@@ -38,17 +38,24 @@ class SearchViewController: UIViewController, UITableViewDataSource {
         
         return UITableViewCell()
     }
+
     
-    
-    func searchForWords(terms: String) -> [TrackInfo] {
+    func searchForWords(query: String) -> [TrackInfo] {
         let userDefaults = UserDefaults.standard
-        if let session = userDefaults.object(forKey: "spotify_sesson") {
-            
-            //SPTSearch
-            
-        } else {
-            print("NO SESSION FOUND")
+        if userDefaults.object(forKey: "access_token") != nil {
+            let token = userDefaults.string(forKey: "access_token")
+            SPTSearch.perform(withQuery: query, queryType: SPTSearchQueryType.queryTypeTrack, accessToken: token, callback: { (error, any) in
+                let listPage = any as! [SPTListPage]
+                if listPage.isEmpty {
+                    print("FOUND NO SEARCH RESULTS")
+                    return
+                }
+                print("FOUND SOME SEARCH RESULTS")
+                // TODO: call function to fill table view with data
+                
+            })
         }
+        
         
         return []
     }

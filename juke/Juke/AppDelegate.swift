@@ -28,16 +28,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             SPTAuth.defaultInstance().handleAuthCallback(withTriggeredAuthURL: url as URL, callback: { (error, session) in
                 
-                print("Callback!!")
                 if error != nil {
                     print("AUTHENTICATION ERROR")
                     return
                 }
                 
                 let userDefaults = UserDefaults.standard
-                let sessionData = NSKeyedArchiver.archivedData(withRootObject: session!)
-                userDefaults.set(sessionData, forKey: "spotify_session")
+                userDefaults.set(session!.accessToken, forKey: "access_token")
                 userDefaults.synchronize()
+                
+                
+                if userDefaults.object(forKey: "access_token") != nil {
+                    let token = userDefaults.string(forKey: "access_token")
+                    SPTSearch.perform(withQuery: "closer", queryType: SPTSearchQueryType.queryTypeTrack, accessToken: token, callback: { (error, any) in
+                        let listPage = any as! SPTListPage
+                        if listPage.totalListLength == 0 {
+                            print("FOUND NO SEARCH RESULTS")
+                            return
+                        }
+                        print("FOUND SOME SEARCH RESULTS")
+                        print(listPage.nextPageURL)
+                       
+                        // TODO: call function to fill table view with data
+                        
+                    })
+                }
             })
         }
         
