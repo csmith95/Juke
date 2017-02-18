@@ -19,6 +19,7 @@
 		4BC7785C1E583686009DD520 /* SpotifyMetadata.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC7785B1E583686009DD520 /* SpotifyMetadata.framework */; };
 		4BC778621E5853EC009DD520 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC778611E5853EC009DD520 /* ViewController.swift */; };
 		4BC778681E586371009DD520 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC778671E586371009DD520 /* SearchViewController.swift */; };
+		52F958B41E5876E1003FA4F4 /* QueuesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F958B31E5876E1003FA4F4 /* QueuesController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		4BC7785B1E583686009DD520 /* SpotifyMetadata.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyMetadata.framework; sourceTree = "<group>"; };
 		4BC778611E5853EC009DD520 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../../juke/Juke/ViewController.swift; sourceTree = "<group>"; };
 		4BC778671E586371009DD520 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchViewController.swift; path = ../../juke/Juke/SearchViewController.swift; sourceTree = "<group>"; };
+		52F958B31E5876E1003FA4F4 /* QueuesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QueuesController.swift; path = ../../../../Documents/QueuesController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 				4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */,
 				4BC778611E5853EC009DD520 /* ViewController.swift */,
 				4BC778671E586371009DD520 /* SearchViewController.swift */,
+				52F958B31E5876E1003FA4F4 /* QueuesController.swift */,
 			);
 			path = Juke;
 			sourceTree = "<group>";
@@ -174,6 +177,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52F958B41E5876E1003FA4F4 /* QueuesController.swift in Sources */,
 				4B3A34D01E58120F00C314A0 /* Juke.xcdatamodeld in Sources */,
 				4BC778621E5853EC009DD520 /* ViewController.swift in Sources */,
 				4BC778681E586371009DD520 /* SearchViewController.swift in Sources */,
