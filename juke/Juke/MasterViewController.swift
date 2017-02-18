@@ -13,8 +13,9 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     var detailViewController: DetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
-
-
+    let kClientID = "77d4489425fe464483f0934f99847c8b"
+    let kCallbackURL = "juke1231://callback"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -26,6 +27,20 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             let controllers = split.viewControllers
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
         }
+        
+        spotifyLogin()
+    }
+    
+    
+    func spotifyLogin() {
+        print("trying to login")
+        let auth = SPTAuth.defaultInstance()!
+        auth.clientID = kClientID
+        auth.redirectURL = NSURL(string:kCallbackURL) as URL!
+        auth.requestedScopes = [SPTAuthStreamingScope]
+        let loginURL = auth.loginURL!
+        UIApplication.shared.open(loginURL)
+        print("here")
     }
 
     override func viewWillAppear(_ animated: Bool) {

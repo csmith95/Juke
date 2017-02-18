@@ -142,6 +142,7 @@ typedef void (^SPTAuthCallback)(NSError *error, SPTSession *session);
 ///----------------------------
 /// @name Starting Authentication
 ///----------------------------
+@property (readonly) NSURL *loginURL;
 
 /**
  Returns a URL that, when opened, will begin the Spotify authentication process.
