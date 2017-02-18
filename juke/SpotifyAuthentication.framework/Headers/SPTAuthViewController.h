@@ -22,7 +22,6 @@
 @class SPTAuthViewController;
 
 /** A ViewController for managing the login flow inside your app. */
-__deprecated_msg("Use `SFSafariViewController` or a `WKWebView` to present the `SPTAuth.loginURL`")
 @protocol SPTAuthViewDelegate
 
 /**
@@ -64,13 +63,17 @@ __deprecated_msg("Use `SFSafariViewController` or a `WKWebView` to present the `
 	[self presentViewController:authvc animated:NO completion:nil];
  ```
  */
-__deprecated_msg("Use `SFSafariViewController` or a `WKWebView` to present the `SPTAuth.loginURL`")
 @interface SPTAuthViewController : UIViewController
 
 /**
  The delegate which will receive the result of the authentication.
  */
 @property (nonatomic, assign) id<SPTAuthViewDelegate> delegate;
+
+/**
+ Enable the signup flow while logging in, this is off by default.
+ */
+@property (nonatomic, readwrite) BOOL hideSignup;
 
 /**
  Creates an authentication view controller for the default application using the authentication information from

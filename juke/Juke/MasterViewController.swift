@@ -33,14 +33,14 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     
     
     func spotifyLogin() {
-        print("trying to login")
+        print("TRYING TO LOGIN")
         let auth = SPTAuth.defaultInstance()!
         auth.clientID = kClientID
         auth.redirectURL = NSURL(string:kCallbackURL) as URL!
         auth.requestedScopes = [SPTAuthStreamingScope]
         let loginURL = auth.loginURL!
         UIApplication.shared.open(loginURL)
-        print("here")
+        print("HERE")
     }
 
     override func viewWillAppear(_ animated: Bool) {
