@@ -35,10 +35,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
                 
                 let userDefaults = UserDefaults.standard
-                let sessionData = NSKeyedArchiver.archivedData(withRootObject: session)
+                let sessionData = NSKeyedArchiver.archivedData(withRootObject: session!)
                 userDefaults.set(sessionData, forKey: "spotify_session")
                 userDefaults.synchronize()
-                
             })
         }
         

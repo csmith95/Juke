@@ -8,17 +8,49 @@
 
 import UIKit
 
-class SearchViewController: UIViewController {
+class SearchViewController: UIViewController, UITableViewDataSource {
 
+    @IBOutlet weak var tableView: UITableView!
+    struct TrackInfo {
+        var id: String
+        var artist: String
+        var name: String
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        tableView.dataSource = self
         // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func tableView(_ tableView: UITableView,
+                   numberOfRowsInSection section: Int) -> Int {
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView,
+                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        return UITableViewCell()
+    }
+    
+    
+    func searchForWords(terms: String) -> [TrackInfo] {
+        let userDefaults = UserDefaults.standard
+        if let session = userDefaults.object(forKey: "spotify_sesson") {
+            
+            //SPTSearch
+            
+        } else {
+            print("NO SESSION FOUND")
+        }
+        
+        return []
     }
     
 

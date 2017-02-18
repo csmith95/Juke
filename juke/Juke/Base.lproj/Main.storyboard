@@ -133,6 +133,7 @@
                     </view>
                     <connections>
                         <outlet property="searchDisplayController" destination="ge2-ZN-pnY" id="HZl-yw-80B"/>
+                        <outlet property="tableView" destination="X7m-Rx-a1Z" id="P5w-0r-PWX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aUb-Gw-TcA" userLabel="First Responder" sceneMemberID="firstResponder"/>
