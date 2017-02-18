@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  SearchViewController.swift
 //  Juke
 //
 //  Created by Conner Smith on 2/18/17.
@@ -8,20 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
-    let kClientID = "77d4489425fe464483f0934f99847c8b"
-    let kCallbackURL = "juke1231://callback"
-    
-    @IBAction func spotifyLogin(_ sender: UIButton) {
-        let auth = SPTAuth.defaultInstance()!
-        auth.clientID = kClientID
-        auth.redirectURL = NSURL(string:kCallbackURL) as URL!
-        auth.requestedScopes = [SPTAuthStreamingScope]
-        let loginURL = auth.loginURL!
-        UIApplication.shared.open(loginURL)
-    }
-    
+class SearchViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
