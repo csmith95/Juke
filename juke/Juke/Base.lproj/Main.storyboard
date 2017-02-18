@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="e7J-L0-lqN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="k1e-ul-ZlJ">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -88,44 +88,44 @@
             <point key="canvasLocation" x="960.79999999999995" y="-229.83508245877064"/>
         </scene>
         <!--Queues Controller-->
-        <scene sceneID="zEr-3C-wtz">
+        <scene sceneID="DeP-NQ-g8Q">
             <objects>
-                <viewController id="e7J-L0-lqN" customClass="QueuesController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="k1e-ul-ZlJ" customClass="QueuesController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Ggq-Yb-DIV"/>
-                        <viewControllerLayoutGuide type="bottom" id="yRz-Xf-5wp"/>
+                        <viewControllerLayoutGuide type="top" id="ZxN-o6-6at"/>
+                        <viewControllerLayoutGuide type="bottom" id="phc-tB-hwc"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="ldS-vN-liK">
+                    <view key="view" contentMode="scaleToFill" id="mfH-46-K5p">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XYh-X7-Hqy">
-                                <rect key="frame" x="0.0" y="59" width="375" height="44"/>
+                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hR7-A3-6oD">
+                                <rect key="frame" x="0.0" y="64" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
-                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9wR-7q-z0x">
-                                <rect key="frame" x="0.0" y="15" width="375" height="44"/>
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v1V-WA-ryj">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
-                                    <navigationItem title="Queues" id="x2T-W0-mJt">
-                                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="s0g-7i-aWg">
+                                    <navigationItem title="Queues" id="CYp-sf-2JR">
+                                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="zuR-c9-A09">
                                             <connections>
-                                                <action selector="addQueue:" destination="e7J-L0-lqN" id="qp8-2q-4Hb"/>
+                                                <action selector="addNewQueue:" destination="k1e-ul-ZlJ" id="5Gb-kp-WLI"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fqi-Iw-quR">
-                                <rect key="frame" x="0.0" y="103" width="375" height="564"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Zrx-tK-2NG">
+                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="vri-Et-73f">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="queue" id="KKR-Ch-iz2">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vri-Et-73f" id="ft1-pO-Ahi">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KKR-Ch-iz2" id="afx-i8-g0f">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
@@ -136,13 +136,13 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <outlet property="queuesList" destination="fqi-Iw-quR" id="UWF-JM-utF"/>
-                        <outletCollection property="queueList" destination="fqi-Iw-quR" collectionClass="NSMutableArray" id="hqf-B8-fVh"/>
+                        <outlet property="tableView" destination="Zrx-tK-2NG" id="VUm-de-IOV"/>
+                        <outletCollection property="queueList" destination="Zrx-tK-2NG" collectionClass="NSMutableArray" id="V9H-j7-6Sy"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Uz1-Ol-zvz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tmv-vf-d4f" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1760.8" y="-232.53373313343329"/>
+            <point key="canvasLocation" x="2434.4000000000001" y="-238.83058470764618"/>
         </scene>
         <!--Search View Controller-->
         <scene sceneID="iYi-Ku-Kg1">
