@@ -12,7 +12,7 @@ module.exports = function(app, express){
 
 
 	//Serves the public directory to the user
-	app.use(express.static(__dirname + '/../public'));
+	app.use(express.static(__dirname + '/public'));
 
 
 
