@@ -7,10 +7,10 @@ var mongoose = require('mongoose');
 
 require('./middleware.js')(app, express);
 
-mongoose.connect('mongodb://localhost/juke');
+mongoose.connect(process.env.MONGOLAB_URI||'mongodb://localhost/juke');
 
-testData.addData();
+// testData.addData();
 
-app.listen(port);
+app.listen(process.env.PORT ||port);
 
 console.log('server is running on port ' + port);

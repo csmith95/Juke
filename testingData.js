@@ -13,7 +13,6 @@ module.exports = {
 			},
 			"url" : "www/w/37.754023/ -122.431641"
 		}
-		console.log("HELLO")
 
 		var group1 = {
 			"body":{

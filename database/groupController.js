@@ -43,7 +43,7 @@ module.exports = {
 		//This part performs a url extraction to find out which group the owner is trying to access. It will later deal with 
 		//possible issues of there being additial arguments such as person in group selection. 
 		var locLat = req.url.split('/')[2].substring(0,req.url.split('/')[2].length - 2);
-		var locLng = req.url.split('/')[3].substring(0,req.url.split('/')[2].length - 2);
+		var locLng = req.url.split('/')[3].substring(0,req.url.split('/')[3].length - 2);
 
 		Group.find({"lngLocation":{"$regex": locLng, "$options": "i"}, "latLocation":{"$regex": locLat, "$options": "i"}}, function(err, group){
 			if(err){
