@@ -1,16 +1,17 @@
 var express = require('express');
 var app = express();
-var port =  8000;
+var port = process.env.PORT || 8000;
+var mongoPort = process.env.MONGOLAB_URI||'mongodb://localhost/juke';
 var testData = require('./testingData');
 
 var mongoose = require('mongoose');
 
 require('./middleware.js')(app, express);
 
-mongoose.connect(process.env.MONGOLAB_URI||'mongodb://localhost/juke');
+mongoose.connect(mongoPort);
 
 // testData.addData();
 
-app.listen(process.env.PORT ||port);
+app.listen(port);
 
 console.log('server is running on port ' + port);
