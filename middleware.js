@@ -11,6 +11,11 @@ module.exports = function(app, express){
 	app.use(bodyParser.urlencoded({extended: true})); //Allows the URL to be accessed
 
 
+	//Serves the public directory to the user
+	app.use(express.static(__dirname + '/../public'));
+
+
+
 	//Requires username and latLocation lngLocation
 	//uri: wwww.yourwebsite.com/updateLocation/
 	//req.body = {username:"Linus", latLocation:1412.31,lngLocation:13134.31}
