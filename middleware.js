@@ -16,11 +16,26 @@ module.exports = function(app, express){
 
 
 	// //Database Requests
+
+	//Requires username and latLocation lngLocation
 	app.post('/updateLocation', userController.updateLocation);
 
+	//Requires username, latLocation, lngLocation, 
 	app.post('/createGroup', groupController.createGroup);
+
+	//Adds a member to a group, Requires username, groupname
 	app.post('/addMember', groupController.addMember);
+
+	//Doesn't work yet
 	app.post('/vote', groupController.vote);
+
+	//Requires a groupname, songname, and username where user must be in the group
+	app.post('/addSong', groupController.addSong);
+
+	//Requires only a group name
+	app.post('/popSong', groupController.popSong);
+
+	//Requies a latLocationa and lngLocation
 	app.get('/findNearbyGroups', groupController.findNearbyGroups);
 
 };
