@@ -25,7 +25,6 @@
 			<string>edu.stanford.csmith95</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>spotify-action</string>
 				<string>juke1231</string>
 			</array>
 		</dict>
