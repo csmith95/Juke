@@ -19,7 +19,12 @@ class ViewController: UIViewController {
         auth.redirectURL = NSURL(string:kCallbackURL) as URL!
         auth.requestedScopes = [SPTAuthStreamingScope]
         let loginURL = auth.loginURL!
+        NotificationCenter.default.addObserver(self, selector: "loginSuccessful", name: Notification.Name("loginSuccessful"), object: nil)
         UIApplication.shared.open(loginURL)
+    }
+    
+    func loginSuccessful() {
+        performSegue(withIdentifier: "loginSegue", sender: nil)
     }
     
 
