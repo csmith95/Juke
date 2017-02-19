@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1217" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="QC7-bB-CTg">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1217" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="yff-L0-ZUT">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="Unknown constraint types" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -109,11 +110,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
                                     <navigationItem title="Queues" id="JAO-BJ-WWP">
-                                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="OCB-Kc-qD5">
-                                            <connections>
-                                                <action selector="addNewQueue:" destination="gfY-4f-P8L" id="Bck-FH-LWY"/>
-                                            </connections>
-                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="OCB-Kc-qD5"/>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -121,33 +118,31 @@
                                 <frame key="frameInset" minY="108" width="375" height="559"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="separatorColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="separatorColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="listitem" id="2wn-Hv-wBt" customClass="queueTableViewCell" customModule="Juke" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ListItem" id="2wn-Hv-wBt" customClass="QueueTableViewCell" customModule="Juke" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5xj-QW-egA" id="QIX-aM-Cmg">
-                                            <frame key="frameInset" width="375" height="44"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="QIX-aM-Cmg">
+                                            <frame key="frameInset" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="itemLabel" destination="P8D-S9-sfe" id="D0C-w3-HuL"/>
-                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Zy-pO-O3f">
+                                <frame key="frameInset" minX="16" minY="146" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="WVP-xP-X3t" firstAttribute="leading" secondItem="XNc-SB-ZOU" secondAttribute="leading" id="1OK-RC-bfQ"/>
-                            <constraint firstItem="xRj-5s-jh5" firstAttribute="top" secondItem="WVP-xP-X3t" secondAttribute="bottom" id="80R-cB-zcz"/>
-                            <constraint firstItem="WVP-xP-X3t" firstAttribute="leading" secondItem="XNc-SB-ZOU" secondAttribute="leading" id="846-Vb-U4s"/>
-                            <constraint firstItem="WVP-xP-X3t" firstAttribute="top" secondItem="deQ-6N-ASp" secondAttribute="bottom" id="BOF-Nk-s4I"/>
-                            <constraint firstAttribute="trailing" secondItem="WVP-xP-X3t" secondAttribute="trailing" id="ROk-Hf-ivz"/>
-                            <constraint firstAttribute="trailing" secondItem="WVP-xP-X3t" secondAttribute="trailing" id="bj1-To-N9K"/>
-                            <constraint firstItem="WVP-xP-X3t" firstAttribute="top" secondItem="deQ-6N-ASp" secondAttribute="bottom" id="lWc-MH-gha"/>
-                            <constraint firstItem="xRj-5s-jh5" firstAttribute="top" secondItem="WVP-xP-X3t" secondAttribute="bottom" id="xbo-EU-E6e"/>
+                            <constraint firstAttribute="leading" secondItem="XNc-SB-ZOU" secondAttribute="leading" id="1OK-RC-bfQ"/>
+                            <constraint firstAttribute="leading" secondItem="XNc-SB-ZOU" secondAttribute="leading" id="846-Vb-U4s"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Queues" id="wad-50-IS0">
@@ -158,7 +153,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="listTableView" destination="WVP-xP-X3t" id="j9s-yX-s0j"/>
+                        <outlet property="tableView" destination="4VZ-4U-6k1" id="e81-li-YNm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BIg-Q4-Koc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -183,10 +178,10 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchCell" id="8Y7-kg-6Vv" customClass="SearchTableViewCell" customModule="Juke" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="92" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8Y7-kg-6Vv" id="nbw-tK-hd0">
-                                            <frame key="frameInset" width="375" height="43"/>
+                                            <frame key="frameInset" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="laO-GR-1nD">

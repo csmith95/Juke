@@ -13,20 +13,27 @@ class QueuesController: UIViewController, UITableViewDataSource {
     var items: [String] = ["Hello World", "dkgakjdsg"]
     
 
-    @IBOutlet weak var listTableView: UITableView!
+    @IBOutlet weak var tableView: UITableView!
+
     @IBAction func addItem(_ sender: Any) {
         alert()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        listTableView.dataSource = self
+        tableView.dataSource = self
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "listItem") as! queueTableViewCell
-        cell.itemLabel.text = items[indexPath.row]
-        return cell
+        var cell:QueueTableViewCell? = tableView.dequeueReusableCell(withIdentifier: "ListItem") as!QueueTableViewCell
+        if let b = cell {
+            b.textLabel?.text = items[indexPath.row]
+            return b
+        }
+        
+        let c = QueueTableViewCell()
+        c.textLabel?.text = items[indexPath.row]
+        return c
     }
     
     
@@ -50,7 +57,7 @@ class QueuesController: UIViewController, UITableViewDataSource {
             (action) in
             let textfield = alert.textFields![0] as! UITextField
             self.items.append(textfield.text!)
-            self.listTableView.reloadData()
+            self.tableView.reloadData()
             print(textfield.text!)
         }
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) {

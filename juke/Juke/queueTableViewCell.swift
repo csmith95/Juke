@@ -1,17 +1,16 @@
 //
-//  queueTableViewCell.swift
+//  QueueTableViewCell.swift
 //  Juke
 //
-//  Created by Thomas Jensen on 2/18/17.
+//  Created by Conner Smith on 2/18/17.
 //  Copyright © 2017 csmith. All rights reserved.
 //
 
 import UIKit
 
-class queueTableViewCell: UITableViewCell {
+class QueueTableViewCell: UITableViewCell {
 
     
-    @IBOutlet weak var itemLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
