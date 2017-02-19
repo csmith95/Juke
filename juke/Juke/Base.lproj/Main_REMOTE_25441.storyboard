@@ -87,15 +87,15 @@
             </objects>
             <point key="canvasLocation" x="960.79999999999995" y="-229.83508245877064"/>
         </scene>
-        <!--Queues-->
-        <scene sceneID="3CV-tW-b3H">
+        <!--Queues Controller-->
+        <scene sceneID="V7a-dA-ZeL">
             <objects>
-                <viewController id="o5C-ph-W7R" customClass="QueuesController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="gfY-4f-P8L" customClass="QueuesController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="LvF-kS-F16"/>
-                        <viewControllerLayoutGuide type="bottom" id="xRj-5s-jh5"/>
+                        <viewControllerLayoutGuide type="top" id="oVE-8j-qZ6"/>
+                        <viewControllerLayoutGuide type="bottom" id="Axv-e4-f9j"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="XNc-SB-ZOU">
+                    <view key="view" contentMode="scaleToFill" id="jT8-fp-0AE">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -121,49 +121,24 @@
                                 <frame key="frameInset" minY="108" width="375" height="559"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="separatorColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="sectionIndexColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="listitem" id="2wn-Hv-wBt" customClass="queueTableViewCell" customModule="Juke" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="5xj-QW-egA">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5xj-QW-egA" id="QIX-aM-Cmg">
                                             <frame key="frameInset" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="itemLabel" destination="P8D-S9-sfe" id="D0C-w3-HuL"/>
-                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="WVP-xP-X3t" firstAttribute="leading" secondItem="XNc-SB-ZOU" secondAttribute="leading" id="1OK-RC-bfQ"/>
-                            <constraint firstItem="xRj-5s-jh5" firstAttribute="top" secondItem="WVP-xP-X3t" secondAttribute="bottom" id="80R-cB-zcz"/>
-                            <constraint firstItem="WVP-xP-X3t" firstAttribute="leading" secondItem="XNc-SB-ZOU" secondAttribute="leading" id="846-Vb-U4s"/>
-                            <constraint firstItem="WVP-xP-X3t" firstAttribute="top" secondItem="deQ-6N-ASp" secondAttribute="bottom" id="BOF-Nk-s4I"/>
-                            <constraint firstAttribute="trailing" secondItem="WVP-xP-X3t" secondAttribute="trailing" id="ROk-Hf-ivz"/>
-                            <constraint firstAttribute="trailing" secondItem="WVP-xP-X3t" secondAttribute="trailing" id="bj1-To-N9K"/>
-                            <constraint firstItem="WVP-xP-X3t" firstAttribute="top" secondItem="deQ-6N-ASp" secondAttribute="bottom" id="lWc-MH-gha"/>
-                            <constraint firstItem="xRj-5s-jh5" firstAttribute="top" secondItem="WVP-xP-X3t" secondAttribute="bottom" id="xbo-EU-E6e"/>
-                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Queues" id="wad-50-IS0">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="jZb-V2-anu">
-                            <connections>
-                                <action selector="addItem:" destination="o5C-ph-W7R" id="FCj-10-aTD"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="listTableView" destination="WVP-xP-X3t" id="j9s-yX-s0j"/>
-                    </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="BIg-Q4-Koc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0gc-dn-ggG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5044" y="-253.2233883058471"/>
+            <point key="canvasLocation" x="2634" y="-253"/>
         </scene>
         <!--Search View Controller-->
         <scene sceneID="iYi-Ku-Kg1">
@@ -269,26 +244,6 @@
                 </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="240.80000000000001" y="624.73763118440786"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="MTD-mV-J4j">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="yff-L0-ZUT" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="6lr-88-i04">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="barTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="o5C-ph-W7R" kind="relationship" relationship="rootViewController" id="Bsc-3T-Wd4"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="wnc-C4-KzA" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="4104.8000000000002" y="-253.2233883058471"/>
         </scene>
     </scenes>
     <resources>

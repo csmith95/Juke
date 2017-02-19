@@ -23,7 +23,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
         
-        print("URL: ", url)
         if SPTAuth.defaultInstance().canHandle(url as URL) {
             
             SPTAuth.defaultInstance().handleAuthCallback(withTriggeredAuthURL: url as URL, callback: { (error, session) in
@@ -36,23 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let userDefaults = UserDefaults.standard
                 userDefaults.set(session!.accessToken, forKey: "access_token")
                 userDefaults.synchronize()
-                
-                
-                if userDefaults.object(forKey: "access_token") != nil {
-                    let token = userDefaults.string(forKey: "access_token")
-                    SPTSearch.perform(withQuery: "closer", queryType: SPTSearchQueryType.queryTypeTrack, accessToken: token, callback: { (error, any) in
-                        let listPage = any as! SPTListPage
-                        if listPage.totalListLength == 0 {
-                            print("FOUND NO SEARCH RESULTS")
-                            return
-                        }
-                        print("FOUND SOME SEARCH RESULTS")
-                        print(listPage.nextPageURL)
-                       
-                        // TODO: call function to fill table view with data
-                        
-                    })
-                }
+                NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: nil)
             })
         }
         

@@ -15,8 +15,11 @@
 		4B3A34E51E581F1300C314A0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E41E581F1300C314A0 /* AVFoundation.framework */; };
 		4B3A34E71E581F8F00C314A0 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */; };
 		4B3A34EA1E581FBF00C314A0 /* SpotifyAudioPlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E81E581FBF00C314A0 /* SpotifyAudioPlayback.framework */; };
+<<<<<<< HEAD
+=======
 		4B845E591E5894FB00C80EFD /* QueuesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B845E581E5894FB00C80EFD /* QueuesController.swift */; };
 		4B845E5B1E591AAD00C80EFD /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B845E5A1E591AAD00C80EFD /* SearchTableViewCell.swift */; };
+>>>>>>> dfd370e39c7735c2c7ff444d86fec9abaa38b15d
 		4BC7785A1E5835D9009DD520 /* SpotifyAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC778591E5835D9009DD520 /* SpotifyAuthentication.framework */; };
 		4BC7785C1E583686009DD520 /* SpotifyMetadata.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC7785B1E583686009DD520 /* SpotifyMetadata.framework */; };
 		4BC778621E5853EC009DD520 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC778611E5853EC009DD520 /* ViewController.swift */; };
@@ -36,8 +39,11 @@
 		4B3A34E41E581F1300C314A0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4B3A34E81E581FBF00C314A0 /* SpotifyAudioPlayback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAudioPlayback.framework; sourceTree = "<group>"; };
+<<<<<<< HEAD
+=======
 		4B845E581E5894FB00C80EFD /* QueuesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueuesController.swift; sourceTree = "<group>"; };
 		4B845E5A1E591AAD00C80EFD /* SearchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
+>>>>>>> dfd370e39c7735c2c7ff444d86fec9abaa38b15d
 		4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Juke-Bridging-Header.h"; sourceTree = "<group>"; };
 		4BC778591E5835D9009DD520 /* SpotifyAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAuthentication.framework; sourceTree = "<group>"; };
 		4BC7785B1E583686009DD520 /* SpotifyMetadata.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyMetadata.framework; sourceTree = "<group>"; };
@@ -92,8 +98,13 @@
 				4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */,
 				4BC778611E5853EC009DD520 /* ViewController.swift */,
 				4BC778671E586371009DD520 /* SearchViewController.swift */,
+<<<<<<< HEAD
+				52FCBC4F1E592B3700F31A73 /* QueuesController.swift */,
+				5284B36C1E59209E00E965BB /* queueTableViewCell.swift */,
+=======
 				4B845E581E5894FB00C80EFD /* QueuesController.swift */,
 				4B845E5A1E591AAD00C80EFD /* SearchTableViewCell.swift */,
+>>>>>>> dfd370e39c7735c2c7ff444d86fec9abaa38b15d
 			);
 			path = Juke;
 			sourceTree = "<group>";
@@ -186,8 +197,13 @@
 			files = (
 				4B3A34D01E58120F00C314A0 /* Juke.xcdatamodeld in Sources */,
 				4BC778621E5853EC009DD520 /* ViewController.swift in Sources */,
+<<<<<<< HEAD
+				5284B36D1E59209E00E965BB /* queueTableViewCell.swift in Sources */,
+				52FCBC501E592B3700F31A73 /* QueuesController.swift in Sources */,
+=======
 				4B845E591E5894FB00C80EFD /* QueuesController.swift in Sources */,
 				4B845E5B1E591AAD00C80EFD /* SearchTableViewCell.swift in Sources */,
+>>>>>>> dfd370e39c7735c2c7ff444d86fec9abaa38b15d
 				4BC778681E586371009DD520 /* SearchViewController.swift in Sources */,
 				4B3A34CD1E58120F00C314A0 /* AppDelegate.swift in Sources */,
 			);
