@@ -8,13 +8,62 @@
 
 import UIKit
 
-class QueuesController: UIViewController {
+class QueuesController: UIViewController, UITableViewDataSource {
     
+    var items: [String] = ["Hello World", "dkgakjdsg"]
+    
+
+    @IBOutlet weak var listTableView: UITableView!
+    @IBAction func addItem(_ sender: Any) {
+        alert()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Do any additional setup after loading the view.
+        listTableView.dataSource = self
     }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "listItem") as! queueTableViewCell
+        cell.itemLabel.text = items[indexPath.row]
+        return cell
+    }
+    
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return items.count
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func alert() {
+        let alert = UIAlertController(title: "", message: "Please name your new playlist.", preferredStyle: .alert)
+        
+        alert.addTextField {
+            (textfield: UITextField) in
+            textfield.placeholder = "Enter name"
+        }
+        
+        let add = UIAlertAction(title: "Add", style: .default) {
+            (action) in
+            let textfield = alert.textFields![0] as! UITextField
+            self.items.append(textfield.text!)
+            self.listTableView.reloadData()
+            print(textfield.text!)
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) {
+            (action) in
+            print("hi")
+        }
+        
+        alert.addAction(add)
+        alert.addAction(cancel)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
