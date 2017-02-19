@@ -3,6 +3,7 @@ var express = require('express');
 var app = express();
 var port = (process.env.PORT || 8000);
 var mongoPort = (process.env.MONGOLAB_URI||'mongodb://localhost/juke');
+console.log(process.env.MONGOLAB_URI)
 var testData = require('./testingData');
 
 var mongoose = require('mongoose');
