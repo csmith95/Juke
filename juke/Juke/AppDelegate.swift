@@ -21,9 +21,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func application(_ application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
+    func application(_ application: UIApplication, openURL url: URL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
         
-        if SPTAuth.defaultInstance().canHandle(url as URL) {
+        
+        if SPTAuth.defaultInstance().canHandle(url) {
             
             SPTAuth.defaultInstance().handleAuthCallback(withTriggeredAuthURL: url as URL, callback: { (error, session) in
                 
@@ -37,6 +38,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 userDefaults.synchronize()
                 NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: nil)
             })
+        } else {
+            print("CAN'T HANDLE RECEIVED URL")
         }
         
         return true

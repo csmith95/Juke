@@ -16,10 +16,10 @@ class ViewController: UIViewController {
     @IBAction func spotifyLogin(_ sender: UIButton) {
         let auth = SPTAuth.defaultInstance()!
         auth.clientID = kClientID
-        auth.redirectURL = NSURL(string:kCallbackURL) as URL!
+        auth.redirectURL = NSURL(string:kCallbackURL) as! URL
         auth.requestedScopes = [SPTAuthStreamingScope]
         let loginURL = auth.loginURL!
-        NotificationCenter.default.addObserver(self, selector: "loginSuccessful", name: Notification.Name("loginSuccessful"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.loginSuccessful), name: Notification.Name("loginSuccessful"), object: nil)
         UIApplication.shared.open(loginURL)
     }
     
