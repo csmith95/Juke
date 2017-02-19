@@ -1,0 +1,19 @@
+{
+  "name": "jukeserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "middleware.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.16.1",
+    "express": "^4.14.1",
+    "mongo": "^0.1.0",
+    "mongoose": "^4.8.3",
+    "morgan": "^1.8.1"
+  }
+}
