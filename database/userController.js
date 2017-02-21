@@ -12,14 +12,18 @@ module.exports  = {
 				result.lngLocation = lngLocation
 				res.send(200, "Location Updated");	
 			} else {
-				var newUser = new User({
-					username:username,
-					lngLocation: lngLocation,
-					latLocation:latLocation,
-					groups: []
+				var newUser = new User;
+				newUser.username = username;
+				newUser.lngLocation =  lngLocation;
+				newUser.latLocation = latLocation;
+				newUser.groups =  [];
+				newUser.save(function(err, result) {
+					if(err){
+						res.send(300, "Failed to find user ");							
+					} else {
+						res.send(200, result);	
+					}
 				});
-				newUser.save();
-				res.send(200, newUser);	
 			}
 		})
 	}

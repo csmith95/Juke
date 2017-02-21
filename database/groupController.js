@@ -16,14 +16,13 @@ module.exports = {
 			if(group) {
 				res.send(300, "Group already exists")
 			} else {
-				var group = new Group ({
-					groupName: req.body.groupName,
-					owner: req.body.owner,
-					password: req.body.password,
-					members: objToArray(req.body.members),
-					latLocation: req.body.latitude,
-					lngLocation: req.body.longitude
-				});
+				var group = new Group;
+				group.groupName = req.body.groupName; 
+				group.owner =  req.body.owner;
+				group.password =  req.body.password;
+				group.members =  objToArray(req.body.members);
+				group.latLocation =  req.body.latitude;
+				group.lngLocation =  req.body.longitude;
 
 				group.save(function(err, resp){
 					if(err){
