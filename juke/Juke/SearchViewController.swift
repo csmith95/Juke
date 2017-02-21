@@ -41,14 +41,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        var cellOptional:SearchTableViewCell? = tableView.dequeueReusableCell(withIdentifier : "SearchCell", for: indexPath) as! SearchTableViewCell
-        if let cell = cellOptional {
-            cell.artist.text = self.items[indexPath.row].artist
-            cell.songName.text = self.items[indexPath.row].name
-            return cell
-        }
-        
-        let cell = SearchTableViewCell()
+        let cell:SearchTableViewCell = tableView.dequeueReusableCell(withIdentifier : "SearchCell", for: indexPath) as! SearchTableViewCell
         cell.artist.text = self.items[indexPath.row].artist
         cell.songName.text = self.items[indexPath.row].name
         return cell
@@ -65,7 +58,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     func fillItems(json: NSDictionary) {
         let tracks = json["tracks"] as! NSDictionary
         let items = tracks["items"] as! NSArray
-        print("ITEMS: ", items)
         let numItemsToCache = min(kNumItems, items.count)
         for i in 0 ..< numItemsToCache {
             let curr = items[i] as! NSDictionary

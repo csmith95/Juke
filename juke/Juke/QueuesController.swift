@@ -38,15 +38,9 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell:QueueTableViewCell? = tableView.dequeueReusableCell(withIdentifier: "ListItem") as!QueueTableViewCell
-        if let b = cell {
-            b.textLabel?.text = items[indexPath.row]
-            return b
-        }
-        
-        let c = QueueTableViewCell()
-        c.textLabel?.text = items[indexPath.row]
-        return c
+        let cell:QueueTableViewCell = tableView.dequeueReusableCell(withIdentifier: "ListItem") as! QueueTableViewCell
+        cell.textLabel?.text = items[indexPath.row]
+        return cell
     }
     
     
@@ -68,7 +62,7 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
         
         let add = UIAlertAction(title: "Add", style: .default) {
             (action) in
-            let textfield = alert.textFields![0] as! UITextField
+            let textfield = alert.textFields![0]
             self.items.append(textfield.text!)
             self.tableView.reloadData()
             
@@ -95,7 +89,7 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
     }
     
     // MARK: - CoreLocation Delegate Methods
-    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+    @nonobjc func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
         locationManager.stopUpdatingLocation()
         if ((error) != nil) {
             print(error)

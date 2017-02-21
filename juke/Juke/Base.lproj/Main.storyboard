@@ -45,49 +45,6 @@
             </objects>
             <point key="canvasLocation" x="-535" y="625"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="tZf-kX-TPQ">
-            <objects>
-                <viewController id="TTJ-Vi-h0z" sceneMemberID="viewController">
-                    <label key="view" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="nearby/new" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wGf-KU-sM1">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="VRw-HB-Nfy" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-45" y="-235"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="OpO-dd-jkw">
-            <objects>
-                <viewController id="l2W-xZ-6Ya" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="OiI-D3-VUj"/>
-                        <viewControllerLayoutGuide type="bottom" id="xzX-du-lb9"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="JyM-3V-tfS">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="queueu" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xXf-ys-igF">
-                                <frame key="frameInset" minX="166" minY="296" width="58" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="f2U-Ks-oDu" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="960.79999999999995" y="-229.83508245877064"/>
-        </scene>
         <!--Queues-->
         <scene sceneID="3CV-tW-b3H">
             <objects>
@@ -158,7 +115,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BIg-Q4-Koc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5044" y="-253.2233883058471"/>
+            <point key="canvasLocation" x="1175" y="-255"/>
         </scene>
         <!--Search View Controller-->
         <scene sceneID="iYi-Ku-Kg1">
@@ -283,7 +240,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wnc-C4-KzA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4104.8000000000002" y="-253.2233883058471"/>
+            <point key="canvasLocation" x="550" y="-254"/>
         </scene>
     </scenes>
     <resources>
