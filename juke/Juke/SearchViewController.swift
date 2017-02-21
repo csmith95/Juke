@@ -98,7 +98,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
                         let template = "https://api.spotify.com/v1/search?query=$&type=track&market=US&offset=00&limit=10"
                         let tmp = template.replacingOccurrences(of: "$", with: query)
                         let url = URL(string: tmp.replacingOccurrences(of: " ", with: "%20"))!
-                        //let url = URL(string: "https://api.spotify.com/v1/search?query=Shape%20of%20You&type=track&market=US&offset=00&limit=10")!
                         let data = NSData(contentsOf: url) as Data?
                         do {
                             let json = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.allowFragments) as! NSDictionary
