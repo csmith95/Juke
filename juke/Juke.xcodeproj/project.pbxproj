@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4B0FB5801E59A12C008D34FD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B0FB57F1E59A12C008D34FD /* CoreLocation.framework */; };
+		4B0FB5821E5BFA42008D34FD /* ServerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0FB5811E5BFA42008D34FD /* ServerDelegate.swift */; };
 		4B3A34CD1E58120F00C314A0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B3A34CC1E58120F00C314A0 /* AppDelegate.swift */; };
 		4B3A34D01E58120F00C314A0 /* Juke.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4B3A34CE1E58120F00C314A0 /* Juke.xcdatamodeld */; };
 		4B3A34D71E58120F00C314A0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B3A34D51E58120F00C314A0 /* Main.storyboard */; };
@@ -27,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		4B0FB57F1E59A12C008D34FD /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		4B0FB5811E5BFA42008D34FD /* ServerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerDelegate.swift; sourceTree = "<group>"; };
 		4B3A34C91E58120F00C314A0 /* Juke.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Juke.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B3A34CC1E58120F00C314A0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4B3A34CF1E58120F00C314A0 /* Juke.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Juke.xcdatamodel; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 				4B845E581E5894FB00C80EFD /* QueuesController.swift */,
 				4B845E5A1E591AAD00C80EFD /* SearchTableViewCell.swift */,
 				4BB18A881E593D2A005FC549 /* QueueTableViewCell.swift */,
+				4B0FB5811E5BFA42008D34FD /* ServerDelegate.swift */,
 			);
 			path = Juke;
 			sourceTree = "<group>";
@@ -188,6 +191,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B3A34D01E58120F00C314A0 /* Juke.xcdatamodeld in Sources */,
+				4B0FB5821E5BFA42008D34FD /* ServerDelegate.swift in Sources */,
 				4BC778621E5853EC009DD520 /* ViewController.swift in Sources */,
 				4B845E591E5894FB00C80EFD /* QueuesController.swift in Sources */,
 				4B845E5B1E591AAD00C80EFD /* SearchTableViewCell.swift in Sources */,
