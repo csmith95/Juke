@@ -14,8 +14,11 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
     var items: [String] = ["Hello World", "dkgakjdsg"]
     let locationManager = CLLocationManager()
     let kCLLocationAccuracyKilometer = 0.1
+    let serverDelegate = ServerDelegate()
+    let kCreateGroupURL = "createGroup"
 
     @IBOutlet weak var tableView: UITableView!
+    var newGroupName: String?
 
     @IBAction func addItem(_ sender: Any) {
         alert()
@@ -62,13 +65,14 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
         
         let add = UIAlertAction(title: "Add", style: .default) {
             (action) in
-            let textfield = alert.textFields![0]
-            self.items.append(textfield.text!)
+            let textField = alert.textFields![0]
+            self.items.append(textField.text!)
             self.tableView.reloadData()
             
-            // TODO: get location, register playlist w/ db
+            // get location then register playlist w/ db inside 
+            // location callback
+            self.newGroupName = textField.text
             self.locationManager.requestLocation()
-            print("REQUESTED LOCATION")
         }
         
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) {
@@ -78,7 +82,7 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
         
         alert.addAction(add)
         alert.addAction(cancel)
-        
+
         present(alert, animated: true, completion: nil)
     }
     
@@ -97,11 +101,26 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if self.newGroupName == nil {
+            return
+        }
+        
         let locationArray = locations as NSArray
         let locationObj = locationArray.lastObject as! CLLocation
         let coord = locationObj.coordinate
-        print("LONG: ", coord.longitude)
-        print("LAT: ", coord.latitude)
+        let fields: [String:String] = [
+            "groupName" : self.newGroupName!,
+            "latitude" : String(coord.latitude),
+            "longitude" : String(coord.longitude)
+        ]
+        let dict = NSDictionary(dictionary: fields)
+        
+        serverDelegate.postRequest(query: kCreateGroupURL, fields: dict) { (data: Data?, response: URLResponse?, error: Error?) in
+            if self.newGroupName == nil {
+                return
+            }
+            self.newGroupName = nil
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

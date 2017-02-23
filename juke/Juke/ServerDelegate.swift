@@ -10,7 +10,7 @@ import Foundation
 
 class ServerDelegate {
     
-    let kBaseURL = "myjukebx.herokuapp.com"
+    let kBaseURL = "http://myjukebx.herokuapp.com/"
     let kRequestMethod = "POST"
     
     // issues postRequest using fields specified as key-val pairs in NSDictionary, then executes callback with received data
@@ -19,11 +19,13 @@ class ServerDelegate {
         request.httpMethod = kRequestMethod
         let bodyString = createBodyString(fields: fields)
         request.httpBody = bodyString.data(using: .utf8)
+        print("REQUEST: ", request)
+        print("BODY STRING: ", bodyString)
         let task = URLSession.shared.dataTask(with: request, completionHandler: callback)
         task.resume()
     }
     
-    func createBodyString(fields: NSDictionary) -> String {
+    private func createBodyString(fields: NSDictionary) -> String {
         var postString = ""
         var i = 1
         for (key, value) in fields {
