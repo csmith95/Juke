@@ -1,0 +1,405 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4B3A34CD1E58120F00C314A0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B3A34CC1E58120F00C314A0 /* AppDelegate.swift */; };
+		4B3A34D01E58120F00C314A0 /* Juke.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4B3A34CE1E58120F00C314A0 /* Juke.xcdatamodeld */; };
+		4B3A34D71E58120F00C314A0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B3A34D51E58120F00C314A0 /* Main.storyboard */; };
+		4B3A34D91E58120F00C314A0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B3A34D81E58120F00C314A0 /* Assets.xcassets */; };
+		4B3A34DC1E58120F00C314A0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B3A34DA1E58120F00C314A0 /* LaunchScreen.storyboard */; };
+		4B3A34E51E581F1300C314A0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E41E581F1300C314A0 /* AVFoundation.framework */; };
+		4B3A34E71E581F8F00C314A0 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */; };
+		4B3A34EA1E581FBF00C314A0 /* SpotifyAudioPlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E81E581FBF00C314A0 /* SpotifyAudioPlayback.framework */; };
+<<<<<<< HEAD
+=======
+		4B845E591E5894FB00C80EFD /* QueuesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B845E581E5894FB00C80EFD /* QueuesController.swift */; };
+		4B845E5B1E591AAD00C80EFD /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B845E5A1E591AAD00C80EFD /* SearchTableViewCell.swift */; };
+>>>>>>> dfd370e39c7735c2c7ff444d86fec9abaa38b15d
+		4BC7785A1E5835D9009DD520 /* SpotifyAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC778591E5835D9009DD520 /* SpotifyAuthentication.framework */; };
+		4BC7785C1E583686009DD520 /* SpotifyMetadata.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC7785B1E583686009DD520 /* SpotifyMetadata.framework */; };
+		4BC778621E5853EC009DD520 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC778611E5853EC009DD520 /* ViewController.swift */; };
+		4BC778681E586371009DD520 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC778671E586371009DD520 /* SearchViewController.swift */; };
+		5284B36D1E59209E00E965BB /* queueTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5284B36C1E59209E00E965BB /* queueTableViewCell.swift */; };
+		52FCBC501E592B3700F31A73 /* QueuesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FCBC4F1E592B3700F31A73 /* QueuesController.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		4B3A34C91E58120F00C314A0 /* Juke.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Juke.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B3A34CC1E58120F00C314A0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		4B3A34CF1E58120F00C314A0 /* Juke.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Juke.xcdatamodel; sourceTree = "<group>"; };
+		4B3A34D61E58120F00C314A0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		4B3A34D81E58120F00C314A0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4B3A34DB1E58120F00C314A0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		4B3A34DD1E58120F00C314A0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4B3A34E41E581F1300C314A0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		4B3A34E81E581FBF00C314A0 /* SpotifyAudioPlayback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAudioPlayback.framework; sourceTree = "<group>"; };
+<<<<<<< HEAD
+=======
+		4B845E581E5894FB00C80EFD /* QueuesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueuesController.swift; sourceTree = "<group>"; };
+		4B845E5A1E591AAD00C80EFD /* SearchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
+>>>>>>> dfd370e39c7735c2c7ff444d86fec9abaa38b15d
+		4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Juke-Bridging-Header.h"; sourceTree = "<group>"; };
+		4BC778591E5835D9009DD520 /* SpotifyAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAuthentication.framework; sourceTree = "<group>"; };
+		4BC7785B1E583686009DD520 /* SpotifyMetadata.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyMetadata.framework; sourceTree = "<group>"; };
+		4BC778611E5853EC009DD520 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../../juke/Juke/ViewController.swift; sourceTree = "<group>"; };
+		4BC778671E586371009DD520 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchViewController.swift; path = ../../juke/Juke/SearchViewController.swift; sourceTree = "<group>"; };
+		5284B36C1E59209E00E965BB /* queueTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = queueTableViewCell.swift; sourceTree = "<group>"; };
+		52FCBC4F1E592B3700F31A73 /* QueuesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueuesController.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4B3A34C61E58120F00C314A0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BC7785C1E583686009DD520 /* SpotifyMetadata.framework in Frameworks */,
+				4B3A34E71E581F8F00C314A0 /* SystemConfiguration.framework in Frameworks */,
+				4BC7785A1E5835D9009DD520 /* SpotifyAuthentication.framework in Frameworks */,
+				4B3A34E51E581F1300C314A0 /* AVFoundation.framework in Frameworks */,
+				4B3A34EA1E581FBF00C314A0 /* SpotifyAudioPlayback.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4B3A34C01E58120E00C314A0 = {
+			isa = PBXGroup;
+			children = (
+				4B3A34CB1E58120F00C314A0 /* Juke */,
+				4B3A34CA1E58120F00C314A0 /* Products */,
+				4B3A34E31E581F1300C314A0 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		4B3A34CA1E58120F00C314A0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4B3A34C91E58120F00C314A0 /* Juke.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4B3A34CB1E58120F00C314A0 /* Juke */ = {
+			isa = PBXGroup;
+			children = (
+				4B3A34CC1E58120F00C314A0 /* AppDelegate.swift */,
+				4B3A34D51E58120F00C314A0 /* Main.storyboard */,
+				4B3A34D81E58120F00C314A0 /* Assets.xcassets */,
+				4B3A34DA1E58120F00C314A0 /* LaunchScreen.storyboard */,
+				4B3A34DD1E58120F00C314A0 /* Info.plist */,
+				4B3A34CE1E58120F00C314A0 /* Juke.xcdatamodeld */,
+				4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */,
+				4BC778611E5853EC009DD520 /* ViewController.swift */,
+				4BC778671E586371009DD520 /* SearchViewController.swift */,
+<<<<<<< HEAD
+				52FCBC4F1E592B3700F31A73 /* QueuesController.swift */,
+				5284B36C1E59209E00E965BB /* queueTableViewCell.swift */,
+=======
+				4B845E581E5894FB00C80EFD /* QueuesController.swift */,
+				4B845E5A1E591AAD00C80EFD /* SearchTableViewCell.swift */,
+>>>>>>> dfd370e39c7735c2c7ff444d86fec9abaa38b15d
+			);
+			path = Juke;
+			sourceTree = "<group>";
+		};
+		4B3A34E31E581F1300C314A0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4BC7785B1E583686009DD520 /* SpotifyMetadata.framework */,
+				4BC778591E5835D9009DD520 /* SpotifyAuthentication.framework */,
+				4B3A34E81E581FBF00C314A0 /* SpotifyAudioPlayback.framework */,
+				4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */,
+				4B3A34E41E581F1300C314A0 /* AVFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4B3A34C81E58120F00C314A0 /* Juke */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4B3A34E01E58120F00C314A0 /* Build configuration list for PBXNativeTarget "Juke" */;
+			buildPhases = (
+				4B3A34C51E58120F00C314A0 /* Sources */,
+				4B3A34C61E58120F00C314A0 /* Frameworks */,
+				4B3A34C71E58120F00C314A0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Juke;
+			productName = Juke;
+			productReference = 4B3A34C91E58120F00C314A0 /* Juke.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4B3A34C11E58120E00C314A0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0800;
+				LastUpgradeCheck = 0800;
+				ORGANIZATIONNAME = csmith;
+				TargetAttributes = {
+					4B3A34C81E58120F00C314A0 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = UZ9Y7C37N9;
+						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 4B3A34C41E58120E00C314A0 /* Build configuration list for PBXProject "Juke" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4B3A34C01E58120E00C314A0;
+			productRefGroup = 4B3A34CA1E58120F00C314A0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4B3A34C81E58120F00C314A0 /* Juke */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4B3A34C71E58120F00C314A0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B3A34DC1E58120F00C314A0 /* LaunchScreen.storyboard in Resources */,
+				4B3A34D91E58120F00C314A0 /* Assets.xcassets in Resources */,
+				4B3A34D71E58120F00C314A0 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4B3A34C51E58120F00C314A0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B3A34D01E58120F00C314A0 /* Juke.xcdatamodeld in Sources */,
+				4BC778621E5853EC009DD520 /* ViewController.swift in Sources */,
+<<<<<<< HEAD
+				5284B36D1E59209E00E965BB /* queueTableViewCell.swift in Sources */,
+				52FCBC501E592B3700F31A73 /* QueuesController.swift in Sources */,
+=======
+				4B845E591E5894FB00C80EFD /* QueuesController.swift in Sources */,
+				4B845E5B1E591AAD00C80EFD /* SearchTableViewCell.swift in Sources */,
+>>>>>>> dfd370e39c7735c2c7ff444d86fec9abaa38b15d
+				4BC778681E586371009DD520 /* SearchViewController.swift in Sources */,
+				4B3A34CD1E58120F00C314A0 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		4B3A34D51E58120F00C314A0 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B3A34D61E58120F00C314A0 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		4B3A34DA1E58120F00C314A0 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B3A34DB1E58120F00C314A0 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4B3A34DE1E58120F00C314A0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4B3A34DF1E58120F00C314A0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4B3A34E11E58120F00C314A0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = UZ9Y7C37N9;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = Juke/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = edu.stanford.csmith95.Juke;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Juke/Juke-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		4B3A34E21E58120F00C314A0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = UZ9Y7C37N9;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = Juke/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = edu.stanford.csmith95.Juke;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Juke/Juke-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4B3A34C41E58120E00C314A0 /* Build configuration list for PBXProject "Juke" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B3A34DE1E58120F00C314A0 /* Debug */,
+				4B3A34DF1E58120F00C314A0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4B3A34E01E58120F00C314A0 /* Build configuration list for PBXNativeTarget "Juke" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B3A34E11E58120F00C314A0 /* Debug */,
+				4B3A34E21E58120F00C314A0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		4B3A34CE1E58120F00C314A0 /* Juke.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				4B3A34CF1E58120F00C314A0 /* Juke.xcdatamodel */,
+			);
+			currentVersion = 4B3A34CF1E58120F00C314A0 /* Juke.xcdatamodel */;
+			path = Juke.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 4B3A34C11E58120E00C314A0 /* Project object */;
+}
