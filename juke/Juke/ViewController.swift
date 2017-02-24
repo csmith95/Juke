@@ -24,6 +24,7 @@ class ViewController: UIViewController {
     }
     
     func loginSuccessful() {
+        print("LOGGED IN")
         performSegue(withIdentifier: "loginSegue", sender: nil)
     }
     
