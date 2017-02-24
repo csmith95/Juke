@@ -23,22 +23,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, openURL url: URL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
         
-        print("2")
         if SPTAuth.defaultInstance().canHandle(url) {
-            
-            print("HANDLING URL")
             SPTAuth.defaultInstance().handleAuthCallback(withTriggeredAuthURL: url as URL, callback: { (error, session) in
                 
                 if error != nil {
                     print("AUTHENTICATION ERROR")
                     return
                 }
-                
                 let userDefaults = UserDefaults.standard
                 userDefaults.set(session!.accessToken, forKey: "access_token")
                 userDefaults.synchronize()
                 NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: nil)
-                print("POSTED SIGNAL")
             })
         } else {
             print("CAN'T HANDLE URL: ", url)

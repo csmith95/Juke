@@ -38,7 +38,7 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                     </view>
                     <connections>
-                        <segue destination="A5G-jb-G5q" kind="show" identifier="loginSegue" id="ffm-h6-3yq"/>
+                        <segue destination="yff-L0-ZUT" kind="show" identifier="loginSegue" id="nXJ-JA-i8l"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HZG-SM-ndf" sceneMemberID="firstResponder"/>
@@ -85,6 +85,9 @@
                                             <frame key="frameInset" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="xeJ-be-aqE" kind="show" identifier="displayGroup" id="eZH-gn-RIT"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -108,7 +111,38 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BIg-Q4-Koc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1175" y="-255"/>
+            <point key="canvasLocation" x="1230" y="625"/>
+        </scene>
+        <!--GroupTitle-->
+        <scene sceneID="6Rn-ys-Ijl">
+            <objects>
+                <tableViewController id="xeJ-be-aqE" customClass="GroupController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="L1C-f5-Qek">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="W4b-GL-Wat">
+                                <rect key="frame" x="0.0" y="92" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="W4b-GL-Wat" id="Bb4-NV-a0E">
+                                    <frame key="frameInset" width="375" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="xeJ-be-aqE" id="XRu-ye-LTN"/>
+                            <outlet property="delegate" destination="xeJ-be-aqE" id="rEf-OJ-5Vr"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="GroupTitle" id="paA-TT-uur">
+                        <barButtonItem key="rightBarButtonItem" image="search" id="re4-Tf-SJa"/>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fbL-iW-8TF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2068" y="625"/>
         </scene>
         <!--Search View Controller-->
         <scene sceneID="iYi-Ku-Kg1">
@@ -128,7 +162,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchCell" id="8Y7-kg-6Vv" customClass="SearchTableViewCell" customModule="Juke" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="92" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8Y7-kg-6Vv" id="nbw-tK-hd0">
                                             <frame key="frameInset" width="375" height="43.5"/>
@@ -213,7 +247,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="326" y="625"/>
+            <point key="canvasLocation" x="2100" y="-225"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="MTD-mV-J4j">
@@ -233,10 +267,11 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wnc-C4-KzA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="550" y="-254"/>
+            <point key="canvasLocation" x="386" y="625"/>
         </scene>
     </scenes>
     <resources>
         <image name="full_logo" width="1024" height="1024"/>
+        <image name="search" width="25" height="25"/>
     </resources>
 </document>

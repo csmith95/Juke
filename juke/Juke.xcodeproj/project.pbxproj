@@ -17,6 +17,7 @@
 		4B3A34E51E581F1300C314A0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E41E581F1300C314A0 /* AVFoundation.framework */; };
 		4B3A34E71E581F8F00C314A0 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */; };
 		4B3A34EA1E581FBF00C314A0 /* SpotifyAudioPlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E81E581FBF00C314A0 /* SpotifyAudioPlayback.framework */; };
+		4B63F88C1E5FFC3F00E4224D /* GroupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B63F88B1E5FFC3F00E4224D /* GroupController.swift */; };
 		4B845E591E5894FB00C80EFD /* QueuesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B845E581E5894FB00C80EFD /* QueuesController.swift */; };
 		4B845E5B1E591AAD00C80EFD /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B845E5A1E591AAD00C80EFD /* SearchTableViewCell.swift */; };
 		4BB18A891E593D2A005FC549 /* QueueTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB18A881E593D2A005FC549 /* QueueTableViewCell.swift */; };
@@ -39,6 +40,7 @@
 		4B3A34E41E581F1300C314A0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4B3A34E81E581FBF00C314A0 /* SpotifyAudioPlayback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAudioPlayback.framework; sourceTree = "<group>"; };
+		4B63F88B1E5FFC3F00E4224D /* GroupController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupController.swift; sourceTree = "<group>"; };
 		4B845E581E5894FB00C80EFD /* QueuesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueuesController.swift; sourceTree = "<group>"; };
 		4B845E5A1E591AAD00C80EFD /* SearchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
 		4BB18A881E593D2A005FC549 /* QueueTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueueTableViewCell.swift; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 				4B845E5A1E591AAD00C80EFD /* SearchTableViewCell.swift */,
 				4BB18A881E593D2A005FC549 /* QueueTableViewCell.swift */,
 				4B0FB5811E5BFA42008D34FD /* ServerDelegate.swift */,
+				4B63F88B1E5FFC3F00E4224D /* GroupController.swift */,
 			);
 			path = Juke;
 			sourceTree = "<group>";
@@ -192,6 +195,7 @@
 			files = (
 				4B3A34D01E58120F00C314A0 /* Juke.xcdatamodeld in Sources */,
 				4B0FB5821E5BFA42008D34FD /* ServerDelegate.swift in Sources */,
+				4B63F88C1E5FFC3F00E4224D /* GroupController.swift in Sources */,
 				4BC778621E5853EC009DD520 /* ViewController.swift in Sources */,
 				4B845E591E5894FB00C80EFD /* QueuesController.swift in Sources */,
 				4B845E5B1E591AAD00C80EFD /* SearchTableViewCell.swift in Sources */,

@@ -10,8 +10,6 @@ import UIKit
 
 class QueueTableViewCell: UITableViewCell {
 
-    
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

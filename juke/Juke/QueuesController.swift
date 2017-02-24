@@ -9,14 +9,14 @@
 import UIKit
 import CoreLocation
 
-class QueuesController: UIViewController, UITableViewDataSource, CLLocationManagerDelegate {
-    
-    var groups: [Group] = []
+class QueuesController: UIViewController, UITableViewDataSource, CLLocationManagerDelegate, UITableViewDelegate {
     
     struct Group {
         var groupName: String
         var groupID: String?
     }
+    var groups: [Group] = []
+    var selectedGroup: Group? = nil
     
     let locationManager = CLLocationManager()
     let kCLLocationAccuracyKilometer = 0.1
@@ -34,6 +34,7 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
+        tableView.delegate = self
         
         // Ask for authorization from the User.
         if CLLocationManager.locationServicesEnabled() {
@@ -48,6 +49,19 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
         
         // request location to fetch nearby playlists
         locationManager.requestLocation()
+    }
+    
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        print("CALLED!")
+        self.selectedGroup = self.groups[indexPath.row]
+        return indexPath
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "displayGroup") {
+            let vc = segue.destination as! GroupController
+            vc.group = self.selectedGroup
+        }
     }
     
     
