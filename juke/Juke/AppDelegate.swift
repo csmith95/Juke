@@ -23,8 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     @nonobjc func application(_ application: UIApplication, openURL url: URL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
         
-        
-        print("TRYING TO REACH URL: ", url)
+
         if SPTAuth.defaultInstance().canHandle(url) {
             
             SPTAuth.defaultInstance().handleAuthCallback(withTriggeredAuthURL: url as URL, callback: { (error, session) in
@@ -40,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: nil)
             })
         } else {
-            print("CAN'T HANDLE RECEIVED URL")
+            print("CAN'T HANDLE URL: ", url)
         }
         
         return true

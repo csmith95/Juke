@@ -11,11 +11,18 @@ import CoreLocation
 
 class QueuesController: UIViewController, UITableViewDataSource, CLLocationManagerDelegate {
     
-    var items: [String] = ["Hello World", "dkgakjdsg"]
+    var groups: [Group] = []
+    
+    struct Group {
+        var groupName: String
+        var groupID: String?
+    }
+    
     let locationManager = CLLocationManager()
     let kCLLocationAccuracyKilometer = 0.1
     let serverDelegate = ServerDelegate()
-    let kCreateGroupURL = "createGroup"
+    let kCreateGroupQuery = "createGroup"
+    let kFetchNearbyQuery = "findNearbyGroups"
 
     @IBOutlet weak var tableView: UITableView!
     var newGroupName: String?
@@ -38,17 +45,59 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
             // Set a movement threshold for new events.
             locationManager.distanceFilter = 60; // meters
         }
+        
+        // request location to fetch nearby playlists
+        locationManager.requestLocation()
+    }
+    
+    
+    func fetchNearbyPlaylists(latitude: Double, longitude: Double) {
+        
+        // create fields for GET request
+        let fields: [String:Double] = [
+            "latitude" : latitude,
+            "longitude" : longitude
+        ]
+        let dict = NSDictionary(dictionary: fields)
+        
+        // issue GET request, handle response
+        serverDelegate.getRequest(query: kFetchNearbyQuery, fields: dict) { (data: Data?, response: URLResponse?, error: Error?) in
+            
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.allowFragments) as! NSArray
+                if json.count == 0 {
+                    return
+                }
+                
+                for object in json {
+                    let map = object as! NSDictionary
+                    let discoveredGroup = Group(groupName: map["groupName"] as! String, groupID: map["_id"] as? String)
+                    if !self.groups.contains(where: { (group) -> Bool in
+                        group.groupID == discoveredGroup.groupID
+                    }) {
+                        self.groups.append(discoveredGroup) // group hasn't been fetched yet
+                    }
+                }
+                
+                // update UI on main thread
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            } catch {
+                print("ERROR: ", error)
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:QueueTableViewCell = tableView.dequeueReusableCell(withIdentifier: "ListItem") as! QueueTableViewCell
-        cell.textLabel?.text = items[indexPath.row]
+        cell.textLabel?.text = groups[indexPath.row].groupName
         return cell
     }
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items.count
+        return groups.count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -60,29 +109,29 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
         
         alert.addTextField {
             (textfield: UITextField) in
-            textfield.placeholder = "Enter name"
+            textfield.placeholder = "Enter group name"
         }
         
         let add = UIAlertAction(title: "Add", style: .default) {
             (action) in
+            
             let textField = alert.textFields![0]
-            self.items.append(textField.text!)
+            
+            // prematurely create the group w/o ID so UI feels responsive.
+            // ID field is set inside POST callback
+            let newGroup = Group(groupName: textField.text!, groupID: nil)
+            self.groups.append(newGroup)
             self.tableView.reloadData()
             
-            // get location then register playlist w/ db inside 
-            // location callback
-            self.newGroupName = textField.text
+            // get location then register playlist w/ db inside location callback
+            self.newGroupName = textField.text!
             self.locationManager.requestLocation()
         }
         
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) {
-            (action) in
-            print("hi")
-        }
-        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+
         alert.addAction(add)
         alert.addAction(cancel)
-
         present(alert, animated: true, completion: nil)
     }
     
@@ -101,25 +150,47 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if self.newGroupName == nil {
-            return
-        }
         
         let locationArray = locations as NSArray
         let locationObj = locationArray.lastObject as! CLLocation
         let coord = locationObj.coordinate
+        let latitude = coord.latitude
+        let longitude = coord.longitude
+        
+        fetchNearbyPlaylists(latitude: latitude, longitude: longitude)
+        if self.newGroupName == nil {
+            return
+        }
+        
+        // create fields for POST request
         let fields: [String:String] = [
             "groupName" : self.newGroupName!,
-            "latitude" : String(coord.latitude),
-            "longitude" : String(coord.longitude)
+            "latitude" : String(latitude),
+            "longitude" : String(longitude)
         ]
         let dict = NSDictionary(dictionary: fields)
         
-        serverDelegate.postRequest(query: kCreateGroupURL, fields: dict) { (data: Data?, response: URLResponse?, error: Error?) in
+        // issue POST request, handle response
+        serverDelegate.postRequest(query: kCreateGroupQuery, fields: dict) { (data: Data?, response: URLResponse?, error: Error?) in
             if self.newGroupName == nil {
                 return
             }
             self.newGroupName = nil
+            
+            // fill cells in TableView
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.allowFragments) as! NSDictionary
+                let groupName = json["groupName"] as! String
+                let groupID = json["_id"] as! String
+                for i in 0 ..< self.groups.count {
+                    if self.groups[i].groupName == groupName {
+                        self.groups[i].groupID = groupID
+                        return
+                    }
+                }
+            } catch {
+                print("ERROR: ", error)
+            }
         }
     }
     
