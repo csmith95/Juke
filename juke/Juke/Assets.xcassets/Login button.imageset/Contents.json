@@ -2,12 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "jukeEdited.jpeg",
+      "filename" : "Login button.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "juke.png",
       "scale" : "2x"
     },
     {
