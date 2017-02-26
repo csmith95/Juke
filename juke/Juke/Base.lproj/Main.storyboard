@@ -38,10 +38,21 @@
                                     <action selector="spotifyLogin:" destination="QC7-bB-CTg" eventType="touchUpInside" id="ZlC-XD-ZWP"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wnc-XT-gxM">
+                                <rect key="frame" x="89" y="103" width="197" height="41"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="log in with Spotify">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="spotifyLogin:" destination="QC7-bB-CTg" eventType="touchUpInside" id="78Q-hm-gfv"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                     </view>
                     <connections>
+                        <outlet property="loginButton" destination="wnc-XT-gxM" id="6L7-WC-xLr"/>
                         <segue destination="yff-L0-ZUT" kind="show" identifier="loginSegue" id="nXJ-JA-i8l"/>
                     </connections>
                 </viewController>
