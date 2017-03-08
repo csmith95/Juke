@@ -13,7 +13,10 @@ class ViewController: UIViewController {
     let kClientID = "77d4489425fe464483f0934f99847c8b"
     let kCallbackURL = "juke1231://callback"
     
-    @IBAction func spotifyLogin(_ sender: UIButton) {
+    
+    @IBOutlet weak var loginButton: UIButton!
+    
+    @IBAction func spotifyLogin(_ sender: Any) {
         let auth = SPTAuth.defaultInstance()!
         auth.clientID = kClientID
         auth.redirectURL = NSURL(string:kCallbackURL) as! URL
@@ -21,7 +24,17 @@ class ViewController: UIViewController {
         let loginURL = auth.loginURL!
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.loginSuccessful), name: Notification.Name("loginSuccessful"), object: nil)
         UIApplication.shared.open(loginURL)
-    }
+        }
+    
+//    @IBAction func spotifyLogin(_ sender: UIButton) {
+//        let auth = SPTAuth.defaultInstance()!
+//        auth.clientID = kClientID
+//        auth.redirectURL = NSURL(string:kCallbackURL) as! URL
+//        auth.requestedScopes = [SPTAuthStreamingScope]
+//        let loginURL = auth.loginURL!
+//        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.loginSuccessful), name: Notification.Name("loginSuccessful"), object: nil)
+//        UIApplication.shared.open(loginURL)
+//    }
     
     func loginSuccessful() {
         performSegue(withIdentifier: "loginSegue", sender: nil)
@@ -30,6 +43,9 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        loginButton.layer.borderWidth = 1.0
+        loginButton.layer.borderColor = UIColor(red:139/255.0, green:245/255.0, blue:119/255.0, alpha: 1.0).cgColor
+        loginButton.layer.cornerRadius = 15
     }
     
 
