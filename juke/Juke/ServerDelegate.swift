@@ -11,6 +11,7 @@ import Foundation
 class ServerDelegate {
     
     let kBaseURL = "http://myjukebx.herokuapp.com/"
+    let kSpotifyBaseURL = "https://api.spotify.com/v1/search"
     
     // issues postRequest using fields specified as key-val pairs in NSDictionary, then executes callback with received data
     func postRequest(query: String, fields : NSDictionary, callback : @escaping (Data?, URLResponse?, Error?) -> Void) {
@@ -42,6 +43,15 @@ class ServerDelegate {
             i += 1
         }
         return postString
+    }
+    
+    func spotifyGetRequest(query: String, fields : NSDictionary, callback : @escaping (Data?, URLResponse?, Error?) -> Void) {
+        let queryString = createBodyString(fields: fields)
+        var request = URLRequest(url: URL(string: kSpotifyBaseURL + query + "?" + queryString)!)
+        request.httpMethod = "GET"
+        print("REQUEST: ", request)
+        let task = URLSession.shared.dataTask(with: request, completionHandler: callback)
+        task.resume()
     }
     
 }

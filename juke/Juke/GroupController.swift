@@ -32,6 +32,18 @@ class GroupController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
+    @IBAction func searchButtonPressed(_ sender: AnyObject) {
+        performSegue(withIdentifier: "searchSegue", sender: sender)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "searchSegue") {
+            let vc = segue.destination as! SearchTableViewController
+            vc.group = self.group
+        }
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
