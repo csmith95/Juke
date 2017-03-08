@@ -14,8 +14,8 @@ class ServerDelegate {
     let kSpotifyBaseURL = "https://api.spotify.com/v1/search"
     
     // issues postRequest using fields specified as key-val pairs in NSDictionary, then executes callback with received data
-    func postRequest(query: String, fields : NSDictionary, callback : @escaping (Data?, URLResponse?, Error?) -> Void) {
-        var request = URLRequest(url: URL(string: kBaseURL + query)!)
+    func postRequest(path: String, fields : NSDictionary, callback : @escaping (Data?, URLResponse?, Error?) -> Void) {
+        var request = URLRequest(url: URL(string: kBaseURL + path)!)
         request.httpMethod = "POST"
         let bodyString = createBodyString(fields: fields)
         request.httpBody = bodyString.data(using: .utf8)
@@ -23,9 +23,9 @@ class ServerDelegate {
         task.resume()
     }
     
-    func getRequest(query: String, fields : NSDictionary, callback : @escaping (Data?, URLResponse?, Error?) -> Void) {
+    func getRequest(path: String, fields : NSDictionary, callback : @escaping (Data?, URLResponse?, Error?) -> Void) {
         let queryString = createBodyString(fields: fields)
-        var request = URLRequest(url: URL(string: kBaseURL + query + "?" + queryString)!)
+        var request = URLRequest(url: URL(string: kBaseURL + path + "?" + queryString)!)
         request.httpMethod = "GET"
         print("REQUEST: ", request)
         let task = URLSession.shared.dataTask(with: request, completionHandler: callback)
@@ -45,9 +45,9 @@ class ServerDelegate {
         return postString
     }
     
-    func spotifyGetRequest(query: String, fields : NSDictionary, callback : @escaping (Data?, URLResponse?, Error?) -> Void) {
+    func spotifyGetRequest(path: String, fields : NSDictionary, callback : @escaping (Data?, URLResponse?, Error?) -> Void) {
         let queryString = createBodyString(fields: fields)
-        var request = URLRequest(url: URL(string: kSpotifyBaseURL + query + "?" + queryString)!)
+        var request = URLRequest(url: URL(string: kSpotifyBaseURL + path + "?" + queryString)!)
         request.httpMethod = "GET"
         print("REQUEST: ", request)
         let task = URLSession.shared.dataTask(with: request, completionHandler: callback)

@@ -18,9 +18,10 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     // passed from GroupController (the previous ViewController)
     var group: QueuesController.Group?
+    let kAddSongPath = "addSong"
     
     struct Song {
-        var id: String
+        var uri: String
         var artistName: String
         var songName: String
     }
@@ -69,8 +70,21 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func addSongToGroup(song: Song, group: QueuesController.Group) {
-        print("ADD to group: ", group)
-        print("SONG: ", song)
+        // create fields for GET request
+        let fields: [String:String] = [
+            "group_id" : group.id!,
+            "song_id" : song.uri
+        ]
+        let dict = NSDictionary(dictionary: fields)
+        
+        serverDelegate.postRequest(path: kAddSongPath, fields: dict) { (data: Data?, response: URLResponse?, error: Error?) in
+            if response != nil {
+                print("ADD SONG RESPONSE: ", response)
+            }
+            if error != nil {
+                print("ADD SONG ERROR: ", error)
+            }
+        }
     }
     
     // Code to send GET request and parse json response into results array
@@ -80,12 +94,12 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         let numItemsToCache = min(kNumResultsToStore, items.count)
         for i in 0 ..< numItemsToCache {
             let curr = items[i] as! NSDictionary
-            let id = (curr["uri"] as! String).characters.split{$0 == ":"}.map(String.init)[2]
+            let uri = curr["uri"] as! String
             let name = curr["name"] as! String
             let artists = curr["artists"] as! NSArray
             let first = artists[0] as! NSDictionary
             let artist = first["name"] as! String
-            self.results.append(Song(id: id, artistName: artist, songName: name))
+            self.results.append(Song(uri: uri, artistName: artist, songName: name))
         }
     }
     
@@ -110,7 +124,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             let dict = NSDictionary(dictionary: fields)
             
             // issue GET request, handle response
-            serverDelegate.spotifyGetRequest(query: "", fields: dict) { (data: Data?, response: URLResponse?, error: Error?) in
+            serverDelegate.spotifyGetRequest(path: "", fields: dict) { (data: Data?, response: URLResponse?, error: Error?) in
                 do {
                     let jsonDict = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.allowFragments) as! NSDictionary
                     self.fillItems(json: jsonDict)

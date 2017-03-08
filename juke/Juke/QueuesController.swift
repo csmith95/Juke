@@ -12,8 +12,8 @@ import CoreLocation
 class QueuesController: UIViewController, UITableViewDataSource, CLLocationManagerDelegate, UITableViewDelegate {
     
     struct Group {
-        var groupName: String
-        var groupID: String?
+        var name: String
+        var id: String?
     }
     var groups: [Group] = []
     var selectedGroup: Group? = nil
@@ -21,8 +21,8 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
     let locationManager = CLLocationManager()
     let kCLLocationAccuracyKilometer = 0.1
     let serverDelegate = ServerDelegate()
-    let kCreateGroupQuery = "createGroup"
-    let kFetchNearbyQuery = "findNearbyGroups"
+    let kCreateGroupPath = "createGroup"
+    let kFetchNearbyPath = "findNearbyGroups"
 
     @IBOutlet weak var tableView: UITableView!
     var newGroupName: String?
@@ -74,7 +74,7 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
         let dict = NSDictionary(dictionary: fields)
         
         // issue GET request, handle response
-        serverDelegate.getRequest(query: kFetchNearbyQuery, fields: dict) { (data: Data?, response: URLResponse?, error: Error?) in
+        serverDelegate.getRequest(path: kFetchNearbyPath, fields: dict) { (data: Data?, response: URLResponse?, error: Error?) in
             
             do {
                 let json = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.allowFragments) as! NSArray
@@ -84,9 +84,9 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
                 
                 for object in json {
                     let map = object as! NSDictionary
-                    let discoveredGroup = Group(groupName: map["groupName"] as! String, groupID: map["_id"] as? String)
+                    let discoveredGroup = Group(name: map["groupName"] as! String, id: map["_id"] as? String)
                     if !self.groups.contains(where: { (group) -> Bool in
-                        group.groupID == discoveredGroup.groupID
+                        group.id == discoveredGroup.id
                     }) {
                         self.groups.append(discoveredGroup) // group hasn't been fetched yet
                     }
@@ -104,7 +104,7 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: QueueTableViewCell = tableView.dequeueReusableCell(withIdentifier: "ListItem") as! QueueTableViewCell
-        cell.textLabel?.text = groups[indexPath.row].groupName
+        cell.textLabel?.text = groups[indexPath.row].name
         return cell
     }
     
@@ -132,7 +132,7 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
             
             // prematurely create the group w/o ID so UI feels responsive.
             // ID field is set inside POST callback
-            let newGroup = Group(groupName: textField.text!, groupID: nil)
+            let newGroup = Group(name: textField.text!, id: nil)
             self.groups.append(newGroup)
             self.tableView.reloadData()
             
@@ -184,7 +184,7 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
         let dict = NSDictionary(dictionary: fields)
         
         // issue POST request, handle response
-        serverDelegate.postRequest(query: kCreateGroupQuery, fields: dict) { (data: Data?, response: URLResponse?, error: Error?) in
+        serverDelegate.postRequest(path: kCreateGroupPath, fields: dict) { (data: Data?, response: URLResponse?, error: Error?) in
             if self.newGroupName == nil {
                 return
             }
@@ -196,8 +196,8 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
                 let groupName = json["groupName"] as! String
                 let groupID = json["_id"] as! String
                 for i in 0 ..< self.groups.count {
-                    if self.groups[i].groupName == groupName {
-                        self.groups[i].groupID = groupID
+                    if self.groups[i].name == groupName {
+                        self.groups[i].id = groupID
                         return
                     }
                 }
@@ -210,6 +210,8 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("ERROR RECEIVING LOCATION UPDATE: ", error)
     }
+    
+    
     
     
     /*
