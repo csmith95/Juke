@@ -21,27 +21,29 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="999" verticalCompressionResistancePriority="999" misplaced="YES" image="full_logo" translatesAutoresizingMaskIntoConstraints="NO" id="uak-dm-KCp">
-                                <rect key="frame" x="40" y="90" width="270" height="300"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="JukeLogo" translatesAutoresizingMaskIntoConstraints="NO" id="ESk-da-D6A">
+                                <rect key="frame" x="81" y="201" width="253" height="317"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="270" id="aeO-Kq-tJX"/>
-                                    <constraint firstAttribute="height" constant="300" id="b47-GR-rbW"/>
+                                    <constraint firstAttribute="width" constant="210" id="8aV-B4-wOJ"/>
+                                    <constraint firstAttribute="height" constant="300" id="nB4-yT-Gyl"/>
                                 </constraints>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                         <constraints>
-                            <constraint firstItem="uak-dm-KCp" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="azM-72-WBF"/>
-                            <constraint firstItem="uak-dm-KCp" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="klI-fW-fwv"/>
+                            <constraint firstItem="ESk-da-D6A" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Cyj-Vt-Jfn"/>
+                            <constraint firstItem="ESk-da-D6A" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Qon-jo-XLP"/>
+                            <constraint firstItem="ESk-da-D6A" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="ugw-vo-m36"/>
+                            <constraint firstItem="ESk-da-D6A" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="who-I2-oha"/>
                         </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="52" y="374.66266866566718"/>
+            <point key="canvasLocation" x="50.724637681159422" y="374.18478260869568"/>
         </scene>
     </scenes>
     <resources>
-        <image name="full_logo" width="2048" height="2048"/>
+        <image name="JukeLogo" width="1481" height="2039"/>
     </resources>
 </document>
