@@ -52,7 +52,6 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
     }
     
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        print("CALLED!")
         self.selectedGroup = self.groups[indexPath.row]
         return indexPath
     }
@@ -104,7 +103,7 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell:QueueTableViewCell = tableView.dequeueReusableCell(withIdentifier: "ListItem") as! QueueTableViewCell
+        let cell: QueueTableViewCell = tableView.dequeueReusableCell(withIdentifier: "ListItem") as! QueueTableViewCell
         cell.textLabel?.text = groups[indexPath.row].groupName
         return cell
     }

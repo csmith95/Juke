@@ -19,12 +19,12 @@
 		4B3A34EA1E581FBF00C314A0 /* SpotifyAudioPlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E81E581FBF00C314A0 /* SpotifyAudioPlayback.framework */; };
 		4B63F88C1E5FFC3F00E4224D /* GroupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B63F88B1E5FFC3F00E4224D /* GroupController.swift */; };
 		4B845E591E5894FB00C80EFD /* QueuesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B845E581E5894FB00C80EFD /* QueuesController.swift */; };
-		4B845E5B1E591AAD00C80EFD /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B845E5A1E591AAD00C80EFD /* SearchTableViewCell.swift */; };
 		4BB18A891E593D2A005FC549 /* QueueTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB18A881E593D2A005FC549 /* QueueTableViewCell.swift */; };
 		4BC7785A1E5835D9009DD520 /* SpotifyAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC778591E5835D9009DD520 /* SpotifyAuthentication.framework */; };
 		4BC7785C1E583686009DD520 /* SpotifyMetadata.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC7785B1E583686009DD520 /* SpotifyMetadata.framework */; };
 		4BC778621E5853EC009DD520 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC778611E5853EC009DD520 /* ViewController.swift */; };
-		4BC778681E586371009DD520 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC778671E586371009DD520 /* SearchViewController.swift */; };
+		4BDCEBA21E6F63E900D9D3EE /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEBA11E6F63E900D9D3EE /* SearchTableViewController.swift */; };
+		4BDCEBA41E6F6D3900D9D3EE /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEBA31E6F6D3900D9D3EE /* SearchCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,13 +42,13 @@
 		4B3A34E81E581FBF00C314A0 /* SpotifyAudioPlayback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAudioPlayback.framework; sourceTree = "<group>"; };
 		4B63F88B1E5FFC3F00E4224D /* GroupController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupController.swift; sourceTree = "<group>"; };
 		4B845E581E5894FB00C80EFD /* QueuesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueuesController.swift; sourceTree = "<group>"; };
-		4B845E5A1E591AAD00C80EFD /* SearchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
 		4BB18A881E593D2A005FC549 /* QueueTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueueTableViewCell.swift; sourceTree = "<group>"; };
 		4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Juke-Bridging-Header.h"; sourceTree = "<group>"; };
 		4BC778591E5835D9009DD520 /* SpotifyAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAuthentication.framework; sourceTree = "<group>"; };
 		4BC7785B1E583686009DD520 /* SpotifyMetadata.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyMetadata.framework; sourceTree = "<group>"; };
 		4BC778611E5853EC009DD520 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../../juke/Juke/ViewController.swift; sourceTree = "<group>"; };
-		4BC778671E586371009DD520 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchViewController.swift; path = ../../juke/Juke/SearchViewController.swift; sourceTree = "<group>"; };
+		4BDCEBA11E6F63E900D9D3EE /* SearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
+		4BDCEBA31E6F6D3900D9D3EE /* SearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,12 +96,12 @@
 				4B3A34CE1E58120F00C314A0 /* Juke.xcdatamodeld */,
 				4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */,
 				4BC778611E5853EC009DD520 /* ViewController.swift */,
-				4BC778671E586371009DD520 /* SearchViewController.swift */,
 				4B845E581E5894FB00C80EFD /* QueuesController.swift */,
-				4B845E5A1E591AAD00C80EFD /* SearchTableViewCell.swift */,
 				4BB18A881E593D2A005FC549 /* QueueTableViewCell.swift */,
 				4B0FB5811E5BFA42008D34FD /* ServerDelegate.swift */,
 				4B63F88B1E5FFC3F00E4224D /* GroupController.swift */,
+				4BDCEBA11E6F63E900D9D3EE /* SearchTableViewController.swift */,
+				4BDCEBA31E6F6D3900D9D3EE /* SearchCell.swift */,
 			);
 			path = Juke;
 			sourceTree = "<group>";
@@ -197,11 +197,11 @@
 				4B0FB5821E5BFA42008D34FD /* ServerDelegate.swift in Sources */,
 				4B63F88C1E5FFC3F00E4224D /* GroupController.swift in Sources */,
 				4BC778621E5853EC009DD520 /* ViewController.swift in Sources */,
+				4BDCEBA41E6F6D3900D9D3EE /* SearchCell.swift in Sources */,
 				4B845E591E5894FB00C80EFD /* QueuesController.swift in Sources */,
-				4B845E5B1E591AAD00C80EFD /* SearchTableViewCell.swift in Sources */,
-				4BC778681E586371009DD520 /* SearchViewController.swift in Sources */,
 				4B3A34CD1E58120F00C314A0 /* AppDelegate.swift in Sources */,
 				4BB18A891E593D2A005FC549 /* QueueTableViewCell.swift in Sources */,
+				4BDCEBA21E6F63E900D9D3EE /* SearchTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
