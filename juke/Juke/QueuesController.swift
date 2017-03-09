@@ -8,24 +8,28 @@
 
 import UIKit
 import CoreLocation
+import Alamofire
 
 class QueuesController: UIViewController, UITableViewDataSource, CLLocationManagerDelegate, UITableViewDelegate {
     
     struct Group {
-        var groupName: String
-        var groupID: String?
+        var name: String
+        var id: String?
     }
     var groups: [Group] = []
     var selectedGroup: Group? = nil
+    var pendingGroupID: String? = nil
     
     let locationManager = CLLocationManager()
     let kCLLocationAccuracyKilometer = 0.1
-    let serverDelegate = ServerDelegate()
-    let kCreateGroupQuery = "createGroup"
-    let kFetchNearbyQuery = "findNearbyGroups"
+    let kBaseURL = "http://myjukebx.herokuapp.com/"
+    let kFetchNearbyPath = "findNearbyGroups"
+    let kCreateGroupPath = "createGroup"
+    let kUpdateLocationPath = "updateGroupLocation"
 
     @IBOutlet weak var tableView: UITableView!
     var newGroupName: String?
+    
 
     @IBAction func addItem(_ sender: Any) {
         alert()
@@ -66,48 +70,33 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
     
     func fetchNearbyPlaylists(latitude: Double, longitude: Double) {
         
-        // create fields for GET request
-        let fields: [String:Double] = [
-            "latitude" : latitude,
-            "longitude" : longitude
-        ]
-        let dict = NSDictionary(dictionary: fields)
         
-        // issue GET request, handle response
-        serverDelegate.getRequest(query: kFetchNearbyQuery, fields: dict) { (data: Data?, response: URLResponse?, error: Error?) in
-            
-            do {
-                let json = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.allowFragments) as! NSArray
-                if json.count == 0 {
-                    return
-                }
-                
-                for object in json {
+        let params: Parameters = ["latitude": latitude, "longitude": longitude]
+        Alamofire.request(self.kBaseURL + self.kFetchNearbyPath, method: .get, parameters: params).validate().responseJSON { response in
+            switch response.result {
+            case .success:
+                let nearbyGroups = response.result.value as! NSArray
+                self.groups = []    // clear groups that have already been fetched to avoid duplicate displays
+                for object in nearbyGroups {
                     let map = object as! NSDictionary
-                    let discoveredGroup = Group(groupName: map["groupName"] as! String, groupID: map["_id"] as? String)
-                    if !self.groups.contains(where: { (group) -> Bool in
-                        group.groupID == discoveredGroup.groupID
-                    }) {
-                        self.groups.append(discoveredGroup) // group hasn't been fetched yet
-                    }
+                    self.groups.append(Group(name: map["groupName"] as! String, id: map["_id"] as? String))
                 }
                 
                 // update UI on main thread
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
-            } catch {
-                print("ERROR: ", error)
+            case .failure(let error):
+                print(error)
             }
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: QueueTableViewCell = tableView.dequeueReusableCell(withIdentifier: "ListItem") as! QueueTableViewCell
-        cell.textLabel?.text = groups[indexPath.row].groupName
+        cell.textLabel?.text = groups[indexPath.row].name
         return cell
     }
-    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return groups.count
@@ -132,17 +121,26 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
             
             // prematurely create the group w/o ID so UI feels responsive.
             // ID field is set inside POST callback
-            let newGroup = Group(groupName: textField.text!, groupID: nil)
+            let newGroup = Group(name: textField.text!, id: nil)
             self.groups.append(newGroup)
             self.tableView.reloadData()
-            
-            // get location then register playlist w/ db inside location callback
             self.newGroupName = textField.text!
-            self.locationManager.requestLocation()
+            
+            // create group
+            let params: Parameters = ["groupName" : newGroup.name]
+            Alamofire.request(self.kBaseURL + self.kCreateGroupPath, method: .post, parameters: params).validate().responseJSON { response in
+                switch response.result {
+                case .success:
+                    let group = response.result.value as! NSDictionary
+                    self.pendingGroupID = group["_id"] as? String
+                    self.locationManager.requestLocation() // set group location later inside location callback
+                case .failure(let error):
+                    print(error)
+                }
+            }
         }
         
         let cancel = UIAlertAction(title: "Cancel", style: .cancel)
-
         alert.addAction(add)
         alert.addAction(cancel)
         present(alert, animated: true, completion: nil)
@@ -162,6 +160,8 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
         }
     }
     
+    var pendingGroupIDLock = pthread_mutex_t()
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         let locationArray = locations as NSArray
@@ -169,47 +169,29 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
         let coord = locationObj.coordinate
         let latitude = coord.latitude
         let longitude = coord.longitude
-        
+    
         fetchNearbyPlaylists(latitude: latitude, longitude: longitude)
-        if self.newGroupName == nil {
-            return
-        }
-        
-        // create fields for POST request
-        let fields: [String:String] = [
-            "groupName" : self.newGroupName!,
-            "latitude" : String(latitude),
-            "longitude" : String(longitude)
-        ]
-        let dict = NSDictionary(dictionary: fields)
-        
-        // issue POST request, handle response
-        serverDelegate.postRequest(query: kCreateGroupQuery, fields: dict) { (data: Data?, response: URLResponse?, error: Error?) in
-            if self.newGroupName == nil {
-                return
-            }
-            self.newGroupName = nil
-            
-            // fill cells in TableView
-            do {
-                let json = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.allowFragments) as! NSDictionary
-                let groupName = json["groupName"] as! String
-                let groupID = json["_id"] as! String
-                for i in 0 ..< self.groups.count {
-                    if self.groups[i].groupName == groupName {
-                        self.groups[i].groupID = groupID
-                        return
-                    }
+        pthread_mutex_lock(&pendingGroupIDLock)
+        if let groupID = self.pendingGroupID {  // update group location, if there's a pending group
+            self.pendingGroupID = nil
+            let params: Parameters = ["id" : groupID, "latitude": latitude, "longitude": longitude]
+            Alamofire.request(self.kBaseURL + self.kUpdateLocationPath, method: .post, parameters: params).validate().responseJSON { response in
+                switch response.result {
+                case .success:
+                    print("Set location for group ", groupID)
+                case .failure(let error):
+                    print(error)
                 }
-            } catch {
-                print("ERROR: ", error)
             }
         }
+        pthread_mutex_unlock(&pendingGroupIDLock)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("ERROR RECEIVING LOCATION UPDATE: ", error)
     }
+    
+    
     
     
     /*

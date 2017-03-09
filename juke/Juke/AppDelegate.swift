@@ -25,15 +25,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if SPTAuth.defaultInstance().canHandle(url) {
             SPTAuth.defaultInstance().handleAuthCallback(withTriggeredAuthURL: url as URL, callback: { (error, session) in
-                
                 if error != nil {
                     print("AUTHENTICATION ERROR")
                     return
                 }
-                let userDefaults = UserDefaults.standard
-                userDefaults.set(session!.accessToken, forKey: "access_token")
-                userDefaults.synchronize()
-                NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: nil)
+                if let session = session {
+                    let userDefaults = UserDefaults.standard
+                    let sessionData = NSKeyedArchiver.archivedData(withRootObject: session)
+                    userDefaults.set(sessionData, forKey: "SpotifySession")
+                    NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: nil)
+                }
             })
         } else {
             print("CAN'T HANDLE URL: ", url)

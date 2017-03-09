@@ -16,7 +16,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var loginButton: UIButton!
     
-    @IBAction func spotifyLogin(_ sender: Any) {
+    @IBAction func loginPressed(_ sender: AnyObject) {
         let auth = SPTAuth.defaultInstance()!
         auth.clientID = kClientID
         auth.redirectURL = NSURL(string:kCallbackURL) as! URL
@@ -24,17 +24,7 @@ class ViewController: UIViewController {
         let loginURL = auth.loginURL!
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.loginSuccessful), name: Notification.Name("loginSuccessful"), object: nil)
         UIApplication.shared.open(loginURL)
-        }
-    
-//    @IBAction func spotifyLogin(_ sender: UIButton) {
-//        let auth = SPTAuth.defaultInstance()!
-//        auth.clientID = kClientID
-//        auth.redirectURL = NSURL(string:kCallbackURL) as! URL
-//        auth.requestedScopes = [SPTAuthStreamingScope]
-//        let loginURL = auth.loginURL!
-//        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.loginSuccessful), name: Notification.Name("loginSuccessful"), object: nil)
-//        UIApplication.shared.open(loginURL)
-//    }
+    }
     
     func loginSuccessful() {
         performSegue(withIdentifier: "loginSegue", sender: nil)
