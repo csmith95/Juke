@@ -25,6 +25,7 @@
 		4BDCEBA21E6F63E900D9D3EE /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEBA11E6F63E900D9D3EE /* SearchTableViewController.swift */; };
 		4BDCEBA41E6F6D3900D9D3EE /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEBA31E6F6D3900D9D3EE /* SearchCell.swift */; };
 		4BDCEBA81E709F7F00D9D3EE /* JamsPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */; };
+		4BDCEC061E720D0B00D9D3EE /* ServerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEC051E720D0B00D9D3EE /* ServerConstants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,6 +110,7 @@
 		4BDCEBA31E6F6D3900D9D3EE /* SearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JamsPlayer.swift; sourceTree = "<group>"; };
 		4BDCEBEA1E70F6FC00D9D3EE /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = ../Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
+		4BDCEC051E720D0B00D9D3EE /* ServerConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerConstants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +165,7 @@
 				4BDCEBA11E6F63E900D9D3EE /* SearchTableViewController.swift */,
 				4BDCEBA31E6F6D3900D9D3EE /* SearchCell.swift */,
 				4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */,
+				4BDCEC051E720D0B00D9D3EE /* ServerConstants.swift */,
 			);
 			path = Juke;
 			sourceTree = "<group>";
@@ -327,6 +330,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BDCEC061E720D0B00D9D3EE /* ServerConstants.swift in Sources */,
 				4B3A34D01E58120F00C314A0 /* Juke.xcdatamodeld in Sources */,
 				4B63F88C1E5FFC3F00E4224D /* GroupController.swift in Sources */,
 				4BC778621E5853EC009DD520 /* ViewController.swift in Sources */,

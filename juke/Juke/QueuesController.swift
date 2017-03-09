@@ -22,10 +22,6 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
     
     let locationManager = CLLocationManager()
     let kCLLocationAccuracyKilometer = 0.1
-    let kBaseURL = "http://myjukebx.herokuapp.com/"
-    let kFetchNearbyPath = "findNearbyGroups"
-    let kCreateGroupPath = "createGroup"
-    let kUpdateLocationPath = "updateGroupLocation"
 
     @IBOutlet weak var tableView: UITableView!
     var newGroupName: String?
@@ -72,7 +68,7 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
         
         
         let params: Parameters = ["latitude": latitude, "longitude": longitude]
-        Alamofire.request(self.kBaseURL + self.kFetchNearbyPath, method: .get, parameters: params).validate().responseJSON { response in
+        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kFetchNearbyPath, method: .get, parameters: params).validate().responseJSON { response in
             switch response.result {
             case .success:
                 let nearbyGroups = response.result.value as! NSArray
@@ -128,7 +124,7 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
             
             // create group
             let params: Parameters = ["groupName" : newGroup.name]
-            Alamofire.request(self.kBaseURL + self.kCreateGroupPath, method: .post, parameters: params).validate().responseJSON { response in
+            Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kCreateGroupPath, method: .post, parameters: params).validate().responseJSON { response in
                 switch response.result {
                 case .success:
                     let group = response.result.value as! NSDictionary
@@ -175,7 +171,7 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
         if let groupID = self.pendingGroupID {  // update group location, if there's a pending group
             self.pendingGroupID = nil
             let params: Parameters = ["id" : groupID, "latitude": latitude, "longitude": longitude]
-            Alamofire.request(self.kBaseURL + self.kUpdateLocationPath, method: .post, parameters: params).validate().responseJSON { response in
+            Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kUpdateLocationPath, method: .post, parameters: params).validate().responseJSON { response in
                 switch response.result {
                 case .success:
                     print("Set location for group ", groupID)

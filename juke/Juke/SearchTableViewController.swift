@@ -19,9 +19,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     // passed from GroupController (the previous ViewController)
     var group: QueuesController.Group?
-    let kBaseURL = "http://myjukebx.herokuapp.com/"
-    let kSpotifyBaseURL = "https://api.spotify.com/v1/search"
-    let kAddSongPath = "addSong"
     
     struct Song {
         var uri: String
@@ -73,7 +70,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     func addSongToGroup(song: Song, group: QueuesController.Group) {
         let params: Parameters = ["group_id": group.id!, "song_id": song.uri]
-        Alamofire.request(self.kBaseURL + self.kAddSongPath, method: .post, parameters: params).validate().responseJSON { response in
+        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate().responseJSON { response in
             switch response.result {
             case .success:
                 print("Added song: ", song)
@@ -114,7 +111,8 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             "offset" : "00",
             "limit" : "10"
         ]
-        Alamofire.request(self.kSpotifyBaseURL, method: .get, parameters: params).validate().responseJSON { response in
+    
+        Alamofire.request(ServerConstants.kSpotifySearchURL, method: .get, parameters: params).validate().responseJSON { response in
             switch response.result {
             case .success:
                 if let response = response.result.value as? NSDictionary {
