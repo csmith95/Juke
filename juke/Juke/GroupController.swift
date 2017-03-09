@@ -7,8 +7,12 @@
 //
 
 import UIKit
+import Alamofire
 
 class GroupController: UITableViewController {
+    
+    let kServerBaseURL = "http://myjukebx.herokuapp.com/"
+    let kFetchSongsPath = "/fetchSongs"
 
     var navBarTitle: String? {
         get {
@@ -25,12 +29,7 @@ class GroupController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navBarTitle = group?.name
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        fetchSongs()
     }
 
     @IBAction func searchButtonPressed(_ sender: AnyObject) {
@@ -62,15 +61,14 @@ class GroupController: UITableViewController {
     }
     
     
-    // function to fetch songs and trigger table reload
-    func fetchSongs(latitude: Double, longitude: Double) {
+    // fetch songs and trigger table reload
+    func fetchSongs() {
         
-        // create fields for GET request
-        let fields: [String:Double] = [
-            "latitude" : latitude,
-            "longitude" : longitude
-        ]
-        let dict = NSDictionary(dictionary: fields)
+        Alamofire.request(URL(string: kServerBaseURL + kFetchSongsPath)!, method: .get, parameters: ["group_id":self.group?.id]).responseJSON { response in
+            
+         print(response)
+            
+        }
         
 //        // issue GET request, handle response
 //        serverDelegate.getRequest(path: kFetchNearbyPath, fields: dict) { (data: Data?, response: URLResponse?, error: Error?) in

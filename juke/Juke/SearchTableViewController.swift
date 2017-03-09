@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
@@ -18,6 +19,8 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     // passed from GroupController (the previous ViewController)
     var group: QueuesController.Group?
+    let kBaseURL = "http://myjukebx.herokuapp.com/"
+    let kSpotifyBaseURL = "https://api.spotify.com/v1/search"
     let kAddSongPath = "addSong"
     
     struct Song {
@@ -26,7 +29,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         var songName: String
     }
     
-    let serverDelegate = ServerDelegate()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,19 +72,13 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func addSongToGroup(song: Song, group: QueuesController.Group) {
-        // create fields for GET request
-        let fields: [String:String] = [
-            "group_id" : group.id!,
-            "song_id" : song.uri
-        ]
-        let dict = NSDictionary(dictionary: fields)
-        
-        serverDelegate.postRequest(path: kAddSongPath, fields: dict) { (data: Data?, response: URLResponse?, error: Error?) in
-            if response != nil {
-                print("ADD SONG RESPONSE: ", response)
-            }
-            if error != nil {
-                print("ADD SONG ERROR: ", error)
+        let params: Parameters = ["group_id": group.id!, "song_id": song.uri]
+        Alamofire.request(self.kBaseURL + self.kAddSongPath, method: .post, parameters: params).validate().responseJSON { response in
+            switch response.result {
+            case .success:
+                print("Added song: ", song)
+            case .failure(let error):
+                print(error)
             }
         }
     }
@@ -110,32 +106,26 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         }
         
         self.results = []
-        let userDefaults = UserDefaults.standard
-        if userDefaults.object(forKey: "access_token") != nil {
-            let fixedQuery = query.replacingOccurrences(of: " ", with: "%20")
-            // create fields for GET request
-            let fields: [String:String] = [
-                "query" : fixedQuery,
-                "type" : "track",
-                "market" : "US",
-                "offset" : "00",
-                "limit" : "10"
-            ]
-            let dict = NSDictionary(dictionary: fields)
-            
-            // issue GET request, handle response
-            serverDelegate.spotifyGetRequest(path: "", fields: dict) { (data: Data?, response: URLResponse?, error: Error?) in
-                do {
-                    let jsonDict = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.allowFragments) as! NSDictionary
-                    self.fillItems(json: jsonDict)
-                    
-                    // update UI on main thread
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
-                } catch {
-                    print("ERROR: ", error)
+        let fixedQuery = query.replacingOccurrences(of: " ", with: "%20")
+        let params: Parameters = [
+            "query" : fixedQuery,
+            "type" : "track",
+            "market" : "US",
+            "offset" : "00",
+            "limit" : "10"
+        ]
+        Alamofire.request(self.kSpotifyBaseURL, method: .get, parameters: params).validate().responseJSON { response in
+            switch response.result {
+            case .success:
+                if let response = response.result.value as? NSDictionary {
+                    self.fillItems(json: response)
                 }
+                // update UI on main thread
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            case .failure(let error):
+                print(error)
             }
         }
     }

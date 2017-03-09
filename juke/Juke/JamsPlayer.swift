@@ -30,24 +30,24 @@ class JamsPlayer  {
     public func playTrack(trackUri: String) {
         if self.session != nil {
             
-            try {
-                let req = SPTTrack.createRequest(forTrack: URL(string: trackUri), withAccessToken: session!.accessToken, market: nil)
-                task = URLSession.shared.dataTask(with: req, completionHandler: callback)
-                task.resume()
-            catch {
-                    
-            }
-            
-            SPTRequest.requestItemAtURI(NSURL(string: trackUri), withSession: session, callback: { (error:NSError!, trackObj:AnyObject!) -> Void in
-             if error != nil {
-                println("Album lookup got error \(error)")
-                return
-             }
-             
-             let track = trackObj as SPTTrack
-             
-             self.player?.playTrackProvider(track, callback: nil)
-            })
+//            try {
+//                let req = SPTTrack.createRequest(forTrack: URL(string: trackUri), withAccessToken: session!.accessToken, market: nil)
+//                task = URLSession.shared.dataTask(with: req, completionHandler: callback)
+//                task.resume()
+//            catch {
+//                    
+//            }
+//            
+//            SPTRequest.requestItemAtURI(NSURL(string: trackUri), withSession: session, callback: { (error:NSError!, trackObj:AnyObject!) -> Void in
+//             if error != nil {
+//                println("Album lookup got error \(error)")
+//                return
+//             }
+//             
+//             let track = trackObj as SPTTrack
+//             
+//             self.player?.playTrackProvider(track, callback: nil)
+//            })
         }
     
     }
