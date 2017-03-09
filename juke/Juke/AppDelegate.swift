@@ -31,8 +31,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     return
                 }
                 let userDefaults = UserDefaults.standard
-                userDefaults.set(session!.accessToken, forKey: "access_token")
-                userDefaults.synchronize()
+                let sessionData = NSKeyedArchiver.archivedData(withRootObject: session)
+                userDefaults.set(sessionData, forKey: "SpotifySession")
                 NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: nil)
             })
         } else {
