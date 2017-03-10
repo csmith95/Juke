@@ -156,8 +156,6 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
         }
     }
     
-    var pendingGroupIDLock = pthread_mutex_t()
-    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         let locationArray = locations as NSArray
@@ -167,7 +165,7 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
         let longitude = coord.longitude
     
         fetchNearbyPlaylists(latitude: latitude, longitude: longitude)
-        pthread_mutex_lock(&pendingGroupIDLock)
+        objc_sync_enter(pendingGroupID)
         if let groupID = self.pendingGroupID {  // update group location, if there's a pending group
             self.pendingGroupID = nil
             let params: Parameters = ["id" : groupID, "latitude": latitude, "longitude": longitude]
@@ -180,7 +178,7 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
                 }
             }
         }
-        pthread_mutex_unlock(&pendingGroupIDLock)
+        objc_sync_exit(pendingGroupID)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
