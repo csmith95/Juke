@@ -10,9 +10,6 @@ import UIKit
 import Alamofire
 
 class GroupController: UITableViewController {
-    
-    let kServerBaseURL = "http://myjukebx.herokuapp.com/"
-    let kFetchSongsPath = "/fetchSongs"
 
     var navBarTitle: String? {
         get {
@@ -23,13 +20,21 @@ class GroupController: UITableViewController {
         }
     }
     
+    struct SongData {
+        let songName: String
+        let artist: String
+        let id: String
+    }
+    
     var group: QueuesController.Group?
     let jamsPlayer = JamsPlayer.sharedInstance
+    var songIDs = [String]()
+    var songData = [String: SongData]()     // id --> songName, artist, id
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navBarTitle = group?.name
-        fetchSongs()
+        fetchSongIDs()
     }
 
     @IBAction func searchButtonPressed(_ sender: AnyObject) {
@@ -52,51 +57,70 @@ class GroupController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return songData.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
+        if let song = self.songData[self.songIDs[indexPath.row]] {
+            cell.songName.text = song.songName
+            cell.artist.text = song.artist
+        }
+
+        return cell
+    }
+    
+    func fetchSongData() {
+        let group = DispatchGroup()
+        self.songData.removeAll()
+        for id in self.songIDs {
+            group.enter()
+            Alamofire.request(ServerConstants.kSpotifyTrackDataURL + id, method: .get).responseJSON { response in
+                switch response.result {
+                case .success:
+                    if let response = response.result.value as? NSDictionary {
+                        objc_sync_enter(self.songData)
+                        let id = response["id"] as! String
+                        let songName = response["name"] as! String
+                        let artist = ((response["artists"] as! NSArray)[0] as! NSDictionary)["name"] as! String
+                        self.songData[id] = SongData(songName: songName, artist: artist, id: id)
+                        objc_sync_exit(self.songData)
+                        group.leave()
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+        
+        // reload on main thread after all responses come in
+        group.notify(queue: .main) {
+            self.tableView.reloadData()
+        }
     }
     
     
     // fetch songs and trigger table reload
-    func fetchSongs() {
-        
-        Alamofire.request(URL(string: kServerBaseURL + kFetchSongsPath)!, method: .get, parameters: ["group_id":self.group?.id]).responseJSON { response in
-            
-         print(response)
-            
+    func fetchSongIDs() {
+        // note that Alamofire doesn't work with optionals -- must force unwrap with "as String!"
+        let params: Parameters = ["group_id":self.group?.id as String!]
+        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kFetchSongsPath, method: .get, parameters: params).responseJSON { response in
+            switch response.result {
+            case .success:
+                if let response = response.result.value as? [String]{
+                    // the line below transforms [*:*:id] --> [id]
+                    self.songIDs = response.map {$0.characters.split{$0 == ":"}.map(String.init)[2]}
+                    self.fetchSongData()
+                }
+            case .failure(let error):
+                print(error)
+            }
         }
-        
-//        // issue GET request, handle response
-//        serverDelegate.getRequest(path: kFetchNearbyPath, fields: dict) { (data: Data?, response: URLResponse?, error: Error?) in
-//            
-//            do {
-//                let json = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.allowFragments) as! NSArray
-//                if json.count == 0 {
-//                    return
-//                }
-//                
-//                for object in json {
-//                    let map = object as! NSDictionary
-//                    let discoveredGroup = Group(name: map["groupName"] as! String, id: map["_id"] as? String)
-//                    if !self.groups.contains(where: { (group) -> Bool in
-//                        group.id == discoveredGroup.id
-//                    }) {
-//                        self.groups.append(discoveredGroup) // group hasn't been fetched yet
-//                    }
-//                }
-//                
-//                // update UI on main thread
-//                DispatchQueue.main.async {
-//                    self.tableView.reloadData()
-//                }
-//            } catch {
-//                print("ERROR: ", error)
-//            }
-//        }
     }
 
 }
