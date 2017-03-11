@@ -89,7 +89,7 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: QueueTableViewCell = tableView.dequeueReusableCell(withIdentifier: "ListItem") as! QueueTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ListItem") as! GroupsTableViewCell
         cell.textLabel?.text = groups[indexPath.row].name
         return cell
     }
