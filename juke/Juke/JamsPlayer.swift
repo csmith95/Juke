@@ -8,53 +8,66 @@
 
 import Foundation
 
-class JamsPlayer  {
+class JamsPlayer: NSObject, SPTAudioStreamingDelegate {
     
+    static let shared = JamsPlayer()
     let userDefaults = UserDefaults.standard
-    static let sharedInstance = SPTAudioStreamingController.sharedInstance()
+    let sharedInstance = SPTAudioStreamingController.sharedInstance()
     var session: SPTSession? = nil
+    let kClientID = "77d4489425fe464483f0934f99847c8b"
     
-    //This prevents others from using the default '()' initializer for this class.
-    private init() {
-        print("JAMS!")
-        refreshSession()
+    override private init() {
+        super.init()
+        do {
+            try sharedInstance?.start(withClientId: kClientID)
+            sharedInstance?.delegate = self
+            refreshSession()
+        } catch let err {
+            print(err)
+        }
+    }
+    
+    func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
+        print("AudioStreamer logged in!")
+    }
+    
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceiveError error: Error!) {
+        print(error)
+    }
+    
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceiveMessage message: String!) {
+        print("Received message: ", message)
     }
     
     private func refreshSession() {
+        if (session != nil && sharedInstance!.loggedIn && session!.isValid()) {
+            return
+        }
+        
         if let sessionObj = userDefaults.object(forKey: "SpotifySession") {
             let sessionDataObj = sessionObj as! Data
             self.session = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as? SPTSession
+            let token:String = session?.accessToken as String!
+            self.sharedInstance?.login(withAccessToken: token)
         }
     }
     
-    public func playTrack(trackUri: String) {
-        if self.session != nil {
-            
-//            try {
-//                let req = SPTTrack.createRequest(forTrack: URL(string: trackUri), withAccessToken: session!.accessToken, market: nil)
-//                task = URLSession.shared.dataTask(with: req, completionHandler: callback)
-//                task.resume()
-//            catch {
-//                    
-//            }
-//            
-//            SPTRequest.requestItemAtURI(NSURL(string: trackUri), withSession: session, callback: { (error:NSError!, trackObj:AnyObject!) -> Void in
-//             if error != nil {
-//                println("Album lookup got error \(error)")
-//                return
-//             }
-//             
-//             let track = trackObj as SPTTrack
-//             
-//             self.player?.playTrackProvider(track, callback: nil)
-//            })
+    public func playSong(trackID: String) {
+        refreshSession()
+        if let session = self.session {
+            if !session.isValid() {
+                print("session no longer valid")
+                return
+            }
+            let uri = "spotify:track:" + trackID
+            sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: 0, callback: { (error) in
+                if let error = error {
+                    print(error)
+                }
+            })
         }
     
     }
-    
-    public func pause() {
-    
-    
-    }
-
 }
+
+
