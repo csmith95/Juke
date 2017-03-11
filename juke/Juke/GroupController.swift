@@ -27,12 +27,17 @@ class GroupController: UITableViewController {
     }
     
     var group: QueuesController.Group?
-    let jamsPlayer = JamsPlayer.sharedInstance
+    let jamsPlayer = JamsPlayer.shared
     var songIDs = [String]()
     var songData = [String: SongData]()     // id --> songName, artist, id
+    var selectedIndex: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         navBarTitle = group?.name
         fetchSongIDs()
     }
@@ -45,6 +50,19 @@ class GroupController: UITableViewController {
         if (segue.identifier == "searchSegue") {
             let vc = segue.destination as! SearchTableViewController
             vc.group = self.group
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let previouslySelected = self.selectedIndex {
+            let cell = tableView.cellForRow(at: previouslySelected) as! SongTableViewCell
+            cell.songName.textColor = UIColor.black
+        }
+        let selected = tableView.cellForRow(at: indexPath) as! SongTableViewCell
+        selected.songName.textColor = UIColor.green
+        self.selectedIndex = indexPath
+        DispatchQueue.global(qos: .background).async {
+            self.jamsPlayer.playSong(trackID: self.songIDs[indexPath.row])
         }
     }
     

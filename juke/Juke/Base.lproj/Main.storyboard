@@ -167,7 +167,6 @@
                                 <connections>
                                     <outlet property="artist" destination="pnQ-mQ-CZU" id="BfA-5F-ZvR"/>
                                     <outlet property="songName" destination="buo-9O-pGe" id="qpd-3w-7FH"/>
-                                    <segue destination="RDu-So-6MN" kind="show" identifier="searchSegue" id="Jm0-nj-v7W"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -183,6 +182,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <segue destination="RDu-So-6MN" kind="show" identifier="searchSegue" id="z4O-nd-BXx"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fbL-iW-8TF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
