@@ -60,7 +60,7 @@
         <!--Groups-->
         <scene sceneID="3CV-tW-b3H">
             <objects>
-                <viewController id="o5C-ph-W7R" customClass="QueuesController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="o5C-ph-W7R" customClass="GroupsController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="LvF-kS-F16"/>
                         <viewControllerLayoutGuide type="bottom" id="xRj-5s-jh5"/>

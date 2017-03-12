@@ -40,6 +40,7 @@ class GroupController: UITableViewController {
         super.viewWillAppear(animated)
         navBarTitle = group?.name
         fetchSongIDs()
+        print("view will appear")
     }
 
     @IBAction func searchButtonPressed(_ sender: AnyObject) {
@@ -57,7 +58,13 @@ class GroupController: UITableViewController {
         if let previouslySelected = self.selectedIndex {
             let cell = tableView.cellForRow(at: previouslySelected) as! SongTableViewCell
             cell.songName.textColor = UIColor.black
+            if previouslySelected.row == indexPath.row {
+                DispatchQueue.global(qos: .background).async {
+                    self.jamsPlayer.togglePlaybackState()
+                }
+            }
         }
+        
         let selected = tableView.cellForRow(at: indexPath) as! SongTableViewCell
         selected.songName.textColor = UIColor.green
         self.selectedIndex = indexPath
@@ -80,7 +87,7 @@ class GroupController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return songData.count
+        return songIDs.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -94,6 +101,7 @@ class GroupController: UITableViewController {
     }
     
     func fetchSongData() {
+        print("fetch song data")
         let group = DispatchGroup()
         self.songData.removeAll()
         for id in self.songIDs {
@@ -108,23 +116,27 @@ class GroupController: UITableViewController {
                         let artist = ((response["artists"] as! NSArray)[0] as! NSDictionary)["name"] as! String
                         self.songData[id] = SongData(songName: songName, artist: artist, id: id)
                         objc_sync_exit(self.songData)
-                        group.leave()
                     }
                 case .failure(let error):
                     print(error)
                 }
+                print("left")
+                group.leave()
+
             }
         }
         
         // reload on main thread after all responses come in
         group.notify(queue: .main) {
             self.tableView.reloadData()
+            print(self.songData.values)
         }
     }
     
     
     // fetch songs and trigger table reload
     func fetchSongIDs() {
+        print("fetch song ids")
         // note that Alamofire doesn't work with optionals -- must force unwrap with "as String!"
         let params: Parameters = ["group_id":self.group?.id as String!]
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kFetchSongsPath, method: .get, parameters: params).responseJSON { response in

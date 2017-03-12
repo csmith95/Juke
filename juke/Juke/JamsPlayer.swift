@@ -66,8 +66,18 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate {
                 }
             })
         }
-    
     }
+    
+    public func togglePlaybackState() {
+        if let currState = sharedInstance?.playbackState.isPlaying {
+            sharedInstance?.setIsPlaying(!currState, callback: { (err) in
+                if let err = err {
+                    print(err)
+                }
+            })
+        }
+    }
+    
 }
 
 
