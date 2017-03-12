@@ -18,7 +18,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     @IBOutlet var searchBar: UISearchBar!
     
     // passed from GroupController (the previous ViewController)
-    var group: QueuesController.Group?
+    var group: GroupsController.Group?
     
     struct Song {
         var uri: String
@@ -68,7 +68,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         return cell
     }
     
-    func addSongToGroup(song: Song, group: QueuesController.Group) {
+    func addSongToGroup(song: Song, group: GroupsController.Group) {
         let params: Parameters = ["group_id": group.id!, "song_id": song.uri]
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate().responseJSON { response in
             switch response.result {

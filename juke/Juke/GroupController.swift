@@ -26,7 +26,7 @@ class GroupController: UITableViewController {
         let id: String
     }
     
-    var group: QueuesController.Group?
+    var group: GroupsController.Group?
     let jamsPlayer = JamsPlayer.shared
     var songIDs = [String]()
     var songData = [String: SongData]()     // id --> songName, artist, id
