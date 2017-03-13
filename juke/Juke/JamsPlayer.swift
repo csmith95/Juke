@@ -8,7 +8,7 @@
 
 import Foundation
 
-class JamsPlayer: NSObject, SPTAudioStreamingDelegate {
+class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate {
     
     static let shared = JamsPlayer()
     let userDefaults = UserDefaults.standard
@@ -21,6 +21,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate {
         do {
             try sharedInstance?.start(withClientId: kClientID)
             sharedInstance?.delegate = self
+            sharedInstance?.playbackDelegate = self
             refreshSession()
         } catch let err {
             print(err)
@@ -37,6 +38,14 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate {
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceiveMessage message: String!) {
         print("Received message: ", message)
+    }
+    
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceive event: SpPlaybackEvent) {
+        if event == SPPlaybackNotifyTrackChanged {
+            // track changed -- pop first song, play next song
+            
+            
+        }
     }
     
     private func refreshSession() {
