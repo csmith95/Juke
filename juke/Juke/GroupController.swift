@@ -26,6 +26,8 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
         let id: String
     }
     
+    @IBOutlet var currTimeLabel: UILabel!
+    @IBOutlet var timeLeftLabel: UILabel!
     @IBOutlet var currentlyPlayingArtistLabel: UILabel!
     @IBOutlet var currentlyPlayingLabel: UILabel!
     @IBOutlet var songProgressSlider: UISlider!
@@ -129,9 +131,20 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
         return cell
     }
     
+    private func timeIntervalToString(interval: TimeInterval) -> String {
+        let ti = NSInteger(interval)
+        let seconds = ti % 60
+        let minutes = (ti / 60) % 60
+        return NSString(format: "%0.2d:%0.2d", minutes, seconds) as String
+    }
+    
     func songPositionChanged(notification: NSNotification) {
-        if let progress = notification.object as? Float {
-            songProgressSlider.setValue(progress, animated: true)
+        if let data = notification.object as? NSDictionary {
+            songProgressSlider.setValue(data["ratio"] as! Float, animated: true)
+            let pos = data["position"] as! TimeInterval
+            self.currTimeLabel.text = timeIntervalToString(interval: pos)
+            let timeLeft = (data["duration"] as! TimeInterval) - pos
+            self.timeLeftLabel.text = "-" + timeIntervalToString(interval: timeLeft)
         }
     }
     
@@ -142,8 +155,6 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kPopSong, method: .post, parameters: params).responseJSON { response in
             switch response.result {
             case .success:
-                print(response.result.value)
-                print("Popped song")
                 self.fetchSongIDs()
             case .failure(let error):
                 print(error)

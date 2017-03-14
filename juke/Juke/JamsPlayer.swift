@@ -86,9 +86,9 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         // signal GroupController so that it can update UISlider
         if let currentTrack = audioStreaming.metadata.currentTrack {
             self.position = position
-            print(position)
             let ratio = position / currentTrack.duration
-            NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: ratio)
+            let data = ["position": position, "ratio": ratio, "duration":currentTrack.duration]
+            NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
         }
     }
     
@@ -100,7 +100,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
                 return
             }
             let uri = "spotify:track:" + trackID
-            sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: 240, callback: { (error) in
+            sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: 0, callback: { (error) in
                 if let error = error {
                     print(error)
                 }
@@ -109,13 +109,16 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
-        if isPlaying {
-            if let duration = audioStreaming.metadata.currentTrack?.duration {
-                audioStreaming.seek(to: duration - 15, callback: { (err) in
-                    print(err)
-                })
-            }
-        }
+//        if isPlaying {
+//            print("is playing")
+//            if let duration = audioStreaming.metadata.currentTrack?.duration {
+//                audioStreaming.seek(to: duration - 15, callback: { (err) in
+//                    if let err = err {
+//                       print(err)
+//                    }
+//                })
+//            }
+//        }
     }
     
     public func togglePlaybackState() {
