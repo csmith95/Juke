@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 
 class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
+    
     var navBarTitle: String? {
         get {
             return self.navigationItem.title
@@ -26,6 +26,8 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
         let id: String
     }
     
+    @IBOutlet var currentlyPlayingArtistLabel: UILabel!
+    @IBOutlet var currentlyPlayingLabel: UILabel!
     @IBOutlet var songProgressSlider: UISlider!
     @IBOutlet var currentlyPlayingView: UIView!
     @IBOutlet var tableView: UITableView!
@@ -40,6 +42,7 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
         self.tableView.delegate = self
         self.tableView.dataSource = self
         NotificationCenter.default.addObserver(self, selector: #selector(GroupController.songFinished), name: Notification.Name("songFinished"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(GroupController.songPositionChanged), name: Notification.Name("songPositionChanged"), object: nil)
         currentlyPlayingView.layer.cornerRadius = 10;
         currentlyPlayingView.layer.masksToBounds = true;
         currentlyPlayingView.layer.borderColor = UIColor.gray.cgColor;
@@ -58,7 +61,7 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
         navBarTitle = group?.name
         fetchSongIDs()
     }
-
+    
     @IBAction func searchButtonPressed(_ sender: AnyObject) {
         performSegue(withIdentifier: "searchSegue", sender: sender)
     }
@@ -70,69 +73,82 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
         }
     }
     
-    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        // TODO: play cell at position 0 if it's not already playing
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let previouslySelected = self.selectedIndex {
-            let cell = tableView.cellForRow(at: previouslySelected) as! SongTableViewCell
-            cell.songName.textColor = UIColor.black
-            if previouslySelected.row == indexPath.row {
-                DispatchQueue.global(qos: .background).async {
-                    self.jamsPlayer.togglePlaybackState()
-                }
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // play cell at position 0 if it's not already playing
+        if indexPath.row == 0 {
+            let id = self.songIDs[0]
+            if jamsPlayer.isPlaying(trackID: id) {
                 return
             }
+            DispatchQueue.global(qos: .background).async {
+                self.jamsPlayer.playSong(trackID: id)
+            }
         }
-        
-        let selected = tableView.cellForRow(at: indexPath) as! SongTableViewCell
-        selected.songName.textColor = UIColor.green
-        self.selectedIndex = indexPath
-        DispatchQueue.global(qos: .background).async {
-            self.jamsPlayer.playSong(trackID: self.songIDs[indexPath.row])
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 0 {
+            return 0    // hide first row -- should be currently playing track
         }
+        return 40
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     // MARK: - Table view data source
-
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return songIDs.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if indexPath.row == 0 {
+            // place first song in the currentlyPlayingLabel
+            if let song = self.songData[self.songIDs[0]] {
+                self.currentlyPlayingLabel.text = song.songName
+                self.currentlyPlayingArtistLabel.text = song.artist
+            }
+        }
+        
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
         if let song = self.songData[self.songIDs[indexPath.row]] {
             cell.songName.text = song.songName
             cell.artist.text = song.artist
         }
-
+        
         return cell
+    }
+    
+    func songPositionChanged(notification: NSNotification) {
+        if let progress = notification.object as? Float {
+            songProgressSlider.setValue(progress, animated: true)
+        }
     }
     
     func songFinished() {
         // pop first song, play next song
-        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kPopSong, method: .get).responseJSON { response in
+        let params: Parameters = ["group_id":self.group?.id as String!]
+        print(params)
+        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kPopSong, method: .post, parameters: params).responseJSON { response in
             switch response.result {
             case .success:
+                print(response.result.value)
                 print("Popped song")
-                
+                self.fetchSongIDs()
             case .failure(let error):
                 print(error)
             }
         }
-        
     }
     
     private func fetchSongData() {
@@ -155,7 +171,6 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
                     print(error)
                 }
                 group.leave()
-
             }
         }
         
@@ -183,5 +198,5 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
             }
         }
     }
-
+    
 }

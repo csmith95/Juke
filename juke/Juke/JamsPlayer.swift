@@ -11,10 +11,11 @@ import Foundation
 class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate {
     
     static let shared = JamsPlayer()
-    let userDefaults = UserDefaults.standard
-    let sharedInstance = SPTAudioStreamingController.sharedInstance()
-    var session: SPTSession? = nil
-    let kClientID = "77d4489425fe464483f0934f99847c8b"
+    private let userDefaults = UserDefaults.standard
+    private let sharedInstance = SPTAudioStreamingController.sharedInstance()
+    private var session: SPTSession? = nil
+    private let kClientID = "77d4489425fe464483f0934f99847c8b"
+    private var position: TimeInterval = 0.0
     
     override private init() {
         super.init()
@@ -42,8 +43,15 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceive event: SpPlaybackEvent) {
         if event == SPPlaybackNotifyTrackChanged {
+            if audioStreaming.metadata == nil {
+                return
+            }
             // track changed -- tell GroupController to pop first song, play next song
-            NotificationCenter.default.post(name: Notification.Name("songFinished"), object: nil)
+            if let currentTrack = audioStreaming.metadata.currentTrack {
+                if self.position >= currentTrack.duration - 5 {
+                    NotificationCenter.default.post(name: Notification.Name("songFinished"), object: nil)
+                }
+            }
         }
     }
     
@@ -60,6 +68,30 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         }
     }
     
+    public func isPlaying(trackID: String) -> Bool {
+        if let audioStreamer = sharedInstance {
+            if audioStreamer.metadata == nil {
+                return false
+            }
+            
+            if let currentTrack = audioStreamer.metadata.currentTrack {
+                let id = currentTrack.uri.characters.split{$0 == ":"}.map(String.init)[2]
+                return id == trackID
+            }
+        }
+        return false
+    }
+    
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePosition position: TimeInterval) {
+        // signal GroupController so that it can update UISlider
+        if let currentTrack = audioStreaming.metadata.currentTrack {
+            self.position = position
+            print(position)
+            let ratio = position / currentTrack.duration
+            NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: ratio)
+        }
+    }
+    
     public func playSong(trackID: String) {
         refreshSession()
         if let session = self.session {
@@ -68,11 +100,21 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
                 return
             }
             let uri = "spotify:track:" + trackID
-            sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: 0, callback: { (error) in
+            sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: 240, callback: { (error) in
                 if let error = error {
                     print(error)
                 }
             })
+        }
+    }
+    
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
+        if isPlaying {
+            if let duration = audioStreaming.metadata.currentTrack?.duration {
+                audioStreaming.seek(to: duration - 15, callback: { (err) in
+                    print(err)
+                })
+            }
         }
     }
     
@@ -87,5 +129,4 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     }
     
 }
-
 
