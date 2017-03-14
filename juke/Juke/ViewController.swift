@@ -27,6 +27,7 @@ class ViewController: UIViewController {
     }
     
     func loginSuccessful() {
+        let player = JamsPlayer.shared  // just to authenticate/start player before user gets to playlist page
         performSegue(withIdentifier: "loginSegue", sender: nil)
     }
     
