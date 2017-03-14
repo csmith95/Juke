@@ -42,9 +42,8 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceive event: SpPlaybackEvent) {
         if event == SPPlaybackNotifyTrackChanged {
-            // track changed -- pop first song, play next song
-            
-            
+            // track changed -- tell GroupController to pop first song, play next song
+            NotificationCenter.default.post(name: Notification.Name("songFinished"), object: nil)
         }
     }
     

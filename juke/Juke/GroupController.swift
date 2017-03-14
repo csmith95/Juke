@@ -9,7 +9,7 @@
 import UIKit
 import Alamofire
 
-class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSource, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate {
+class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     var navBarTitle: String? {
         get {
@@ -26,6 +26,8 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
         let id: String
     }
     
+    @IBOutlet var songProgressSlider: UISlider!
+    @IBOutlet var currentlyPlayingView: UIView!
     @IBOutlet var tableView: UITableView!
     var group: GroupsController.Group?
     let jamsPlayer = JamsPlayer.shared
@@ -33,14 +35,22 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
     var songData = [String: SongData]()     // id --> songName, artist, id
     var selectedIndex: IndexPath?
     
-    public static func configureJamsPlayer() {
-        // TODO: migrate init code from JamesPlayer
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        NotificationCenter.default.addObserver(self, selector: #selector(GroupController.songFinished), name: Notification.Name("songFinished"), object: nil)
+        currentlyPlayingView.layer.cornerRadius = 10;
+        currentlyPlayingView.layer.masksToBounds = true;
+        currentlyPlayingView.layer.borderColor = UIColor.gray.cgColor;
+        currentlyPlayingView.layer.borderWidth = 0.5;
+        currentlyPlayingView.layer.contentsScale = UIScreen.main.scale;
+        currentlyPlayingView.layer.shadowColor = UIColor.black.cgColor;
+        currentlyPlayingView.layer.shadowRadius = 5.0;
+        currentlyPlayingView.layer.shadowOpacity = 0.5;
+        currentlyPlayingView.layer.masksToBounds = false;
+        currentlyPlayingView.clipsToBounds = false;
+        songProgressSlider.setThumbImage(UIImage(named: "slider_cap"), for: .normal)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -111,7 +121,21 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
         return cell
     }
     
-    func fetchSongData() {
+    func songFinished() {
+        // pop first song, play next song
+        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kPopSong, method: .get).responseJSON { response in
+            switch response.result {
+            case .success:
+                print("Popped song")
+                
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+    }
+    
+    private func fetchSongData() {
         let group = DispatchGroup() // to ensure view only reloads after all songs fetched
         self.songData.removeAll()
         for id in self.songIDs {
@@ -143,7 +167,7 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     
     // fetch songs and trigger table reload
-    func fetchSongIDs() {
+    private func fetchSongIDs() {
         // note that Alamofire doesn't work with optionals -- must force unwrap with "as String!"
         let params: Parameters = ["group_id":self.group?.id as String!]
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kFetchSongsPath, method: .get, parameters: params).responseJSON { response in

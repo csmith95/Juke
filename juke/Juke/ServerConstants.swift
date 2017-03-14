@@ -21,4 +21,5 @@ public class ServerConstants {
     static let kCreateGroupPath = "createGroup"
     static let kUpdateLocationPath = "updateGroupLocation"
     static let kFetchSongsPath = "fetchSongs"
+    static let kPopSong = "popSong"
 }
