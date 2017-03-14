@@ -1,5 +1,5 @@
 //
-//  QueuesController.swift
+//  GroupsController.swift
 //  Juke
 //
 //  Created by Conner Smith on 2/18/17.
@@ -10,7 +10,7 @@ import UIKit
 import CoreLocation
 import Alamofire
 
-class QueuesController: UIViewController, UITableViewDataSource, CLLocationManagerDelegate, UITableViewDelegate {
+class GroupsController: UIViewController, UITableViewDataSource, CLLocationManagerDelegate, UITableViewDelegate {
     
     struct Group {
         var name: String
@@ -65,8 +65,6 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
     
     
     func fetchNearbyPlaylists(latitude: Double, longitude: Double) {
-        
-        
         let params: Parameters = ["latitude": latitude, "longitude": longitude]
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kFetchNearbyPath, method: .get, parameters: params).validate().responseJSON { response in
             switch response.result {
@@ -163,8 +161,8 @@ class QueuesController: UIViewController, UITableViewDataSource, CLLocationManag
         let coord = locationObj.coordinate
         let latitude = coord.latitude
         let longitude = coord.longitude
+        self.fetchNearbyPlaylists(latitude: latitude, longitude: longitude)
     
-        fetchNearbyPlaylists(latitude: latitude, longitude: longitude)
         objc_sync_enter(pendingGroupID)
         if let groupID = self.pendingGroupID {  // update group location, if there's a pending group
             self.pendingGroupID = nil

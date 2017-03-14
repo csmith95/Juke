@@ -8,19 +8,21 @@
 
 import Foundation
 
-class JamsPlayer: NSObject, SPTAudioStreamingDelegate {
+class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate {
     
     static let shared = JamsPlayer()
-    let userDefaults = UserDefaults.standard
-    let sharedInstance = SPTAudioStreamingController.sharedInstance()
-    var session: SPTSession? = nil
-    let kClientID = "77d4489425fe464483f0934f99847c8b"
+    private let userDefaults = UserDefaults.standard
+    private let sharedInstance = SPTAudioStreamingController.sharedInstance()
+    private var session: SPTSession? = nil
+    private let kClientID = "77d4489425fe464483f0934f99847c8b"
+    private var position: TimeInterval = 0.0
     
     override private init() {
         super.init()
         do {
             try sharedInstance?.start(withClientId: kClientID)
             sharedInstance?.delegate = self
+            sharedInstance?.playbackDelegate = self
             refreshSession()
         } catch let err {
             print(err)
@@ -39,6 +41,20 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate {
         print("Received message: ", message)
     }
     
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceive event: SpPlaybackEvent) {
+        if event == SPPlaybackNotifyTrackChanged {
+            if audioStreaming.metadata == nil {
+                return
+            }
+            // track changed -- tell GroupController to pop first song, play next song
+            if let currentTrack = audioStreaming.metadata.currentTrack {
+                if self.position >= currentTrack.duration - 5 {
+                    NotificationCenter.default.post(name: Notification.Name("songFinished"), object: nil)
+                }
+            }
+        }
+    }
+    
     private func refreshSession() {
         if (session != nil && sharedInstance!.loggedIn && session!.isValid()) {
             return
@@ -49,6 +65,30 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate {
             self.session = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as? SPTSession
             let token:String = session?.accessToken as String!
             self.sharedInstance?.login(withAccessToken: token)
+        }
+    }
+    
+    public func isPlaying(trackID: String) -> Bool {
+        if let audioStreamer = sharedInstance {
+            if audioStreamer.metadata == nil {
+                return false
+            }
+            
+            if let currentTrack = audioStreamer.metadata.currentTrack {
+                let id = currentTrack.uri.characters.split{$0 == ":"}.map(String.init)[2]
+                return id == trackID
+            }
+        }
+        return false
+    }
+    
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePosition position: TimeInterval) {
+        // signal GroupController so that it can update UISlider
+        if let currentTrack = audioStreaming.metadata.currentTrack {
+            self.position = position
+            let ratio = position / currentTrack.duration
+            let data = ["position": position, "ratio": ratio, "duration":currentTrack.duration]
+            NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
         }
     }
     
@@ -66,8 +106,30 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate {
                 }
             })
         }
-    
     }
+    
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
+//        if isPlaying {
+//            print("is playing")
+//            if let duration = audioStreaming.metadata.currentTrack?.duration {
+//                audioStreaming.seek(to: duration - 15, callback: { (err) in
+//                    if let err = err {
+//                       print(err)
+//                    }
+//                })
+//            }
+//        }
+    }
+    
+    public func togglePlaybackState() {
+        if let currState = sharedInstance?.playbackState.isPlaying {
+            sharedInstance?.setIsPlaying(!currState, callback: { (err) in
+                if let err = err {
+                    print(err)
+                }
+            })
+        }
+    }
+    
 }
-
 

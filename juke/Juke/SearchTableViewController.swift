@@ -18,7 +18,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     @IBOutlet var searchBar: UISearchBar!
     
     // passed from GroupController (the previous ViewController)
-    var group: QueuesController.Group?
+    var group: GroupsController.Group?
     
     struct Song {
         var uri: String
@@ -58,17 +58,17 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         cell.artistLabel!.text = song.artistName
         // Assign the tap action which will be executed when the user taps the UIButton
         cell.tapAction = { (cell) in
+            // post to server
+            self.addSongToGroup(song: self.results[indexPath.row], group: self.group!)
+            
             // animate button text change from "+" to "Added!"
             cell.addButton!.setTitle("Added!", for: .normal)
             cell.addButton!.titleLabel?.font = UIFont(name: "System", size: 16)
-            
-            // post to server
-            self.addSongToGroup(song: self.results[indexPath.row], group: self.group!)
         }
         return cell
     }
     
-    func addSongToGroup(song: Song, group: QueuesController.Group) {
+    func addSongToGroup(song: Song, group: GroupsController.Group) {
         let params: Parameters = ["group_id": group.id!, "song_id": song.uri]
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate().responseJSON { response in
             switch response.result {

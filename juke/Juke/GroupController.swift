@@ -9,8 +9,8 @@
 import UIKit
 import Alamofire
 
-class GroupController: UITableViewController {
-
+class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
     var navBarTitle: String? {
         get {
             return self.navigationItem.title
@@ -26,7 +26,14 @@ class GroupController: UITableViewController {
         let id: String
     }
     
-    var group: QueuesController.Group?
+    @IBOutlet var currTimeLabel: UILabel!
+    @IBOutlet var timeLeftLabel: UILabel!
+    @IBOutlet var currentlyPlayingArtistLabel: UILabel!
+    @IBOutlet var currentlyPlayingLabel: UILabel!
+    @IBOutlet var songProgressSlider: UISlider!
+    @IBOutlet var currentlyPlayingView: UIView!
+    @IBOutlet var tableView: UITableView!
+    var group: GroupsController.Group?
     let jamsPlayer = JamsPlayer.shared
     var songIDs = [String]()
     var songData = [String: SongData]()     // id --> songName, artist, id
@@ -34,6 +41,21 @@ class GroupController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        NotificationCenter.default.addObserver(self, selector: #selector(GroupController.songFinished), name: Notification.Name("songFinished"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(GroupController.songPositionChanged), name: Notification.Name("songPositionChanged"), object: nil)
+        currentlyPlayingView.layer.cornerRadius = 10;
+        currentlyPlayingView.layer.masksToBounds = true;
+        currentlyPlayingView.layer.borderColor = UIColor.gray.cgColor;
+        currentlyPlayingView.layer.borderWidth = 0.5;
+        currentlyPlayingView.layer.contentsScale = UIScreen.main.scale;
+        currentlyPlayingView.layer.shadowColor = UIColor.black.cgColor;
+        currentlyPlayingView.layer.shadowRadius = 5.0;
+        currentlyPlayingView.layer.shadowOpacity = 0.5;
+        currentlyPlayingView.layer.masksToBounds = false;
+        currentlyPlayingView.clipsToBounds = false;
+        songProgressSlider.setThumbImage(UIImage(named: "slider_cap"), for: .normal)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -41,7 +63,7 @@ class GroupController: UITableViewController {
         navBarTitle = group?.name
         fetchSongIDs()
     }
-
+    
     @IBAction func searchButtonPressed(_ sender: AnyObject) {
         performSegue(withIdentifier: "searchSegue", sender: sender)
     }
@@ -53,48 +75,95 @@ class GroupController: UITableViewController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let previouslySelected = self.selectedIndex {
-            let cell = tableView.cellForRow(at: previouslySelected) as! SongTableViewCell
-            cell.songName.textColor = UIColor.black
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // play cell at position 0 if it's not already playing
+        if indexPath.row == 0 {
+            let id = self.songIDs[0]
+            if jamsPlayer.isPlaying(trackID: id) {
+                return
+            }
+            DispatchQueue.global(qos: .background).async {
+                self.jamsPlayer.playSong(trackID: id)
+            }
         }
-        let selected = tableView.cellForRow(at: indexPath) as! SongTableViewCell
-        selected.songName.textColor = UIColor.green
-        self.selectedIndex = indexPath
-        DispatchQueue.global(qos: .background).async {
-            self.jamsPlayer.playSong(trackID: self.songIDs[indexPath.row])
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 0 {
+            return 0    // hide first row -- should be currently playing track
         }
+        return 40
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return songData.count
+        return songIDs.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if indexPath.row == 0 {
+            // place first song in the currentlyPlayingLabel
+            if let song = self.songData[self.songIDs[0]] {
+                self.currentlyPlayingLabel.text = song.songName
+                self.currentlyPlayingArtistLabel.text = song.artist
+            }
+        }
+        
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
         if let song = self.songData[self.songIDs[indexPath.row]] {
             cell.songName.text = song.songName
             cell.artist.text = song.artist
         }
-
+        
         return cell
     }
     
-    func fetchSongData() {
-        let group = DispatchGroup()
+    private func timeIntervalToString(interval: TimeInterval) -> String {
+        let ti = NSInteger(interval)
+        let seconds = ti % 60
+        let minutes = (ti / 60) % 60
+        return NSString(format: "%0.2d:%0.2d", minutes, seconds) as String
+    }
+    
+    func songPositionChanged(notification: NSNotification) {
+        if let data = notification.object as? NSDictionary {
+            songProgressSlider.setValue(data["ratio"] as! Float, animated: true)
+            let pos = data["position"] as! TimeInterval
+            self.currTimeLabel.text = timeIntervalToString(interval: pos)
+            let timeLeft = (data["duration"] as! TimeInterval) - pos
+            self.timeLeftLabel.text = "-" + timeIntervalToString(interval: timeLeft)
+        }
+    }
+    
+    func songFinished() {
+        // pop first song, play next song
+        let params: Parameters = ["group_id":self.group?.id as String!]
+        print(params)
+        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kPopSong, method: .post, parameters: params).responseJSON { response in
+            switch response.result {
+            case .success:
+                self.fetchSongIDs()
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    private func fetchSongData() {
+        let group = DispatchGroup() // to ensure view only reloads after all songs fetched
         self.songData.removeAll()
         for id in self.songIDs {
             group.enter()
@@ -108,11 +177,11 @@ class GroupController: UITableViewController {
                         let artist = ((response["artists"] as! NSArray)[0] as! NSDictionary)["name"] as! String
                         self.songData[id] = SongData(songName: songName, artist: artist, id: id)
                         objc_sync_exit(self.songData)
-                        group.leave()
                     }
                 case .failure(let error):
                     print(error)
                 }
+                group.leave()
             }
         }
         
@@ -124,7 +193,7 @@ class GroupController: UITableViewController {
     
     
     // fetch songs and trigger table reload
-    func fetchSongIDs() {
+    private func fetchSongIDs() {
         // note that Alamofire doesn't work with optionals -- must force unwrap with "as String!"
         let params: Parameters = ["group_id":self.group?.id as String!]
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kFetchSongsPath, method: .get, parameters: params).responseJSON { response in
@@ -140,5 +209,5 @@ class GroupController: UITableViewController {
             }
         }
     }
-
+    
 }
