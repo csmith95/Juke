@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreData
-
+import Alamofire
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -30,10 +30,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     return
                 }
                 if let session = session {
+                    // archive spotify session
                     let userDefaults = UserDefaults.standard
                     let sessionData = NSKeyedArchiver.archivedData(withRootObject: session)
                     userDefaults.set(sessionData, forKey: "SpotifySession")
-                    NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: nil)
+                    
+                    // notify ViewController to initiate loginSegue
+                    NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: session.accessToken)
                 }
             })
         } else {
