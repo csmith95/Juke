@@ -151,7 +151,6 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
     func songFinished() {
         // pop first song, play next song
         let params: Parameters = ["group_id":self.group?.id as String!]
-        print(params)
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kPopSong, method: .post, parameters: params).responseJSON { response in
             switch response.result {
             case .success:
