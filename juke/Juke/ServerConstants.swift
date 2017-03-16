@@ -10,16 +10,22 @@ import Foundation
 
 public class ServerConstants {
     
-    // server base URLs
-    static let kJukeServerURL = "http://myjukebx.herokuapp.com/"
-    static let kSpotifySearchURL = "https://api.spotify.com/v1/search"
-    static let kSpotifyTrackDataURL = "https://api.spotify.com/v1/tracks/"
+    // server base URLs -- rememebr to use local IP if running off localhost because dbs have different content
+    static let kJukeServerURL = "http://10.34.148.120:8000/"    //"http://myjukebx.herokuapp.com/"
     
-    // paths
+    static let kSpotifyBaseURL = "https://api.spotify.com/v1/"
+    static let kSpotifySearchURL = ServerConstants.kSpotifyBaseURL + "search/"
+    static let kSpotifyTrackDataURL = ServerConstants.kSpotifyBaseURL + "tracks/"
+    
+    // juke paths
     static let kAddSongPath = "addSong"
     static let kFetchNearbyPath = "findNearbyGroups"
     static let kCreateGroupPath = "createGroup"
     static let kUpdateLocationPath = "updateGroupLocation"
     static let kFetchSongsPath = "fetchSongs"
     static let kPopSong = "popSong"
+    static let kAddUser = "addUser"
+    
+    //spotify paths
+    static let kCurrentUserPath = "me"
 }

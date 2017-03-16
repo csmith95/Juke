@@ -12,7 +12,7 @@ import Alamofire
 class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     var results = [Song]()
-    let kNumResultsToStore = 15
+    let kNumResultsToStore = 20
     let searchController = UISearchController(searchResultsController: nil)
     
     @IBOutlet var searchBar: UISearchBar!
@@ -21,7 +21,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     var group: GroupsController.Group?
     
     struct Song {
-        var uri: String
+        var id: String
         var artistName: String
         var songName: String
     }
@@ -69,12 +69,9 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func addSongToGroup(song: Song, group: GroupsController.Group) {
-        let params: Parameters = ["group_id": group.id!, "song_id": song.uri]
+        let params: Parameters = ["group_id": group.id, "song_id": song.id, "songName": song.songName, "artistName": song.artistName]
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate().responseJSON { response in
-            switch response.result {
-            case .success:
-                print("Added song: ", song)
-            case .failure(let error):
+            if let error = response.result.error {
                 print(error)
             }
         }
@@ -87,17 +84,17 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         let numItemsToCache = min(kNumResultsToStore, items.count)
         for i in 0 ..< numItemsToCache {
             let curr = items[i] as! NSDictionary
-            let uri = curr["uri"] as! String
+            // the line below transforms "*:*:id" --> "id"
+            let id = (curr["uri"] as! String).characters.split{$0 == ":"}.map(String.init)[2]
             let name = curr["name"] as! String
             let artists = curr["artists"] as! NSArray
             let first = artists[0] as! NSDictionary
             let artist = first["name"] as! String
-            self.results.append(Song(uri: uri, artistName: artist, songName: name))
+            self.results.append(Song(id: id, artistName: artist, songName: name))
         }
     }
     
     func search(query: String) {
-        
         if query == "" {
             return
         }

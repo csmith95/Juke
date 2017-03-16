@@ -10,18 +10,16 @@ import UIKit
 import CoreLocation
 import Alamofire
 
-class GroupsController: UIViewController, UITableViewDataSource, CLLocationManagerDelegate, UITableViewDelegate {
+class GroupsController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     struct Group {
         var name: String
-        var id: String?
+        var id: String
+        var owner_spotify_id: String
     }
     var groups: [Group] = []
     var selectedGroup: Group? = nil
-    var pendingGroupID: String? = nil
-    
-    let locationManager = CLLocationManager()
-    let kCLLocationAccuracyKilometer = 0.1
+    let locationManager = LocationManager.sharedInstance
 
     @IBOutlet weak var tableView: UITableView!
     var newGroupName: String?
@@ -30,29 +28,22 @@ class GroupsController: UIViewController, UITableViewDataSource, CLLocationManag
     @IBAction func addItem(_ sender: Any) {
         alert()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchNearbyPlaylists()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
-        
-        // Ask for authorization from the User.
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            locationManager.requestWhenInUseAuthorization()
-            locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
-
-            // Set a movement threshold for new events.
-            locationManager.distanceFilter = 60; // meters
-        }
-        
-        // request location to fetch nearby playlists
-        locationManager.requestLocation()
     }
     
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        objc_sync_enter(self.groups)
         self.selectedGroup = self.groups[indexPath.row]
+        objc_sync_exit(self.groups)
         return indexPath
     }
     
@@ -63,18 +54,19 @@ class GroupsController: UIViewController, UITableViewDataSource, CLLocationManag
         }
     }
     
-    
-    func fetchNearbyPlaylists(latitude: Double, longitude: Double) {
-        let params: Parameters = ["latitude": latitude, "longitude": longitude]
+    func fetchNearbyPlaylists() {
+        let params: Parameters = ["latitude": self.locationManager.getLat(), "longitude": self.locationManager.getLong()]
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kFetchNearbyPath, method: .get, parameters: params).validate().responseJSON { response in
             switch response.result {
             case .success:
                 let nearbyGroups = response.result.value as! NSArray
+                objc_sync_enter(self.groups)
                 self.groups = []    // clear groups that have already been fetched to avoid duplicate displays
                 for object in nearbyGroups {
                     let map = object as! NSDictionary
-                    self.groups.append(Group(name: map["groupName"] as! String, id: map["_id"] as? String))
+                    self.groups.append(Group(name: map["groupName"] as! String, id: map["_id"] as! String, owner_spotify_id: map["owner_spotify_id"] as! String))
                 }
+                objc_sync_exit(self.groups)
                 
                 // update UI on main thread
                 DispatchQueue.main.async {
@@ -111,23 +103,23 @@ class GroupsController: UIViewController, UITableViewDataSource, CLLocationManag
         let add = UIAlertAction(title: "Add", style: .default) {
             (action) in
             
-            let textField = alert.textFields![0]
-            
-            // prematurely create the group w/o ID so UI feels responsive.
-            // ID field is set inside POST callback
-            let newGroup = Group(name: textField.text!, id: nil)
-            self.groups.append(newGroup)
-            self.tableView.reloadData()
-            self.newGroupName = textField.text!
+            let name = alert.textFields![0].text!
             
             // create group
-            let params: Parameters = ["groupName" : newGroup.name]
+            let params: Parameters = ["groupName" : name, "latitude": self.locationManager.getLat(), "longitude": self.locationManager.getLong(), "owner_spotify_id": ViewController.currSpotifyID]
             Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kCreateGroupPath, method: .post, parameters: params).validate().responseJSON { response in
                 switch response.result {
                 case .success:
-                    let group = response.result.value as! NSDictionary
-                    self.pendingGroupID = group["_id"] as? String
-                    self.locationManager.requestLocation() // set group location later inside location callback
+                    if let group = response.result.value as? NSDictionary {
+                        let newGroup = Group(name: group["groupName"] as! String, id: group["_id"] as! String, owner_spotify_id: group["owner_spotify_id"] as! String)
+                        objc_sync_enter(self.groups)
+                        self.groups.append(newGroup)
+                        objc_sync_exit(self.groups)
+                        // update UI on main thread
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                    }
                 case .failure(let error):
                     print(error)
                 }
@@ -146,54 +138,21 @@ class GroupsController: UIViewController, UITableViewDataSource, CLLocationManag
         // Dispose of any resources that can be recreated.
     }
     
-    // MARK: - CoreLocation Delegate Methods
-    @nonobjc func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
-        locationManager.stopUpdatingLocation()
-        if ((error) != nil) {
-            print(error)
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-        let locationArray = locations as NSArray
-        let locationObj = locationArray.lastObject as! CLLocation
-        let coord = locationObj.coordinate
-        let latitude = coord.latitude
-        let longitude = coord.longitude
-        self.fetchNearbyPlaylists(latitude: latitude, longitude: longitude)
-    
-        objc_sync_enter(pendingGroupID)
-        if let groupID = self.pendingGroupID {  // update group location, if there's a pending group
-            self.pendingGroupID = nil
-            let params: Parameters = ["id" : groupID, "latitude": latitude, "longitude": longitude]
-            Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kUpdateLocationPath, method: .post, parameters: params).validate().responseJSON { response in
-                switch response.result {
-                case .success:
-                    print("Set location for group ", groupID)
-                case .failure(let error):
-                    print(error)
-                }
-            }
-        }
-        objc_sync_exit(pendingGroupID)
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("ERROR RECEIVING LOCATION UPDATE: ", error)
-    }
-    
-    
-    
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
+    // might need this function later to handle moving playlists (ex: car)
+//    func updateLocation() {
+//        objc_sync_enter(pendingGroupID)
+//        if let groupID = self.pendingGroupID {  // update group location, if there's a pending group
+//            self.pendingGroupID = nil
+//            let params: Parameters = ["id" : groupID, "latitude": latitude, "longitude": longitude]
+//            Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kUpdateLocationPath, method: .post, parameters: params).validate().responseJSON { response in
+//                switch response.result {
+//                case .success:
+//                    print("Set location for group ", groupID)
+//                case .failure(let error):
+//                    print(error)
+//                }
+//            }
+//        }
+//        objc_sync_exit(pendingGroupID)
+//    }
 }

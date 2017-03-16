@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import Alamofire
 
 class ViewController: UIViewController {
 
     let kClientID = "77d4489425fe464483f0934f99847c8b"
     let kCallbackURL = "juke1231://callback"
-    
+    public static var currSpotifyID: String = ""
     
     @IBOutlet weak var loginButton: UIButton!
     
@@ -26,9 +27,41 @@ class ViewController: UIViewController {
         UIApplication.shared.open(loginURL)
     }
     
-    func loginSuccessful() {
-        let player = JamsPlayer.shared  // to kick off authentication of player before user gets to playlist page
-        performSegue(withIdentifier: "loginSegue", sender: nil)
+    func loginSuccessful(notification: NSNotification) {
+        if let accessToken = notification.object as? String {
+            // kick off authentication of player early
+            let player = JamsPlayer.shared
+            performSegue(withIdentifier: "loginSegue", sender: nil)
+            fetchSpotifyUser(accessToken: accessToken)
+        }
+    }
+    
+    func fetchSpotifyUser(accessToken: String) {
+        // first retrieve user object from spotify server using access token
+        let headers: HTTPHeaders = ["Authorization": "Bearer " + accessToken]
+        let url = ServerConstants.kSpotifyBaseURL + ServerConstants.kCurrentUserPath
+        Alamofire.request(url, method: .get, parameters: nil, encoding: URLEncoding.default, headers: headers).validate().responseJSON {
+            response in
+            switch response.result {
+            case .success:
+                if let user = response.result.value as? NSDictionary {
+                    self.updateJukeServer(user: user)
+                }
+            case .failure(let error):
+                print(error)
+            }
+        };
+    }
+    
+    func updateJukeServer(user: NSDictionary) {
+        // create new user object in DB. if already exists with spotify_id, no-op
+        if let spotify_id = user["id"] as? String {
+            let url = ServerConstants.kJukeServerURL + ServerConstants.kAddUser
+            let params: Parameters = ["spotify_id": spotify_id]
+            Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
+                ViewController.currSpotifyID = spotify_id
+            };
+        }
     }
     
 
@@ -37,6 +70,8 @@ class ViewController: UIViewController {
         loginButton.layer.borderWidth = 1.0
         loginButton.layer.borderColor = UIColor(red:139/255.0, green:245/255.0, blue:119/255.0, alpha: 1.0).cgColor
         loginButton.layer.cornerRadius = 15
+        // kick of location updates early
+        let locationManager = LocationManager.sharedInstance
     }
     
 

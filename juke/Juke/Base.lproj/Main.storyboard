@@ -42,8 +42,8 @@
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                         <constraints>
-                            <constraint firstItem="P6M-7a-Bc7" firstAttribute="centerY" secondItem="R3w-FZ-41t" secondAttribute="centerY" id="J6t-HY-FS5"/>
-                            <constraint firstItem="wnc-XT-gxM" firstAttribute="top" secondItem="P6M-7a-Bc7" secondAttribute="bottom" constant="25" id="cB6-Lm-2Od"/>
+                            <constraint firstItem="P6M-7a-Bc7" firstAttribute="top" secondItem="cai-9t-cJR" secondAttribute="bottom" constant="100" id="9AE-Sz-t5T"/>
+                            <constraint firstItem="wnc-XT-gxM" firstAttribute="top" secondItem="P6M-7a-Bc7" secondAttribute="bottom" constant="60" id="cB6-Lm-2Od"/>
                             <constraint firstItem="P6M-7a-Bc7" firstAttribute="centerX" secondItem="R3w-FZ-41t" secondAttribute="centerX" id="g30-sF-oTu"/>
                             <constraint firstItem="wnc-XT-gxM" firstAttribute="centerX" secondItem="R3w-FZ-41t" secondAttribute="centerX" id="sdN-9n-1Aw"/>
                         </constraints>
@@ -247,6 +247,11 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <toolbarItems>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Vm8-wL-sgU"/>
+                        <barButtonItem id="mDV-Cg-wUp"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="yCj-Wo-WSv"/>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" title="GroupTitle" id="Thh-BC-j5w">
                         <barButtonItem key="rightBarButtonItem" image="search" id="hhU-nk-l9c">
                             <connections>
@@ -254,7 +259,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="barButton" destination="mDV-Cg-wUp" id="rLC-Yu-bgD"/>
                         <outlet property="currTimeLabel" destination="qOs-Ub-kQn" id="V0p-Hg-RRl"/>
                         <outlet property="currentlyPlayingArtistLabel" destination="oMP-6K-FcU" id="7Uf-0f-0OE"/>
                         <outlet property="currentlyPlayingLabel" destination="vZf-Cb-jOg" id="yr9-YF-mLh"/>
