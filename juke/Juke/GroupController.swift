@@ -21,11 +21,11 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     struct Song {
-        let songName: String?
-        let artist: String?
-        let spotify_id: String?
-        let votes: Int?
-        let progress: Float?    // progress in song, synced with owner's device
+        let songName: String
+        let artist: String
+        let spotify_id: String
+        let votes: Int
+        let progress: Double    // progress in song, synced with owner's device
     }
     
     @IBOutlet var barButton: UIBarButtonItem!
@@ -78,19 +78,6 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
         }
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        // play cell at position 0 if it's not already playing
-        if indexPath.row == 0 {
-            let id = self.songs[0].spotify_id!
-            if jamsPlayer.isPlaying(trackID: id) {
-                return
-            }
-            DispatchQueue.global(qos: .background).async {
-                self.jamsPlayer.playSong(trackID: id)
-            }
-        }
-    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 {
             return 0    // hide first row -- should be currently playing track
@@ -137,6 +124,10 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func songPositionChanged(notification: NSNotification) {
+        if self.songs.count == 0 {
+            return
+        }
+        
         if let data = notification.object as? NSDictionary {
             songProgressSlider.setValue(data["ratio"] as! Float, animated: true)
             let pos = data["position"] as! TimeInterval
@@ -146,7 +137,7 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
             
             // update progress in db if current user is playlist owner
             if ViewController.currSpotifyID == group?.owner_spotify_id {
-                let song_id = self.songs[0].spotify_id!
+                let song_id = self.songs[0].spotify_id
                 socketManager.updateSongPositionChanged(group_id: group!.id, song_id: song_id, position: pos)
             }
         }
@@ -165,6 +156,21 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
         }
     }
     
+    private func playTopSong() {
+        // play first song
+        if self.songs.count > 0 {
+            DispatchQueue.global(qos: .background).async {
+                // play cell at position 0 if it's not already playing
+                let song = self.songs[0]
+                let id = song.spotify_id
+                if self.jamsPlayer.isPlaying(trackID: id) {
+                    return
+                }
+                self.jamsPlayer.playSong(trackID: id, progress: song.progress)
+            }
+        }
+    }
+    
     // fetch songs and trigger table reload
     private func fetchSongs() {
         // note that Alamofire doesn't work with optionals -- must force unwrap with "as String!"
@@ -178,7 +184,7 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
                         let id = item["spotify_id"] as! String
                         let song = item["songName"] as! String
                         let artist = item["artistName"] as! String
-                        let progress = item["progress"] as! Float
+                        let progress = item["progress"] as! Double
                         let votes = item["votes"] as! Int
                         self.songs.append(Song(songName: song, artist: artist, spotify_id: id, votes: votes, progress: progress))
                     }
@@ -186,6 +192,8 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                     }
+                    
+                    self.playTopSong()
                 }
             case .failure(let error):
                 print(error)

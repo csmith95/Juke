@@ -12,7 +12,7 @@ import Alamofire
 class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     var results = [Song]()
-    let kNumResultsToStore = 15
+    let kNumResultsToStore = 20
     let searchController = UISearchController(searchResultsController: nil)
     
     @IBOutlet var searchBar: UISearchBar!
@@ -71,10 +71,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     func addSongToGroup(song: Song, group: GroupsController.Group) {
         let params: Parameters = ["group_id": group.id, "song_id": song.id, "songName": song.songName, "artistName": song.artistName]
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate().responseJSON { response in
-            switch response.result {
-            case .success:
-                print("Added song: ", song)
-            case .failure(let error):
+            if let error = response.result.error {
                 print(error)
             }
         }

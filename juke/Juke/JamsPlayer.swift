@@ -92,7 +92,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         }
     }
     
-    public func playSong(trackID: String) {
+    public func playSong(trackID: String, progress: Double) {
         refreshSession()
         if let session = self.session {
             if !session.isValid() {
@@ -100,7 +100,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
                 return
             }
             let uri = "spotify:track:" + trackID
-            sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: 0, callback: { (error) in
+            sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: progress, callback: { (error) in
                 if let error = error {
                     print(error)
                 }
