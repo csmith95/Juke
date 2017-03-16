@@ -20,12 +20,15 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
         }
     }
     
-    struct SongData {
-        let songName: String
-        let artist: String
-        let id: String
+    struct Song {
+        let songName: String?
+        let artist: String?
+        let spotify_id: String?
+        let votes: Int?
+        let progress: Float?    // progress in song, synced with owner's device
     }
     
+    @IBOutlet var barButton: UIBarButtonItem!
     @IBOutlet var currTimeLabel: UILabel!
     @IBOutlet var timeLeftLabel: UILabel!
     @IBOutlet var currentlyPlayingArtistLabel: UILabel!
@@ -35,9 +38,9 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
     @IBOutlet var tableView: UITableView!
     var group: GroupsController.Group?
     let jamsPlayer = JamsPlayer.shared
-    var songIDs = [String]()
-    var songData = [String: SongData]()     // id --> songName, artist, id
+    var songs = [Song]()
     var selectedIndex: IndexPath?
+    let socketManager = SocketManager.sharedInstance
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +64,7 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navBarTitle = group?.name
-        fetchSongIDs()
+        fetchSongs()
     }
     
     @IBAction func searchButtonPressed(_ sender: AnyObject) {
@@ -78,7 +81,7 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         // play cell at position 0 if it's not already playing
         if indexPath.row == 0 {
-            let id = self.songIDs[0]
+            let id = self.songs[0].spotify_id!
             if jamsPlayer.isPlaying(trackID: id) {
                 return
             }
@@ -109,25 +112,20 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return songIDs.count
+        return songs.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+        let song = self.songs[indexPath.row]
         if indexPath.row == 0 {
             // place first song in the currentlyPlayingLabel
-            if let song = self.songData[self.songIDs[0]] {
-                self.currentlyPlayingLabel.text = song.songName
-                self.currentlyPlayingArtistLabel.text = song.artist
-            }
+            self.currentlyPlayingLabel.text = song.songName
+            self.currentlyPlayingArtistLabel.text = song.artist
         }
         
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
-        if let song = self.songData[self.songIDs[indexPath.row]] {
-            cell.songName.text = song.songName
-            cell.artist.text = song.artist
-        }
-        
+        cell.songName.text = song.songName
+        cell.artist.text = song.artist
         return cell
     }
     
@@ -145,6 +143,12 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
             self.currTimeLabel.text = timeIntervalToString(interval: pos)
             let timeLeft = (data["duration"] as! TimeInterval) - pos
             self.timeLeftLabel.text = "-" + timeIntervalToString(interval: timeLeft)
+            
+            // update progress in db if current user is playlist owner
+            if ViewController.currSpotifyID == group?.owner_spotify_id {
+                let song_id = self.songs[0].spotify_id!
+                socketManager.updateSongPositionChanged(group_id: group!.id, song_id: song_id, position: pos)
+            }
         }
     }
     
@@ -154,54 +158,34 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kPopSong, method: .post, parameters: params).responseJSON { response in
             switch response.result {
             case .success:
-                self.fetchSongIDs()
+                self.fetchSongs()
             case .failure(let error):
                 print(error)
             }
         }
     }
     
-    private func fetchSongData() {
-        let group = DispatchGroup() // to ensure view only reloads after all songs fetched
-        self.songData.removeAll()
-        for id in self.songIDs {
-            group.enter()
-            Alamofire.request(ServerConstants.kSpotifyTrackDataURL + id, method: .get).responseJSON { response in
-                switch response.result {
-                case .success:
-                    if let response = response.result.value as? NSDictionary {
-                        objc_sync_enter(self.songData)
-                        let id = response["id"] as! String
-                        let songName = response["name"] as! String
-                        let artist = ((response["artists"] as! NSArray)[0] as! NSDictionary)["name"] as! String
-                        self.songData[id] = SongData(songName: songName, artist: artist, id: id)
-                        objc_sync_exit(self.songData)
-                    }
-                case .failure(let error):
-                    print(error)
-                }
-                group.leave()
-            }
-        }
-        
-        // reload on main thread after all responses come in
-        group.notify(queue: .main) {
-            self.tableView.reloadData()
-        }
-    }
-    
-    
     // fetch songs and trigger table reload
-    private func fetchSongIDs() {
+    private func fetchSongs() {
         // note that Alamofire doesn't work with optionals -- must force unwrap with "as String!"
-        let params: Parameters = ["group_id":self.group?.id as String!]
+        let params: Parameters = ["group_id": self.group?.id as String!]
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kFetchSongsPath, method: .get, parameters: params).responseJSON { response in
             switch response.result {
             case .success:
-                if let response = response.result.value as? [String]{
-                    // the line below transforms [*:*:id] --> [id]
-                    self.songIDs = response.map {$0.characters.split{$0 == ":"}.map(String.init)[2]}
-                    self.fetchSongData()
+                if let songs = response.result.value as? [NSDictionary] {
+                    self.songs.removeAll()
+                    for item in songs {
+                        let id = item["spotify_id"] as! String
+                        let song = item["songName"] as! String
+                        let artist = item["artistName"] as! String
+                        let progress = item["progress"] as! Float
+                        let votes = item["votes"] as! Int
+                        self.songs.append(Song(songName: song, artist: artist, spotify_id: id, votes: votes, progress: progress))
+                    }
+                    // update UI on main thread
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
                 }
             case .failure(let error):
                 print(error)

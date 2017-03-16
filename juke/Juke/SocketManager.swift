@@ -12,7 +12,7 @@ import SocketIO
 class SocketManager: NSObject {
     
     static let sharedInstance = SocketManager()
-    let socket = SocketIOClient(socketURL: URL(string: "http://10.29.32.78:8000")!)
+    let socket = SocketIOClient(socketURL: URL(string: "http://10.34.148.120:8000")!)
     
     override private init() {
         super.init()
@@ -41,11 +41,11 @@ class SocketManager: NSObject {
     }
     
     public func updateSongPositionChanged(group_id: String, song_id: String, position: Double) {
-        socket.emit("songPositionChanged", ["song_id": song_id, "group_id": group_id])
+        socket.emit("songPositionChanged", ["song_id": song_id, "group_id": group_id, "position": position])
     }
+    
     
     public func updateSongEnded(group_id: String) {
         socket.emit("songEnded", ["group_id": group_id])
     }
-    
 }
