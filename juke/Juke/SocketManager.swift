@@ -12,7 +12,7 @@ import SocketIO
 class SocketManager: NSObject {
     
     static let sharedInstance = SocketManager()
-    let socket = SocketIOClient(socketURL: URL(string: "http://10.34.148.120:8000")!)
+    let socket = SocketIOClient(socketURL: URL(string: ServerConstants.kJukeServerURL)!)
     
     override private init() {
         super.init()
@@ -20,7 +20,8 @@ class SocketManager: NSObject {
             print("socket connected")
             self.updateUserTunedIntoGroup(user_id: "abc", group_id: "def")
         }
-        socket.on("disconnect") { data, ack in
+        
+        self.socket.on("disconnect") { data, ack in
             print("socket disconnected")
         }
         socket.on("random") { data, ack in
@@ -48,4 +49,5 @@ class SocketManager: NSObject {
     public func updateSongEnded(group_id: String) {
         socket.emit("songEnded", ["group_id": group_id])
     }
+    
 }

@@ -84,23 +84,21 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePosition position: TimeInterval) {
         // signal GroupController so that it can update UISlider
-        if let currentTrack = audioStreaming.metadata.currentTrack {
-            self.position = position
-            let ratio = position / currentTrack.duration
-            let data = ["position": position, "ratio": ratio, "duration":currentTrack.duration]
-            NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
-        }
+        self.position = position
+        let data = ["position": position]
+        NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
     }
     
-    public func playSong(trackID: String, progress: Double) {
-        refreshSession()
+    public func loadSong(trackID: String, progress: Double) {
         if let session = self.session {
             if !session.isValid() {
                 print("session no longer valid")
                 return
             }
+            
             let uri = "spotify:track:" + trackID
-            sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: progress, callback: { (error) in
+            sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: 0, callback: { (error) in
+                self.setPlayStatus(shouldPlay: false, trackID: trackID, position: 0) // load then pause
                 if let error = error {
                     print(error)
                 }
@@ -108,28 +106,21 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         }
     }
     
-    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
-//        if isPlaying {
-//            print("is playing")
-//            if let duration = audioStreaming.metadata.currentTrack?.duration {
-//                audioStreaming.seek(to: duration - 15, callback: { (err) in
-//                    if let err = err {
-//                       print(err)
-//                    }
-//                })
-//            }
-//        }
-    }
-    
-    public func togglePlaybackState() {
-        if let currState = sharedInstance?.playbackState.isPlaying {
-            sharedInstance?.setIsPlaying(!currState, callback: { (err) in
+    public func setPlayStatus(shouldPlay: Bool, trackID: String, position: Double) {
+        if shouldPlay {
+            let uri = "spotify:track:" + trackID
+            sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: position, callback: { (error) in
+                if let error = error {
+                    print(error)
+                }
+            })
+        } else {
+            sharedInstance?.setIsPlaying(false, callback: { (err) in
                 if let err = err {
                     print(err)
                 }
             })
         }
     }
-    
 }
 

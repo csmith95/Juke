@@ -24,6 +24,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         var id: String
         var artistName: String
         var songName: String
+        var duration: Double
     }
     
     
@@ -69,7 +70,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func addSongToGroup(song: Song, group: GroupsController.Group) {
-        let params: Parameters = ["group_id": group.id, "song_id": song.id, "songName": song.songName, "artistName": song.artistName]
+        let params: Parameters = ["group_id": group.id, "song_id": song.id, "songName": song.songName, "artistName": song.artistName, "duration": song.duration]
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate().responseJSON { response in
             if let error = response.result.error {
                 print(error)
@@ -87,10 +88,11 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             // the line below transforms "*:*:id" --> "id"
             let id = (curr["uri"] as! String).characters.split{$0 == ":"}.map(String.init)[2]
             let name = curr["name"] as! String
+            let duration = (curr["duration_ms"] as! Double) / 1000
             let artists = curr["artists"] as! NSArray
             let first = artists[0] as! NSDictionary
             let artist = first["name"] as! String
-            self.results.append(Song(id: id, artistName: artist, songName: name))
+            self.results.append(Song(id: id, artistName: artist, songName: name, duration: duration))
         }
     }
     
@@ -100,9 +102,8 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         }
         
         self.results = []
-        let fixedQuery = query.replacingOccurrences(of: " ", with: "%20")
         let params: Parameters = [
-            "query" : fixedQuery,
+            "query" : query,
             "type" : "track",
             "market" : "US",
             "offset" : "00",
