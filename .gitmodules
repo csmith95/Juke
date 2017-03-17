@@ -1,3 +1,9 @@
 [submodule "Alamofire"]
 	path = Alamofire
 	url = https://github.com/Alamofire/Alamofire.git
+[submodule "socket.io-client-swift"]
+	path = socket.io-client-swift
+	url = https://github.com/socketio/socket.io-client-swift.git
+[submodule "juke/socket.io-client-swift"]
+	path = juke/socket.io-client-swift
+	url = https://github.com/socketio/socket.io-client-swift.git

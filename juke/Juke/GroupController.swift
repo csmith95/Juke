@@ -26,9 +26,9 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
         let spotify_id: String
         let votes: Int
         let progress: Double    // progress in song, synced with owner's device
+        let duration: Double
     }
     
-    @IBOutlet var barButton: UIBarButtonItem!
     @IBOutlet var currTimeLabel: UILabel!
     @IBOutlet var timeLeftLabel: UILabel!
     @IBOutlet var currentlyPlayingArtistLabel: UILabel!
@@ -41,6 +41,8 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
     var songs = [Song]()
     var selectedIndex: IndexPath?
     let socketManager = SocketManager.sharedInstance
+    let playImage = UIImage(named: "play.png")
+    let pauseImage = UIImage(named: "pause.png")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -116,6 +118,29 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
         return cell
     }
     
+    @IBAction func barButtonPressed(_ sender: AnyObject) {
+        if self.songs.count == 0 {
+            return
+        }
+        
+        let song = self.songs[0]
+        let button = sender as! UIBarButtonItem
+        var newImage: UIImage
+        var newPlayStatus: Bool
+        if button.image == playImage {
+            // was paused --> switch to pauseImage & play song
+            newImage = pauseImage!
+            newPlayStatus = true
+        } else {
+            // was playing --> switch to playImage & pause song
+            newImage = playImage!
+            newPlayStatus = false
+        }
+
+        button.image = newImage
+        jamsPlayer.setPlayStatus(shouldPlay: newPlayStatus, trackID: song.spotify_id, position: song.progress)
+    }
+    
     private func timeIntervalToString(interval: TimeInterval) -> String {
         let ti = NSInteger(interval)
         let seconds = ti % 60
@@ -128,19 +153,26 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
             return
         }
         
+        let song = songs[0]
         if let data = notification.object as? NSDictionary {
-            songProgressSlider.setValue(data["ratio"] as! Float, animated: true)
-            let pos = data["position"] as! TimeInterval
-            self.currTimeLabel.text = timeIntervalToString(interval: pos)
-            let timeLeft = (data["duration"] as! TimeInterval) - pos
-            self.timeLeftLabel.text = "-" + timeIntervalToString(interval: timeLeft)
+            // update slider
+            let progress = data["position"] as! Double
+            updateSlider(song: song, progress: progress)
             
             // update progress in db if current user is playlist owner
             if ViewController.currSpotifyID == group?.owner_spotify_id {
                 let song_id = self.songs[0].spotify_id
-                socketManager.updateSongPositionChanged(group_id: group!.id, song_id: song_id, position: pos)
+                socketManager.updateSongPositionChanged(group_id: group!.id, song_id: song_id, position: progress)
             }
         }
+    }
+    
+    private func updateSlider(song: Song, progress: Double) {
+        let ratio = progress / song.duration
+        let timeLeft = song.duration - progress
+        self.songProgressSlider.setValue(Float(ratio), animated: true)
+        self.currTimeLabel.text = timeIntervalToString(interval: progress)
+        self.timeLeftLabel.text = "-" + timeIntervalToString(interval: timeLeft)
     }
     
     func songFinished() {
@@ -156,17 +188,23 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
         }
     }
     
-    private func playTopSong() {
-        // play first song
+    private func loadTopSong() {
         if self.songs.count > 0 {
+            let song = self.songs[0]
+            // update UI on main thread
+            DispatchQueue.main.async {
+                self.updateSlider(song: song, progress: song.progress)
+            }
+            
             DispatchQueue.global(qos: .background).async {
                 // play cell at position 0 if it's not already playing
-                let song = self.songs[0]
                 let id = song.spotify_id
                 if self.jamsPlayer.isPlaying(trackID: id) {
-                    return
+                    return  // if already playing, let it play
                 }
-                self.jamsPlayer.playSong(trackID: id, progress: song.progress)
+                
+                // otherwise, load song and wait for user to press play or tune in/out
+                self.jamsPlayer.loadSong(trackID: id, progress: song.progress)
             }
         }
     }
@@ -185,15 +223,18 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
                         let song = item["songName"] as! String
                         let artist = item["artistName"] as! String
                         let progress = item["progress"] as! Double
+                        let duration = item["duration"] as! Double
                         let votes = item["votes"] as! Int
-                        self.songs.append(Song(songName: song, artist: artist, spotify_id: id, votes: votes, progress: progress))
+                        self.songs.append(Song(songName: song, artist: artist, spotify_id: id, votes: votes, progress: progress, duration: duration))
                     }
                     // update UI on main thread
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                     }
                     
-                    self.playTopSong()
+                    if songs.count > 0 {
+                        self.loadTopSong()
+                    }
                 }
             case .failure(let error):
                 print(error)
