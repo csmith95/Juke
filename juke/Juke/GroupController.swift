@@ -128,19 +128,19 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
             return
         }
         
-        if let data = notification.object as? NSDictionary {
-            songProgressSlider.setValue(data["ratio"] as! Float, animated: true)
-            let pos = data["position"] as! TimeInterval
-            self.currTimeLabel.text = timeIntervalToString(interval: pos)
-            let timeLeft = (data["duration"] as! TimeInterval) - pos
-            self.timeLeftLabel.text = "-" + timeIntervalToString(interval: timeLeft)
-            
-            // update progress in db if current user is playlist owner
-            if ViewController.currSpotifyID == group?.owner_spotify_id {
-                let song_id = self.songs[0].spotify_id
-                socketManager.updateSongPositionChanged(group_id: group!.id, song_id: song_id, position: pos)
-            }
-        }
+//        if let data = notification.object as? NSDictionary {
+//            songProgressSlider.setValue(data["ratio"] as! Float, animated: true)
+//            let pos = data["position"] as! TimeInterval
+//            self.currTimeLabel.text = timeIntervalToString(interval: pos)
+//            let timeLeft = (data["duration"] as! TimeInterval) - pos
+//            self.timeLeftLabel.text = "-" + timeIntervalToString(interval: timeLeft)
+//            
+//            // update progress in db if current user is playlist owner
+//            if ViewController.currSpotifyID == group?.owner_spotify_id {
+//                let song_id = self.songs[0].spotify_id
+//                socketManager.updateSongPositionChanged(group_id: group!.id, song_id: song_id, position: pos)
+//            }
+//        }
     }
     
     func songFinished() {

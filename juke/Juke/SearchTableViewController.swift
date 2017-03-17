@@ -26,11 +26,13 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         var songName: String
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+
+       
         searchBar.delegate = self
         tableView.delegate = self
+
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -50,12 +52,14 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return results.count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "searchCell", for: indexPath) as! SearchCell
         let song = results[(indexPath as NSIndexPath).row]
         cell.songLabel!.text = song.songName
         cell.artistLabel!.text = song.artistName
+        cell.addButton!.setTitle("+", for: .normal)
+        cell.addButton!.titleLabel?.font = UIFont(name: "System", size: 23)
         // Assign the tap action which will be executed when the user taps the UIButton
         cell.tapAction = { (cell) in
             // post to server
@@ -65,6 +69,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             cell.addButton!.setTitle("Added!", for: .normal)
             cell.addButton!.titleLabel?.font = UIFont(name: "System", size: 16)
         }
+        
         return cell
     }
     
@@ -100,13 +105,12 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         }
         
         self.results = []
-        let fixedQuery = query.replacingOccurrences(of: " ", with: "%20")
         let params: Parameters = [
-            "query" : fixedQuery,
+            "query" : query,
             "type" : "track",
             "market" : "US",
             "offset" : "00",
-            "limit" : "10"
+            "limit" : kNumResultsToStore
         ]
     
         Alamofire.request(ServerConstants.kSpotifySearchURL, method: .get, parameters: params).validate().responseJSON { response in
@@ -124,6 +128,10 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             }
         }
     }
+    
+
+    
+
 
     /*
     // Override to support conditional editing of the table view.
@@ -170,6 +178,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
     */
 }
+
 
 
 
