@@ -28,11 +28,8 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-       
         searchBar.delegate = self
         tableView.delegate = self
-
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

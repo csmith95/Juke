@@ -109,16 +109,16 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
-//        if isPlaying {
-//            print("is playing")
-//            if let duration = audioStreaming.metadata.currentTrack?.duration {
-//                audioStreaming.seek(to: duration - 15, callback: { (err) in
-//                    if let err = err {
-//                       print(err)
-//                    }
-//                })
-//            }
-//        }
+        if isPlaying {
+            print("is playing")
+            if let duration = audioStreaming.metadata.currentTrack?.duration {
+                audioStreaming.seek(to: duration - 15, callback: { (err) in
+                    if let err = err {
+                       print(err)
+                    }
+                })
+            }
+        }
     }
     
     public func togglePlaybackState() {
