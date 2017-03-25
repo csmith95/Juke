@@ -1,12 +1,15 @@
 PODS:
   - Alamofire (4.4.0)
+  - Socket.IO-Client-Swift (8.3.0)
 
 DEPENDENCIES:
   - Alamofire (~> 4.4)
+  - Socket.IO-Client-Swift (~> 8.3.0)
 
 SPEC CHECKSUMS:
   Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  Socket.IO-Client-Swift: 7ad3aded3c0f74d99555e950ac3aa82ca3eefbaf
 
-PODFILE CHECKSUM: 8153a5ea195bb94910a19853d79ecedcc971679e
+PODFILE CHECKSUM: bed06b51e66465910b7187de4068a0d350750c15
 
 COCOAPODS: 1.2.0
