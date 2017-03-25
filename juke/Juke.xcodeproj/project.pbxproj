@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B8A0D073A619FA4F5917B1F /* Pods_Juke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F31EE44CE3E3103BDDB3393A /* Pods_Juke.framework */; };
 		4B0490E91E734614003F49DF /* SongTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0490E81E734614003F49DF /* SongTableViewCell.swift */; };
 		4B0490FA1E73972C003F49DF /* GroupsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0490F91E73972C003F49DF /* GroupsTableViewCell.swift */; };
 		4B0FB5801E59A12C008D34FD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B0FB57F1E59A12C008D34FD /* CoreLocation.framework */; };
@@ -169,6 +170,9 @@
 		4BDCEBEA1E70F6FC00D9D3EE /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = ../Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		4BDCEC051E720D0B00D9D3EE /* ServerConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerConstants.swift; sourceTree = "<group>"; };
 		4BF307B01E7797B9002CAE9E /* CardTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardTableViewCell.swift; sourceTree = "<group>"; };
+		AAD574C13732817D8AB7E517 /* Pods-Juke.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Juke/Pods-Juke.debug.xcconfig"; sourceTree = "<group>"; };
+		F0AEFA5E063F7025C7E58A4E /* Pods-Juke.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke.release.xcconfig"; path = "Pods/Target Support Files/Pods-Juke/Pods-Juke.release.xcconfig"; sourceTree = "<group>"; };
+		F31EE44CE3E3103BDDB3393A /* Pods_Juke.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Juke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,12 +186,22 @@
 				4BC7785A1E5835D9009DD520 /* SpotifyAuthentication.framework in Frameworks */,
 				4B3A34E51E581F1300C314A0 /* AVFoundation.framework in Frameworks */,
 				4B3A34EA1E581FBF00C314A0 /* SpotifyAudioPlayback.framework in Frameworks */,
+				1B8A0D073A619FA4F5917B1F /* Pods_Juke.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4B08CDB894563C61CDC2C59E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				AAD574C13732817D8AB7E517 /* Pods-Juke.debug.xcconfig */,
+				F0AEFA5E063F7025C7E58A4E /* Pods-Juke.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		4B3A34C01E58120E00C314A0 = {
 			isa = PBXGroup;
 			children = (
@@ -196,6 +210,7 @@
 				4B3A34CB1E58120F00C314A0 /* Juke */,
 				4B3A34CA1E58120F00C314A0 /* Products */,
 				4B3A34E31E581F1300C314A0 /* Frameworks */,
+				4B08CDB894563C61CDC2C59E /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -242,6 +257,7 @@
 				4B3A34E81E581FBF00C314A0 /* SpotifyAudioPlayback.framework */,
 				4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */,
 				4B3A34E41E581F1300C314A0 /* AVFoundation.framework */,
+				F31EE44CE3E3103BDDB3393A /* Pods_Juke.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -280,9 +296,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4B3A34E01E58120F00C314A0 /* Build configuration list for PBXNativeTarget "Juke" */;
 			buildPhases = (
+				4F70FF08AD9268CB4354B9A0 /* [CP] Check Pods Manifest.lock */,
 				4B3A34C51E58120F00C314A0 /* Sources */,
 				4B3A34C61E58120F00C314A0 /* Frameworks */,
 				4B3A34C71E58120F00C314A0 /* Resources */,
+				A780261EE6FEFE51F142674B /* [CP] Embed Pods Frameworks */,
+				F6B755943E93FD5EB797E364 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -448,6 +467,54 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4F70FF08AD9268CB4354B9A0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		A780261EE6FEFE51F142674B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Juke/Pods-Juke-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F6B755943E93FD5EB797E364 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Juke/Pods-Juke-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		4B3A34C51E58120F00C314A0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -602,6 +669,7 @@
 		};
 		4B3A34E11E58120F00C314A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AAD574C13732817D8AB7E517 /* Pods-Juke.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -625,6 +693,7 @@
 		};
 		4B3A34E21E58120F00C314A0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F0AEFA5E063F7025C7E58A4E /* Pods-Juke.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
