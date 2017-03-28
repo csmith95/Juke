@@ -98,7 +98,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
             
             let uri = "spotify:track:" + trackID
             sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: 0, callback: { (error) in
-                self.setPlayStatus(shouldPlay: false, trackID: trackID, position: 0) // load then pause
+                self.setPlayStatus(shouldPlay: false, trackID: trackID, position: progress) // load then pause
                 if let error = error {
                     print(error)
                 }

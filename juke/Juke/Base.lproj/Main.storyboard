@@ -270,6 +270,7 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="barButton" destination="jKa-qm-GAv" id="Hsq-f8-qL9"/>
                         <outlet property="currTimeLabel" destination="qOs-Ub-kQn" id="V0p-Hg-RRl"/>
                         <outlet property="currentlyPlayingArtistLabel" destination="oMP-6K-FcU" id="7Uf-0f-0OE"/>
                         <outlet property="currentlyPlayingLabel" destination="vZf-Cb-jOg" id="yr9-YF-mLh"/>

@@ -29,6 +29,7 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
         let duration: Double
     }
     
+    @IBOutlet var barButton: UIBarButtonItem!
     @IBOutlet var currTimeLabel: UILabel!
     @IBOutlet var timeLeftLabel: UILabel!
     @IBOutlet var currentlyPlayingArtistLabel: UILabel!
@@ -168,6 +169,7 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     private func updateSlider(song: Song, progress: Double) {
+        print(progress)
         let ratio = progress / song.duration
         let timeLeft = song.duration - progress
         self.songProgressSlider.setValue(Float(ratio), animated: true)
@@ -232,7 +234,12 @@ class GroupController: UIViewController, UITableViewDelegate, UITableViewDataSou
                         self.tableView.reloadData()
                     }
                     
-                    if songs.count > 0 {
+                    if self.songs.count > 0 {
+                        if self.jamsPlayer.isPlaying(trackID: self.songs[0].spotify_id) {
+                            self.barButton.image = self.pauseImage
+                        } else {
+                            self.barButton.image = self.playImage
+                        }
                         self.loadTopSong()
                     }
                 }
