@@ -46,7 +46,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
             if audioStreaming.metadata == nil {
                 return
             }
-            // track changed -- tell GroupController to pop first song, play next song
+            // track changed -- tell StreamController to pop first song, play next song
             if let currentTrack = audioStreaming.metadata.currentTrack {
                 if self.position >= currentTrack.duration - 5 {
                     NotificationCenter.default.post(name: Notification.Name("songFinished"), object: nil)
@@ -83,7 +83,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePosition position: TimeInterval) {
-        // signal GroupController so that it can update UISlider
+        // signal StreamController so that it can update UISlider
         self.position = position
         let data = ["position": position]
         NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
