@@ -45,6 +45,7 @@ class ViewController: UIViewController {
             switch response.result {
             case .success:
                 if let user = response.result.value as? NSDictionary {
+                    print(user)
                     self.updateJukeServer(user: user)
                 }
             case .failure(let error):
@@ -70,8 +71,8 @@ class ViewController: UIViewController {
         loginButton.layer.borderWidth = 1.0
         loginButton.layer.borderColor = UIColor(red:139/255.0, green:245/255.0, blue:119/255.0, alpha: 1.0).cgColor
         loginButton.layer.cornerRadius = 15
-        // kick of location updates early
-        let locationManager = LocationManager.sharedInstance
+        // kick off location updates early -- currently not using location for MVP
+//        let locationManager = LocationManager.sharedInstance
     }
     
 

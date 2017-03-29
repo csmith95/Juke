@@ -1,15 +1,22 @@
 PODS:
   - Alamofire (4.4.0)
+  - AlamofireImage (3.2.0):
+    - Alamofire (~> 4.1)
   - Socket.IO-Client-Swift (8.3.0)
+  - Unbox (2.4.0)
 
 DEPENDENCIES:
   - Alamofire (~> 4.4)
+  - AlamofireImage (~> 3.1)
   - Socket.IO-Client-Swift (~> 8.3.0)
+  - Unbox
 
 SPEC CHECKSUMS:
   Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  AlamofireImage: 157ed682cc81d3b9db4fb90c1f12180ac552d93b
   Socket.IO-Client-Swift: 7ad3aded3c0f74d99555e950ac3aa82ca3eefbaf
+  Unbox: c8b2ab69d3337597b4a3f47a0538807dc12db670
 
-PODFILE CHECKSUM: bed06b51e66465910b7187de4068a0d350750c15
+PODFILE CHECKSUM: a667b8d27802e65739a1c56a0697d12cd6e229e7
 
 COCOAPODS: 1.2.0

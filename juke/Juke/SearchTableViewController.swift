@@ -11,22 +11,11 @@ import Alamofire
 
 class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
-    var results = [Song]()
+    var results:[Models.Song] = []
     let kNumResultsToStore = 20
     let searchController = UISearchController(searchResultsController: nil)
     
     @IBOutlet var searchBar: UISearchBar!
-    
-    // passed from GroupController (the previous ViewController)
-    var group: GroupsController.Group?
-    
-    struct Song {
-        var id: String
-        var artistName: String
-        var songName: String
-        var duration: Double
-    }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,19 +47,19 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         cell.songLabel!.text = song.songName
         cell.artistLabel!.text = song.artistName
         // Assign the tap action which will be executed when the user taps the UIButton
-        cell.tapAction = { (cell) in
-            // post to server
-            self.addSongToGroup(song: self.results[indexPath.row], group: self.group!)
-            
-            // animate button text change from "+" to "Added!"
-            cell.addButton!.setTitle("Added!", for: .normal)
-            cell.addButton!.titleLabel?.font = UIFont(name: "System", size: 16)
-        }
+//        cell.tapAction = { (cell) in
+//            // post to server
+//            self.addSongToStream(song: self.results[indexPath.row], stream: self.group!)
+//            
+//            // animate button text change from "+" to "Added!"
+//            cell.addButton!.setTitle("Added!", for: .normal)
+//            cell.addButton!.titleLabel?.font = UIFont(name: "System", size: 16)
+//        }
         return cell
     }
     
-    func addSongToGroup(song: Song, group: GroupsController.Group) {
-        let params: Parameters = ["group_id": group.id, "song_id": song.id, "songName": song.songName, "artistName": song.artistName, "duration": song.duration]
+    func addSongToStream(song: Models.Song, stream: Models.Stream) {
+        let params: Parameters = ["groupID": stream.id, "songID": song.spotifyID, "songName": song.songName, "artistName": song.artistName, "duration": song.duration]
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate().responseJSON { response in
             if let error = response.result.error {
                 print(error)
@@ -85,6 +74,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         let numItemsToCache = min(kNumResultsToStore, items.count)
         for i in 0 ..< numItemsToCache {
             let curr = items[i] as! NSDictionary
+            
             // the line below transforms "*:*:id" --> "id"
             let id = (curr["uri"] as! String).characters.split{$0 == ":"}.map(String.init)[2]
             let name = curr["name"] as! String
@@ -92,7 +82,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             let artists = curr["artists"] as! NSArray
             let first = artists[0] as! NSDictionary
             let artist = first["name"] as! String
-            self.results.append(Song(id: id, artistName: artist, songName: name, duration: duration))
+            self.results.append(Models.Song(songName: name, artistName: artist, spotifyID: id, progress: 0.0, duration: duration))
         }
     }
     
@@ -125,51 +115,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             }
         }
     }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
+    
 }
 
 
