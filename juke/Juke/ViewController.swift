@@ -45,8 +45,7 @@ class ViewController: UIViewController {
             switch response.result {
             case .success:
                 if let user = response.result.value as? NSDictionary {
-                    print(user)
-                    self.updateJukeServer(user: user)
+                    self.addUserToJukeServer(user: user)
                 }
             case .failure(let error):
                 print(error)
@@ -54,13 +53,18 @@ class ViewController: UIViewController {
         };
     }
     
-    func updateJukeServer(user: NSDictionary) {
-        // create new user object in DB. if already exists with spotify_id, no-op
-        if let spotify_id = user["id"] as? String {
+    func addUserToJukeServer(user: NSDictionary) {
+        // create new user object in DB. if already exists with spotifyID, no-op
+        if let spotifyID = user["id"] as? String, let username = user["display_name"] as? String {
+            var imageURL = "juke_icon"         // default image
+            let images = user["images"] as! [NSDictionary]
+            if images.count > 0 {
+                imageURL = images[0]["url"] as! String
+            }
             let url = ServerConstants.kJukeServerURL + ServerConstants.kAddUser
-            let params: Parameters = ["spotify_id": spotify_id]
+            let params: Parameters = ["spotifyID": spotifyID, "username": username, "imageURL": imageURL]
             Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
-                ViewController.currSpotifyID = spotify_id
+                ViewController.currSpotifyID = spotifyID
             };
         }
     }

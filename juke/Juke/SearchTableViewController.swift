@@ -59,7 +59,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func addSongToStream(song: Models.Song, stream: Models.Stream) {
-        let params: Parameters = ["groupID": stream.id, "songID": song.spotifyID, "songName": song.songName, "artistName": song.artistName, "duration": song.duration]
+        let params: Parameters = ["streamID": stream.streamID, "spotifyID": song.spotifyID, "songName": song.songName, "artistName": song.artistName, "duration": song.duration]
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate().responseJSON { response in
             if let error = response.result.error {
                 print(error)
@@ -82,7 +82,10 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             let artists = curr["artists"] as! NSArray
             let first = artists[0] as! NSDictionary
             let artist = first["name"] as! String
-            self.results.append(Models.Song(songName: name, artistName: artist, spotifyID: id, progress: 0.0, duration: duration))
+            let album = first["album"] as! NSDictionary
+            let images = album["images"] as! [NSDictionary]
+            let coverArtURL = images[0]["url"] as! String
+            self.results.append(Models.Song(songName: name, artistName: artist, spotifyID: id, progress: 0.0, duration: duration, coverArtURL: coverArtURL, coverArt: nil))
         }
     }
     
@@ -97,7 +100,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             "type" : "track",
             "market" : "US",
             "offset" : "00",
-            "limit" : "10"
+            "limit" : "20"
         ]
     
         Alamofire.request(ServerConstants.kSpotifySearchURL, method: .get, parameters: params).validate().responseJSON { response in
