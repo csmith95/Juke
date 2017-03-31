@@ -16,6 +16,7 @@ class LoginViewController: UIViewController {
     @IBOutlet var loginFrame: UIView!
     let kClientID = "77d4489425fe464483f0934f99847c8b"
     let kCallbackURL = "juke1231://callback"
+    let connectButton: UIControl = SPTConnectButton()
     public static var currUser: Models.User? = nil
     
     
@@ -98,10 +99,10 @@ class LoginViewController: UIViewController {
                 }
             }
         } else {
-            let connectButton: UIControl = SPTConnectButton()
             connectButton.frame = loginFrame.bounds
-            connectButton.addTarget(self, action: #selector(LoginViewController.loginPressed), for: UIControlEvents.touchUpInside)
-            self.loginFrame.addSubview(connectButton)
+            connectButton.becomeFirstResponder()
+            connectButton.addTarget(self, action: #selector(LoginViewController.loginPressed(_:)), for: UIControlEvents.touchUpInside)
+            view.addSubview(connectButton)
         }
 
         // kick off location updates early -- currently not using location for MVP
@@ -119,15 +120,4 @@ class LoginViewController: UIViewController {
         }
         return nil
     }
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
 }
