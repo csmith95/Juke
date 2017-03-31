@@ -9,22 +9,22 @@
 import UIKit
 import Alamofire
 import Unbox
+import RevealingSplashView
 
 class LoginViewController: UIViewController {
-
+    
+    @IBOutlet var loginFrame: UIView!
     let kClientID = "77d4489425fe464483f0934f99847c8b"
     let kCallbackURL = "juke1231://callback"
     public static var currUser: Models.User? = nil
     
-    @IBOutlet weak var loginButton: UIButton!
     
-    @IBAction func loginPressed(_ sender: AnyObject) {
+    func loginPressed(_ sender: AnyObject) {
         let auth = SPTAuth.defaultInstance()!
         auth.clientID = kClientID
         auth.redirectURL = NSURL(string:kCallbackURL) as! URL
         auth.requestedScopes = [SPTAuthStreamingScope]
         let loginURL = auth.loginURL!
-        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.loginSuccessful), name: Notification.Name("loginSuccessful"), object: nil)
         UIApplication.shared.open(loginURL)
     }
     
@@ -77,25 +77,57 @@ class LoginViewController: UIViewController {
         };
     }
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        loginButton.layer.borderWidth = 1.0
-        loginButton.layer.borderColor = UIColor(red:139/255.0, green:245/255.0, blue:119/255.0, alpha: 1.0).cgColor
-        loginButton.layer.cornerRadius = 15
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.loginSuccessful), name: Notification.Name("loginSuccessful"), object: nil)
+        
+        //Initialize a revealing Splash with with the iconImage, the initial size and the background color
+        let revealingSplashView = RevealingSplashView(iconImage: UIImage(named: "JukeLogo")!, iconInitialSize: CGSize(width: 210, height: 410), backgroundColor: UIColor.clear)
+        
+        //Adds the revealing splash view as a sub view
+        self.view.addSubview(revealingSplashView)
+        
+        
+        if let session = retrieveSession() {
+            revealingSplashView.startAnimation(){
+                // post notification on main thread since it involves a segue
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: session.accessToken)
+                }
+            }
+        } else {
+            let connectButton: UIControl = SPTConnectButton()
+            connectButton.frame = loginFrame.bounds
+            connectButton.addTarget(self, action: #selector(LoginViewController.loginPressed), for: UIControlEvents.touchUpInside)
+            self.loginFrame.addSubview(connectButton)
+        }
+
         // kick off location updates early -- currently not using location for MVP
-//        let locationManager = LocationManager.sharedInstance
+        //        let locationManager = LocationManager.sharedInstance
+    }
+
+    func retrieveSession() -> SPTSession? {
+        if let sessionObj = UserDefaults.standard.object(forKey: "SpotifySession") {
+            let sessionDataObj = sessionObj as! Data
+            if let session = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as? SPTSession {
+                if session.isValid() {
+                    return session
+                }
+            }
+        }
+        return nil
     }
     
-
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }

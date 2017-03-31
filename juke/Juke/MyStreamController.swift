@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import Unbox
+import KYCircularProgress
 
 class MyStreamController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -21,13 +22,12 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    @IBOutlet var circularProgressFrame: UIView!
     @IBOutlet var coverArtImage: UIImageView!
     @IBOutlet var barButton: UIBarButtonItem!
-    //    @IBOutlet var currTimeLabel: UILabel!
-    //    @IBOutlet var timeLeftLabel: UILabel!
+    @IBOutlet var currTimeLabel: UILabel!
     @IBOutlet var currentlyPlayingArtistLabel: UILabel!
     @IBOutlet var currentlyPlayingLabel: UILabel!
-    //    @IBOutlet var songProgressSlider: UISlider!
     @IBOutlet var currentlyPlayingView: UIView!
     @IBOutlet var tableView: UITableView!
     var stream: Models.Stream?
@@ -35,8 +35,29 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     var songs: [Models.Song] = []
     var selectedIndex: IndexPath?
     let socketManager = SocketManager.sharedInstance
-    let playImage = UIImage(named: "play.png")
-    let pauseImage = UIImage(named: "pause.png")
+    let listenImage = UIImage(named: "listening.png")
+    let muteImage = UIImage(named: "mute.png")
+    @IBOutlet var joinStreamButton: UIButton!
+    @IBOutlet var listenButton: UIButton!
+    var circularProgress = KYCircularProgress()
+    
+    @IBAction func joinStream(_ sender: AnyObject) {
+        // TODO
+        
+    }
+    
+    
+    @IBAction func toggleListening(_ sender: AnyObject) {
+        if self.songs.count == 0 {
+            return
+        }
+        
+        let song = self.songs[0]
+        let newPlayStatus = !listenButton.isSelected
+        listenButton.isSelected = newPlayStatus
+        jamsPlayer.setPlayStatus(shouldPlay: newPlayStatus, trackID: song.spotifyID, position: song.progress)
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,17 +75,24 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         currentlyPlayingView.layer.shadowOpacity = 0.5;
         currentlyPlayingView.layer.masksToBounds = false;
         currentlyPlayingView.clipsToBounds = false;
-        currentlyPlayingView.backgroundColor = UIColor.gray
-        //        songProgressSlider.setThumbImage(UIImage(named: "slider_cap"), for: .normal)
+        listenButton.setImage(listenImage, for: .normal)
+        listenButton.setImage(muteImage, for: .selected)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navBarTitle = "My Stream"
-        self.songs = self.stream!.songs
-        if self.songs.count > 0 {
-            self.coverArtImage.image = self.songs[0].coverArt!
+        navBarTitle = stream?.owner.username
+        songs = stream!.songs
+        if songs.count > 0 {
+            coverArtImage.image = songs[0].coverArt!.af_imageRoundedIntoCircle()
+            circularProgress = KYCircularProgress(frame: circularProgressFrame.bounds)
+            circularProgress.startAngle =  -1 * M_PI_2
+            circularProgress.endAngle = -1 * M_PI_2 + 2*M_PI
+            circularProgress.lineWidth = 2.0
+            circularProgress.colors = [.blue, .yellow, .red]
+            circularProgressFrame.addSubview(circularProgress)
         }
+        loadTopSong()
         //fetchSongs()
     }
     
@@ -106,29 +134,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         return cell
     }
     
-    @IBAction func barButtonPressed(_ sender: AnyObject) {
-        if self.songs.count == 0 {
-            return
-        }
-        
-        let song = self.songs[0]
-        let button = sender as! UIBarButtonItem
-        var newImage: UIImage
-        var newPlayStatus: Bool
-        if button.image == playImage {
-            // was paused --> switch to pauseImage & play song
-            newImage = pauseImage!
-            newPlayStatus = true
-        } else {
-            // was playing --> switch to playImage & pause song
-            newImage = playImage!
-            newPlayStatus = false
-        }
-        
-        button.image = newImage
-        jamsPlayer.setPlayStatus(shouldPlay: newPlayStatus, trackID: song.spotifyID, position: song.progress)
-    }
-    
     private func timeIntervalToString(interval: TimeInterval) -> String {
         let ti = NSInteger(interval)
         let seconds = ti % 60
@@ -145,23 +150,21 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         if let data = notification.object as? NSDictionary {
             // update slider
             let progress = data["position"] as! Double
-            //            updateSlider(song: song, progress: progress)
+            updateSlider(song: song, progress: progress)
             
             // update progress in db if current user is playlist owner
-            if LoginViewController.currUser!.spotifyID == stream?.owner.spotifyID {
+            if LoginViewController.currUser?.spotifyID == stream?.owner.spotifyID {
                 let song_id = self.songs[0].spotifyID
                 socketManager.updateSongPositionChanged(group_id: stream!.streamID, song_id: song_id, position: progress)
             }
         }
     }
     
-    //    private func updateSlider(song: Models.Song, progress: Double) {
-    //        let ratio = progress / song.duration
-    //        let timeLeft = song.duration - progress
-    //        self.songProgressSlider.setValue(Float(ratio), animated: true)
-    //        self.currTimeLabel.text = timeIntervalToString(interval: progress)
-    //        self.timeLeftLabel.text = "-" + timeIntervalToString(interval: timeLeft)
-    //    }
+    private func updateSlider(song: Models.Song, progress: Double) {
+        let normalizedProgress = progress / song.duration
+        circularProgress.progress = normalizedProgress
+        self.currTimeLabel.text = timeIntervalToString(interval: progress/1000)
+    }
     
     func songFinished() {
         // pop first song, play next song
@@ -169,8 +172,12 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kPopSong, method: .post, parameters: params).responseJSON { response in
             switch response.result {
             case .success:
-                print("success")
-            //                self.fetchSongs()
+                print("song popped")
+                self.stream?.songs.remove(at: 0)
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+                self.loadTopSong()
             case .failure(let error):
                 print(error)
             }
@@ -180,20 +187,16 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     private func loadTopSong() {
         if self.songs.count > 0 {
             let song = self.songs[0]
-            // update UI on main thread
-            //            DispatchQueue.main.async {
-            //                self.updateSlider(song: song, progress: song.progress)
-            //            }
+            self.updateSlider(song: song, progress: song.progress)
+            
+            if self.jamsPlayer.isPlaying(trackID: song.spotifyID) {
+                listenButton.isSelected = true
+                return  // if already playing, let it play
+            }
             
             DispatchQueue.global(qos: .background).async {
-                // play cell at position 0 if it's not already playing
-                let id = song.spotifyID
-                if self.jamsPlayer.isPlaying(trackID: id) {
-                    return  // if already playing, let it play
-                }
-                
-                // otherwise, load song and wait for user to press play or tune in/out
-                self.jamsPlayer.loadSong(trackID: id, progress: song.progress)
+                // load song and wait for user to press play or tune in/out
+                self.jamsPlayer.loadSong(trackID: song.spotifyID, progress: song.progress)
             }
         }
     }

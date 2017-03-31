@@ -3,6 +3,7 @@ PODS:
   - AlamofireImage (3.2.0):
     - Alamofire (~> 4.1)
   - KYCircularProgress (1.0.0)
+  - RevealingSplashView (0.1.0)
   - Socket.IO-Client-Swift (8.3.0)
   - Unbox (2.4.0)
 
@@ -10,6 +11,7 @@ DEPENDENCIES:
   - Alamofire (~> 4.4)
   - AlamofireImage (~> 3.1)
   - KYCircularProgress
+  - RevealingSplashView
   - Socket.IO-Client-Swift (~> 8.3.0)
   - Unbox
 
@@ -17,9 +19,10 @@ SPEC CHECKSUMS:
   Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
   AlamofireImage: 157ed682cc81d3b9db4fb90c1f12180ac552d93b
   KYCircularProgress: e83d5346247c917182b451c6357fd96b3c3d71b6
+  RevealingSplashView: 501dd03d975ba2c4165dd463ea1c7c407fb9d13e
   Socket.IO-Client-Swift: 7ad3aded3c0f74d99555e950ac3aa82ca3eefbaf
   Unbox: c8b2ab69d3337597b4a3f47a0538807dc12db670
 
-PODFILE CHECKSUM: 9e17a4cae984290ef4ebba39ecb91c5f00c615ef
+PODFILE CHECKSUM: 8dff11cf5c3acd1ecff9cafea5facc352347d7d5
 
 COCOAPODS: 1.2.0
