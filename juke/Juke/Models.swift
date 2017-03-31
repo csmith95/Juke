@@ -30,6 +30,12 @@ class Models {
         let imageURL: String
     }
     
+    struct SpotifyUser {
+        let spotifyID: String
+        let username: String
+        let imageURL: String
+    }
+    
     struct Stream {
         let owner: User
         let members: [User]
@@ -57,6 +63,14 @@ extension Models.User: Unboxable {
         self.spotifyID = try unboxer.unbox(key: "spotifyID")
         self.username = try unboxer.unbox(key: "username")
         self.imageURL = try unboxer.unbox(key: "imageURL")
+    }
+}
+
+extension Models.SpotifyUser: Unboxable {
+    init(unboxer: Unboxer) throws {
+        self.spotifyID = try unboxer.unbox(key: "id")
+        self.username = try unboxer.unbox(key: "display_name")
+        self.imageURL = try unboxer.unbox(keyPath: "images.0.url")
     }
 }
 
