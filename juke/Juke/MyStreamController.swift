@@ -85,16 +85,14 @@ class MyStreamController: UIViewController {
         // fetch stream for user. if not tuned in, creates and returns an offline stream by default
         let url = ServerConstants.kJukeServerURL + ServerConstants.kFetchStream
         let params: Parameters = ["ownerSpotifyID": LoginViewController.currUser!.spotifyID]
-        print(url)
-        print(params)
         Alamofire.request(url, method: .get, parameters: params).validate().responseJSON { response in
             switch response.result {
                 case .success:
                     do {
                         let unparsedStream = response.result.value as! UnboxableDictionary
+                        print(unparsedStream)
                         let stream: Models.Stream = try unbox(dictionary: unparsedStream)
                         self.stream = stream
-                        print(stream)
                     } catch {
                         print("Error unboxing stream: ", error)
                     }
