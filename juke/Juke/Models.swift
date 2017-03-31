@@ -28,6 +28,7 @@ class Models {
         let spotifyID: String
         let username: String
         let imageURL: String
+        let tunedInto: String?  // null if user doesn't have a stream
     }
     
     struct SpotifyUser {
@@ -63,6 +64,7 @@ extension Models.User: Unboxable {
         self.spotifyID = try unboxer.unbox(key: "spotifyID")
         self.username = try unboxer.unbox(key: "username")
         self.imageURL = try unboxer.unbox(key: "imageURL")
+        self.tunedInto = try unboxer.unbox(key: "tunedInto")
     }
 }
 

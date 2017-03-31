@@ -32,7 +32,6 @@ class MyStreamController: UIViewController {
     @IBOutlet var tableView: UITableView!
     var stream: Models.Stream?
     let jamsPlayer = JamsPlayer.shared
-    var songs: [Models.Song] = []
     var selectedIndex: IndexPath?
     let socketManager = SocketManager.sharedInstance
     let listenImage = UIImage(named: "listening.png")
@@ -48,11 +47,11 @@ class MyStreamController: UIViewController {
     
     
     @IBAction func toggleListening(_ sender: AnyObject) {
-        if self.songs.count == 0 {
+        if self.stream!.songs.count == 0 {
             return
         }
         
-        let song = self.songs[0]
+        let song = self.stream!.songs[0]
         let newPlayStatus = !listenButton.isSelected
         listenButton.isSelected = newPlayStatus
         jamsPlayer.setPlayStatus(shouldPlay: newPlayStatus, trackID: song.spotifyID, position: song.progress)
@@ -82,6 +81,29 @@ class MyStreamController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navBarTitle = "My Jam"
+        
+        // fetch stream for user. if not tuned in, creates and returns an offline stream by default
+        let url = ServerConstants.kJukeServerURL + ServerConstants.kFetchStream
+        let params: Parameters = ["ownerSpotifyID": LoginViewController.currUser!.spotifyID]
+        print(url)
+        print(params)
+        Alamofire.request(url, method: .get, parameters: params).validate().responseJSON { response in
+            switch response.result {
+                case .success:
+                    do {
+                        let unparsedStream = response.result.value as! UnboxableDictionary
+                        let stream: Models.Stream = try unbox(dictionary: unparsedStream)
+                        self.stream = stream
+                        print(stream)
+                    } catch {
+                        print("Error unboxing stream: ", error)
+                    }
+                    
+//                    self.loadTopSong()
+                case .failure(let error):
+                    print("Err fetching stream: ", error)
+                }
+        }
     }
 //        songs = stream!.songs
 //        if songs.count > 0 {

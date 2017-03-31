@@ -33,7 +33,6 @@ class LoginViewController: UIViewController {
         if let accessToken = notification.object as? String {
             // kick off authentication of player early
             let player = JamsPlayer.shared
-            performSegue(withIdentifier: "loginSegue", sender: nil)
             fetchSpotifyUser(accessToken: accessToken)
         }
     }
@@ -67,13 +66,22 @@ class LoginViewController: UIViewController {
             "username": spotifyUser.username,
             "imageURL": spotifyUser.imageURL
         ]
+        print(params)
         Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
-            do {
-                let dictionary = response.result.value as! UnboxableDictionary
-                let user: Models.User = try unbox(dictionary: dictionary)
-                LoginViewController.currUser = user
-            } catch {
-                print("Error unboxing user: ", error)
+            switch response.result {
+            case .success:
+                do {
+                    let unparsedJukeUser = response.result.value as! UnboxableDictionary
+                    let user: Models.User = try unbox(dictionary: unparsedJukeUser)
+                    LoginViewController.currUser = user
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: "loginSegue", sender: nil)
+                    }
+                } catch {
+                    print("Error unboxing user: ", error)
+                }
+            case .failure(let error):
+                print("Error adding user to database: ", error)
             }
         };
     }

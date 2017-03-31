@@ -32,7 +32,6 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
     @IBOutlet var tableView: UITableView!
     var stream: Models.Stream?
     let jamsPlayer = JamsPlayer.shared
-    var songs: [Models.Song] = []
     var selectedIndex: IndexPath?
     let socketManager = SocketManager.sharedInstance
     let listenImage = UIImage(named: "listening.png")
@@ -48,11 +47,11 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     
     @IBAction func toggleListening(_ sender: AnyObject) {
-        if self.songs.count == 0 {
+        if self.stream!.songs.count == 0 {
             return
         }
         
-        let song = self.songs[0]
+        let song = self.stream!.songs[0]
         let newPlayStatus = !listenButton.isSelected
         listenButton.isSelected = newPlayStatus
         jamsPlayer.setPlayStatus(shouldPlay: newPlayStatus, trackID: song.spotifyID, position: song.progress)
@@ -82,7 +81,7 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navBarTitle = stream?.owner.username
-        songs = stream!.songs
+        let songs = self.stream!.songs
         if songs.count > 0 {
             coverArtImage.image = songs[0].coverArt!.af_imageRoundedIntoCircle()
             circularProgress = KYCircularProgress(frame: circularProgressFrame.bounds)
@@ -117,11 +116,11 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return self.songs.count
+        return self.stream!.songs.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let song = self.songs[indexPath.row]
+        let song = self.stream!.songs[indexPath.row]
         if indexPath.row == 0 {
             // place first song in the currentlyPlayingLabel
             self.currentlyPlayingLabel.text = song.songName
@@ -142,11 +141,11 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     func songPositionChanged(notification: NSNotification) {
-        if self.songs.count == 0 {
+        if self.stream!.songs.count == 0 {
             return
         }
         
-        let song = songs[0]
+        let song = self.stream!.songs[0]
         if let data = notification.object as? NSDictionary {
             // update slider
             let progress = data["position"] as! Double
@@ -154,7 +153,7 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
             
             // update progress in db if current user is playlist owner
             if LoginViewController.currUser?.spotifyID == stream?.owner.spotifyID {
-                let song_id = self.songs[0].spotifyID
+                let song_id = self.stream!.songs[0].spotifyID
                 socketManager.updateSongPositionChanged(group_id: stream!.streamID, song_id: song_id, position: progress)
             }
         }
@@ -173,7 +172,7 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
             switch response.result {
             case .success:
                 print("song popped")
-                self.stream?.songs.remove(at: 0)
+                self.stream?.songs.remove(at: 0)    // instead of unboxing entire stream, for now just pop first song
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
@@ -185,8 +184,8 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     private func loadTopSong() {
-        if self.songs.count > 0 {
-            let song = self.songs[0]
+        if self.stream!.songs.count > 0 {
+            let song = self.stream!.songs[0]
             self.updateSlider(song: song, progress: song.progress)
             
             if self.jamsPlayer.isPlaying(trackID: song.spotifyID) {
