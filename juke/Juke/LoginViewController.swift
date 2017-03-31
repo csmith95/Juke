@@ -8,12 +8,13 @@
 
 import UIKit
 import Alamofire
+import Unbox
 
-class ViewController: UIViewController {
+class LoginViewController: UIViewController {
 
     let kClientID = "77d4489425fe464483f0934f99847c8b"
     let kCallbackURL = "juke1231://callback"
-    public static var currSpotifyID: String = ""
+    public static var currUser: Models.User? = nil
     
     @IBOutlet weak var loginButton: UIButton!
     
@@ -23,7 +24,7 @@ class ViewController: UIViewController {
         auth.redirectURL = NSURL(string:kCallbackURL) as! URL
         auth.requestedScopes = [SPTAuthStreamingScope]
         let loginURL = auth.loginURL!
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.loginSuccessful), name: Notification.Name("loginSuccessful"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.loginSuccessful), name: Notification.Name("loginSuccessful"), object: nil)
         UIApplication.shared.open(loginURL)
     }
     
@@ -44,9 +45,12 @@ class ViewController: UIViewController {
             response in
             switch response.result {
             case .success:
-                if let user = response.result.value as? NSDictionary {
-                    print(user)
-                    self.updateJukeServer(user: user)
+                do {
+                    let dictionary = response.result.value as! UnboxableDictionary
+                    let spotifyUser: Models.SpotifyUser = try unbox(dictionary: dictionary)
+                    self.addUserToJukeServer(spotifyUser: spotifyUser)
+                } catch {
+                    print("error unboxing spotify user: ", error)
                 }
             case .failure(let error):
                 print(error)
@@ -54,15 +58,23 @@ class ViewController: UIViewController {
         };
     }
     
-    func updateJukeServer(user: NSDictionary) {
-        // create new user object in DB. if already exists with spotify_id, no-op
-        if let spotify_id = user["id"] as? String {
-            let url = ServerConstants.kJukeServerURL + ServerConstants.kAddUser
-            let params: Parameters = ["spotify_id": spotify_id]
-            Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
-                ViewController.currSpotifyID = spotify_id
-            };
-        }
+    func addUserToJukeServer(spotifyUser: Models.SpotifyUser) {
+        // create new user object in DB. if already exists with spotifyID, no-op
+        let url = ServerConstants.kJukeServerURL + ServerConstants.kAddUser
+        let params: Parameters = [
+            "spotifyID": spotifyUser.spotifyID,
+            "username": spotifyUser.username,
+            "imageURL": spotifyUser.imageURL
+        ]
+        Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
+            do {
+                let dictionary = response.result.value as! UnboxableDictionary
+                let user: Models.User = try unbox(dictionary: dictionary)
+                LoginViewController.currUser = user
+            } catch {
+                print("Error unboxing user: ", error)
+            }
+        };
     }
     
 

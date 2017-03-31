@@ -1,0 +1,257 @@
+//
+//  StreamController.swift
+//  Juke
+//
+//  Created by Conner Smith on 2/23/17.
+//  Copyright © 2017 csmith. All rights reserved.
+//
+
+import UIKit
+import Alamofire
+import Unbox
+
+class MyStreamController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    var navBarTitle: String? {
+        get {
+            return self.navigationItem.title
+        }
+        set (newValue) {
+            self.navigationItem.title = newValue
+        }
+    }
+    
+    @IBOutlet var coverArtImage: UIImageView!
+    @IBOutlet var barButton: UIBarButtonItem!
+    //    @IBOutlet var currTimeLabel: UILabel!
+    //    @IBOutlet var timeLeftLabel: UILabel!
+    @IBOutlet var currentlyPlayingArtistLabel: UILabel!
+    @IBOutlet var currentlyPlayingLabel: UILabel!
+    //    @IBOutlet var songProgressSlider: UISlider!
+    @IBOutlet var currentlyPlayingView: UIView!
+    @IBOutlet var tableView: UITableView!
+    var stream: Models.Stream?
+    let jamsPlayer = JamsPlayer.shared
+    var songs: [Models.Song] = []
+    var selectedIndex: IndexPath?
+    let socketManager = SocketManager.sharedInstance
+    let playImage = UIImage(named: "play.png")
+    let pauseImage = UIImage(named: "pause.png")
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        NotificationCenter.default.addObserver(self, selector: #selector(StreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StreamController.songPositionChanged), name: Notification.Name("songPositionChanged"), object: nil)
+        currentlyPlayingView.layer.cornerRadius = 10;
+        currentlyPlayingView.layer.masksToBounds = true;
+        currentlyPlayingView.layer.borderColor = UIColor.gray.cgColor;
+        currentlyPlayingView.layer.borderWidth = 0.5;
+        currentlyPlayingView.layer.contentsScale = UIScreen.main.scale;
+        currentlyPlayingView.layer.shadowColor = UIColor.black.cgColor;
+        currentlyPlayingView.layer.shadowRadius = 5.0;
+        currentlyPlayingView.layer.shadowOpacity = 0.5;
+        currentlyPlayingView.layer.masksToBounds = false;
+        currentlyPlayingView.clipsToBounds = false;
+        currentlyPlayingView.backgroundColor = UIColor.gray
+        //        songProgressSlider.setThumbImage(UIImage(named: "slider_cap"), for: .normal)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navBarTitle = "My Stream"
+        self.songs = self.stream!.songs
+        if self.songs.count > 0 {
+            self.coverArtImage.image = self.songs[0].coverArt!
+        }
+        //fetchSongs()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 0 {
+            return 0    // hide first row -- should be currently playing track
+        }
+        return 40
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    // MARK: - Table view data source
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
+        return self.songs.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let song = self.songs[indexPath.row]
+        if indexPath.row == 0 {
+            // place first song in the currentlyPlayingLabel
+            self.currentlyPlayingLabel.text = song.songName
+            self.currentlyPlayingArtistLabel.text = song.artistName
+        }
+        
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
+        cell.songName.text = song.songName
+        cell.artist.text = song.artistName
+        return cell
+    }
+    
+    @IBAction func barButtonPressed(_ sender: AnyObject) {
+        if self.songs.count == 0 {
+            return
+        }
+        
+        let song = self.songs[0]
+        let button = sender as! UIBarButtonItem
+        var newImage: UIImage
+        var newPlayStatus: Bool
+        if button.image == playImage {
+            // was paused --> switch to pauseImage & play song
+            newImage = pauseImage!
+            newPlayStatus = true
+        } else {
+            // was playing --> switch to playImage & pause song
+            newImage = playImage!
+            newPlayStatus = false
+        }
+        
+        button.image = newImage
+        jamsPlayer.setPlayStatus(shouldPlay: newPlayStatus, trackID: song.spotifyID, position: song.progress)
+    }
+    
+    private func timeIntervalToString(interval: TimeInterval) -> String {
+        let ti = NSInteger(interval)
+        let seconds = ti % 60
+        let minutes = (ti / 60) % 60
+        return NSString(format: "%0.2d:%0.2d", minutes, seconds) as String
+    }
+    
+    func songPositionChanged(notification: NSNotification) {
+        if self.songs.count == 0 {
+            return
+        }
+        
+        let song = songs[0]
+        if let data = notification.object as? NSDictionary {
+            // update slider
+            let progress = data["position"] as! Double
+            //            updateSlider(song: song, progress: progress)
+            
+            // update progress in db if current user is playlist owner
+            if LoginViewController.currUser!.spotifyID == stream?.owner.spotifyID {
+                let song_id = self.songs[0].spotifyID
+                socketManager.updateSongPositionChanged(group_id: stream!.streamID, song_id: song_id, position: progress)
+            }
+        }
+    }
+    
+    //    private func updateSlider(song: Models.Song, progress: Double) {
+    //        let ratio = progress / song.duration
+    //        let timeLeft = song.duration - progress
+    //        self.songProgressSlider.setValue(Float(ratio), animated: true)
+    //        self.currTimeLabel.text = timeIntervalToString(interval: progress)
+    //        self.timeLeftLabel.text = "-" + timeIntervalToString(interval: timeLeft)
+    //    }
+    
+    func songFinished() {
+        // pop first song, play next song
+        let params: Parameters = ["streamID": stream?.streamID as String!]
+        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kPopSong, method: .post, parameters: params).responseJSON { response in
+            switch response.result {
+            case .success:
+                print("success")
+            //                self.fetchSongs()
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    private func loadTopSong() {
+        if self.songs.count > 0 {
+            let song = self.songs[0]
+            // update UI on main thread
+            //            DispatchQueue.main.async {
+            //                self.updateSlider(song: song, progress: song.progress)
+            //            }
+            
+            DispatchQueue.global(qos: .background).async {
+                // play cell at position 0 if it's not already playing
+                let id = song.spotifyID
+                if self.jamsPlayer.isPlaying(trackID: id) {
+                    return  // if already playing, let it play
+                }
+                
+                // otherwise, load song and wait for user to press play or tune in/out
+                self.jamsPlayer.loadSong(trackID: id, progress: song.progress)
+            }
+        }
+    }
+    
+    // fetch songs and trigger table reload
+    //    private func fetchSongs() {
+    //        // note that Alamofire doesn't work with optionals -- must force unwrap with "as String!"
+    //        let params: Parameters = ["streamID": stream?.streamID as String!]
+    //        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kFetchSongsPath, method: .get, parameters: params).responseJSON { response in
+    //            switch response.result {
+    //            case .success:
+    //                if let unparsedSongs = response.result.value as? [UnboxableDictionary] {
+    //                    self.songs.removeAll()
+    //                    var firstSong = true
+    //                    let dispatchGroup = DispatchGroup()
+    //                    for unparsedSong in unparsedSongs {
+    //                        do {
+    //                            let fetchedSong: Models.Song = try unbox(dictionary: unparsedSong)
+    //                            if firstSong {
+    //                                firstSong = false
+    //                                dispatchGroup.enter()
+    //                                Alamofire.request(fetchedSong.coverArtURL).responseImage { response in
+    //                                    let size = CGSize(width: 150.0, height: 150.0)
+    //                                    if let coverArt = response.result.value {
+    //                                        self.coverArtImage.image = coverArt.af_imageAspectScaled(toFill: size).af_imageRoundedIntoCircle()
+    //                                    } else {
+    //                                        self.coverArtImage.image = UIImage(named: "juke_icon")!.af_imageAspectScaled(toFill: size).af_imageRoundedIntoCircle()
+    //                                    }
+    //                                    objc_sync_enter(self.songs)
+    //                                    self.songs.append(fetchedSong)
+    //                                    objc_sync_exit(self.songs)
+    //                                    dispatchGroup.leave()
+    //                                }
+    //                            }
+    //
+    //                            objc_sync_enter(self.songs)
+    //                            self.songs.append(fetchedSong)
+    //                            objc_sync_exit(self.songs)
+    //                        } catch {
+    //                            print("Error trying to unbox song: \(error)")
+    //                        }
+    //                    }
+    //
+    //                    // update UI on main thread
+    //                    dispatchGroup.notify(queue: DispatchQueue.main) {
+    //                        self.tableView.reloadData()
+    //                        if self.jamsPlayer.isPlaying(trackID: self.songs[0].spotifyID) {
+    //                            self.barButton.image = self.pauseImage
+    //                        } else {
+    //                            self.barButton.image = self.playImage
+    //                        }
+    //                        self.loadTopSong()
+    //                    }
+    //                }
+    //            case .failure(let error):
+    //                print(error)
+    //            }
+    //        }
+    //    }
+    
+}

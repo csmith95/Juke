@@ -48,7 +48,9 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
             }
             // track changed -- tell StreamController to pop first song, play next song
             if let currentTrack = audioStreaming.metadata.currentTrack {
-                if self.position >= currentTrack.duration - 5 {
+                let duration_ms = currentTrack.duration * 1000
+                if self.position >= duration_ms - 2000 {
+                    self.position = 0.0
                     NotificationCenter.default.post(name: Notification.Name("songFinished"), object: nil)
                 }
             }
@@ -76,7 +78,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
             
             if let currentTrack = audioStreamer.metadata.currentTrack {
                 let id = currentTrack.uri.characters.split{$0 == ":"}.map(String.init)[2]
-                return id == trackID
+                return id == trackID && audioStreamer.playbackState.isPlaying
             }
         }
         return false
@@ -84,8 +86,8 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePosition position: TimeInterval) {
         // signal StreamController so that it can update UISlider
-        self.position = position
-        let data = ["position": position]
+        self.position = position * 1000
+        let data = ["position": self.position]
         NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
     }
     
@@ -97,10 +99,11 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
             }
             
             let uri = "spotify:track:" + trackID
-            sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: 0, callback: { (error) in
-                self.setPlayStatus(shouldPlay: false, trackID: trackID, position: progress) // load then pause
+            sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: progress, callback: { (error) in
                 if let error = error {
                     print(error)
+                } else {
+                    self.setPlayStatus(shouldPlay: false, trackID: trackID, position: progress) // load then pause
                 }
             })
         }

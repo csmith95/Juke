@@ -10,7 +10,7 @@ import Foundation
 
 public class ServerConstants {
     
-    // server base URLs -- rememebr to use local IP if running off localhost because dbs have different content
+    // server base URLs -- remember to use local IP if running off localhost because dbs have different content
     static let kJukeServerURL = "http://myjukebx.herokuapp.com/"
     
     static let kSpotifyBaseURL = "https://api.spotify.com/v1/"
