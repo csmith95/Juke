@@ -22,7 +22,7 @@ class LoginViewController: UIViewController {
     func loginPressed(_ sender: AnyObject) {
         let auth = SPTAuth.defaultInstance()!
         auth.clientID = kClientID
-        auth.redirectURL = NSURL(string:kCallbackURL) as! URL
+        auth.redirectURL = NSURL(string:kCallbackURL)! as URL
         auth.requestedScopes = [SPTAuthStreamingScope]
         let loginURL = auth.loginURL!
         UIApplication.shared.open(loginURL)
