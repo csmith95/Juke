@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import Unbox
 
 class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
@@ -47,22 +48,35 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         cell.songLabel!.text = song.songName
         cell.artistLabel!.text = song.artistName
         // Assign the tap action which will be executed when the user taps the UIButton
-//        cell.tapAction = { (cell) in
-//            // post to server
-//            self.addSongToStream(song: self.results[indexPath.row], stream: self.group!)
-//            
-//            // animate button text change from "+" to "Added!"
-//            cell.addButton!.setTitle("Added!", for: .normal)
-//            cell.addButton!.titleLabel?.font = UIFont(name: "System", size: 16)
-//        }
+        cell.tapAction = { (cell) in
+            // post to server
+            self.addSongToStream(song: self.results[indexPath.row], stream: CurrentUser.currStream!)
+            
+            // animate button text change from "+" to "Added!"
+            cell.addButton!.setTitle("Added!", for: .normal)
+            cell.addButton!.titleLabel?.font = UIFont(name: "System", size: 16)
+        }
         return cell
     }
     
     func addSongToStream(song: Models.Song, stream: Models.Stream) {
-        let params: Parameters = ["streamID": stream.streamID, "spotifyID": song.spotifyID, "songName": song.songName, "artistName": song.artistName, "duration": song.duration]
+        let params: Parameters = ["streamID": stream.streamID, "spotifyID": song.spotifyID, "songName": song.songName, "artistName": song.artistName, "duration": song.duration, "coverArtURL": song.coverArtURL]
+        print("\nPARAMS: ", params)
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate().responseJSON { response in
-            if let error = response.result.error {
-                print(error)
+            switch response.result {
+            case .success:
+                do {
+                    let unparsedStream = response.result.value as! UnboxableDictionary
+                    print("\nUNPARSED: ", unparsedStream)
+                    let stream: Models.Stream = try unbox(dictionary: unparsedStream)
+                    CurrentUser.currStream = stream
+                    print("added song")
+                } catch {
+                    print("error unboxing stream after adding song: ", error)
+                }
+                
+            case .failure(let error):
+                print("Error adding song to current stream: ", error)
             }
         }
     }
@@ -78,11 +92,11 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             // the line below transforms "*:*:id" --> "id"
             let id = (curr["uri"] as! String).characters.split{$0 == ":"}.map(String.init)[2]
             let name = curr["name"] as! String
-            let duration = (curr["duration_ms"] as! Double) / 1000
+            let duration = curr["duration_ms"] as! Double
             let artists = curr["artists"] as! NSArray
             let first = artists[0] as! NSDictionary
             let artist = first["name"] as! String
-            let album = first["album"] as! NSDictionary
+            let album = curr["album"] as! NSDictionary
             let images = album["images"] as! [NSDictionary]
             let coverArtURL = images[0]["url"] as! String
             self.results.append(Models.Song(songName: name, artistName: artist, spotifyID: id, progress: 0.0, duration: duration, coverArtURL: coverArtURL, coverArt: nil))

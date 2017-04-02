@@ -28,7 +28,7 @@ class Models {
         let spotifyID: String
         let username: String
         let imageURL: String
-        let tunedInto: String?  // null if user doesn't have a stream
+        let tunedInto: String   // id
     }
     
     struct SpotifyUser {
@@ -44,7 +44,6 @@ class Models {
         var songs: [Song]
         let isLive: Bool
     }
-    
 }
 
 extension Models.Song: Unboxable {

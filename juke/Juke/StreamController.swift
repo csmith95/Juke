@@ -152,7 +152,7 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
             updateSlider(song: song, progress: progress)
             
             // update progress in db if current user is playlist owner
-            if LoginViewController.currUser?.spotifyID == stream?.owner.spotifyID {
+            if CurrentUser.currUser?.spotifyID == stream?.owner.spotifyID {
                 let song_id = self.stream!.songs[0].spotifyID
                 socketManager.updateSongPositionChanged(group_id: stream!.streamID, song_id: song_id, position: progress)
             }

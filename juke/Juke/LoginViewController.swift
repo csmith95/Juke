@@ -17,7 +17,6 @@ class LoginViewController: UIViewController {
     let kClientID = "77d4489425fe464483f0934f99847c8b"
     let kCallbackURL = "juke1231://callback"
     let connectButton: UIControl = SPTConnectButton()
-    public static var currUser: Models.User? = nil
     
     
     func loginPressed(_ sender: AnyObject) {
@@ -73,7 +72,7 @@ class LoginViewController: UIViewController {
                 do {
                     let unparsedJukeUser = response.result.value as! UnboxableDictionary
                     let user: Models.User = try unbox(dictionary: unparsedJukeUser)
-                    LoginViewController.currUser = user
+                    CurrentUser.currUser = user
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: "loginSegue", sender: nil)
                     }

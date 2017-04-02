@@ -10,8 +10,9 @@ import UIKit
 import Alamofire
 import Unbox
 import KYCircularProgress
+import AlamofireImage
 
-class MyStreamController: UIViewController {
+class MyStreamController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var navBarTitle: String? {
         get {
@@ -30,10 +31,9 @@ class MyStreamController: UIViewController {
     @IBOutlet var currentlyPlayingLabel: UILabel!
     @IBOutlet var currentlyPlayingView: UIView!
     @IBOutlet var tableView: UITableView!
-    var stream: Models.Stream?
     let jamsPlayer = JamsPlayer.shared
     var selectedIndex: IndexPath?
-    let socketManager = SocketManager.sharedInstance
+//    let socketManager = SocketManager.sharedInstance
     let listenImage = UIImage(named: "listening.png")
     let muteImage = UIImage(named: "mute.png")
     @IBOutlet var joinStreamButton: UIButton!
@@ -47,11 +47,11 @@ class MyStreamController: UIViewController {
     
     
     @IBAction func toggleListening(_ sender: AnyObject) {
-        if self.stream!.songs.count == 0 {
+        if CurrentUser.currStream!.songs.count == 0 {
             return
         }
         
-        let song = self.stream!.songs[0]
+        let song = CurrentUser.currStream!.songs[0]
         let newPlayStatus = !listenButton.isSelected
         listenButton.isSelected = newPlayStatus
         jamsPlayer.setPlayStatus(shouldPlay: newPlayStatus, trackID: song.spotifyID, position: song.progress)
@@ -60,10 +60,10 @@ class MyStreamController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.tableView.delegate = self
-//        self.tableView.dataSource = self
-//        NotificationCenter.default.addObserver(self, selector: #selector(StreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(StreamController.songPositionChanged), name: Notification.Name("songPositionChanged"), object: nil)
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        NotificationCenter.default.addObserver(self, selector: #selector(StreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StreamController.songPositionChanged), name: Notification.Name("songPositionChanged"), object: nil)
         currentlyPlayingView.layer.cornerRadius = 10;
         currentlyPlayingView.layer.masksToBounds = true;
         currentlyPlayingView.layer.borderColor = UIColor.gray.cgColor;
@@ -74,153 +74,163 @@ class MyStreamController: UIViewController {
         currentlyPlayingView.layer.shadowOpacity = 0.5;
         currentlyPlayingView.layer.masksToBounds = false;
         currentlyPlayingView.clipsToBounds = false;
-//        listenButton.setImage(listenImage, for: .normal)
-//        listenButton.setImage(muteImage, for: .selected)
+        listenButton.setImage(listenImage, for: .normal)
+        listenButton.setImage(muteImage, for: .selected)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navBarTitle = "My Jam"
-        
+        fetchMyStream();
+    }
+
+    
+    func fetchMyStream() {
         // fetch stream for user. if not tuned in, creates and returns an offline stream by default
         let url = ServerConstants.kJukeServerURL + ServerConstants.kFetchStream
-        let params: Parameters = ["ownerSpotifyID": LoginViewController.currUser!.spotifyID]
+        let params: Parameters = ["ownerSpotifyID": CurrentUser.currUser!.spotifyID]
         Alamofire.request(url, method: .get, parameters: params).validate().responseJSON { response in
             switch response.result {
-                case .success:
-                    do {
-                        let unparsedStream = response.result.value as! UnboxableDictionary
-                        print(unparsedStream)
-                        let stream: Models.Stream = try unbox(dictionary: unparsedStream)
-                        self.stream = stream
-                    } catch {
-                        print("Error unboxing stream: ", error)
+            case .success:
+                do {
+                    let unparsedStream = response.result.value as! UnboxableDictionary
+                    let stream: Models.Stream = try unbox(dictionary: unparsedStream)
+                    CurrentUser.currStream = stream
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
                     }
-                    
-//                    self.loadTopSong()
-                case .failure(let error):
-                    print("Err fetching stream: ", error)
+                    self.loadTopSong()
+                } catch {
+                    print("Error unboxing stream: ", error)
                 }
+                
+            case .failure(let error):
+                print("Error fetching stream: ", error)
+            }
         }
     }
-//        songs = stream!.songs
-//        if songs.count > 0 {
-//            coverArtImage.image = songs[0].coverArt!.af_imageRoundedIntoCircle()
-//            circularProgress = KYCircularProgress(frame: circularProgressFrame.bounds)
-//            circularProgress.startAngle =  -1 * M_PI_2
-//            circularProgress.endAngle = -1 * M_PI_2 + 2*M_PI
-//            circularProgress.lineWidth = 2.0
-//            circularProgress.colors = [.blue, .yellow, .red]
-//            circularProgressFrame.addSubview(circularProgress)
-//        }
-//        loadTopSong()
-        //fetchSongs()
-//    }
-//    
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        if indexPath.row == 0 {
-//            return 0    // hide first row -- should be currently playing track
-//        }
-//        return 40
-//    }
-//    
-//    override func didReceiveMemoryWarning() {
-//        super.didReceiveMemoryWarning()
-//        // Dispose of any resources that can be recreated.
-//    }
-//    
+    
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 0 {
+            return 0    // hide first row -- should be currently playing track
+        }
+        return 40
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+//
 //    // MARK: - Table view data source
 //    
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        // #warning Incomplete implementation, return the number of sections
-//        return 1
-//    }
-//    
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        // #warning Incomplete implementation, return the number of rows
-//        return self.songs.count
-//    }
-//    
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let song = self.songs[indexPath.row]
-//        if indexPath.row == 0 {
-//            // place first song in the currentlyPlayingLabel
-//            self.currentlyPlayingLabel.text = song.songName
-//            self.currentlyPlayingArtistLabel.text = song.artistName
-//        }
-//        
-//        let cell = self.tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
-//        cell.songName.text = song.songName
-//        cell.artist.text = song.artistName
-//        return cell
-//    }
-//    
-//    private func timeIntervalToString(interval: TimeInterval) -> String {
-//        let ti = NSInteger(interval)
-//        let seconds = ti % 60
-//        let minutes = (ti / 60) % 60
-//        return NSString(format: "%0.2d:%0.2d", minutes, seconds) as String
-//    }
-//    
-//    func songPositionChanged(notification: NSNotification) {
-//        if self.songs.count == 0 {
-//            return
-//        }
-//        
-//        let song = songs[0]
-//        if let data = notification.object as? NSDictionary {
-//            // update slider
-//            let progress = data["position"] as! Double
-//            updateSlider(song: song, progress: progress)
-//            
-//            // update progress in db if current user is playlist owner
-//            if LoginViewController.currUser?.spotifyID == stream?.owner.spotifyID {
-//                let song_id = self.songs[0].spotifyID
-//                socketManager.updateSongPositionChanged(group_id: stream!.streamID, song_id: song_id, position: progress)
+    func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
+        if (CurrentUser.currStream == nil) {
+            return 0
+        }
+        return CurrentUser.currStream!.songs.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let song = CurrentUser.currStream!.songs[indexPath.row]
+        if indexPath.row == 0 {
+            // place first song in the currentlyPlayingLabel
+            self.currentlyPlayingLabel.text = song.songName
+            self.currentlyPlayingArtistLabel.text = song.artistName
+        }
+        
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
+        cell.songName.text = song.songName
+        cell.artist.text = song.artistName
+        return cell
+    }
+    
+    private func timeIntervalToString(interval: TimeInterval) -> String {
+        let ti = NSInteger(interval)
+        let seconds = ti % 60
+        let minutes = (ti / 60) % 60
+        return NSString(format: "%0.2d:%0.2d", minutes, seconds) as String
+    }
+    
+    func songPositionChanged(notification: NSNotification) {
+        if CurrentUser.currStream == nil || CurrentUser.currStream!.songs.count == 0 {
+            return
+        }
+        
+        let stream = CurrentUser.currStream!
+        let songs = stream.songs
+        let song = songs[0]
+        if let data = notification.object as? NSDictionary {
+            // update slider
+            let progress = data["position"] as! Double
+            updateSlider(song: song, progress: progress)
+            
+            // update progress in db if current user is playlist owner
+//            if CurrentUser.currUser?.spotifyID == stream.owner.spotifyID {
+//                let song_id = songs[0].spotifyID
+//                socketManager.updateSongPositionChanged(group_id: stream.streamID, song_id: song_id, position: progress)
 //            }
-//        }
-//    }
-//    
-//    private func updateSlider(song: Models.Song, progress: Double) {
-//        let normalizedProgress = progress / song.duration
-//        circularProgress.progress = normalizedProgress
-//        self.currTimeLabel.text = timeIntervalToString(interval: progress/1000)
-//    }
-//    
-//    func songFinished() {
-//        // pop first song, play next song
-//        let params: Parameters = ["streamID": stream?.streamID as String!]
-//        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kPopSong, method: .post, parameters: params).responseJSON { response in
-//            switch response.result {
-//            case .success:
-//                print("song popped")
-//                self.stream?.songs.remove(at: 0)
-//                DispatchQueue.main.async {
-//                    self.tableView.reloadData()
-//                }
-//                self.loadTopSong()
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
-//    }
-//    
-//    private func loadTopSong() {
-//        if self.songs.count > 0 {
-//            let song = self.songs[0]
-//            self.updateSlider(song: song, progress: song.progress)
-//            
-//            if self.jamsPlayer.isPlaying(trackID: song.spotifyID) {
-//                listenButton.isSelected = true
-//                return  // if already playing, let it play
-//            }
-//            
-//            DispatchQueue.global(qos: .background).async {
-//                // load song and wait for user to press play or tune in/out
-//                self.jamsPlayer.loadSong(trackID: song.spotifyID, progress: song.progress)
-//            }
-//        }
-//    }
+        }
+    }
+    
+    private func updateSlider(song: Models.Song, progress: Double) {
+        let normalizedProgress = progress / song.duration
+        circularProgress.progress = normalizedProgress
+        self.currTimeLabel.text = timeIntervalToString(interval: progress/1000)
+    }
+    
+    func songFinished() {
+        // pop first song, play next song
+        let stream = CurrentUser.currStream!
+        let params: Parameters = ["streamID": stream.streamID as String!]
+        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kPopSong, method: .post, parameters: params).responseJSON { response in
+            switch response.result {
+            case .success:
+                print("song popped")
+                CurrentUser.currStream!.songs.remove(at: 0)
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+                self.loadTopSong()
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    private func loadTopSong() {
+        let songs = CurrentUser.currStream!.songs
+        if songs.count > 0 {
+            let song = songs[0]
+            DispatchQueue.main.async {
+                self.coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: CircleFilter())
+                self.circularProgress = KYCircularProgress(frame: self.circularProgressFrame.bounds)
+                self.circularProgress.startAngle =  -1 * M_PI_2
+                self.circularProgress.endAngle = -1 * M_PI_2 + 2*M_PI
+                self.circularProgress.lineWidth = 2.0
+                self.circularProgress.colors = [.blue, .yellow, .red]
+                self.circularProgressFrame.addSubview(self.circularProgress)
+                self.updateSlider(song: song, progress: song.progress)
+            }
+            
+            if self.jamsPlayer.isPlaying(trackID: song.spotifyID) {
+                listenButton.isSelected = true
+                return  // if already playing, let it play
+            }
+            
+            DispatchQueue.global(qos: .background).async {
+                // load song and wait for user to press play or tune in/out
+                self.jamsPlayer.loadSong(trackID: song.spotifyID, progress: song.progress)
+            }
+        }
+    }
     
     // fetch songs and trigger table reload
     //    private func fetchSongs() {
