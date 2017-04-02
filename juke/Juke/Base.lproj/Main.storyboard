@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="QC7-bB-CTg">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="rXL-Ez-cdK">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Login View Controller-->
-        <scene sceneID="73k-cm-9cP">
+        <scene sceneID="viY-uY-OtI">
             <objects>
-                <viewController id="QC7-bB-CTg" customClass="LoginViewController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="rXL-Ez-cdK" customClass="LoginViewController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="cai-9t-cJR"/>
-                        <viewControllerLayoutGuide type="bottom" id="kjh-Dg-lC3"/>
+                        <viewControllerLayoutGuide type="top" id="OZP-MI-sfN"/>
+                        <viewControllerLayoutGuide type="bottom" id="8Ce-6K-1JG"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="R3w-FZ-41t">
+                    <view key="view" contentMode="scaleToFill" id="5lq-Oi-Vmc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l7W-78-afH">
-                                <rect key="frame" x="77" y="482" width="221" height="60"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cGf-is-wdM">
+                                <rect key="frame" x="65" y="311" width="244" height="44"/>
+                                <state key="normal" image="loginButton"/>
+                                <connections>
+                                    <action selector="loginWithSpotify:" destination="rXL-Ez-cdK" eventType="touchUpInside" id="SYl-Y3-4BS"/>
+                                    <segue destination="Wsq-F5-h4X" kind="show" identifier="loginSegue" id="LmD-TS-AGH"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="l7W-78-afH" firstAttribute="leading" secondItem="R3w-FZ-41t" secondAttribute="leadingMargin" constant="61" id="2Lz-Ur-baF"/>
-                            <constraint firstItem="l7W-78-afH" firstAttribute="centerX" secondItem="R3w-FZ-41t" secondAttribute="centerX" id="aGV-YQ-quv"/>
-                            <constraint firstItem="kjh-Dg-lC3" firstAttribute="top" secondItem="l7W-78-afH" secondAttribute="bottom" constant="125" id="bJd-K0-RKD"/>
-                            <constraint firstItem="l7W-78-afH" firstAttribute="top" secondItem="cai-9t-cJR" secondAttribute="bottom" constant="462" id="pUa-No-ajj"/>
+                            <constraint firstItem="cGf-is-wdM" firstAttribute="centerY" secondItem="5lq-Oi-Vmc" secondAttribute="centerY" id="2SJ-Iq-anp"/>
+                            <constraint firstItem="cGf-is-wdM" firstAttribute="centerX" secondItem="5lq-Oi-Vmc" secondAttribute="centerX" id="jPH-tj-bWS"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="loginFrame" destination="l7W-78-afH" id="2lj-Zd-7sp"/>
-                        <segue destination="Wsq-F5-h4X" kind="show" identifier="loginSegue" id="fJP-ts-l1s"/>
+                        <outlet property="loginButton" destination="cGf-is-wdM" id="yFJ-Jh-w5g"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="HZG-SM-ndf" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zEA-FO-qCa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-580" y="624.73763118440786"/>
+            <point key="canvasLocation" x="-693" y="617"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="zsD-Os-w13">
@@ -167,7 +167,7 @@
                                 <rect key="frame" x="0.0" y="72" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="opR-7u-Zoc" id="Rtq-dK-EGG">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Song" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4JV-u2-07g">
@@ -301,7 +301,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="txm-zd-nJK" id="1Af-Fi-Z21">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Artist" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nNm-hv-aTU">
@@ -448,7 +448,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="A83-fr-uvK" id="bAA-2x-Et6">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Artist" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4J4-2m-Eu8">
@@ -577,6 +577,7 @@
     </scenes>
     <resources>
         <image name="listening" width="25" height="25"/>
+        <image name="loginButton" width="244" height="44"/>
         <image name="merge" width="25" height="25"/>
         <image name="play" width="22" height="22"/>
     </resources>
