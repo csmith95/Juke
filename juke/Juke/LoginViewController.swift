@@ -34,11 +34,12 @@ class LoginViewController: UIViewController {
             let sessionDataObj = sessionObj as! Data
             
             let session = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
-            
+            print(session.isValid())
             if !session.isValid() {
                 // session is not valid so renew it
                 SPTAuth.defaultInstance().renewSession(SPTAuth.defaultInstance().session, callback: { (error, renewedSession) in
                     if let session = renewedSession {
+                        print("d")
                         SPTAuth.defaultInstance().session = session
                         let sessionData = NSKeyedArchiver.archivedData(withRootObject: session)
                         userDefaults.set(sessionData, forKey: "SpotifySession")
@@ -89,11 +90,13 @@ class LoginViewController: UIViewController {
         // first retrieve user object from spotify server using access token
         let headers: HTTPHeaders = ["Authorization": "Bearer " + accessToken]
         let url = ServerConstants.kSpotifyBaseURL + ServerConstants.kCurrentUserPath
+        print("here")
         Alamofire.request(url, method: .get, parameters: nil, encoding: URLEncoding.default, headers: headers).validate().responseJSON {
             response in
             switch response.result {
             case .success:
                 do {
+                    print("3")
                     let dictionary = response.result.value as! UnboxableDictionary
                     let spotifyUser: Models.SpotifyUser = try unbox(dictionary: dictionary)
                     self.addUserToJukeServer(spotifyUser: spotifyUser)
@@ -114,6 +117,7 @@ class LoginViewController: UIViewController {
             "username": spotifyUser.username,
             "imageURL": spotifyUser.imageURL
         ]
+        print("2")
         Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
             switch response.result {
             case .success:
@@ -122,6 +126,7 @@ class LoginViewController: UIViewController {
                     let user: Models.User = try unbox(dictionary: unparsedJukeUser)
                     CurrentUser.currUser = user
                     DispatchQueue.main.async {
+                        print("3")
                         self.performSegue(withIdentifier: "loginSegue", sender: nil)
                     }
                 } catch {
@@ -136,4 +141,5 @@ class LoginViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
 }

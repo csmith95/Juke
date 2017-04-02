@@ -10,5 +10,5 @@ import Foundation
 
 class CurrentUser {
     public static var currUser: Models.User? = nil
-    public static var currStream: Models.Stream? = nil    
+    public static var currStream: Models.Stream? = nil
 }
