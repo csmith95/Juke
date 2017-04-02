@@ -23,7 +23,6 @@
 		4B425D6B1E79FADF0040BC3D /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B425D6A1E79FADF0040BC3D /* LocationManager.swift */; };
 		4B63F88C1E5FFC3F00E4224D /* StreamController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B63F88B1E5FFC3F00E4224D /* StreamController.swift */; };
 		4B99E0511E790D150086394A /* SocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B99E0501E790D150086394A /* SocketManager.swift */; };
-		4BA7CB6E1E8EC2FE003E3DC8 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA7CB6D1E8EC2FE003E3DC8 /* LoginViewController.swift */; };
 		4BA7CB701E8ED007003E3DC8 /* MyStreamController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */; };
 		4BA7CB721E8F7CF7003E3DC8 /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA7CB711E8F7CF7003E3DC8 /* CurrentUser.swift */; };
 		4BC7785A1E5835D9009DD520 /* SpotifyAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC778591E5835D9009DD520 /* SpotifyAuthentication.framework */; };
@@ -33,6 +32,7 @@
 		4BDCEBA81E709F7F00D9D3EE /* JamsPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */; };
 		4BDCEC061E720D0B00D9D3EE /* ServerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEC051E720D0B00D9D3EE /* ServerConstants.swift */; };
 		4BF307B11E7797B9002CAE9E /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF307B01E7797B9002CAE9E /* CardTableViewCell.swift */; };
+		F2E815581E90BBBC00404DDF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E815571E90BBBC00404DDF /* LoginViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,7 +53,6 @@
 		4B425D6A1E79FADF0040BC3D /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		4B63F88B1E5FFC3F00E4224D /* StreamController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamController.swift; sourceTree = "<group>"; };
 		4B99E0501E790D150086394A /* SocketManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketManager.swift; sourceTree = "<group>"; };
-		4BA7CB6D1E8EC2FE003E3DC8 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyStreamController.swift; sourceTree = "<group>"; };
 		4BA7CB711E8F7CF7003E3DC8 /* CurrentUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CurrentUser.swift; path = ../CurrentUser.swift; sourceTree = "<group>"; };
 		4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Juke-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -67,6 +66,7 @@
 		72A8139088E7F63BECA297C9 /* Pods-Juke.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke.release.xcconfig"; path = "Pods/Target Support Files/Pods-Juke/Pods-Juke.release.xcconfig"; sourceTree = "<group>"; };
 		D9D54D33C710A946C6515520 /* Pods_Juke.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Juke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECDA8CAF8FCA9C3B7EFCAFF4 /* Pods-Juke.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Juke/Pods-Juke.debug.xcconfig"; sourceTree = "<group>"; };
+		F2E815571E90BBBC00404DDF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,9 +108,9 @@
 		4B3A34CB1E58120F00C314A0 /* Juke */ = {
 			isa = PBXGroup;
 			children = (
-				4BA7CB711E8F7CF7003E3DC8 /* CurrentUser.swift */,
+				F2E815571E90BBBC00404DDF /* LoginViewController.swift */,
+
 				4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */,
-				4BA7CB6D1E8EC2FE003E3DC8 /* LoginViewController.swift */,
 				4B1B130A1E7B990600C1966A /* Assets.xcassets */,
 				4BF307B01E7797B9002CAE9E /* CardTableViewCell.swift */,
 				4B3A34CC1E58120F00C314A0 /* AppDelegate.swift */,
@@ -293,7 +293,7 @@
 				4BF307B11E7797B9002CAE9E /* CardTableViewCell.swift in Sources */,
 				4BA7CB721E8F7CF7003E3DC8 /* CurrentUser.swift in Sources */,
 				4B425D6B1E79FADF0040BC3D /* LocationManager.swift in Sources */,
-				4BA7CB6E1E8EC2FE003E3DC8 /* LoginViewController.swift in Sources */,
+				F2E815581E90BBBC00404DDF /* LoginViewController.swift in Sources */,
 				4B3A34CD1E58120F00C314A0 /* AppDelegate.swift in Sources */,
 				4BDCEBA81E709F7F00D9D3EE /* JamsPlayer.swift in Sources */,
 				4BDCEBA21E6F63E900D9D3EE /* SearchTableViewController.swift in Sources */,

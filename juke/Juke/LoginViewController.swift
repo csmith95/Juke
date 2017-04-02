@@ -1,40 +1,89 @@
 //
-//  ViewController.swift
+//  LoginViewController.swift
 //  Juke
 //
-//  Created by Conner Smith on 2/18/17.
+//  Created by Kojo Worai Osei on 4/1/17.
 //  Copyright © 2017 csmith. All rights reserved.
 //
 
 import UIKit
 import Alamofire
 import Unbox
-import RevealingSplashView
 
 class LoginViewController: UIViewController {
-    
-    @IBOutlet var loginFrame: UIView!
+
+    @IBOutlet weak var loginButton: UIButton!
     let kClientID = "77d4489425fe464483f0934f99847c8b"
     let kCallbackURL = "juke1231://callback"
-    let connectButton: UIControl = SPTConnectButton()
+    var session:SPTSession!
     public static var currUser: Models.User? = nil
     
-    
-    func loginPressed(_ sender: AnyObject) {
-        let auth = SPTAuth.defaultInstance()!
-        auth.clientID = kClientID
-        auth.redirectURL = NSURL(string:kCallbackURL) as! URL
-        auth.requestedScopes = [SPTAuthStreamingScope]
-        let loginURL = auth.loginURL!
-        UIApplication.shared.open(loginURL)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        loginButton.isHidden = true
+        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.updateAfterFirstLogin), name: NSNotification.Name("loginSuccessful"), object: nil)
+        
+        let userDefaults = UserDefaults.standard
+        
+        //config SPTAuth default instance with tokenSwap and refresh
+        SPTAuth.defaultInstance().tokenSwapURL = URL(string: "https://juketokenrefresh.herokuapp.com/swap")
+        SPTAuth.defaultInstance().tokenRefreshURL = URL(string: "https://juketokenrefresh.herokuapp.com/refresh")
+        
+        //check if session is available everytime you launch app
+        if let sessionObj = userDefaults.object(forKey: "SpotifySession") { // session available
+            print("session is available")
+            let sessionDataObj = sessionObj as! Data
+            
+            let session = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
+            
+            if !session.isValid() {
+                // session is not valid so renew it
+                SPTAuth.defaultInstance().renewSession(SPTAuth.defaultInstance().session, callback: { (error, renewedSession) in
+                    if let session = renewedSession {
+                        SPTAuth.defaultInstance().session = session
+                        let sessionData = NSKeyedArchiver.archivedData(withRootObject: session)
+                        userDefaults.set(sessionData, forKey: "SpotifySession")
+                        userDefaults.synchronize()
+                        
+                        self.session = renewedSession
+                        //fetch user
+                        self.fetchSpotifyUser(accessToken: session.accessToken)
+                    }
+                })
+            } else {
+                // session is valid. Hide login button and proceed
+                fetchSpotifyUser(accessToken: session.accessToken)
+                
+            }
+        } else {
+            loginButton.isHidden = false
+        }
     }
     
-    func loginSuccessful(notification: NSNotification) {
-        if let accessToken = notification.object as? String {
-            // kick off authentication of player early
-            let player = JamsPlayer.shared
-            fetchSpotifyUser(accessToken: accessToken)
+    //if you are logging in for the first time and don't have a session that is going to be renewed
+    func updateAfterFirstLogin() {
+        loginButton.isHidden = true
+        let userDefaults = UserDefaults.standard
+        
+        if let sessionObj = userDefaults.object(forKey: "SpotifySession") {
+            let sessionDataObj = sessionObj as! Data
+            let firstTimeSession = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
+            self.session = firstTimeSession
+            //fetch user
+            fetchSpotifyUser(accessToken: session.accessToken)
         }
+        
+    }
+
+    @IBAction func loginWithSpotify(_ sender: Any) {
+        let auth = SPTAuth.defaultInstance()!
+        auth.clientID = kClientID
+        auth.redirectURL = NSURL(string:kCallbackURL)! as URL
+        auth.requestedScopes = [SPTAuthStreamingScope]
+        let loginURL = auth.loginURL!
+        
+        UIApplication.shared.open(loginURL)
+        
     }
     
     func fetchSpotifyUser(accessToken: String) {
@@ -72,7 +121,6 @@ class LoginViewController: UIViewController {
                 do {
                     let unparsedJukeUser = response.result.value as! UnboxableDictionary
                     let user: Models.User = try unbox(dictionary: unparsedJukeUser)
-                    CurrentUser.currUser = user
                     LoginViewController.currUser = user
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: "loginSegue", sender: nil)
@@ -85,41 +133,11 @@ class LoginViewController: UIViewController {
             }
         };
     }
+
     
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.loginSuccessful), name: Notification.Name("loginSuccessful"), object: nil)
-        
-        //Initialize a revealing Splash with with the iconImage, the initial size and the background color
-        let revealingSplashView = RevealingSplashView(iconImage: UIImage(named: "JukeLogo")!, iconInitialSize: CGSize(width: 210, height: 410), backgroundColor: UIColor.clear)
-        
-        //Adds the revealing splash view as a sub view
-        self.view.addSubview(revealingSplashView)
-        
-        if let session = retrieveSession() {
-            NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: session.accessToken)
-            revealingSplashView.startAnimation()
-        } else {
-            connectButton.frame = loginFrame.bounds
-            connectButton.addTarget(self, action: #selector(LoginViewController.loginPressed(_:)), for: UIControlEvents.touchUpInside)
-            view.addSubview(connectButton)
-        }
-        
-        // kick off location updates early -- currently not using location for MVP
-        //        let locationManager = LocationManager.sharedInstance
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
-    
-    func retrieveSession() -> SPTSession? {
-        if let sessionObj = UserDefaults.standard.object(forKey: "SpotifySession") {
-            let sessionDataObj = sessionObj as! Data
-            if let session = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as? SPTSession {
-                if session.isValid() {
-                    return session
-                }
-            }
-        }
-        return nil
-    }
-}
+
