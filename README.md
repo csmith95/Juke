@@ -21,6 +21,6 @@ Add documentation for libraries used below
   * Great list of Swift libraries for any task. 
   
 ## Spotify Auth Credentials
-Client ID: 77d4489425fe464483f0934f99847c8b
-Client Secret: 83b8a312bea5401facdf1802a30140a0
-Redirect URI: juke1231://callback
+* Client ID: 77d4489425fe464483f0934f99847c8b
+* Client Secret: 83b8a312bea5401facdf1802a30140a0
+* Redirect URI: juke1231://callback
