@@ -78,7 +78,6 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
             
             if let currentTrack = audioStreamer.metadata.currentTrack {
                 let id = currentTrack.uri.characters.split{$0 == ":"}.map(String.init)[2]
-                print(id == trackID && audioStreamer.playbackState.isPlaying)
                 return id == trackID && audioStreamer.playbackState.isPlaying
             }
         }

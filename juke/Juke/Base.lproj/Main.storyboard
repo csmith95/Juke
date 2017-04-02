@@ -508,6 +508,14 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eso-DH-HT3">
+                                        <frame key="frameInset" minX="332" minY="213" width="25" height="25"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="online"/>
+                                        <connections>
+                                            <action selector="toggleOnlineStatus:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="nIm-C9-cBT"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -534,6 +542,7 @@
                         <outlet property="currentlyPlayingLabel" destination="oLB-HQ-qCA" id="ZaG-Zr-JaD"/>
                         <outlet property="currentlyPlayingView" destination="Bjd-bi-vR5" id="oMD-mp-Vu7"/>
                         <outlet property="listenButton" destination="ecT-Yx-POt" id="MiL-Hg-xOa"/>
+                        <outlet property="onlineButton" destination="eso-DH-HT3" id="WvQ-Ki-phT"/>
                         <outlet property="tableView" destination="c5n-oG-gxF" id="OK9-8e-Eff"/>
                     </connections>
                 </viewController>
@@ -564,6 +573,7 @@
     <resources>
         <image name="listening" width="25" height="25"/>
         <image name="merge" width="25" height="25"/>
+        <image name="online" width="25" height="25"/>
         <image name="play" width="22" height="22"/>
     </resources>
 </document>

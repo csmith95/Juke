@@ -23,6 +23,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    @IBOutlet var onlineButton: UIButton!
     @IBOutlet var circularProgressFrame: UIView!
     @IBOutlet var coverArtImage: UIImageView!
     @IBOutlet var barButton: UIBarButtonItem!
@@ -47,6 +48,27 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         jamsPlayer.setPlayStatus(shouldPlay: newPlayStatus, trackID: song.spotifyID, position: song.progress)
     }
     
+    @IBAction func toggleOnlineStatus(_ sender: AnyObject) {
+        let newOnlineStatus = !onlineButton.isSelected
+        onlineButton.isSelected = newOnlineStatus
+        let url = ServerConstants.kJukeServerURL + ServerConstants.kChangeOnlineStatus
+        let params: Parameters = ["streamID": CurrentUser.currStream!.streamID, "isLive": newOnlineStatus]
+        Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
+            switch response.result {
+            case .success:
+                do {
+                    let unparsedStream = response.result.value as! UnboxableDictionary
+                    let stream: Models.Stream = try unbox(dictionary: unparsedStream)
+                    CurrentUser.currStream = stream
+                } catch {
+                    print("error unboxing new stream after changing online status: ", error)
+                }
+            case .failure(let error):
+                print("error changing live status: ", error)
+            }
+            
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,6 +122,9 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
                     CurrentUser.currStream = stream
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
+                        self.onlineButton.setImage(UIImage(named: "online.png"), for: .normal)
+                        self.onlineButton.setImage(UIImage(named: "offline.png"), for: .selected)
+                        self.onlineButton.isSelected = CurrentUser.currStream!.isLive
                     }
                     self.loadTopSong(shouldPlay: false)
                 } catch {
