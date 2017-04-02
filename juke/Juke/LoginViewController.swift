@@ -16,13 +16,14 @@ class LoginViewController: UIViewController {
     @IBOutlet var loginFrame: UIView!
     let kClientID = "77d4489425fe464483f0934f99847c8b"
     let kCallbackURL = "juke1231://callback"
+    let connectButton: UIControl = SPTConnectButton()
     public static var currUser: Models.User? = nil
     
     
     func loginPressed(_ sender: AnyObject) {
         let auth = SPTAuth.defaultInstance()!
         auth.clientID = kClientID
-        auth.redirectURL = NSURL(string:kCallbackURL)! as URL
+        auth.redirectURL = NSURL(string:kCallbackURL) as! URL
         auth.requestedScopes = [SPTAuthStreamingScope]
         let loginURL = auth.loginURL!
         UIApplication.shared.open(loginURL)
@@ -32,7 +33,6 @@ class LoginViewController: UIViewController {
         if let accessToken = notification.object as? String {
             // kick off authentication of player early
             let player = JamsPlayer.shared
-            performSegue(withIdentifier: "loginSegue", sender: nil)
             fetchSpotifyUser(accessToken: accessToken)
         }
     }
@@ -66,13 +66,22 @@ class LoginViewController: UIViewController {
             "username": spotifyUser.username,
             "imageURL": spotifyUser.imageURL
         ]
+        print(params)
         Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
-            do {
-                let dictionary = response.result.value as! UnboxableDictionary
-                let user: Models.User = try unbox(dictionary: dictionary)
-                LoginViewController.currUser = user
-            } catch {
-                print("Error unboxing user: ", error)
+            switch response.result {
+            case .success:
+                do {
+                    let unparsedJukeUser = response.result.value as! UnboxableDictionary
+                    let user: Models.User = try unbox(dictionary: unparsedJukeUser)
+                    LoginViewController.currUser = user
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: "loginSegue", sender: nil)
+                    }
+                } catch {
+                    print("Error unboxing user: ", error)
+                }
+            case .failure(let error):
+                print("Error adding user to database: ", error)
             }
         };
     }
@@ -98,16 +107,16 @@ class LoginViewController: UIViewController {
                 }
             }
         } else {
-            let connectButton: UIControl = SPTConnectButton()
             connectButton.frame = loginFrame.bounds
-            connectButton.addTarget(self, action: #selector(LoginViewController.loginPressed), for: UIControlEvents.touchUpInside)
-            self.loginFrame.addSubview(connectButton)
+            connectButton.becomeFirstResponder()
+            connectButton.addTarget(self, action: #selector(LoginViewController.loginPressed(_:)), for: UIControlEvents.touchUpInside)
+            view.addSubview(connectButton)
         }
-
+        
         // kick off location updates early -- currently not using location for MVP
         //        let locationManager = LocationManager.sharedInstance
     }
-
+    
     func retrieveSession() -> SPTSession? {
         if let sessionObj = UserDefaults.standard.object(forKey: "SpotifySession") {
             let sessionDataObj = sessionObj as! Data
@@ -119,15 +128,4 @@ class LoginViewController: UIViewController {
         }
         return nil
     }
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
 }
