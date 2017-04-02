@@ -17,6 +17,7 @@ class LoginViewController: UIViewController {
     let kClientID = "77d4489425fe464483f0934f99847c8b"
     let kCallbackURL = "juke1231://callback"
     let connectButton: UIControl = SPTConnectButton()
+    public static var currUser: Models.User? = nil
     
     
     func loginPressed(_ sender: AnyObject) {
@@ -65,7 +66,6 @@ class LoginViewController: UIViewController {
             "username": spotifyUser.username,
             "imageURL": spotifyUser.imageURL
         ]
-    
         Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
             switch response.result {
             case .success:
@@ -73,6 +73,7 @@ class LoginViewController: UIViewController {
                     let unparsedJukeUser = response.result.value as! UnboxableDictionary
                     let user: Models.User = try unbox(dictionary: unparsedJukeUser)
                     CurrentUser.currUser = user
+                    LoginViewController.currUser = user
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: "loginSegue", sender: nil)
                     }
@@ -105,11 +106,11 @@ class LoginViewController: UIViewController {
             connectButton.addTarget(self, action: #selector(LoginViewController.loginPressed(_:)), for: UIControlEvents.touchUpInside)
             view.addSubview(connectButton)
         }
-
+        
         // kick off location updates early -- currently not using location for MVP
         //        let locationManager = LocationManager.sharedInstance
     }
-
+    
     func retrieveSession() -> SPTSession? {
         if let sessionObj = UserDefaults.standard.object(forKey: "SpotifySession") {
             let sessionDataObj = sessionObj as! Data
