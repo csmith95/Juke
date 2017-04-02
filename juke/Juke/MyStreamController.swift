@@ -101,7 +101,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         self.onlineButton.setImage(UIImage(named: "offline.png"), for: .selected)
         fetchMyStream();
     }
-
     
     func fetchMyStream() {
         // fetch stream for user. if not tuned in, creates and returns an offline stream by default
@@ -135,7 +134,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             }
         }
     }
-    
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 {

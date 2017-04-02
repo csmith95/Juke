@@ -14,7 +14,7 @@ import Unbox
 class StreamsTableViewController: UITableViewController {
     
     var streams: [Models.Stream] = []
-    let locationManager = LocationManager.sharedInstance
+//    let locationManager = LocationManager.sharedInstance
     
     override func viewDidLoad() {
         super.viewDidLoad()

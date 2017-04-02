@@ -34,12 +34,10 @@ class LoginViewController: UIViewController {
             let sessionDataObj = sessionObj as! Data
             
             let session = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
-            print(session.isValid())
             if !session.isValid() {
                 // session is not valid so renew it
                 SPTAuth.defaultInstance().renewSession(SPTAuth.defaultInstance().session, callback: { (error, renewedSession) in
                     if let session = renewedSession {
-                        print("d")
                         SPTAuth.defaultInstance().session = session
                         let sessionData = NSKeyedArchiver.archivedData(withRootObject: session)
                         userDefaults.set(sessionData, forKey: "SpotifySession")
@@ -64,7 +62,6 @@ class LoginViewController: UIViewController {
     func updateAfterFirstLogin() {
         loginButton.isHidden = true
         let userDefaults = UserDefaults.standard
-        
         if let sessionObj = userDefaults.object(forKey: "SpotifySession") {
             let sessionDataObj = sessionObj as! Data
             let firstTimeSession = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
@@ -81,16 +78,13 @@ class LoginViewController: UIViewController {
         auth.redirectURL = NSURL(string:kCallbackURL)! as URL
         auth.requestedScopes = [SPTAuthStreamingScope]
         let loginURL = auth.loginURL!
-        
         UIApplication.shared.open(loginURL)
-        
     }
     
     func fetchSpotifyUser(accessToken: String) {
         // first retrieve user object from spotify server using access token
         let headers: HTTPHeaders = ["Authorization": "Bearer " + accessToken]
         let url = ServerConstants.kSpotifyBaseURL + ServerConstants.kCurrentUserPath
-        print("here")
         Alamofire.request(url, method: .get, parameters: nil, encoding: URLEncoding.default, headers: headers).validate().responseJSON {
             response in
             switch response.result {
@@ -117,7 +111,7 @@ class LoginViewController: UIViewController {
             "username": spotifyUser.username,
             "imageURL": spotifyUser.imageURL
         ]
-        print("2")
+        
         Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
             switch response.result {
             case .success:
@@ -126,7 +120,6 @@ class LoginViewController: UIViewController {
                     let user: Models.User = try unbox(dictionary: unparsedJukeUser)
                     CurrentUser.currUser = user
                     DispatchQueue.main.async {
-                        print("3")
                         self.performSegue(withIdentifier: "loginSegue", sender: nil)
                     }
                 } catch {
