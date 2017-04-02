@@ -32,10 +32,7 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
     @IBOutlet var tableView: UITableView!
     var stream: Models.Stream?
     let jamsPlayer = JamsPlayer.shared
-    var selectedIndex: IndexPath?
     let socketManager = SocketManager.sharedInstance
-    let listenImage = UIImage(named: "listening.png")
-    let muteImage = UIImage(named: "mute.png")
     @IBOutlet var joinStreamButton: UIButton!
     @IBOutlet var listenButton: UIButton!
     var circularProgress = KYCircularProgress()
@@ -74,8 +71,8 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
         currentlyPlayingView.layer.shadowOpacity = 0.5;
         currentlyPlayingView.layer.masksToBounds = false;
         currentlyPlayingView.clipsToBounds = false;
-        listenButton.setImage(listenImage, for: .normal)
-        listenButton.setImage(muteImage, for: .selected)
+        listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
+        listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -91,7 +88,7 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
             circularProgress.colors = [.blue, .yellow, .red]
             circularProgressFrame.addSubview(circularProgress)
         }
-        loadTopSong()
+        loadTopSong(shouldPlay: false)
         //fetchSongs()
     }
     
@@ -150,12 +147,6 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
             // update slider
             let progress = data["position"] as! Double
             updateSlider(song: song, progress: progress)
-            
-            // update progress in db if current user is playlist owner
-            if CurrentUser.currUser?.spotifyID == stream?.owner.spotifyID {
-                let song_id = self.stream!.songs[0].spotifyID
-                socketManager.updateSongPositionChanged(group_id: stream!.streamID, song_id: song_id, position: progress)
-            }
         }
     }
     
@@ -176,14 +167,14 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
-                self.loadTopSong()
+                self.loadTopSong(shouldPlay: true)
             case .failure(let error):
                 print(error)
             }
         }
     }
     
-    private func loadTopSong() {
+    private func loadTopSong(shouldPlay: Bool) {
         if self.stream!.songs.count > 0 {
             let song = self.stream!.songs[0]
             self.updateSlider(song: song, progress: song.progress)
@@ -195,7 +186,7 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
             
             DispatchQueue.global(qos: .background).async {
                 // load song and wait for user to press play or tune in/out
-                self.jamsPlayer.loadSong(trackID: song.spotifyID, progress: song.progress)
+                self.jamsPlayer.loadSong(trackID: song.spotifyID, progress: song.progress, shouldPlay: shouldPlay)
             }
         }
     }

@@ -78,6 +78,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
             
             if let currentTrack = audioStreamer.metadata.currentTrack {
                 let id = currentTrack.uri.characters.split{$0 == ":"}.map(String.init)[2]
+                print(id == trackID && audioStreamer.playbackState.isPlaying)
                 return id == trackID && audioStreamer.playbackState.isPlaying
             }
         }
@@ -91,7 +92,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
     }
     
-    public func loadSong(trackID: String, progress: Double) {
+    public func loadSong(trackID: String, progress: Double, shouldPlay: Bool) {
         if let session = self.session {
             if !session.isValid() {
                 print("session no longer valid")
@@ -103,7 +104,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
                 if let error = error {
                     print(error)
                 } else {
-                    self.setPlayStatus(shouldPlay: false, trackID: trackID, position: progress) // load then pause
+                    self.setPlayStatus(shouldPlay: shouldPlay, trackID: trackID, position: progress) // load then pause
                 }
             })
         }

@@ -61,7 +61,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     func addSongToStream(song: Models.Song, stream: Models.Stream) {
         let params: Parameters = ["streamID": stream.streamID, "spotifyID": song.spotifyID, "songName": song.songName, "artistName": song.artistName, "duration": song.duration, "coverArtURL": song.coverArtURL]
-        print("\nPARAMS: ", params)
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate().responseJSON { response in
             switch response.result {
             case .success:

@@ -97,17 +97,11 @@ class LoginViewController: UIViewController {
         //Adds the revealing splash view as a sub view
         self.view.addSubview(revealingSplashView)
         
-        
         if let session = retrieveSession() {
-            revealingSplashView.startAnimation(){
-                // post notification on main thread since it involves a segue
-                DispatchQueue.main.async {
-                    NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: session.accessToken)
-                }
-            }
+            NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: session.accessToken)
+            revealingSplashView.startAnimation()
         } else {
             connectButton.frame = loginFrame.bounds
-            connectButton.becomeFirstResponder()
             connectButton.addTarget(self, action: #selector(LoginViewController.loginPressed(_:)), for: UIControlEvents.touchUpInside)
             view.addSubview(connectButton)
         }

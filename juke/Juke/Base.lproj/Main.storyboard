@@ -486,14 +486,6 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mgA-c4-M1u">
-                                        <frame key="frameInset" minX="343" minY="210" width="24" height="28"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Button" image="merge"/>
-                                        <connections>
-                                            <action selector="joinStream:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="lcW-ZW-nJ3"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ecT-Yx-POt">
                                         <frame key="frameInset" minX="8" minY="210" width="41" height="28"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -524,7 +516,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="yA3-4K-0jC"/>
-                                    <barButtonItem image="play" id="uye-xr-skg"/>
+                                    <barButtonItem image="play" id="d6d-Pa-s8b"/>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="vS9-sO-EaT"/>
                                 </items>
                             </toolbar>
@@ -541,7 +533,6 @@
                         <outlet property="currentlyPlayingArtistLabel" destination="pu8-lc-FZV" id="g78-Jl-1Te"/>
                         <outlet property="currentlyPlayingLabel" destination="oLB-HQ-qCA" id="ZaG-Zr-JaD"/>
                         <outlet property="currentlyPlayingView" destination="Bjd-bi-vR5" id="oMD-mp-Vu7"/>
-                        <outlet property="joinStreamButton" destination="mgA-c4-M1u" id="td0-aR-nvr"/>
                         <outlet property="listenButton" destination="ecT-Yx-POt" id="MiL-Hg-xOa"/>
                         <outlet property="tableView" destination="c5n-oG-gxF" id="OK9-8e-Eff"/>
                     </connections>
