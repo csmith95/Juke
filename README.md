@@ -19,3 +19,8 @@ Add documentation for libraries used below
   * Web socket interface for Swift. Here is the server-side repo: https://github.com/socketio/socket.io
 5. Miscellaneous Awesome Libs -> https://github.com/matteocrippa/awesome-swift#uitableview
   * Great list of Swift libraries for any task. 
+  
+## Spotify Auth Credentials
+Client ID: 77d4489425fe464483f0934f99847c8b
+Client Secret: 83b8a312bea5401facdf1802a30140a0
+Redirect URI: juke1231://callback
