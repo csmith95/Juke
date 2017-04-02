@@ -16,7 +16,6 @@ class LoginViewController: UIViewController {
     let kClientID = "77d4489425fe464483f0934f99847c8b"
     let kCallbackURL = "juke1231://callback"
     var session:SPTSession!
-    public static var currUser: Models.User? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +34,6 @@ class LoginViewController: UIViewController {
             let sessionDataObj = sessionObj as! Data
             
             let session = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
-            
             if !session.isValid() {
                 // session is not valid so renew it
                 SPTAuth.defaultInstance().renewSession(SPTAuth.defaultInstance().session, callback: { (error, renewedSession) in
@@ -64,7 +62,6 @@ class LoginViewController: UIViewController {
     func updateAfterFirstLogin() {
         loginButton.isHidden = true
         let userDefaults = UserDefaults.standard
-        
         if let sessionObj = userDefaults.object(forKey: "SpotifySession") {
             let sessionDataObj = sessionObj as! Data
             let firstTimeSession = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
@@ -81,9 +78,7 @@ class LoginViewController: UIViewController {
         auth.redirectURL = NSURL(string:kCallbackURL)! as URL
         auth.requestedScopes = [SPTAuthStreamingScope]
         let loginURL = auth.loginURL!
-        
         UIApplication.shared.open(loginURL)
-        
     }
     
     func fetchSpotifyUser(accessToken: String) {
@@ -95,6 +90,7 @@ class LoginViewController: UIViewController {
             switch response.result {
             case .success:
                 do {
+                    print("3")
                     let dictionary = response.result.value as! UnboxableDictionary
                     let spotifyUser: Models.SpotifyUser = try unbox(dictionary: dictionary)
                     self.addUserToJukeServer(spotifyUser: spotifyUser)
@@ -115,13 +111,14 @@ class LoginViewController: UIViewController {
             "username": spotifyUser.username,
             "imageURL": spotifyUser.imageURL
         ]
+        
         Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
             switch response.result {
             case .success:
                 do {
                     let unparsedJukeUser = response.result.value as! UnboxableDictionary
                     let user: Models.User = try unbox(dictionary: unparsedJukeUser)
-                    LoginViewController.currUser = user
+                    CurrentUser.currUser = user
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: "loginSegue", sender: nil)
                     }
@@ -134,11 +131,8 @@ class LoginViewController: UIViewController {
         };
     }
 
-    
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
 }

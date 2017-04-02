@@ -97,17 +97,10 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navBarTitle = "My Jam"
-        
-        if (CurrentUser.currStream?.owner.spotifyID == CurrentUser.currUser?.spotifyID) {
-            listenButton.setImage(UIImage(named: "play.png"), for: .normal)
-            listenButton.setImage(UIImage(named: "pause.png"), for: .selected)
-        } else {
-            listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
-            listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
-        }
+        self.onlineButton.setImage(UIImage(named: "online.png"), for: .normal)
+        self.onlineButton.setImage(UIImage(named: "offline.png"), for: .selected)
         fetchMyStream();
     }
-
     
     func fetchMyStream() {
         // fetch stream for user. if not tuned in, creates and returns an offline stream by default
@@ -121,12 +114,17 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
                     let stream: Models.Stream = try unbox(dictionary: unparsedStream)
                     CurrentUser.currStream = stream
                     DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                        self.onlineButton.setImage(UIImage(named: "online.png"), for: .normal)
-                        self.onlineButton.setImage(UIImage(named: "offline.png"), for: .selected)
                         self.onlineButton.isSelected = CurrentUser.currStream!.isLive
+                        if (CurrentUser.currStream?.owner.spotifyID == CurrentUser.currUser?.spotifyID) {
+                            self.listenButton.setImage(UIImage(named: "play.png"), for: .normal)
+                            self.listenButton.setImage(UIImage(named: "pause.png"), for: .selected)
+                        } else {
+                            self.listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
+                            self.listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
+                        }
+                        self.tableView.reloadData()
+                        self.loadTopSong(shouldPlay: false)
                     }
-                    self.loadTopSong(shouldPlay: false)
                 } catch {
                     print("Error unboxing stream: ", error)
                 }
@@ -136,7 +134,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             }
         }
     }
-    
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 {
@@ -198,10 +195,11 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             let progress = data["position"] as! Double
             updateSlider(song: song, progress: progress)
             
-//            // update progress in db if current user is playlist owner
-//            if CurrentUser.currUser?.spotifyID == stream.owner.spotifyID {
-//                socketManager.updateSongPositionChanged(streamID: stream.streamID, position: progress)
-//            }
+            // update progress in db if current user is playlist owner
+            if CurrentUser.currUser?.spotifyID == stream.owner.spotifyID {
+                CurrentUser.currStream?.songs[0].progress = progress
+                socketManager.updateSongPositionChanged(streamID: stream.streamID, position: progress)
+            }
         }
     }
     
@@ -220,11 +218,11 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             case .success:
                 CurrentUser.currStream!.songs.remove(at: 0)
                 DispatchQueue.main.async {
+                    self.loadTopSong(shouldPlay: true)
                     self.tableView.reloadData()
                     self.circularProgress.progress = 0.0
                 }
                 
-                self.loadTopSong(shouldPlay: true)
             case .failure(let error):
                 print(error)
             }
@@ -235,77 +233,21 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         let songs = CurrentUser.currStream!.songs
         if songs.count > 0 {
             let song = songs[0]
-            DispatchQueue.main.async {
-                self.coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: CircleFilter())
-                self.updateSlider(song: song, progress: song.progress)
-            }
+            self.coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: CircleFilter())
+            self.updateSlider(song: song, progress: song.progress)
             
             if self.jamsPlayer.isPlaying(trackID: song.spotifyID) {
-                listenButton.isSelected = true
+                listenButton.isSelected = true  // if already playing, let it play. otherwise use the shouldPlay boolean
                 return
+            } else {
+                listenButton.isSelected = shouldPlay
             }
             
-            DispatchQueue.global(qos: .background).async {
-                // load song and wait for user to press play or tune in/out
-                self.jamsPlayer.loadSong(trackID: song.spotifyID, progress: song.progress, shouldPlay: shouldPlay)
-            }
+            // load song and wait for user to press play or tune in/out
+            self.jamsPlayer.loadSong(trackID: song.spotifyID, progress: song.progress, shouldPlay: shouldPlay)
+        } else {
+            // no songs left -- reset
+            
         }
     }
-    
-    // fetch songs and trigger table reload
-    //    private func fetchSongs() {
-    //        // note that Alamofire doesn't work with optionals -- must force unwrap with "as String!"
-    //        let params: Parameters = ["streamID": stream?.streamID as String!]
-    //        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kFetchSongsPath, method: .get, parameters: params).responseJSON { response in
-    //            switch response.result {
-    //            case .success:
-    //                if let unparsedSongs = response.result.value as? [UnboxableDictionary] {
-    //                    self.songs.removeAll()
-    //                    var firstSong = true
-    //                    let dispatchGroup = DispatchGroup()
-    //                    for unparsedSong in unparsedSongs {
-    //                        do {
-    //                            let fetchedSong: Models.Song = try unbox(dictionary: unparsedSong)
-    //                            if firstSong {
-    //                                firstSong = false
-    //                                dispatchGroup.enter()
-    //                                Alamofire.request(fetchedSong.coverArtURL).responseImage { response in
-    //                                    let size = CGSize(width: 150.0, height: 150.0)
-    //                                    if let coverArt = response.result.value {
-    //                                        self.coverArtImage.image = coverArt.af_imageAspectScaled(toFill: size).af_imageRoundedIntoCircle()
-    //                                    } else {
-    //                                        self.coverArtImage.image = UIImage(named: "juke_icon")!.af_imageAspectScaled(toFill: size).af_imageRoundedIntoCircle()
-    //                                    }
-    //                                    objc_sync_enter(self.songs)
-    //                                    self.songs.append(fetchedSong)
-    //                                    objc_sync_exit(self.songs)
-    //                                    dispatchGroup.leave()
-    //                                }
-    //                            }
-    //
-    //                            objc_sync_enter(self.songs)
-    //                            self.songs.append(fetchedSong)
-    //                            objc_sync_exit(self.songs)
-    //                        } catch {
-    //                            print("Error trying to unbox song: \(error)")
-    //                        }
-    //                    }
-    //
-    //                    // update UI on main thread
-    //                    dispatchGroup.notify(queue: DispatchQueue.main) {
-    //                        self.tableView.reloadData()
-    //                        if self.jamsPlayer.isPlaying(trackID: self.songs[0].spotifyID) {
-    //                            self.barButton.image = self.pauseImage
-    //                        } else {
-    //                            self.barButton.image = self.playImage
-    //                        }
-    //                        self.loadTopSong()
-    //                    }
-    //                }
-    //            case .failure(let error):
-    //                print(error)
-    //            }
-    //        }
-    //    }
-    
 }

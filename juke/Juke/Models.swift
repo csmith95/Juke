@@ -18,7 +18,7 @@ class Models {
         let songName: String
         let artistName: String
         let spotifyID: String
-        let progress: Double    // progress in song, synced with owner's device
+        var progress: Double    // progress in song, synced with owner's device
         let duration: Double
         let coverArtURL: String
         var coverArt: UIImage?  // fetched lazily later -- not stored in DB

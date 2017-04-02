@@ -112,7 +112,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     public func setPlayStatus(shouldPlay: Bool, trackID: String, position: Double) {
         if shouldPlay {
             let uri = "spotify:track:" + trackID
-            sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: position, callback: { (error) in
+            sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: position/1000, callback: { (error) in
                 if let error = error {
                     print(error)
                 }
