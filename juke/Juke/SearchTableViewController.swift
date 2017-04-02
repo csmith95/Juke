@@ -67,7 +67,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             case .success:
                 do {
                     let unparsedStream = response.result.value as! UnboxableDictionary
-                    print("\nUNPARSED: ", unparsedStream)
                     let stream: Models.Stream = try unbox(dictionary: unparsedStream)
                     CurrentUser.currStream = stream
                     print("added song")

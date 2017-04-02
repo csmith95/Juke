@@ -28,7 +28,7 @@ class Models {
         let spotifyID: String
         let username: String
         let imageURL: String
-        let tunedInto: String   // id
+        let tunedInto: String?   // id
     }
     
     struct SpotifyUser {
