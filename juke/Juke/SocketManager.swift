@@ -41,8 +41,8 @@ class SocketManager: NSObject {
         socket.emit("joinedGroup", ["user_id": user_id, "group_id": group_id])
     }
     
-    public func updateSongPositionChanged(group_id: String, song_id: String, position: Double) {
-        socket.emit("songPositionChanged", ["song_id": song_id, "group_id": group_id, "position": position])
+    public func updateSongPositionChanged(streamID: String, position: Double) {
+        socket.emit("songPositionChanged", ["streamID": streamID, "position": position])
     }
     
     

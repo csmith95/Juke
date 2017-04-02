@@ -67,13 +67,13 @@
                     </userDefinedRuntimeAttributes>
                     <connections>
                         <segue destination="aNa-bh-xnM" kind="relationship" relationship="viewControllers" id="0Wi-aB-6lV"/>
-                        <segue destination="Dgi-1u-LZq" kind="relationship" relationship="viewControllers" id="zkn-w6-nQn"/>
+                        <segue destination="nxr-Ui-A1n" kind="relationship" relationship="viewControllers" id="T2o-gZ-Xmc"/>
                         <segue destination="jvE-nl-hbR" kind="relationship" relationship="viewControllers" id="6fu-lK-COz"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zhc-f6-5s6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="252" y="625"/>
+            <point key="canvasLocation" x="562" y="654"/>
         </scene>
         <!--Streams Table View Controller-->
         <scene sceneID="ipP-ku-I8t">
@@ -267,25 +267,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uWn-pd-k0G" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="700" y="1662"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="vuX-bM-geA">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Dgi-1u-LZq" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" systemItem="favorites" id="IcC-89-BkM"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="orn-WS-RoN">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="MDf-xd-Wgi" kind="show" id="9cJ-Fj-WCm"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Hif-g2-Hso" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1286" y="851"/>
         </scene>
         <!--GroupTitle-->
         <scene sceneID="F8Z-DJ-gUC">
@@ -547,6 +528,14 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eso-DH-HT3">
+                                        <frame key="frameInset" minX="332" minY="213" width="25" height="25"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="online"/>
+                                        <connections>
+                                            <action selector="toggleOnlineStatus:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="nIm-C9-cBT"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -555,7 +544,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="yA3-4K-0jC"/>
-                                    <barButtonItem image="play" id="uye-xr-skg"/>
+                                    <barButtonItem image="play" id="d6d-Pa-s8b"/>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="vS9-sO-EaT"/>
                                 </items>
                             </toolbar>
@@ -572,20 +561,40 @@
                         <outlet property="currentlyPlayingArtistLabel" destination="pu8-lc-FZV" id="g78-Jl-1Te"/>
                         <outlet property="currentlyPlayingLabel" destination="oLB-HQ-qCA" id="ZaG-Zr-JaD"/>
                         <outlet property="currentlyPlayingView" destination="Bjd-bi-vR5" id="oMD-mp-Vu7"/>
-                        <outlet property="joinStreamButton" destination="mgA-c4-M1u" id="td0-aR-nvr"/>
                         <outlet property="listenButton" destination="ecT-Yx-POt" id="MiL-Hg-xOa"/>
+                        <outlet property="onlineButton" destination="eso-DH-HT3" id="WvQ-Ki-phT"/>
                         <outlet property="tableView" destination="c5n-oG-gxF" id="OK9-8e-Eff"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CCt-Z1-8jc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2111" y="851"/>
+            <point key="canvasLocation" x="2724" y="689.5052473763119"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="1v4-e5-TKD">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="nxr-Ui-A1n" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" systemItem="favorites" id="GF9-Xb-POY"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="FXk-DT-Bjs">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="MDf-xd-Wgi" kind="relationship" relationship="rootViewController" id="prV-5F-Wid"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="STL-W6-I7U" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1784.8" y="689.5052473763119"/>
         </scene>
     </scenes>
     <resources>
         <image name="listening" width="25" height="25"/>
         <image name="loginButton" width="244" height="44"/>
         <image name="merge" width="25" height="25"/>
+        <image name="online" width="25" height="25"/>
         <image name="play" width="22" height="22"/>
     </resources>
 </document>
