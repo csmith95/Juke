@@ -31,6 +31,7 @@ class LoginViewController: UIViewController {
         
         //check if session is available everytime you launch app
         if let sessionObj = userDefaults.object(forKey: "SpotifySession") { // session available
+            print("session is available")
             let sessionDataObj = sessionObj as! Data
             
             let session = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
@@ -51,11 +52,11 @@ class LoginViewController: UIViewController {
                 })
             } else {
                 // session is valid. Hide login button and proceed
-                loginButton.isHidden = false
-                // fetch user or fire or whatever
                 fetchSpotifyUser(accessToken: session.accessToken)
                 
             }
+        } else {
+            loginButton.isHidden = false
         }
     }
     
