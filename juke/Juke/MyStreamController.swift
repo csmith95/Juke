@@ -66,7 +66,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             case .failure(let error):
                 print("error changing live status: ", error)
             }
-            
         }
     }
     

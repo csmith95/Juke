@@ -54,6 +54,7 @@ class StreamsTableViewController: UITableViewController {
         let stream = streams[indexPath.row]
         let song = stream.songs[0]
         cell.username.text = stream.owner.username
+        print()
         cell.artist.text = song.artistName
         cell.coverArt.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: RoundedCornersFilter(radius: 20.0)) { response in
             self.streams[indexPath.row].songs[0].coverArt = response.result.value
