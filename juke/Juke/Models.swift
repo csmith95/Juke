@@ -28,6 +28,7 @@ class Models {
         let spotifyID: String
         let username: String
         let imageURL: String
+        let tunedInto: String?   // id
     }
     
     struct SpotifyUser {
@@ -43,7 +44,6 @@ class Models {
         var songs: [Song]
         let isLive: Bool
     }
-    
 }
 
 extension Models.Song: Unboxable {
@@ -63,6 +63,7 @@ extension Models.User: Unboxable {
         self.spotifyID = try unboxer.unbox(key: "spotifyID")
         self.username = try unboxer.unbox(key: "username")
         self.imageURL = try unboxer.unbox(key: "imageURL")
+        self.tunedInto = try unboxer.unbox(key: "tunedInto")
     }
 }
 

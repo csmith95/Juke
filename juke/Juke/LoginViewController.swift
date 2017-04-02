@@ -59,20 +59,20 @@ class LoginViewController: UIViewController {
     }
     
     func addUserToJukeServer(spotifyUser: Models.SpotifyUser) {
-        // create new user object in DB. if already exists with spotifyID, no-op
+        // create new user object in DB. if already exists with spotifyID, returns user object
         let url = ServerConstants.kJukeServerURL + ServerConstants.kAddUser
         let params: Parameters = [
             "spotifyID": spotifyUser.spotifyID,
             "username": spotifyUser.username,
             "imageURL": spotifyUser.imageURL
         ]
-        print(params)
         Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
             switch response.result {
             case .success:
                 do {
                     let unparsedJukeUser = response.result.value as! UnboxableDictionary
                     let user: Models.User = try unbox(dictionary: unparsedJukeUser)
+                    CurrentUser.currUser = user
                     LoginViewController.currUser = user
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: "loginSegue", sender: nil)
@@ -98,17 +98,11 @@ class LoginViewController: UIViewController {
         //Adds the revealing splash view as a sub view
         self.view.addSubview(revealingSplashView)
         
-        
         if let session = retrieveSession() {
-            revealingSplashView.startAnimation(){
-                // post notification on main thread since it involves a segue
-                DispatchQueue.main.async {
-                    NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: session.accessToken)
-                }
-            }
+            NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: session.accessToken)
+            revealingSplashView.startAnimation()
         } else {
             connectButton.frame = loginFrame.bounds
-            connectButton.becomeFirstResponder()
             connectButton.addTarget(self, action: #selector(LoginViewController.loginPressed(_:)), for: UIControlEvents.touchUpInside)
             view.addSubview(connectButton)
         }

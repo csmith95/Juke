@@ -24,6 +24,8 @@ public class ServerConstants {
     static let kFetchSongsPath = "fetchSongs"
     static let kPopSong = "popSong"
     static let kAddUser = "addUser"
+    static let kFetchStream = "fetchStream"
+    static let kChangeOnlineStatus = "changeOnlineStatus"
     
     //spotify paths
     static let kCurrentUserPath = "me"
