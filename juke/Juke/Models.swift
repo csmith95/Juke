@@ -24,6 +24,14 @@ class Models {
         var coverArt: UIImage?  // fetched lazily later -- not stored in DB
     }
     
+    struct SpotifySong {
+        let songName: String
+        let artistName: String
+        let spotifyID: String
+        let duration: Double
+        let coverArtURL: String
+    }
+    
     struct User {
         let spotifyID: String
         let username: String
@@ -64,7 +72,7 @@ extension Models.User: Unboxable {
         self.spotifyID = try unboxer.unbox(key: "spotifyID")
         self.username = try unboxer.unbox(key: "username")
         self.imageURL = try unboxer.unbox(key: "imageURL")
-        self.tunedInto = try unboxer.unbox(key: "tunedInto")
+        self.tunedInto = unboxer.unbox(key: "tunedInto")
         self.id = try unboxer.unbox(key: "_id");
     }
 }
@@ -84,6 +92,16 @@ extension Models.Stream: Unboxable {
         self.streamID = try unboxer.unbox(key: "_id")
         self.songs = try unboxer.unbox(key: "songs")
         self.isLive = try unboxer.unbox(key: "isLive")
+    }
+}
+
+extension Models.SpotifySong: Unboxable {
+    init(unboxer: Unboxer) throws {
+        self.songName = try unboxer.unbox(key: "name")
+        self.artistName = try unboxer.unbox(keyPath: "artists.0.name")
+        self.spotifyID = try unboxer.unbox(key: "id")
+        self.duration = try unboxer.unbox(key: "duration_ms")
+        self.coverArtURL = try unboxer.unbox(keyPath: "album.images.1.url")
     }
 }
 

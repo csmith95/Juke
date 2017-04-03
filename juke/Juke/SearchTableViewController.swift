@@ -85,19 +85,20 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         let items = tracks["items"] as! NSArray
         let numItemsToCache = min(kNumResultsToStore, items.count)
         for i in 0 ..< numItemsToCache {
-            let curr = items[i] as! NSDictionary
+            let curr = items[i] as! UnboxableDictionary
             
-            // the line below transforms "*:*:id" --> "id"
-            let id = (curr["uri"] as! String).characters.split{$0 == ":"}.map(String.init)[2]
-            let name = curr["name"] as! String
-            let duration = curr["duration_ms"] as! Double
-            let artists = curr["artists"] as! NSArray
-            let first = artists[0] as! NSDictionary
-            let artist = first["name"] as! String
-            let album = curr["album"] as! NSDictionary
-            let images = album["images"] as! [NSDictionary]
-            let coverArtURL = images[0]["url"] as! String
-            self.results.append(Models.Song(songName: name, artistName: artist, spotifyID: id, progress: 0.0, duration: duration, coverArtURL: coverArtURL, coverArt: nil))
+            do {
+                let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
+                self.results.append(Models.Song(songName: spotifySong.songName,
+                                                artistName: spotifySong.artistName,
+                                                spotifyID: spotifySong.spotifyID,
+                                                progress: 0.0,
+                                                duration: spotifySong.duration,
+                                                coverArtURL: spotifySong.coverArtURL,
+                                                coverArt: nil))
+            } catch {
+                print("error unboxing spotify song: ", error)
+            }
         }
     }
     
