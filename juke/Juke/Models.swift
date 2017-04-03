@@ -28,6 +28,7 @@ class Models {
         let spotifyID: String
         let username: String
         let imageURL: String
+        let id: String
         let tunedInto: String?   // id
     }
     
@@ -64,6 +65,7 @@ extension Models.User: Unboxable {
         self.username = try unboxer.unbox(key: "username")
         self.imageURL = try unboxer.unbox(key: "imageURL")
         self.tunedInto = try unboxer.unbox(key: "tunedInto")
+        self.id = try unboxer.unbox(key: "_id");
     }
 }
 

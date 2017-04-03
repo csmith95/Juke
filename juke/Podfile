@@ -12,5 +12,6 @@ target 'Juke' do
     pod 'Unbox'
     pod 'KYCircularProgress'
     pod 'RevealingSplashView'
+    pod 'PKHUD', '~> 4.0'
 
 end

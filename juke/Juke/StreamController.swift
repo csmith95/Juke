@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import Unbox
 import KYCircularProgress
+import PKHUD
 
 class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -36,10 +37,21 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
     @IBOutlet var joinStreamButton: UIButton!
     @IBOutlet var listenButton: UIButton!
     var circularProgress = KYCircularProgress()
-
+    
     @IBAction func joinStream(_ sender: AnyObject) {
-        // TODO
-        
+        HUD.show(.progress)
+        socketManager.joinStream(userID: CurrentUser.currUser!.id, streamID: stream!.streamID) { unparsedStream in
+            do {
+                let stream: Models.Stream = try unbox(dictionary: unparsedStream)
+                CurrentUser.currStream = stream
+                print("Joined stream: ", stream)
+                HUD.flash(.success, delay: 1.0) { success in
+                    self.tabBarController?.selectedIndex = 1
+                }
+            } catch {
+                print("Error unboxing new stream: ", error)
+            }
+        }
     }
     
     
@@ -53,7 +65,6 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
         listenButton.isSelected = newPlayStatus
         jamsPlayer.setPlayStatus(shouldPlay: newPlayStatus, trackID: song.spotifyID, position: song.progress)
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,8 +99,6 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
             circularProgress.colors = [.blue, .yellow, .red]
             circularProgressFrame.addSubview(circularProgress)
         }
-        loadTopSong(shouldPlay: false)
-        //fetchSongs()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -162,7 +171,6 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kPopSong, method: .post, parameters: params).responseJSON { response in
             switch response.result {
             case .success:
-                print("song popped")
                 self.stream?.songs.remove(at: 0)    // instead of unboxing entire stream, for now just pop first song
                 DispatchQueue.main.async {
                     self.tableView.reloadData()

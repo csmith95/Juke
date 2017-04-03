@@ -90,7 +90,6 @@ class LoginViewController: UIViewController {
             switch response.result {
             case .success:
                 do {
-                    print("3")
                     let dictionary = response.result.value as! UnboxableDictionary
                     let spotifyUser: Models.SpotifyUser = try unbox(dictionary: dictionary)
                     self.addUserToJukeServer(spotifyUser: spotifyUser)

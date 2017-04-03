@@ -112,6 +112,9 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
                     let unparsedStream = response.result.value as! UnboxableDictionary
                     let stream: Models.Stream = try unbox(dictionary: unparsedStream)
                     CurrentUser.currStream = stream
+                    
+                    // TODO: join socket room on backend..? not sure how without going through socket events
+                    // self.socketManager.joinStream(userID: CurrentUser.currUser!.id, streamID: CurrentUser.currStream!.streamID)
                     DispatchQueue.main.async {
                         self.onlineButton.isSelected = CurrentUser.currStream!.isLive
                         if (CurrentUser.currStream?.owner.spotifyID == CurrentUser.currUser?.spotifyID) {
