@@ -20,7 +20,6 @@ public class ServerConstants {
     // juke paths
     static let kAddSongPath = "addSong"
     static let kFetchStreamsPath = "fetchStreams"
-    static let kCreateGroupPath = "createStream"
     static let kFetchSongsPath = "fetchSongs"
     static let kPopSong = "popSong"
     static let kAddUser = "addUser"

@@ -12,7 +12,7 @@ import Unbox
 
 class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
-    var results:[Models.Song] = []
+    var results:[Models.SpotifySong] = []
     let kNumResultsToStore = 20
     let searchController = UISearchController(searchResultsController: nil)
     
@@ -60,7 +60,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         return cell
     }
     
-    func addSongToStream(song: Models.Song, stream: Models.Stream) {
+    func addSongToStream(song: Models.SpotifySong, stream: Models.Stream) {
         let params: Parameters = ["streamID": stream.streamID, "spotifyID": song.spotifyID, "songName": song.songName, "artistName": song.artistName, "duration": song.duration, "coverArtURL": song.coverArtURL]
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate().responseJSON { response in
             switch response.result {
@@ -90,13 +90,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             
             do {
                 let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
-                self.results.append(Models.Song(songName: spotifySong.songName,
-                                                artistName: spotifySong.artistName,
-                                                spotifyID: spotifySong.spotifyID,
-                                                progress: 0.0,
-                                                duration: spotifySong.duration,
-                                                coverArtURL: spotifySong.coverArtURL,
-                                                coverArt: nil))
+                self.results.append(spotifySong)
             } catch {
                 print("error unboxing spotify song: ", error)
             }
