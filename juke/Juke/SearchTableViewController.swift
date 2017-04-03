@@ -26,6 +26,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         search(query: searchBar.text!)
+        self.searchBar.endEditing(true)
     }
     
     override func didReceiveMemoryWarning() {
