@@ -51,7 +51,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         // Assign the tap action which will be executed when the user taps the UIButton
         cell.tapAction = { (cell) in
             // post to server
-            self.addSongToStream(song: self.results[indexPath.row], stream: CurrentUser.currStream!)
+            self.addSongToStream(song: self.results[indexPath.row], stream: CurrentUser.stream!)
             
             // animate button text change from "+" to "Added!"
             cell.addButton!.setTitle("Added!", for: .normal)
@@ -68,7 +68,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
                 do {
                     let unparsedStream = response.result.value as! UnboxableDictionary
                     let stream: Models.Stream = try unbox(dictionary: unparsedStream)
-                    CurrentUser.currStream = stream
+                    CurrentUser.stream = stream
                     print("added song")
                 } catch {
                     print("error unboxing stream after adding song: ", error)

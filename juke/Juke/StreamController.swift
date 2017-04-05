@@ -37,13 +37,14 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
     @IBOutlet var joinStreamButton: UIButton!
     @IBOutlet var listenButton: UIButton!
     var circularProgress = KYCircularProgress()
+    var animationTimer = Timer()
     
     @IBAction func joinStream(_ sender: AnyObject) {
         HUD.show(.progress)
-        socketManager.joinStream(userID: CurrentUser.currUser!.id, streamID: stream!.streamID) { unparsedStream in
+        socketManager.joinStream(userID: CurrentUser.user.id, streamID: stream.streamID) { unparsedStream in
             do {
                 let stream: Models.Stream = try unbox(dictionary: unparsedStream)
-                CurrentUser.currStream = stream
+                CurrentUser.stream = stream
                 HUD.flash(.success, delay: 1.0) { success in
                     self.tabBarController?.selectedIndex = 1
                 }
@@ -55,14 +56,15 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     
     @IBAction func toggleListening(_ sender: AnyObject) {
-        if self.stream!.songs.count == 0 {
+        if stream.songs.count == 0 {
             return
         }
         
-        let song = self.stream!.songs[0]
         let newPlayStatus = !listenButton.isSelected
         listenButton.isSelected = newPlayStatus
-        jamsPlayer.setPlayStatus(shouldPlay: newPlayStatus, song: song)
+        setSong(play: newPlayStatus && stream.isPlaying)
+//            *** TODO: disable MyStreamController like this somehow ****
+//        MyStreamController.sharedMyStreamController.listenButton.isSelected = false
     }
     
     override func viewDidLoad() {
@@ -70,6 +72,8 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
         self.tableView.delegate = self
         self.tableView.dataSource = self
         NotificationCenter.default.addObserver(self, selector: #selector(StreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StreamController.refreshStream), name: Notification.Name("refreshStream"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StreamController.syncPositionWithOwner), name: Notification.Name("syncPositionWithOwner"), object: nil)
         currentlyPlayingView.layer.cornerRadius = 10;
         currentlyPlayingView.layer.masksToBounds = true;
         currentlyPlayingView.layer.borderColor = UIColor.gray.cgColor;
@@ -87,7 +91,7 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navBarTitle = stream?.owner.username
-        socketManager.joinSocketRoom(streamID: stream.streamID, visitor: true)
+        socketManager.visitStream(streamID: stream.streamID)
         
         let songs = self.stream!.songs
         if songs.count > 0 {
@@ -127,7 +131,7 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return self.stream!.songs.count
+        return self.stream.songs.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -151,48 +155,127 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
         return NSString(format: "%0.2d:%0.2d", minutes, seconds) as String
     }
     
-    private func updateSlider(song: Models.Song, progress: Double) {
-        let normalizedProgress = progress / song.duration
-        circularProgress.progress = normalizedProgress
-        self.currTimeLabel.text = timeIntervalToString(interval: progress/1000)
+    private func updateSlider(song: Models.Song) {
+        let normalizedProgress = song.progress / song.duration
+        self.circularProgress.progress = normalizedProgress
+        self.circularProgress.set(progress: normalizedProgress, duration: 0.25)
+        self.currTimeLabel.text = self.timeIntervalToString(interval: song.progress/1000)
+    }
+    
+    public func setSong(play: Bool) {
+        jamsPlayer.setPlayStatus(shouldPlay: play, song: stream.songs[0])
+        setTimer(run: !play && stream.isPlaying)
+    }
+    
+    private func setTimer(run: Bool) {
+        DispatchQueue.main.async {
+            
+            if (run) {
+                if !self.animationTimer.isValid {
+                    self.animationTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.updateAnimationProgress), userInfo: nil, repeats: true)
+                }
+            } else {
+                if self.animationTimer.isValid {
+                    self.animationTimer.invalidate()
+                }
+            }
+        }
+    }
+    
+    func syncPositionWithOwner(notification: NSNotification) {
+        if stream.songs.count == 0 {
+            return
+        }
+        
+        if let data = notification.object as? NSDictionary {
+            if let eventString = data["event"] as? String {
+                
+                let songID = data["songID"] as? String
+                if songID != stream.songs[0].id {
+                    return // notification meant for MyStreamController
+                }
+                
+                switch eventString {
+                case "playStatusChanged":
+                    let isPlaying = data["isPlaying"] as! Bool
+                    stream.isPlaying = isPlaying
+                    let progress = data["progress"] as! Double
+                    stream.songs[0].progress = progress
+                    updateSlider(song: stream!.songs[0])
+                    setSong(play: isPlaying && listenButton.isSelected)
+                default:
+                    print("Received unrecognized ownerSongStatusChanged event: ", eventString);
+                }
+            }
+        }
+    }
+    
+    func updateAnimationProgress() {
+        let song = stream.songs[0]
+        let newProgress = song.progress + 1000
+        stream.songs[0].progress = newProgress
+        updateSlider(song: stream.songs[0])
+        if abs(newProgress - song.duration) < 2000 {
+            songFinished()  // force pop song based on timer
+        }
     }
     
     func songFinished() {
-        self.stream?.songs.remove(at: 0)
+        self.stream.songs.remove(at: 0)
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
-        
-        if CurrentUser.currUser?.spotifyID != self.stream?.owner.spotifyID {
-            return; // if you are not the owner, don't post to DB. let owner's device manage db
+    }
+    
+    func songPositionChanged(notification: NSNotification) {
+        if stream.songs.count == 0 {
+            return
         }
         
-        let params: Parameters = ["streamID": stream?.streamID as String!]
-        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kPopSong, method: .post, parameters: params).responseJSON { response in
-            switch response.result {
-            case .success:
-                DispatchQueue.main.async {
-                    self.loadTopSong(shouldPlay: true)
-                }
-            case .failure(let error):
-                print(error)
+        let songs = stream.songs
+        let song = songs[0]
+        if let data = notification.object as? NSDictionary {
+            let progress = data["progress"] as! Double
+            let songID = data["songID"] as! String
+            if songID != song.id {
+                return  // notification meant for MyStreamController
+            }
+            stream.songs[0].progress = progress
+            DispatchQueue.main.async {
+                self.updateSlider(song: song)
             }
         }
     }
     
-    private func loadTopSong(shouldPlay: Bool) {
-        if self.stream!.songs.count > 0 {
-            let song = self.stream!.songs[0]
-            self.updateSlider(song: song, progress: song.progress)
+    private func loadTopSong() {
+        if stream.songs.count > 0 {
+            let song = stream.songs[0]
+            updateSlider(song: song)
             
-            if self.jamsPlayer.isPlaying(song: song) {
+            if jamsPlayer.isPlaying(song: song) {
                 listenButton.isSelected = true  // if already playing, let it play. otherwise use the shouldPlay boolean
             } else {
-                listenButton.isSelected = shouldPlay
-                if shouldPlay {
-                    self.jamsPlayer.setPlayStatus(shouldPlay: shouldPlay, song: song)
-                }
+                setSong(play: listenButton.isSelected && stream.isPlaying)
             }
         }
     }
+    
+    func refreshStream(notification: NSNotification) {
+        do {
+            if let unparsedStream = notification.object as? UnboxableDictionary {
+                let stream: Models.Stream = try unbox(dictionary: unparsedStream)
+                if self.stream.streamID != stream.streamID {
+                    return  // notification meant for MyStreamController
+                }
+                self.stream = stream
+                DispatchQueue.main.async {
+                    self.loadTopSong()
+                    self.tableView.reloadData()
+                }
+            }
+        } catch {
+            print("error unboxing new stream: ", error)
+        }
+    }
+    
 }

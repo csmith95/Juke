@@ -14,7 +14,7 @@ import Unbox
 class StreamsTableViewController: UITableViewController {
     
     var streams: [Models.Stream] = []
-//    let locationManager = LocationManager.sharedInstance
+    let socketManager = SocketManager.sharedInstance
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,9 +23,6 @@ class StreamsTableViewController: UITableViewController {
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,12 +51,11 @@ class StreamsTableViewController: UITableViewController {
         let stream = streams[indexPath.row]
         let song = stream.songs[0]
         cell.username.text = stream.owner.username
-        print()
         cell.artist.text = song.artistName
         cell.coverArt.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: RoundedCornersFilter(radius: 20.0)) { response in
             self.streams[indexPath.row].songs[0].coverArt = response.result.value
         }
-        let imageFilter = CircleFilter()
+//        let imageFilter = CircleFilter()
 //        if let imageURL = stream.owner.imageURL {
 //            cell.ownerIcon.af_setImage(withURL: URL(string: imageURL)!, placeholderImage: nil, filter: imageFilter)
 //        }
@@ -84,7 +80,7 @@ class StreamsTableViewController: UITableViewController {
                     for unparsedStream in unparsedStreams {
                         do {
                             let fetchedStream: Models.Stream = try unbox(dictionary: unparsedStream)
-                            if (fetchedStream.songs.count > 0 && fetchedStream.streamID != CurrentUser.currStream?.streamID) {
+                            if (fetchedStream.songs.count > 0 && fetchedStream.streamID != CurrentUser.stream?.streamID) {
                                 self.streams.append(fetchedStream)
                             }
                         } catch {

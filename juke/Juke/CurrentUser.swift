@@ -7,9 +7,13 @@
 //
 
 import Foundation
+import Unbox
 
 class CurrentUser {
-    public static var currUser: Models.User!
-    public static var currStream: Models.Stream!
+    public static var user: Models.User!
+    public static var stream: Models.Stream!
     public static var fetched: Bool = false
+    public static func isHost() -> Bool {
+        return CurrentUser.user.id == CurrentUser.stream.owner.id
+    }
 }

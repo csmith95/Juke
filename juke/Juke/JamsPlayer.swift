@@ -16,7 +16,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     private var session: SPTSession? = nil
     private let kClientID = "77d4489425fe464483f0934f99847c8b"
     private var position: TimeInterval = 0.0
-    private var songJukeID: String?
+    private var songJukeID: String? // Juke id of currently playing song
     
     override private init() {
         super.init()
@@ -91,7 +91,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         // signal StreamController so that it can update UISlider
         let position_ms = position * 1000
         self.position = position_ms
-        let data = ["progress": self.position]
+        let data: [String:Any] = ["songID": self.songJukeID, "progress": self.position]
         NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
     }
     

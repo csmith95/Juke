@@ -120,7 +120,7 @@ class LoginViewController: UIViewController {
                 do {
                     let unparsedJukeUser = response.result.value as! UnboxableDictionary
                     let user: Models.User = try unbox(dictionary: unparsedJukeUser)
-                    CurrentUser.currUser = user
+                    CurrentUser.user = user
                     DispatchQueue.main.async {
                         print("loginSegue")
                         self.performSegue(withIdentifier: "loginSegue", sender: nil)
