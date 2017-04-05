@@ -60,7 +60,9 @@ class StreamsTableViewController: UITableViewController {
             self.streams[indexPath.row].songs[0].coverArt = response.result.value
         }
         let imageFilter = CircleFilter()
-        cell.ownerIcon.af_setImage(withURL: URL(string: stream.owner.imageURL)!, placeholderImage: nil, filter: imageFilter)
+//        if let imageURL = stream.owner.imageURL {
+//            cell.ownerIcon.af_setImage(withURL: URL(string: imageURL)!, placeholderImage: nil, filter: imageFilter)
+//        }
         cell.song.text = song.songName
         cell.updateUI()
         return cell
@@ -82,7 +84,7 @@ class StreamsTableViewController: UITableViewController {
                     for unparsedStream in unparsedStreams {
                         do {
                             let fetchedStream: Models.Stream = try unbox(dictionary: unparsedStream)
-                            if fetchedStream.songs.count > 0 {
+                            if (fetchedStream.songs.count > 0 && fetchedStream.streamID != CurrentUser.currStream?.streamID) {
                                 self.streams.append(fetchedStream)
                             }
                         } catch {

@@ -16,6 +16,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     private var session: SPTSession? = nil
     private let kClientID = "77d4489425fe464483f0934f99847c8b"
     private var position: TimeInterval = 0.0
+    private var songJukeID: String?
     
     override private init() {
         super.init()
@@ -70,51 +71,39 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         }
     }
     
-    public func isPlaying(trackID: String) -> Bool {
+    public func isPlaying(song: Models.Song) -> Bool {
+        
+        if self.songJukeID == nil {
+            return false   // first, check that a song is playing or loaded
+        }
+        
+        if self.songJukeID != song.id {
+            return false    // check that they are the same song objects in Juke DB, not just the same spotify song
+        }
+        
         if let audioStreamer = sharedInstance {
-            if audioStreamer.metadata == nil {
-                return false
-            }
-            
-            if let currentTrack = audioStreamer.metadata.currentTrack {
-                let id = currentTrack.uri.characters.split{$0 == ":"}.map(String.init)[2]
-                return id == trackID && audioStreamer.playbackState.isPlaying
-            }
+            return audioStreamer.playbackState.isPlaying   // check that song is playing, not paused
         }
         return false
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePosition position: TimeInterval) {
         // signal StreamController so that it can update UISlider
-        self.position = position * 1000
-        let data = ["position": self.position]
+        let position_ms = position * 1000
+        self.position = position_ms
+        let data = ["progress": self.position]
         NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
     }
     
-    public func loadSong(trackID: String, progress: Double, shouldPlay: Bool) {
-        if let session = self.session {
-            if !session.isValid() {
-                print("session no longer valid")
-                return
-            }
-            
-            let uri = "spotify:track:" + trackID
-            sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: progress, callback: { (error) in
+    public func setPlayStatus(shouldPlay: Bool, song: Models.Song) {
+        if shouldPlay {
+            let position = song.progress / 1000
+            let uri = "spotify:track:" + song.spotifyID
+            sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: position, callback: { (error) in
                 if let error = error {
                     print(error)
                 } else {
-                    self.setPlayStatus(shouldPlay: shouldPlay, trackID: trackID, position: progress) // load then pause
-                }
-            })
-        }
-    }
-    
-    public func setPlayStatus(shouldPlay: Bool, trackID: String, position: Double) {
-        if shouldPlay {
-            let uri = "spotify:track:" + trackID
-            sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: position/1000, callback: { (error) in
-                if let error = error {
-                    print(error)
+                    self.songJukeID = song.id
                 }
             })
         } else {

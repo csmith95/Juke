@@ -21,20 +21,30 @@ class Models {
         var progress: Double    // progress in song, synced with owner's device
         let duration: Double
         let coverArtURL: String
+        let id: String
         var coverArt: UIImage?  // fetched lazily later -- not stored in DB
+    }
+    
+    struct SpotifySong {
+        let songName: String
+        let artistName: String
+        let spotifyID: String
+        let duration: Double
+        let coverArtURL: String
     }
     
     struct User {
         let spotifyID: String
-        let username: String
-        let imageURL: String
+        let username: String?
+        let imageURL: String?
+        let id: String
         let tunedInto: String?   // id
     }
     
     struct SpotifyUser {
         let spotifyID: String
-        let username: String
-        let imageURL: String
+        let username: String?
+        let imageURL: String?
     }
     
     struct Stream {
@@ -43,6 +53,7 @@ class Models {
         let streamID: String
         var songs: [Song]
         let isLive: Bool
+        var isPlaying: Bool
     }
 }
 
@@ -54,6 +65,7 @@ extension Models.Song: Unboxable {
         self.progress = try unboxer.unbox(key: "progress")
         self.duration = try unboxer.unbox(key: "duration")
         self.coverArtURL = try unboxer.unbox(key: "coverArtURL")
+        self.id = try unboxer.unbox(key: "_id")
         self.coverArt = nil
     }
 }
@@ -61,17 +73,18 @@ extension Models.Song: Unboxable {
 extension Models.User: Unboxable {
     init(unboxer: Unboxer) throws {
         self.spotifyID = try unboxer.unbox(key: "spotifyID")
-        self.username = try unboxer.unbox(key: "username")
-        self.imageURL = try unboxer.unbox(key: "imageURL")
-        self.tunedInto = try unboxer.unbox(key: "tunedInto")
+        self.username = unboxer.unbox(key: "username")
+        self.imageURL = unboxer.unbox(key: "imageURL")
+        self.tunedInto = unboxer.unbox(key: "tunedInto")
+        self.id = try unboxer.unbox(key: "_id");
     }
 }
 
 extension Models.SpotifyUser: Unboxable {
     init(unboxer: Unboxer) throws {
         self.spotifyID = try unboxer.unbox(key: "id")
-        self.username = try unboxer.unbox(key: "display_name")
-        self.imageURL = try unboxer.unbox(keyPath: "images.0.url")
+        self.username = unboxer.unbox(key: "display_name")
+        self.imageURL = unboxer.unbox(keyPath: "images.0.url")
     }
 }
 
@@ -82,6 +95,17 @@ extension Models.Stream: Unboxable {
         self.streamID = try unboxer.unbox(key: "_id")
         self.songs = try unboxer.unbox(key: "songs")
         self.isLive = try unboxer.unbox(key: "isLive")
+        self.isPlaying = try unboxer.unbox(key: "isPlaying")
+    }
+}
+
+extension Models.SpotifySong: Unboxable {
+    init(unboxer: Unboxer) throws {
+        self.songName = try unboxer.unbox(key: "name")
+        self.artistName = try unboxer.unbox(keyPath: "artists.0.name")
+        self.spotifyID = try unboxer.unbox(key: "id")
+        self.duration = try unboxer.unbox(key: "duration_ms")
+        self.coverArtURL = try unboxer.unbox(keyPath: "album.images.1.url")
     }
 }
 

@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import Unbox
 import KYCircularProgress
+import PKHUD
 
 class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -36,10 +37,20 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
     @IBOutlet var joinStreamButton: UIButton!
     @IBOutlet var listenButton: UIButton!
     var circularProgress = KYCircularProgress()
-
+    
     @IBAction func joinStream(_ sender: AnyObject) {
-        // TODO
-        
+        HUD.show(.progress)
+        socketManager.joinStream(userID: CurrentUser.currUser!.id, streamID: stream!.streamID) { unparsedStream in
+            do {
+                let stream: Models.Stream = try unbox(dictionary: unparsedStream)
+                CurrentUser.currStream = stream
+                HUD.flash(.success, delay: 1.0) { success in
+                    self.tabBarController?.selectedIndex = 1
+                }
+            } catch {
+                print("Error unboxing new stream: ", error)
+            }
+        }
     }
     
     
@@ -51,16 +62,14 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
         let song = self.stream!.songs[0]
         let newPlayStatus = !listenButton.isSelected
         listenButton.isSelected = newPlayStatus
-        jamsPlayer.setPlayStatus(shouldPlay: newPlayStatus, trackID: song.spotifyID, position: song.progress)
+        jamsPlayer.setPlayStatus(shouldPlay: newPlayStatus, song: song)
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.delegate = self
         self.tableView.dataSource = self
         NotificationCenter.default.addObserver(self, selector: #selector(StreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(StreamController.songPositionChanged), name: Notification.Name("songPositionChanged"), object: nil)
         currentlyPlayingView.layer.cornerRadius = 10;
         currentlyPlayingView.layer.masksToBounds = true;
         currentlyPlayingView.layer.borderColor = UIColor.gray.cgColor;
@@ -88,8 +97,6 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
             circularProgress.colors = [.blue, .yellow, .red]
             circularProgressFrame.addSubview(circularProgress)
         }
-        loadTopSong(shouldPlay: false)
-        //fetchSongs()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -137,19 +144,6 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
         return NSString(format: "%0.2d:%0.2d", minutes, seconds) as String
     }
     
-    func songPositionChanged(notification: NSNotification) {
-        if self.stream!.songs.count == 0 {
-            return
-        }
-        
-        let song = self.stream!.songs[0]
-        if let data = notification.object as? NSDictionary {
-            // update slider
-            let progress = data["position"] as! Double
-            updateSlider(song: song, progress: progress)
-        }
-    }
-    
     private func updateSlider(song: Models.Song, progress: Double) {
         let normalizedProgress = progress / song.duration
         circularProgress.progress = normalizedProgress
@@ -157,17 +151,22 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     func songFinished() {
-        // pop first song, play next song
+        self.stream?.songs.remove(at: 0)
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+        
+        if CurrentUser.currUser?.spotifyID != self.stream?.owner.spotifyID {
+            return; // if you are not the owner, don't post to DB. let owner's device manage db
+        }
+        
         let params: Parameters = ["streamID": stream?.streamID as String!]
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kPopSong, method: .post, parameters: params).responseJSON { response in
             switch response.result {
             case .success:
-                print("song popped")
-                self.stream?.songs.remove(at: 0)    // instead of unboxing entire stream, for now just pop first song
                 DispatchQueue.main.async {
-                    self.tableView.reloadData()
+                    self.loadTopSong(shouldPlay: true)
                 }
-                self.loadTopSong(shouldPlay: true)
             case .failure(let error):
                 print(error)
             }
@@ -179,14 +178,13 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
             let song = self.stream!.songs[0]
             self.updateSlider(song: song, progress: song.progress)
             
-            if self.jamsPlayer.isPlaying(trackID: song.spotifyID) {
-                listenButton.isSelected = true
-                return  // if already playing, let it play
-            }
-            
-            DispatchQueue.global(qos: .background).async {
-                // load song and wait for user to press play or tune in/out
-                self.jamsPlayer.loadSong(trackID: song.spotifyID, progress: song.progress, shouldPlay: shouldPlay)
+            if self.jamsPlayer.isPlaying(song: song) {
+                listenButton.isSelected = true  // if already playing, let it play. otherwise use the shouldPlay boolean
+            } else {
+                listenButton.isSelected = shouldPlay
+                if shouldPlay {
+                    self.jamsPlayer.setPlayStatus(shouldPlay: shouldPlay, song: song)
+                }
             }
         }
     }

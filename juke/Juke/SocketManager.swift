@@ -8,6 +8,7 @@
 
 import Foundation
 import SocketIO
+import Unbox
 
 class SocketManager: NSObject {
     
@@ -18,14 +19,14 @@ class SocketManager: NSObject {
         super.init()
         socket.on("connect") { data, ack in
             print("socket connected")
-            self.updateUserTunedIntoGroup(user_id: "abc", group_id: "def")
         }
         
-        self.socket.on("disconnect") { data, ack in
+        socket.on("disconnect") { data, ack in
             print("socket disconnected")
         }
-        socket.on("random") { data, ack in
-            print("received random!")
+        
+        socket.on("ownerSongStatusChanged") { data, ack in
+            self.ownerSongStatusChanged(data: data, ack: ack)
         }
     }
     
@@ -37,17 +38,46 @@ class SocketManager: NSObject {
         socket.disconnect()
     }
     
-    public func updateUserTunedIntoGroup(user_id: String, group_id: String) {
-        socket.emit("joinedGroup", ["user_id": user_id, "group_id": group_id])
+    public func joinStream(userID: String, streamID: String, callback: @escaping (UnboxableDictionary) -> (Void)) {
+        print("joinStream emitted")
+        socket.emitWithAck("joinStream", ["userID": userID, "streamID": streamID]).timingOut(after: 2) { data in
+            if data.count == 0 {
+                return
+            }
+            if let unparsedStream = data[0] as? UnboxableDictionary {
+                callback(unparsedStream)
+            }
+        }
     }
     
-    public func updateSongPositionChanged(streamID: String, position: Double) {
-        socket.emit("songPositionChanged", ["streamID": streamID, "position": position])
+    public func songPositionChanged(streamID: String, songID: String, position: Double) {
+        socket.emit("songPositionChanged", ["streamID": streamID, "songID": songID, "progress": position])
     }
     
+    public func songPlayStatusChanged(streamID: String, progress: Double, isPlaying: Bool) {
+        socket.emit("songPlayStatusChanged", ["streamID": streamID, "progress": progress, "isPlaying": isPlaying])
+    }
     
-    public func updateSongEnded(group_id: String) {
-        socket.emit("songEnded", ["group_id": group_id])
+    public func songEnded(streamID: String) {
+        print("songEnded emitted")
+        socket.emit("songEnded", ["streamID": streamID])
+    }
+    
+    public func joinSocketRoom(streamID: String) {
+        print("joinSocketRoom emitted")
+        socket.emitWithAck("joinRoom", ["streamID": streamID]).timingOut(after: 2) { data in
+            print("Received joinSocketRoom ACK: ", data)
+        }
+    }
+    
+    private func ownerSongStatusChanged(data: [Any], ack: SocketAckEmitter) {
+        if data.count == 0 {
+            return;
+        }
+        
+        if let values = data[0] as? NSDictionary {
+            NotificationCenter.default.post(name: Notification.Name("syncPositionWithOwner"), object: values)
+        }
     }
     
 }

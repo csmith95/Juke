@@ -45,7 +45,23 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         let song = CurrentUser.currStream!.songs[0]
         let newPlayStatus = !listenButton.isSelected
         listenButton.isSelected = newPlayStatus
-        jamsPlayer.setPlayStatus(shouldPlay: newPlayStatus, trackID: song.spotifyID, position: song.progress)
+        if CurrentUser.currStream?.owner.spotifyID == CurrentUser.currUser?.spotifyID {
+            socketManager.songPlayStatusChanged(streamID: CurrentUser.currStream!.streamID, progress: song.progress, isPlaying: newPlayStatus)
+            jamsPlayer.setPlayStatus(shouldPlay: newPlayStatus, song: song)
+            
+            return
+        }
+        
+        if newPlayStatus {
+            if (CurrentUser.currStream?.isPlaying)! {
+                jamsPlayer.setPlayStatus(shouldPlay: newPlayStatus, song: song)
+
+            }
+            return;
+        }
+        
+        // stop streaming from this device
+        jamsPlayer.setPlayStatus(shouldPlay: newPlayStatus, song: song)
     }
     
     @IBAction func toggleOnlineStatus(_ sender: AnyObject) {
@@ -73,8 +89,9 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        NotificationCenter.default.addObserver(self, selector: #selector(StreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(StreamController.songPositionChanged), name: Notification.Name("songPositionChanged"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songPositionChanged), name: Notification.Name("songPositionChanged"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.syncPositionWithOwner), name: Notification.Name("syncPositionWithOwner"), object: nil)
         currentlyPlayingView.layer.cornerRadius = 10;
         currentlyPlayingView.layer.masksToBounds = true;
         currentlyPlayingView.layer.borderColor = UIColor.gray.cgColor;
@@ -124,6 +141,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
                         self.tableView.reloadData()
                         self.loadTopSong(shouldPlay: false)
                     }
+                    self.socketManager.joinSocketRoom(streamID: CurrentUser.currStream!.streamID)
                 } catch {
                     print("Error unboxing stream: ", error)
                 }
@@ -181,6 +199,48 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         return NSString(format: "%0.2d:%0.2d", minutes, seconds) as String
     }
     
+    func syncPositionWithOwner(notification: NSNotification) {
+        if CurrentUser.currStream == nil || CurrentUser.currStream!.songs.count == 0 {
+            return
+        }
+        
+        let stream = CurrentUser.currStream!
+        let songs = stream.songs
+        let song = songs[0]
+        if CurrentUser.currUser?.spotifyID == stream.owner.spotifyID {
+            return  // owner is already synced with device
+        }
+        
+        if let data = notification.object as? NSDictionary {
+            if let eventString = data["event"] as? String {
+                switch eventString {
+                case "progressChanged":
+                    if self.jamsPlayer.isPlaying(song: song) {
+                        return;
+                    }
+                    let progress = data["progress"] as! Double
+                    CurrentUser.currStream!.songs[0].progress = progress
+                    updateSlider(song: song)
+                    
+                case "playStatusChanged":
+                    let isPlaying = data["isPlaying"] as! Bool
+                    CurrentUser.currStream!.isPlaying = isPlaying
+                    let progress = data["progress"] as! Double
+                    CurrentUser.currStream?.songs[0].progress = progress
+                    updateSlider(song: CurrentUser.currStream!.songs[0])
+                    if isPlaying && listenButton.isSelected {
+                        self.jamsPlayer.setPlayStatus(shouldPlay: isPlaying, song: song)
+                        return
+                    } else if !isPlaying {
+                        self.jamsPlayer.setPlayStatus(shouldPlay: isPlaying, song: song)
+                    }
+                default:
+                    print("Received unrecognized ownerSongStatusChanged event: ", eventString);
+                }
+            }
+        }
+    }
+    
     func songPositionChanged(notification: NSNotification) {
         if CurrentUser.currStream == nil || CurrentUser.currStream!.songs.count == 0 {
             return
@@ -190,36 +250,42 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         let songs = stream.songs
         let song = songs[0]
         if let data = notification.object as? NSDictionary {
-            // update slider
-            let progress = data["position"] as! Double
-            updateSlider(song: song, progress: progress)
-            
+            let progress = data["progress"] as! Double
+            CurrentUser.currStream?.songs[0].progress = progress
             // update progress in db if current user is playlist owner
             if CurrentUser.currUser?.spotifyID == stream.owner.spotifyID {
-                CurrentUser.currStream?.songs[0].progress = progress
-                socketManager.updateSongPositionChanged(streamID: stream.streamID, position: progress)
+                socketManager.songPositionChanged(streamID: stream.streamID, songID: song.id, position: progress)
             }
+            
+            // update slider
+            updateSlider(song: song)
         }
     }
     
-    private func updateSlider(song: Models.Song, progress: Double) {
-        let normalizedProgress = progress / song.duration
-        circularProgress.progress = normalizedProgress
-        self.currTimeLabel.text = timeIntervalToString(interval: progress/1000)
+    private func updateSlider(song: Models.Song) {
+        let normalizedProgress = song.progress / song.duration
+        self.circularProgress.set(progress: normalizedProgress, duration: 0.75)
+        self.currTimeLabel.text = self.timeIntervalToString(interval: song.progress/1000)
     }
     
     func songFinished() {
-        // pop first song, play next song
+        CurrentUser.currStream?.songs.remove(at: 0)
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            self.circularProgress.progress = 0.0
+        }
+        
+        if CurrentUser.currUser?.spotifyID != CurrentUser.currStream?.owner.spotifyID {
+            return; // if you are not the owner, don't post to DB. let owner's device manage DB
+        }
+        
         let stream = CurrentUser.currStream!
         let params: Parameters = ["streamID": stream.streamID]
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kPopSong, method: .post, parameters: params).responseJSON { response in
             switch response.result {
             case .success:
-                CurrentUser.currStream!.songs.remove(at: 0)
                 DispatchQueue.main.async {
                     self.loadTopSong(shouldPlay: true)
-                    self.tableView.reloadData()
-                    self.circularProgress.progress = 0.0
                 }
                 
             case .failure(let error):
@@ -233,19 +299,18 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         if songs.count > 0 {
             let song = songs[0]
             self.coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: CircleFilter())
-            self.updateSlider(song: song, progress: song.progress)
+            self.updateSlider(song: song)
             
-            if self.jamsPlayer.isPlaying(trackID: song.spotifyID) {
+            if self.jamsPlayer.isPlaying(song: song) {
                 listenButton.isSelected = true  // if already playing, let it play. otherwise use the shouldPlay boolean
-                return
             } else {
                 listenButton.isSelected = shouldPlay
+                if shouldPlay && (CurrentUser.currStream?.isPlaying)! {
+                    self.jamsPlayer.setPlayStatus(shouldPlay: shouldPlay, song: song)
+                }
             }
-            
-            // load song and wait for user to press play or tune in/out
-            self.jamsPlayer.loadSong(trackID: song.spotifyID, progress: song.progress, shouldPlay: shouldPlay)
         } else {
-            // no songs left -- reset
+            // TODO: no songs left -- display custom UI
             
         }
     }

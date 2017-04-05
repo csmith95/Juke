@@ -12,7 +12,7 @@ import Unbox
 
 class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
-    var results:[Models.Song] = []
+    var results:[Models.SpotifySong] = []
     let kNumResultsToStore = 20
     let searchController = UISearchController(searchResultsController: nil)
     
@@ -26,6 +26,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         search(query: searchBar.text!)
+        self.searchBar.endEditing(true)
     }
     
     override func didReceiveMemoryWarning() {
@@ -59,7 +60,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         return cell
     }
     
-    func addSongToStream(song: Models.Song, stream: Models.Stream) {
+    func addSongToStream(song: Models.SpotifySong, stream: Models.Stream) {
         let params: Parameters = ["streamID": stream.streamID, "spotifyID": song.spotifyID, "songName": song.songName, "artistName": song.artistName, "duration": song.duration, "coverArtURL": song.coverArtURL]
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate().responseJSON { response in
             switch response.result {
@@ -85,19 +86,14 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         let items = tracks["items"] as! NSArray
         let numItemsToCache = min(kNumResultsToStore, items.count)
         for i in 0 ..< numItemsToCache {
-            let curr = items[i] as! NSDictionary
+            let curr = items[i] as! UnboxableDictionary
             
-            // the line below transforms "*:*:id" --> "id"
-            let id = (curr["uri"] as! String).characters.split{$0 == ":"}.map(String.init)[2]
-            let name = curr["name"] as! String
-            let duration = curr["duration_ms"] as! Double
-            let artists = curr["artists"] as! NSArray
-            let first = artists[0] as! NSDictionary
-            let artist = first["name"] as! String
-            let album = curr["album"] as! NSDictionary
-            let images = album["images"] as! [NSDictionary]
-            let coverArtURL = images[0]["url"] as! String
-            self.results.append(Models.Song(songName: name, artistName: artist, spotifyID: id, progress: 0.0, duration: duration, coverArtURL: coverArtURL, coverArt: nil))
+            do {
+                let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
+                self.results.append(spotifySong)
+            } catch {
+                print("error unboxing spotify song: ", error)
+            }
         }
     }
     
