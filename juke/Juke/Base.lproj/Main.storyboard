@@ -162,7 +162,7 @@
                                 <rect key="frame" x="0.0" y="136" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="opR-7u-Zoc" id="Rtq-dK-EGG">
-                                    <frame key="frameInset" width="375" height="63"/>
+                                    <frame key="frameInset" width="375" height="63.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Song" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4JV-u2-07g">
@@ -277,7 +277,7 @@
                                         <rect key="frame" x="0.0" y="92" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="txm-zd-nJK" id="1Af-Fi-Z21">
-                                            <frame key="frameInset" width="375" height="43"/>
+                                            <frame key="frameInset" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Artist" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nNm-hv-aTU">
@@ -424,7 +424,7 @@
                                         <rect key="frame" x="0.0" y="92" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="A83-fr-uvK" id="bAA-2x-Et6">
-                                            <frame key="frameInset" width="375" height="43"/>
+                                            <frame key="frameInset" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Artist" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4J4-2m-Eu8">
@@ -487,7 +487,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ecT-Yx-POt">
-                                        <frame key="frameInset" minX="8" minY="210" width="41" height="28"/>
+                                        <frame key="frameInset" minX="8" minY="210" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" image="listening"/>
                                         <connections>
@@ -509,11 +509,23 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eso-DH-HT3">
-                                        <frame key="frameInset" minX="332" minY="213" width="25" height="25"/>
+                                        <frame key="frameInset" minX="332" minY="213" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" image="online"/>
                                         <connections>
                                             <action selector="toggleOnlineStatus:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="nIm-C9-cBT"/>
+                                        </connections>
+                                    </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EiJ-O5-NBe">
+                                        <frame key="frameInset" minX="426" minY="77" width="38" height="33"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Et9-c8-VzL">
+                                        <frame key="frameInset" minX="58" minY="213" width="25" height="25"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="split"/>
+                                        <connections>
+                                            <action selector="splitButtonPressed:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="BZn-PX-9I9"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -543,6 +555,7 @@
                         <outlet property="currentlyPlayingView" destination="Bjd-bi-vR5" id="oMD-mp-Vu7"/>
                         <outlet property="listenButton" destination="ecT-Yx-POt" id="MiL-Hg-xOa"/>
                         <outlet property="onlineButton" destination="eso-DH-HT3" id="WvQ-Ki-phT"/>
+                        <outlet property="splitButton" destination="Et9-c8-VzL" id="j5h-EY-7MY"/>
                         <outlet property="tableView" destination="c5n-oG-gxF" id="OK9-8e-Eff"/>
                     </connections>
                 </viewController>
@@ -576,5 +589,6 @@
         <image name="merge" width="25" height="25"/>
         <image name="online" width="25" height="25"/>
         <image name="play" width="22" height="22"/>
+        <image name="split" width="25" height="25"/>
     </resources>
 </document>

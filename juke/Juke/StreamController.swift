@@ -31,7 +31,7 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
     @IBOutlet var currentlyPlayingLabel: UILabel!
     @IBOutlet var currentlyPlayingView: UIView!
     @IBOutlet var tableView: UITableView!
-    var stream: Models.Stream?
+    var stream: Models.Stream!
     let jamsPlayer = JamsPlayer.shared
     let socketManager = SocketManager.sharedInstance
     @IBOutlet var joinStreamButton: UIButton!
@@ -87,6 +87,8 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navBarTitle = stream?.owner.username
+        socketManager.joinSocketRoom(streamID: stream.streamID, visitor: true)
+        
         let songs = self.stream!.songs
         if songs.count > 0 {
             coverArtImage.image = songs[0].coverArt!.af_imageRoundedIntoCircle()
@@ -97,6 +99,11 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
             circularProgress.colors = [.blue, .yellow, .red]
             circularProgressFrame.addSubview(circularProgress)
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        socketManager.leaveSocketRoom(streamID: stream.streamID, visitor: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

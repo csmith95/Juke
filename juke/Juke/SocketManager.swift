@@ -63,10 +63,39 @@ class SocketManager: NSObject {
         socket.emit("songEnded", ["streamID": streamID])
     }
     
-    public func joinSocketRoom(streamID: String) {
+    public func joinSocketRoom(streamID: String, visitor: Bool) {
         print("joinSocketRoom emitted")
-        socket.emitWithAck("joinRoom", ["streamID": streamID]).timingOut(after: 2) { data in
+        var room = streamID
+        if visitor {
+            room += "V"
+        }
+        socket.emitWithAck("joinRoom", ["streamID": room]).timingOut(after: 2) { data in
             print("Received joinSocketRoom ACK: ", data)
+        }
+    }
+    
+    public func leaveSocketRoom(streamID: String, visitor: Bool) {
+        print("leaveSocketRoom emitted")
+        var room = streamID
+        if visitor {
+            room += "V"
+        }
+        socket.emitWithAck("leaveRoom", ["streamID": room]).timingOut(after: 2) { data in
+            print("Received leaveSocketRoom ACK: ", data)
+        }
+    }
+    
+    public func splitFromStream(userID: String) {
+        print("splitFromStream emitted")
+        socket.emitWithAck("splitFromStream", ["userID": userID]).timingOut(after: 2) { data in
+            print("Received splitFromStream ACK: ", data);
+            if data.count == 0 {
+                return
+            }
+            
+            if let newStream = data[0] as? NSDictionary {
+                NotificationCenter.default.post(name: Notification.Name("refreshMyStream"), object: newStream);
+            }
         }
     }
     

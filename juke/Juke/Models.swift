@@ -38,7 +38,7 @@ class Models {
         let username: String?
         let imageURL: String?
         let id: String
-        let tunedInto: String?   // id
+        var tunedInto: String?   // streamID
     }
     
     struct SpotifyUser {
