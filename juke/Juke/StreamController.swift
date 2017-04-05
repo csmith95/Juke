@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import AlamofireImage
 import Unbox
 import KYCircularProgress
 import PKHUD
@@ -63,8 +64,10 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
         let newPlayStatus = !listenButton.isSelected
         listenButton.isSelected = newPlayStatus
         setSong(play: newPlayStatus && stream.isPlaying)
-//            *** TODO: disable MyStreamController like this somehow ****
-//        MyStreamController.sharedMyStreamController.listenButton.isSelected = false
+        if listenButton.isSelected {
+            // disable MyStreamController audio via notification
+            NotificationCenter.default.post(name: Notification.Name("handleVisitingStream"), object: nil);
+        }
     }
     
     override func viewDidLoad() {
@@ -72,7 +75,7 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
         self.tableView.delegate = self
         self.tableView.dataSource = self
         NotificationCenter.default.addObserver(self, selector: #selector(StreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(StreamController.refreshStream), name: Notification.Name("refreshStream"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StreamController.refreshStream), name: Notification.Name("refresh"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(StreamController.syncPositionWithOwner), name: Notification.Name("syncPositionWithOwner"), object: nil)
         currentlyPlayingView.layer.cornerRadius = 10;
         currentlyPlayingView.layer.masksToBounds = true;
@@ -84,25 +87,20 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
         currentlyPlayingView.layer.shadowOpacity = 0.5;
         currentlyPlayingView.layer.masksToBounds = false;
         currentlyPlayingView.clipsToBounds = false;
+        circularProgress = KYCircularProgress(frame: circularProgressFrame.bounds)
+        circularProgress.startAngle =  -1 * M_PI_2
+        circularProgress.endAngle = -1 * M_PI_2 + 2*M_PI
+        circularProgress.lineWidth = 2.0
+        circularProgress.colors = [.blue, .yellow, .red]
+        circularProgressFrame.addSubview(circularProgress)
         listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
         listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navBarTitle = stream?.owner.username
+        navBarTitle = stream.owner.username
         socketManager.visitStream(streamID: stream.streamID)
-        
-        let songs = self.stream!.songs
-        if songs.count > 0 {
-            coverArtImage.image = songs[0].coverArt!.af_imageRoundedIntoCircle()
-            circularProgress = KYCircularProgress(frame: circularProgressFrame.bounds)
-            circularProgress.startAngle =  -1 * M_PI_2
-            circularProgress.endAngle = -1 * M_PI_2 + 2*M_PI
-            circularProgress.lineWidth = 2.0
-            circularProgress.colors = [.blue, .yellow, .red]
-            circularProgressFrame.addSubview(circularProgress)
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -131,18 +129,19 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return self.stream.songs.count
+        return stream.songs.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let song = self.stream!.songs[indexPath.row]
         if indexPath.row == 0 {
             // place first song in the currentlyPlayingLabel
-            self.currentlyPlayingLabel.text = song.songName
-            self.currentlyPlayingArtistLabel.text = song.artistName
+            coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: CircleFilter())
+            currentlyPlayingLabel.text = song.songName
+            currentlyPlayingArtistLabel.text = song.artistName
         }
         
-        let cell = self.tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
         cell.songName.text = song.songName
         cell.artist.text = song.artistName
         return cell
@@ -159,7 +158,7 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
         let normalizedProgress = song.progress / song.duration
         self.circularProgress.progress = normalizedProgress
         self.circularProgress.set(progress: normalizedProgress, duration: 0.25)
-        self.currTimeLabel.text = self.timeIntervalToString(interval: song.progress/1000)
+        self.currTimeLabel.text = timeIntervalToString(interval: song.progress/1000)
     }
     
     public func setSong(play: Bool) {
@@ -169,7 +168,6 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     private func setTimer(run: Bool) {
         DispatchQueue.main.async {
-            
             if (run) {
                 if !self.animationTimer.isValid {
                     self.animationTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.updateAnimationProgress), userInfo: nil, repeats: true)
@@ -221,9 +219,11 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     func songFinished() {
-        self.stream.songs.remove(at: 0)
+        stream.songs.remove(at: 0)
         DispatchQueue.main.async {
             self.tableView.reloadData()
+            self.circularProgress.progress = 0.0
+            self.loadTopSong()
         }
     }
     
@@ -241,9 +241,7 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
                 return  // notification meant for MyStreamController
             }
             stream.songs[0].progress = progress
-            DispatchQueue.main.async {
-                self.updateSlider(song: song)
-            }
+            updateSlider(song: song)
         }
     }
     
@@ -251,12 +249,7 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
         if stream.songs.count > 0 {
             let song = stream.songs[0]
             updateSlider(song: song)
-            
-            if jamsPlayer.isPlaying(song: song) {
-                listenButton.isSelected = true  // if already playing, let it play. otherwise use the shouldPlay boolean
-            } else {
-                setSong(play: listenButton.isSelected && stream.isPlaying)
-            }
+            setSong(play: listenButton.isSelected && stream.isPlaying)
         }
     }
     

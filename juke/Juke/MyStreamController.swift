@@ -36,25 +36,31 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet var tableView: UITableView!
     let jamsPlayer = JamsPlayer.shared
     let socketManager = SocketManager.sharedInstance
-    @IBOutlet var listenButton: UIButton!
+    @IBOutlet public var listenButton: UIButton!
     var circularProgress = KYCircularProgress()
     var animationTimer = Timer()
-    public static let sharedMyStreamController = self
     
     @IBAction func toggleListening(_ sender: AnyObject) {
+        let newPlayStatus = !listenButton.isSelected
+        setListeningStatus(status: newPlayStatus)
+    }
+    
+    func handleVisitingStream(notification: NSNotification) {
+        setListeningStatus(status: false)
+    }
+    
+    private func setListeningStatus(status: Bool) {
         if CurrentUser.stream.songs.count == 0 {
             return
         }
-        
         let song = CurrentUser.stream.songs[0]
-        let newPlayStatus = !listenButton.isSelected
-        listenButton.isSelected = newPlayStatus
+        listenButton.isSelected = status
         if CurrentUser.isHost() {
-            socketManager.songPlayStatusChanged(streamID: CurrentUser.stream.streamID, songID: song.id, progress: song.progress, isPlaying: newPlayStatus)
-            CurrentUser.stream.isPlaying = newPlayStatus
+            socketManager.songPlayStatusChanged(streamID: CurrentUser.stream.streamID, songID: song.id, progress: song.progress, isPlaying: status)
+            CurrentUser.stream.isPlaying = status
         }
         
-        setSong(play: newPlayStatus && CurrentUser.stream.isPlaying)
+        setSong(play: status && CurrentUser.stream.isPlaying)
     }
     
     @IBAction func toggleOnlineStatus(_ sender: AnyObject) {
@@ -90,7 +96,8 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songPositionChanged), name: Notification.Name("songPositionChanged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.syncPositionWithOwner), name: Notification.Name("syncPositionWithOwner"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.refreshMyStream), name: Notification.Name("refreshMyStream"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.refreshMyStream), name: Notification.Name("refresh"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.handleVisitingStream), name: Notification.Name("handleVisitingStream"), object: nil)
         currentlyPlayingView.layer.cornerRadius = 10;
         currentlyPlayingView.layer.masksToBounds = true;
         currentlyPlayingView.layer.borderColor = UIColor.gray.cgColor;
@@ -193,6 +200,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         let song = CurrentUser.stream!.songs[indexPath.row]
         if indexPath.row == 0 {
             // place first song in the currentlyPlayingLabel
+            coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: CircleFilter())
             self.currentlyPlayingLabel.text = song.songName
             self.currentlyPlayingArtistLabel.text = song.artistName
         }
@@ -270,7 +278,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         let normalizedProgress = song.progress / song.duration
         self.circularProgress.progress = normalizedProgress
         self.circularProgress.set(progress: normalizedProgress, duration: 0.25)
-        self.currTimeLabel.text = self.timeIntervalToString(interval: song.progress/1000)
+        self.currTimeLabel.text = timeIntervalToString(interval: song.progress/1000)
     }
     
     func songFinished() {
@@ -278,6 +286,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         DispatchQueue.main.async {
             self.tableView.reloadData()
             self.circularProgress.progress = 0.0
+            self.loadTopSong()
         }
         
         if !CurrentUser.isHost() {
@@ -289,9 +298,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kPopSong, method: .post, parameters: params).responseJSON { response in
             switch response.result {
             case .success:
-                DispatchQueue.main.async {
-                    self.loadTopSong()
-                }
+                print("Popped finished song from DB")
             case .failure(let error):
                 print(error)
             }
@@ -307,7 +314,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     
     private func setTimer(run: Bool) {
         DispatchQueue.main.async {
-            
             if CurrentUser.isHost() {
                 return  // if owner, don't use timer at all
             }
@@ -338,14 +344,8 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         let songs = CurrentUser.stream.songs
         if songs.count > 0 {
             let song = songs[0]
-            coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: CircleFilter())
             updateSlider(song: song)
-            
-            if jamsPlayer.isPlaying(song: song) {
-                listenButton.isSelected = true  // if already playing, let it play
-            } else {
-                setSong(play: listenButton.isSelected && CurrentUser.stream.isPlaying)
-            }
+            setSong(play: listenButton.isSelected && CurrentUser.stream.isPlaying)
         } else {
             // **** TODO: no songs left -- display custom UI ****
             

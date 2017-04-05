@@ -29,13 +29,13 @@ class SocketManager: NSObject {
             self.ownerSongStatusChanged(data: data, ack: ack)
         }
         
-        socket.on("refreshStream") { data, ack in
+        socket.on("refresh") { data, ack in
             if data.count == 0 {
                 return
             }
             if let newStream = data[0] as? NSDictionary {
-                NotificationCenter.default.post(name: Notification.Name("refreshStream"), object: newStream);
-                NotificationCenter.default.post(name: Notification.Name("refreshMyStream"), object: newStream);
+                // TODO: make sure these are populated stream objects
+                NotificationCenter.default.post(name: Notification.Name("refresh"), object: newStream);
             }
         }
     }
