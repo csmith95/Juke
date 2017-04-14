@@ -212,8 +212,11 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="119"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
+                                        <imageView userInteractionEnabled="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qlh-2K-FMz">
+                                            <rect key="frame" x="8" y="14" width="90" height="90"/>
+                                        </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="80K-77-ogI">
-                                            <rect key="frame" x="106" y="37" width="261" height="49"/>
+                                            <rect key="frame" x="106" y="14" width="261" height="49"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="261" id="EVw-2B-Zay"/>
                                             </constraints>
@@ -221,18 +224,23 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qlh-2K-FMz">
-                                            <rect key="frame" x="8" y="14" width="90" height="90"/>
-                                        </imageView>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tjh-8I-GdK">
+                                            <rect key="frame" x="270" y="71" width="97" height="33"/>
+                                            <state key="normal" title="Add to stream"/>
+                                        </button>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="bottomMargin" secondItem="80K-77-ogI" secondAttribute="bottom" constant="24.5" id="4Tq-bH-ezX"/>
-                                        <constraint firstItem="80K-77-ogI" firstAttribute="leading" secondItem="qlh-2K-FMz" secondAttribute="trailing" constant="8" id="VYK-hd-oNu"/>
-                                        <constraint firstAttribute="leadingMargin" secondItem="qlh-2K-FMz" secondAttribute="leading" id="bmc-v2-4VW"/>
-                                        <constraint firstItem="qlh-2K-FMz" firstAttribute="top" secondItem="QdY-VV-ach" secondAttribute="topMargin" constant="6" id="gkV-a9-pj6"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="qlh-2K-FMz" secondAttribute="bottom" constant="7" id="jYi-35-bBd"/>
-                                        <constraint firstItem="80K-77-ogI" firstAttribute="trailing" secondItem="QdY-VV-ach" secondAttribute="trailingMargin" id="rqa-D5-Hyt"/>
-                                        <constraint firstItem="80K-77-ogI" firstAttribute="top" secondItem="QdY-VV-ach" secondAttribute="topMargin" constant="29" id="ycu-fN-Vyl"/>
+                                        <constraint firstAttribute="leadingMargin" secondItem="qlh-2K-FMz" secondAttribute="leading" id="4ox-9a-npt"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="80K-77-ogI" secondAttribute="bottom" constant="48" id="5Mo-et-iy8"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="tjh-8I-GdK" secondAttribute="bottom" constant="7" id="8e5-PX-TIi"/>
+                                        <constraint firstItem="qlh-2K-FMz" firstAttribute="top" secondItem="QdY-VV-ach" secondAttribute="topMargin" constant="6" id="DY0-Qu-y50"/>
+                                        <constraint firstItem="80K-77-ogI" firstAttribute="leading" secondItem="qlh-2K-FMz" secondAttribute="trailing" constant="8" id="FnM-DL-w6Y"/>
+                                        <constraint firstItem="tjh-8I-GdK" firstAttribute="top" secondItem="80K-77-ogI" secondAttribute="bottom" constant="8" id="IAU-LQ-y4s"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="qlh-2K-FMz" secondAttribute="bottom" constant="7" id="Imq-jY-cHi"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="80K-77-ogI" secondAttribute="trailing" id="WXg-ie-0lf"/>
+                                        <constraint firstItem="80K-77-ogI" firstAttribute="top" secondItem="QdY-VV-ach" secondAttribute="topMargin" constant="6" id="pgu-ZV-pMX"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="tjh-8I-GdK" secondAttribute="trailing" id="rYx-yo-Rbd"/>
+                                        <constraint firstItem="tjh-8I-GdK" firstAttribute="leading" secondItem="qlh-2K-FMz" secondAttribute="trailing" constant="172" id="zsh-FO-Bu2"/>
                                     </constraints>
                                 </tableViewCellContentView>
                             </tableViewCell>

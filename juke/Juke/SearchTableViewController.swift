@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import Unbox
 
 struct post {
     let mainImage: UIImage!
@@ -91,12 +92,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
                                 self.tableView.reloadData()
                             }
                         }
-                        
-                        
-                        
-                        
-                        
-                        
+
                     }
                 }
             }
@@ -121,6 +117,26 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         return cell!
     }
  
+    
+    func addSongToStream(song: Models.SpotifySong, stream: Models.Stream) {
+        let params: Parameters = ["streamID": stream.streamID, "spotifyID": song.spotifyID, "songName": song.songName, "artistName": song.artistName, "duration": song.duration, "coverArtURL": song.coverArtURL]
+        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate().responseJSON { response in
+            switch response.result {
+            case .success:
+                do {
+                    let unparsedStream = response.result.value as! UnboxableDictionary
+                    let stream: Models.Stream = try unbox(dictionary: unparsedStream)
+                    CurrentUser.currStream = stream
+                    print("added song")
+                } catch {
+                    print("error unboxing stream after adding song: ", error)
+                }
+                
+            case .failure(let error):
+                print("Error adding song to current stream: ", error)
+            }
+        }
+    }
 
     /*
     // Override to support conditional editing of the table view.
