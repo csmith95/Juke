@@ -17,7 +17,7 @@ struct post {
 
 class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var addButton: UIButton!
+    var results:[Models.SpotifySong] = []
     
     var searchURL = String()
     typealias JSONStandard = [String: AnyObject]
@@ -38,12 +38,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         super.viewDidLoad()
         searchBar.delegate = self
         tableView.delegate = self
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
     override func didReceiveMemoryWarning() {
@@ -79,6 +73,15 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
                     for i in 0..<items.count {
                         let item = items[i]
                         
+                        // convert to models.spotifySong so we can add to stream. CHECK: make less redundant
+                        let curr = item as UnboxableDictionary
+                        do {
+                            let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
+                            self.results.append(spotifySong)
+                        } catch {
+                            print("error unboxing spotify song: ", error)
+                        }
+                        
                         let name = item["name"] as! String
                         
                         if let album = item["album"] as? JSONStandard{
@@ -105,17 +108,28 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell") as! SearchCell
         
-        let mainImageView = cell?.viewWithTag(2) as! UIImageView
+        cell.tapAction = { (cell) in
+            // post to server
+            self.addSongToStream(song: self.results[indexPath.row], stream: CurrentUser.currStream!)
+            
+            // animate button text change from "+" to "Added!"
+            cell.addToStreamButton!.setTitle("Added!", for: .normal)
+            cell.addToStreamButton!.titleLabel?.font = UIFont(name: "System", size: 16)
+        }
+        
+        
+        
+        let mainImageView = cell.viewWithTag(2) as! UIImageView
         
         mainImageView.image = posts[indexPath.row].mainImage
         
-        let mainLabel = cell?.viewWithTag(1) as! UILabel
+        let mainLabel = cell.viewWithTag(1) as! UILabel
         
         mainLabel.text = posts[indexPath.row].name
         
-        return cell!
+        return cell
     }
  
     

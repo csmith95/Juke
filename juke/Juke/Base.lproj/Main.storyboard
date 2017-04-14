@@ -205,7 +205,7 @@
                             </connections>
                         </searchBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchCell" rowHeight="119" id="oae-Ar-DXl">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchCell" rowHeight="119" id="oae-Ar-DXl" customClass="SearchCell" customModule="Juke" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="72" width="375" height="119"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oae-Ar-DXl" id="QdY-VV-ach">
@@ -226,9 +226,10 @@
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tjh-8I-GdK">
                                             <rect key="frame" x="270" y="71" width="97" height="33"/>
+                                            <accessibility key="accessibilityConfiguration" identifier="addToStreamButton"/>
                                             <state key="normal" title="Add to stream"/>
                                             <connections>
-                                                <action selector="addToStreamTapped:" destination="YWD-e6-Wwb" eventType="touchUpInside" id="IIa-h8-hCP"/>
+                                                <action selector="queueSongButtonTapped:" destination="oae-Ar-DXl" eventType="touchUpInside" id="mdE-wd-NM1"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -246,6 +247,9 @@
                                         <constraint firstItem="tjh-8I-GdK" firstAttribute="leading" secondItem="qlh-2K-FMz" secondAttribute="trailing" constant="172" id="zsh-FO-Bu2"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="addToStreamButton" destination="tjh-8I-GdK" id="EdU-Up-cAD"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -255,7 +259,6 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="vn5-oR-1Bd"/>
                     <connections>
-                        <outlet property="addButton" destination="tjh-8I-GdK" id="4x0-bE-wx9"/>
                         <outlet property="searchBar" destination="L6q-ZC-dxU" id="U6C-Qv-6rN"/>
                     </connections>
                 </tableViewController>
