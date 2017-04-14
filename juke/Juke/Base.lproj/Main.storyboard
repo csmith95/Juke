@@ -227,6 +227,9 @@
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tjh-8I-GdK">
                                             <rect key="frame" x="270" y="71" width="97" height="33"/>
                                             <state key="normal" title="Add to stream"/>
+                                            <connections>
+                                                <action selector="addToStreamTapped:" destination="YWD-e6-Wwb" eventType="touchUpInside" id="IIa-h8-hCP"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                     <constraints>
@@ -252,6 +255,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="vn5-oR-1Bd"/>
                     <connections>
+                        <outlet property="addButton" destination="tjh-8I-GdK" id="4x0-bE-wx9"/>
                         <outlet property="searchBar" destination="L6q-ZC-dxU" id="U6C-Qv-6rN"/>
                     </connections>
                 </tableViewController>

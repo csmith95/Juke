@@ -17,6 +17,7 @@ struct post {
 
 class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var addButton: UIButton!
     
     var searchURL = String()
     typealias JSONStandard = [String: AnyObject]
