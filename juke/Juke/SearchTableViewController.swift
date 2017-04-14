@@ -9,14 +9,33 @@
 import UIKit
 import Alamofire
 
-class SearchTableViewController: UITableViewController {
+struct post {
+    let mainImage: UIImage!
+    let name: String!
+}
+
+class SearchTableViewController: UITableViewController, UISearchBarDelegate {
+    @IBOutlet weak var searchBar: UISearchBar!
     
-    var searchURL = "https://api.spotify.com/v1/search"
+    var searchURL = String()
     typealias JSONStandard = [String: AnyObject]
-    var names = [String]()
+    var posts = [post]()
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let keywords = searchBar.text
+        print("searching.. keywords are \(String(describing: keywords))")
+        let finalKeywords = keywords?.replacingOccurrences(of: " ", with: "+")
+        
+        searchURL = "https://api.spotify.com/v1/search?q=\(finalKeywords!)&type=track"
+        
+        searchSpotify(url: searchURL)
+        self.view.endEditing(true)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        searchBar.delegate = self
+        tableView.delegate = self
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -33,12 +52,11 @@ class SearchTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return names.count
+        return posts.count
     }
     
     func searchSpotify(url: String) {
@@ -53,15 +71,32 @@ class SearchTableViewController: UITableViewController {
     func parseSearchData(JSONData: Data) {
         do {
             var readableJSON = try JSONSerialization.jsonObject(with: JSONData, options: .mutableContainers) as! JSONStandard
+            print(readableJSON)
             if let tracks = readableJSON["tracks"] as? JSONStandard{
                 if let items = tracks["items"] as? [JSONStandard] {
                     for i in 0..<items.count {
                         let item = items[i]
                         
                         let name = item["name"] as! String
-                        names.append(name)
                         
-                        self.tableView.reloadData()
+                        if let album = item["album"] as? JSONStandard{
+                            if let images = album["images"] as? [JSONStandard]{
+                                let imageData = images[0]
+                                let mainImageURL = URL(string: imageData["url"] as! String)
+                                let mainImageData = NSData(contentsOf: mainImageURL!)
+                                
+                                let mainImage = UIImage(data: mainImageData as! Data)
+                                
+                                posts.append(post.init(mainImage: mainImage, name: name))
+                                self.tableView.reloadData()
+                            }
+                        }
+                        
+                        
+                        
+                        
+                        
+                        
                     }
                 }
             }
@@ -74,7 +109,14 @@ class SearchTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell")
-        cell?.textLabel?.text = names[indexPath.row]
+        
+        let mainImageView = cell?.viewWithTag(2) as! UIImageView
+        
+        mainImageView.image = posts[indexPath.row].mainImage
+        
+        let mainLabel = cell?.viewWithTag(1) as! UILabel
+        
+        mainLabel.text = posts[indexPath.row].name
         
         return cell!
     }
