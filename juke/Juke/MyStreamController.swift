@@ -144,7 +144,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     
     func refreshStream(notification: NSNotification) {
         print("my stream controller received refreshStream")
-        HUD.show(.progress)
         fetchMyStream()
     }
     
@@ -188,7 +187,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         if indexPath.row == 0 {
             return 0    // hide first row -- should be currently playing track
         }
-        return 40
+        return 50
     }
 
     override func didReceiveMemoryWarning() {
@@ -207,18 +206,11 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         if (CurrentUser.fetched == false) {
             return 0
         }
-        return CurrentUser.stream.songs.count
+        return CurrentUser.stream.songs.count-1     // -1 because the first one is loaded up top
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let song = CurrentUser.stream!.songs[indexPath.row]
-        if indexPath.row == 0 {
-            // place first song in the currentlyPlayingLabel
-            coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: CircleFilter())
-            self.currentlyPlayingLabel.text = song.songName
-            self.currentlyPlayingArtistLabel.text = song.artistName
-        }
-        
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
         cell.songName.text = song.songName
         cell.artist.text = song.artistName
@@ -335,12 +327,12 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             
             if (run) {
                 if !self.animationTimer.isValid {
-                    CurrentUser.stream.songs[0].progress += 400 // trying to offset for the time transition between stopping timer and starting song
+                    CurrentUser.stream.songs[0].progress += 300 // trying to offset for the time transition between stopping timer and starting song
                     self.animationTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.updateAnimationProgress), userInfo: nil, repeats: true)
                 }
             } else {
                 if self.animationTimer.isValid {
-                    CurrentUser.stream.songs[0].progress += 400 // trying to offset for the time transition between stopping timer and starting song
+                    CurrentUser.stream.songs[0].progress += 300 // trying to offset for the time transition between stopping timer and starting song
                     self.animationTimer.invalidate()
                 }
             }
@@ -361,6 +353,11 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         let songs = CurrentUser.stream.songs
         if songs.count > 0 {
             let song = songs[0]
+            // place first song in the currentlyPlayingLabel
+            coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: CircleFilter())
+            self.currentlyPlayingLabel.text = song.songName
+            self.currentlyPlayingArtistLabel.text = song.artistName
+            
             updateSlider(song: song)
             setSong(play: listenButton.isSelected && CurrentUser.stream.isPlaying)
         } else {
