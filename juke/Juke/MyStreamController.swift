@@ -335,11 +335,12 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             
             if (run) {
                 if !self.animationTimer.isValid {
-                    CurrentUser.stream.songs[0].progress += 300 // to offset for the time transition between stopping timer and starting song
+                    CurrentUser.stream.songs[0].progress += 400 // trying to offset for the time transition between stopping timer and starting song
                     self.animationTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.updateAnimationProgress), userInfo: nil, repeats: true)
                 }
             } else {
                 if self.animationTimer.isValid {
+                    CurrentUser.stream.songs[0].progress += 400 // trying to offset for the time transition between stopping timer and starting song
                     self.animationTimer.invalidate()
                 }
             }
