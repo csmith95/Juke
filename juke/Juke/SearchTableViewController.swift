@@ -32,7 +32,8 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         
         searchURL = "https://api.spotify.com/v1/search?q=\(finalKeywords!)&type=track"
         
-        self.posts = [] // reset for a new round of search results
+        self.posts.removeAll() // reset for a new round of search results
+        self.results.removeAll()
         self.tableView.reloadData()
         searchSpotify(url: searchURL)
         self.view.endEditing(true)
@@ -42,6 +43,11 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         super.viewDidLoad()
         searchBar.delegate = self
         tableView.delegate = self
+    }
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print("did scroll")
+        self.view.endEditing(true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -110,13 +116,12 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell") as! SearchCell
-        
         cell.tapAction = { (cell) in
             // post to server
             self.addSongToStream(song: self.results[indexPath.row], stream: CurrentUser.stream!)
             
             // animate button text change from "+" to "Added!"
-            cell.addToStreamButton!.setTitle("Added!", for: .normal)
+            cell.addToStreamButton.isSelected = true
             cell.addToStreamButton!.titleLabel?.font = UIFont(name: "System", size: 16)
         }
         

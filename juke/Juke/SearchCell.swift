@@ -15,12 +15,14 @@ class SearchCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        addToStreamButton!.setTitle("+", for: .normal)
+        addToStreamButton!.setTitle("Added!", for: .selected)
     }
 
     @IBAction func queueSongButtonTapped(_ sender: Any) {
         tapAction?(self)
-        
     }
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 

@@ -65,17 +65,14 @@ class SocketManager: NSObject {
     }
     
     public func songPositionChanged(songID: String, position: Double) {
-        print("song position changed")
         socket.emit("songPositionChanged", ["songID": songID, "progress": position])
     }
     
     public func songPlayStatusChanged(streamID: String, songID: String, progress: Double, isPlaying: Bool) {
-        print("song play status changed")
         socket.emit("songPlayStatusChanged", ["streamID": streamID, "songID":  songID, "progress": progress, "isPlaying": isPlaying])
     }
     
     public func songEnded(streamID: String) {
-        print("songEnded emitted")
         socket.emit("songEnded", ["streamID": streamID])
     }
     
@@ -87,7 +84,6 @@ class SocketManager: NSObject {
     }
     
     public func visitStream(streamID: String) {
-        print("visitStream emitted")
         socket.emitWithAck("visitStream", ["streamID": streamID]).timingOut(after: 2) { data in
             print("Received visitStream ACK: ", data)
             if data.count == 0 {

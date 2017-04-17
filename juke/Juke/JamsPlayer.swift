@@ -19,6 +19,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     private var position: TimeInterval = 0.0
     private var songJukeID: String? // Juke id of currently playing song
     
+    
     override private init() {
         super.init()
         do {
