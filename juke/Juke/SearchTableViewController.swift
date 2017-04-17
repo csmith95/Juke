@@ -85,10 +85,10 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
                             self.downloader.download(URLRequest(url: URL(string: spotifySong.coverArtURL)!)) { response in
                                 if let image = response.result.value {
                                     self.posts.append(post.init(mainImage: self.imageFilter.filter(image), name: spotifySong.songName))
+                                    self.results.append(spotifySong)
                                 }
                                 group.leave()   // signal that an operation has ended
                             }
-                            self.results.append(spotifySong)
                         } catch {
                             print("error unboxing spotify song: ", error)
                         }

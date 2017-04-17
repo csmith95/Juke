@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AVFoundation
 
 class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate {
     
@@ -27,6 +28,16 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
             refreshSession()
         } catch let err {
             print(err)
+        }
+    }
+    
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
+        // allows background audio streaming
+        if isPlaying {
+            try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            try? AVAudioSession.sharedInstance().setActive(true)
+        } else {
+            try? AVAudioSession.sharedInstance().setActive(false)
         }
     }
     
