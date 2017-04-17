@@ -23,7 +23,6 @@ class LoginViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.updateAfterFirstLogin), name: NSNotification.Name("loginSuccessful"), object: nil)
         
         let userDefaults = UserDefaults.standard
-        
         //config SPTAuth default instance with tokenSwap and refresh
         SPTAuth.defaultInstance().tokenSwapURL = URL(string: "https://juketokenrefresh.herokuapp.com/swap")
         SPTAuth.defaultInstance().tokenRefreshURL = URL(string: "https://juketokenrefresh.herokuapp.com/refresh")
@@ -32,12 +31,14 @@ class LoginViewController: UIViewController {
         if let sessionObj = userDefaults.object(forKey: "SpotifySession") { // session available
             print("session is available")
             let sessionDataObj = sessionObj as! Data
-            
             let session = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
             if !session.isValid() {
                 // session is not valid so renew it
+                print("not valid")
                 SPTAuth.defaultInstance().renewSession(SPTAuth.defaultInstance().session, callback: { (error, renewedSession) in
+                    print(renewedSession)
                     if let session = renewedSession {
+                        print("renewed session")
                         SPTAuth.defaultInstance().session = session
                         let sessionData = NSKeyedArchiver.archivedData(withRootObject: session)
                         userDefaults.set(sessionData, forKey: "SpotifySession")
@@ -50,8 +51,8 @@ class LoginViewController: UIViewController {
                 })
             } else {
                 // session is valid. Hide login button and proceed
+                print("session is valid")
                 fetchSpotifyUser(accessToken: session.accessToken)
-                
             }
         } else {
             loginButton.isHidden = false
@@ -61,15 +62,16 @@ class LoginViewController: UIViewController {
     //if you are logging in for the first time and don't have a session that is going to be renewed
     func updateAfterFirstLogin() {
         loginButton.isHidden = true
+        print("updateAfterFirstLogin")
         let userDefaults = UserDefaults.standard
         if let sessionObj = userDefaults.object(forKey: "SpotifySession") {
+            print("Found session in first login")
             let sessionDataObj = sessionObj as! Data
             let firstTimeSession = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
             self.session = firstTimeSession
             //fetch user
             fetchSpotifyUser(accessToken: session.accessToken)
         }
-        
     }
 
     @IBAction func loginWithSpotify(_ sender: Any) {
@@ -83,6 +85,7 @@ class LoginViewController: UIViewController {
     
     func fetchSpotifyUser(accessToken: String) {
         // first retrieve user object from spotify server using access token
+        print("Fetching user")
         let headers: HTTPHeaders = ["Authorization": "Bearer " + accessToken]
         let url = ServerConstants.kSpotifyBaseURL + ServerConstants.kCurrentUserPath
         Alamofire.request(url, method: .get, parameters: nil, encoding: URLEncoding.default, headers: headers).validate().responseJSON {
@@ -93,6 +96,7 @@ class LoginViewController: UIViewController {
                     let dictionary = response.result.value as! UnboxableDictionary
                     let spotifyUser: Models.SpotifyUser = try unbox(dictionary: dictionary)
                     self.addUserToJukeServer(spotifyUser: spotifyUser)
+                    print("Fetched user")
                 } catch {
                     print("error unboxing spotify user: ", error)
                 }
@@ -107,8 +111,8 @@ class LoginViewController: UIViewController {
         let url = ServerConstants.kJukeServerURL + ServerConstants.kAddUser
         let params: Parameters = [
             "spotifyID": spotifyUser.spotifyID,
-            "username": spotifyUser.username,
-            "imageURL": spotifyUser.imageURL
+            "username": (spotifyUser.username != nil) ? spotifyUser.username! : "",
+            "imageURL": (spotifyUser.imageURL != nil) ? spotifyUser.imageURL! : ""
         ]
         
         Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
@@ -117,8 +121,9 @@ class LoginViewController: UIViewController {
                 do {
                     let unparsedJukeUser = response.result.value as! UnboxableDictionary
                     let user: Models.User = try unbox(dictionary: unparsedJukeUser)
-                    CurrentUser.currUser = user
+                    CurrentUser.user = user
                     DispatchQueue.main.async {
+                        print("loginSegue")
                         self.performSegue(withIdentifier: "loginSegue", sender: nil)
                     }
                 } catch {

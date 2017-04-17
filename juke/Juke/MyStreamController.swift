@@ -11,6 +11,7 @@ import Alamofire
 import Unbox
 import KYCircularProgress
 import AlamofireImage
+import PKHUD
 
 class MyStreamController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -23,6 +24,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    @IBOutlet var splitButton: UIButton!
     @IBOutlet var onlineButton: UIButton!
     @IBOutlet var circularProgressFrame: UIView!
     @IBOutlet var coverArtImage: UIImageView!
@@ -34,48 +36,45 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet var tableView: UITableView!
     let jamsPlayer = JamsPlayer.shared
     let socketManager = SocketManager.sharedInstance
-    @IBOutlet var listenButton: UIButton!
+    @IBOutlet public var listenButton: UIButton!
     var circularProgress = KYCircularProgress()
+    var animationTimer = Timer()
     
     @IBAction func toggleListening(_ sender: AnyObject) {
-        if CurrentUser.currStream!.songs.count == 0 {
-            return
-        }
-        
-        let song = CurrentUser.currStream!.songs[0]
         let newPlayStatus = !listenButton.isSelected
-        listenButton.isSelected = newPlayStatus
-        if CurrentUser.currStream?.owner.spotifyID == CurrentUser.currUser?.spotifyID {
-            socketManager.songPlayStatusChanged(streamID: CurrentUser.currStream!.streamID, progress: song.progress, isPlaying: newPlayStatus)
-            jamsPlayer.setPlayStatus(shouldPlay: newPlayStatus, song: song)
-            
+        setListeningStatus(status: newPlayStatus)
+    }
+    
+    func handleVisitingStream(notification: NSNotification) {
+        setListeningStatus(status: false)
+    }
+    
+    private func setListeningStatus(status: Bool) {
+        if CurrentUser.stream.songs.count == 0 {
             return
         }
-        
-        if newPlayStatus {
-            if (CurrentUser.currStream?.isPlaying)! {
-                jamsPlayer.setPlayStatus(shouldPlay: newPlayStatus, song: song)
-
-            }
-            return;
+        let song = CurrentUser.stream.songs[0]
+        listenButton.isSelected = status
+        if CurrentUser.isHost() {
+            socketManager.songPlayStatusChanged(streamID: CurrentUser.stream.streamID, songID: song.id, progress: song.progress, isPlaying: status)
+            CurrentUser.stream.isPlaying = status
         }
         
-        // stop streaming from this device
-        jamsPlayer.setPlayStatus(shouldPlay: newPlayStatus, song: song)
+        setSong(play: status && CurrentUser.stream.isPlaying)
     }
     
     @IBAction func toggleOnlineStatus(_ sender: AnyObject) {
         let newOnlineStatus = !onlineButton.isSelected
         onlineButton.isSelected = newOnlineStatus
         let url = ServerConstants.kJukeServerURL + ServerConstants.kChangeOnlineStatus
-        let params: Parameters = ["streamID": CurrentUser.currStream!.streamID, "isLive": newOnlineStatus]
+        let params: Parameters = ["streamID": CurrentUser.stream.streamID, "isLive": newOnlineStatus]
         Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
             switch response.result {
             case .success:
                 do {
                     let unparsedStream = response.result.value as! UnboxableDictionary
                     let stream: Models.Stream = try unbox(dictionary: unparsedStream)
-                    CurrentUser.currStream = stream
+                    CurrentUser.stream = stream
                 } catch {
                     print("error unboxing new stream after changing online status: ", error)
                 }
@@ -83,6 +82,11 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
                 print("error changing live status: ", error)
             }
         }
+    }
+   
+    @IBAction func splitButtonPressed(_ sender: AnyObject) {
+        HUD.show(.progress)
+        socketManager.splitFromStream(userID: CurrentUser.user.id);
     }
     
     override func viewDidLoad() {
@@ -92,6 +96,8 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songPositionChanged), name: Notification.Name("songPositionChanged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.syncPositionWithOwner), name: Notification.Name("syncPositionWithOwner"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.refreshStream), name: Notification.Name("refreshStream"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.handleVisitingStream), name: Notification.Name("handleVisitingStream"), object: nil)
         currentlyPlayingView.layer.cornerRadius = 10;
         currentlyPlayingView.layer.masksToBounds = true;
         currentlyPlayingView.layer.borderColor = UIColor.gray.cgColor;
@@ -113,35 +119,61 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navBarTitle = "My Jam"
-        self.onlineButton.setImage(UIImage(named: "online.png"), for: .normal)
-        self.onlineButton.setImage(UIImage(named: "offline.png"), for: .selected)
         fetchMyStream();
     }
     
-    func fetchMyStream() {
+    private func setUpControlButtons() {
+        if CurrentUser.isHost() {
+            // controls for the owner
+            listenButton.setImage(UIImage(named: "play.png"), for: .normal)
+            listenButton.setImage(UIImage(named: "pause.png"), for: .selected)
+            // only let host toggle online/offline
+            onlineButton.setImage(UIImage(named: "online.png"), for: .normal)
+            onlineButton.setImage(UIImage(named: "offline.png"), for: .selected)
+            onlineButton.isSelected = CurrentUser.stream.isLive
+            // allow host to split if more than 1 member
+            splitButton.isHidden = (CurrentUser.stream.members.count == 1)
+            // **** TODO: allow host to clear or skip songs ****
+        } else {
+            splitButton.isHidden = false
+            onlineButton.isHidden = true
+            listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
+            listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
+        }
+    }
+    
+    func refreshStream(notification: NSNotification) {
+        print("my stream controller received refreshStream")
+        HUD.show(.progress)
+        fetchMyStream()
+    }
+    
+    private func fetchMyStream() {
         // fetch stream for user. if not tuned in, creates and returns an offline stream by default
         let url = ServerConstants.kJukeServerURL + ServerConstants.kFetchStream
-        let params: Parameters = ["ownerSpotifyID": CurrentUser.currUser!.spotifyID]
+        let params: Parameters = ["ownerSpotifyID": CurrentUser.user.spotifyID]
         Alamofire.request(url, method: .get, parameters: params).validate().responseJSON { response in
             switch response.result {
             case .success:
                 do {
                     let unparsedStream = response.result.value as! UnboxableDictionary
                     let stream: Models.Stream = try unbox(dictionary: unparsedStream)
-                    CurrentUser.currStream = stream
+                    CurrentUser.stream = stream
+                    CurrentUser.user.tunedInto = stream.streamID
+                    CurrentUser.fetched = true
                     DispatchQueue.main.async {
-                        self.onlineButton.isSelected = CurrentUser.currStream!.isLive
-                        if (CurrentUser.currStream?.owner.spotifyID == CurrentUser.currUser?.spotifyID) {
-                            self.listenButton.setImage(UIImage(named: "play.png"), for: .normal)
-                            self.listenButton.setImage(UIImage(named: "pause.png"), for: .selected)
-                        } else {
-                            self.listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
-                            self.listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
+                        if HUD.isVisible {
+                            HUD.flash(.success, delay: 1.0)
                         }
+                        self.setUpControlButtons()
                         self.tableView.reloadData()
-                        self.loadTopSong(shouldPlay: false)
+                        if stream.songs.count > 0 {
+                            if !JamsPlayer.shared.isPlaying(song: stream.songs[0]) {
+                                self.loadTopSong()  // otherwise sounds choppy if playback progress is adjusted every time page is loaded
+                            }
+                        }
                     }
-                    self.socketManager.joinSocketRoom(streamID: CurrentUser.currStream!.streamID)
+                    self.socketManager.joinSocketRoom(streamID: CurrentUser.stream.streamID)
                 } catch {
                     print("Error unboxing stream: ", error)
                 }
@@ -172,16 +204,17 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        if (CurrentUser.currStream == nil) {
+        if (CurrentUser.fetched == false) {
             return 0
         }
-        return CurrentUser.currStream!.songs.count
+        return CurrentUser.stream.songs.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let song = CurrentUser.currStream!.songs[indexPath.row]
+        let song = CurrentUser.stream!.songs[indexPath.row]
         if indexPath.row == 0 {
             // place first song in the currentlyPlayingLabel
+            coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: CircleFilter())
             self.currentlyPlayingLabel.text = song.songName
             self.currentlyPlayingArtistLabel.text = song.artistName
         }
@@ -200,40 +233,30 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func syncPositionWithOwner(notification: NSNotification) {
-        if CurrentUser.currStream == nil || CurrentUser.currStream!.songs.count == 0 {
+        if CurrentUser.stream.songs.count == 0 {
             return
         }
         
-        let stream = CurrentUser.currStream!
-        let songs = stream.songs
-        let song = songs[0]
-        if CurrentUser.currUser?.spotifyID == stream.owner.spotifyID {
+        if CurrentUser.isHost() {
             return  // owner is already synced with device
         }
         
         if let data = notification.object as? NSDictionary {
             if let eventString = data["event"] as? String {
+                
+                let songID = data["songID"] as? String
+                if songID != CurrentUser.stream.songs[0].id {
+                    return // notification meant for a visited StreamController
+                }
+                
                 switch eventString {
-                case "progressChanged":
-                    if self.jamsPlayer.isPlaying(song: song) {
-                        return;
-                    }
-                    let progress = data["progress"] as! Double
-                    CurrentUser.currStream!.songs[0].progress = progress
-                    updateSlider(song: song)
-                    
                 case "playStatusChanged":
                     let isPlaying = data["isPlaying"] as! Bool
-                    CurrentUser.currStream!.isPlaying = isPlaying
+                    CurrentUser.stream.isPlaying = isPlaying
                     let progress = data["progress"] as! Double
-                    CurrentUser.currStream?.songs[0].progress = progress
-                    updateSlider(song: CurrentUser.currStream!.songs[0])
-                    if isPlaying && listenButton.isSelected {
-                        self.jamsPlayer.setPlayStatus(shouldPlay: isPlaying, song: song)
-                        return
-                    } else if !isPlaying {
-                        self.jamsPlayer.setPlayStatus(shouldPlay: isPlaying, song: song)
-                    }
+                    CurrentUser.stream.songs[0].progress = progress
+                    updateSlider(song: CurrentUser.stream.songs[0])
+                    setSong(play: isPlaying && listenButton.isSelected)
                 default:
                     print("Received unrecognized ownerSongStatusChanged event: ", eventString);
                 }
@@ -242,19 +265,22 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func songPositionChanged(notification: NSNotification) {
-        if CurrentUser.currStream == nil || CurrentUser.currStream!.songs.count == 0 {
+        if CurrentUser.stream.songs.count == 0 {
             return
         }
         
-        let stream = CurrentUser.currStream!
-        let songs = stream.songs
+        let songs = CurrentUser.stream.songs
         let song = songs[0]
         if let data = notification.object as? NSDictionary {
+            let songID = data["songID"] as! String
+            if songID != song.id {
+                return  // notification meant for a visited StreamController
+            }
             let progress = data["progress"] as! Double
-            CurrentUser.currStream?.songs[0].progress = progress
+            CurrentUser.stream.songs[0].progress = progress
             // update progress in db if current user is playlist owner
-            if CurrentUser.currUser?.spotifyID == stream.owner.spotifyID {
-                socketManager.songPositionChanged(streamID: stream.streamID, songID: song.id, position: progress)
+            if CurrentUser.isHost() {
+                socketManager.songPositionChanged(songID: song.id, position: progress)
             }
             
             // update slider
@@ -264,53 +290,80 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     
     private func updateSlider(song: Models.Song) {
         let normalizedProgress = song.progress / song.duration
-        self.circularProgress.set(progress: normalizedProgress, duration: 0.75)
-        self.currTimeLabel.text = self.timeIntervalToString(interval: song.progress/1000)
+        self.circularProgress.progress = normalizedProgress
+        self.circularProgress.set(progress: normalizedProgress, duration: 0.5)
+        self.currTimeLabel.text = timeIntervalToString(interval: song.progress/1000)
     }
     
     func songFinished() {
-        CurrentUser.currStream?.songs.remove(at: 0)
+        CurrentUser.stream.songs.remove(at: 0)
         DispatchQueue.main.async {
             self.tableView.reloadData()
             self.circularProgress.progress = 0.0
+            self.loadTopSong()
         }
         
-        if CurrentUser.currUser?.spotifyID != CurrentUser.currStream?.owner.spotifyID {
+        if !CurrentUser.isHost() {
             return; // if you are not the owner, don't post to DB. let owner's device manage DB
         }
         
-        let stream = CurrentUser.currStream!
+        let stream = CurrentUser.stream!
         let params: Parameters = ["streamID": stream.streamID]
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kPopSong, method: .post, parameters: params).responseJSON { response in
             switch response.result {
             case .success:
-                DispatchQueue.main.async {
-                    self.loadTopSong(shouldPlay: true)
-                }
-                
+                print("Popped finished song from DB")
             case .failure(let error):
                 print(error)
             }
         }
     }
     
-    private func loadTopSong(shouldPlay: Bool) {
-        let songs = CurrentUser.currStream!.songs
-        if songs.count > 0 {
-            let song = songs[0]
-            self.coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: CircleFilter())
-            self.updateSlider(song: song)
+    public func setSong(play: Bool) {
+        self.jamsPlayer.setPlayStatus(shouldPlay: play, song: CurrentUser.stream.songs[0])
+        if CurrentUser.user.spotifyID != CurrentUser.stream.owner.spotifyID {
+            setTimer(run: !play && CurrentUser.stream.isPlaying)
+        }
+    }
+    
+    private func setTimer(run: Bool) {
+        
+        DispatchQueue.main.async {
+            if CurrentUser.isHost() {
+                return  // if owner, don't use timer at all
+            }
             
-            if self.jamsPlayer.isPlaying(song: song) {
-                listenButton.isSelected = true  // if already playing, let it play. otherwise use the shouldPlay boolean
+            if (run) {
+                if !self.animationTimer.isValid {
+                    CurrentUser.stream.songs[0].progress += 300 // to offset for the time transition between stopping timer and starting song
+                    self.animationTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.updateAnimationProgress), userInfo: nil, repeats: true)
+                }
             } else {
-                listenButton.isSelected = shouldPlay
-                if shouldPlay && (CurrentUser.currStream?.isPlaying)! {
-                    self.jamsPlayer.setPlayStatus(shouldPlay: shouldPlay, song: song)
+                if self.animationTimer.isValid {
+                    self.animationTimer.invalidate()
                 }
             }
+        }
+    }
+    
+    func updateAnimationProgress() {
+        let song = CurrentUser.stream.songs[0]
+        let newProgress = song.progress + 500
+        CurrentUser.stream.songs[0].progress = newProgress
+        updateSlider(song: CurrentUser.stream.songs[0])
+        if abs(newProgress - song.duration) < 1000 {
+            songFinished()  // force pop song based on timer
+        }
+    }
+    
+    private func loadTopSong() {
+        let songs = CurrentUser.stream.songs
+        if songs.count > 0 {
+            let song = songs[0]
+            updateSlider(song: song)
+            setSong(play: listenButton.isSelected && CurrentUser.stream.isPlaying)
         } else {
-            // TODO: no songs left -- display custom UI
+            // **** TODO: no songs left -- display custom UI ****
             
         }
     }
