@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import AlamofireImage
 import Unbox
 
 struct post {
@@ -22,14 +23,17 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     var searchURL = String()
     typealias JSONStandard = [String: AnyObject]
     var posts = [post]()
+    let downloader = ImageDownloader()
+    let imageFilter = RoundedCornersFilter(radius: 20.0)
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         let keywords = searchBar.text
-        print("searching.. keywords are \(String(describing: keywords))")
         let finalKeywords = keywords?.replacingOccurrences(of: " ", with: "+")
         
         searchURL = "https://api.spotify.com/v1/search?q=\(finalKeywords!)&type=track"
         
+        self.posts = [] // reset for a new round of search results
+        self.tableView.reloadData()
         searchSpotify(url: searchURL)
         self.view.endEditing(true)
     }
@@ -66,8 +70,8 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     func parseSearchData(JSONData: Data) {
         do {
+            let group = DispatchGroup()
             var readableJSON = try JSONSerialization.jsonObject(with: JSONData, options: .mutableContainers) as! JSONStandard
-            print(readableJSON)
             if let tracks = readableJSON["tracks"] as? JSONStandard{
                 if let items = tracks["items"] as? [JSONStandard] {
                     for i in 0..<items.count {
@@ -77,29 +81,26 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
                         let curr = item as UnboxableDictionary
                         do {
                             let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
+                            group.enter()   // signal that an operation is starting
+                            self.downloader.download(URLRequest(url: URL(string: spotifySong.coverArtURL)!)) { response in
+                                if let image = response.result.value {
+                                    self.posts.append(post.init(mainImage: self.imageFilter.filter(image), name: spotifySong.songName))
+                                }
+                                group.leave()   // signal that an operation has ended
+                            }
                             self.results.append(spotifySong)
                         } catch {
                             print("error unboxing spotify song: ", error)
                         }
-                        
-                        let name = item["name"] as! String
-                        
-                        if let album = item["album"] as? JSONStandard{
-                            if let images = album["images"] as? [JSONStandard]{
-                                let imageData = images[0]
-                                let mainImageURL = URL(string: imageData["url"] as! String)
-                                let mainImageData = NSData(contentsOf: mainImageURL!)
-                                
-                                let mainImage = UIImage(data: mainImageData as! Data)
-                                
-                                posts.append(post.init(mainImage: mainImage, name: name))
-                                self.tableView.reloadData()
-                            }
-                        }
-
                     }
                 }
             }
+            
+            // all images fetched -- update tableView on main thread
+            group.notify(queue: DispatchQueue.main) {
+                self.tableView.reloadData()
+            }
+            
         }
         catch {
             print(error)
@@ -132,7 +133,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         return cell
     }
  
-    
     func addSongToStream(song: Models.SpotifySong, stream: Models.Stream) {
         let params: Parameters = ["streamID": stream.streamID, "spotifyID": song.spotifyID, "songName": song.songName, "artistName": song.artistName, "duration": song.duration, "coverArtURL": song.coverArtURL]
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate().responseJSON { response in
