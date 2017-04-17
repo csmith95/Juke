@@ -23,7 +23,6 @@ class LoginViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.updateAfterFirstLogin), name: NSNotification.Name("loginSuccessful"), object: nil)
         
         let userDefaults = UserDefaults.standard
-        
         //config SPTAuth default instance with tokenSwap and refresh
         SPTAuth.defaultInstance().tokenSwapURL = URL(string: "https://juketokenrefresh.herokuapp.com/swap")
         SPTAuth.defaultInstance().tokenRefreshURL = URL(string: "https://juketokenrefresh.herokuapp.com/refresh")
@@ -35,9 +34,11 @@ class LoginViewController: UIViewController {
             let session = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
             if !session.isValid() {
                 // session is not valid so renew it
+                print("not valid")
                 SPTAuth.defaultInstance().renewSession(SPTAuth.defaultInstance().session, callback: { (error, renewedSession) in
+                    print(renewedSession)
                     if let session = renewedSession {
-                        print("renewed sessoin")
+                        print("renewed session")
                         SPTAuth.defaultInstance().session = session
                         let sessionData = NSKeyedArchiver.archivedData(withRootObject: session)
                         userDefaults.set(sessionData, forKey: "SpotifySession")
@@ -110,8 +111,8 @@ class LoginViewController: UIViewController {
         let url = ServerConstants.kJukeServerURL + ServerConstants.kAddUser
         let params: Parameters = [
             "spotifyID": spotifyUser.spotifyID,
-            "username": spotifyUser.username,
-            "imageURL": spotifyUser.imageURL
+            "username": (spotifyUser.username != nil) ? spotifyUser.username! : "",
+            "imageURL": (spotifyUser.imageURL != nil) ? spotifyUser.imageURL! : ""
         ]
         
         Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in

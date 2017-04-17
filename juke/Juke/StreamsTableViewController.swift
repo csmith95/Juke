@@ -10,11 +10,13 @@ import UIKit
 import AlamofireImage
 import Alamofire
 import Unbox
+import PKHUD
 
 class StreamsTableViewController: UITableViewController {
     
     var streams: [Models.Stream] = []
     let socketManager = SocketManager.sharedInstance
+    let defaultImage = UIImage(named: "juke_icon")!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,29 +47,74 @@ class StreamsTableViewController: UITableViewController {
         // #warning Incomplete implementation, return the number of rows
         return streams.count
     }
+    
+    private func setImage(cell: StreamCell, url: String?, index: Int) {
+        let imageFilter = CircleFilter()
+        var imageView:UIImageView!
+        if index == 0 {
+            imageView = cell.ownerIcon
+        } else {
+            imageView = cell.getImageViewForMember(index: index)
+        }
+        
+        if let unwrappedUrl = url {
+            imageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: nil, filter: imageFilter)
+        } else {
+            imageView.image = imageFilter.filter(defaultImage)
+        }
+    }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell", for: indexPath) as! StreamCell
         let stream = streams[indexPath.row]
         let song = stream.songs[0]
-        cell.username.text = stream.owner.username
         cell.artist.text = song.artistName
         cell.coverArt.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: RoundedCornersFilter(radius: 20.0)) { response in
             self.streams[indexPath.row].songs[0].coverArt = response.result.value
         }
-//        let imageFilter = CircleFilter()
-//        if let imageURL = stream.owner.imageURL {
-//            cell.ownerIcon.af_setImage(withURL: URL(string: imageURL)!, placeholderImage: nil, filter: imageFilter)
-//        }
+        
+        setImage(cell: cell, url: stream.owner.imageURL, index: 0)
+        let numIconsToDisplay = stream.members.count - 1
+        if numIconsToDisplay > 0 {
+            for i in 1...numIconsToDisplay {
+                setImage(cell: cell, url: stream.members[i].imageURL, index: i)
+            }
+        }
+        let remainder = stream.members.count - 5;
+        if remainder > 0 {
+            cell.moreMembersLabel.text = "+ \(remainder) more member" + ((remainder > 1) ? "s" : "")
+            cell.moreMembersLabel.isHidden = false
+        } else {
+            cell.moreMembersLabel.isHidden = true
+        }
+
         cell.song.text = song.songName
+        cell.setMusicIndicator(play: stream.isPlaying)
         cell.updateUI()
         return cell
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "displayStream") {
-            let vc = segue.destination as! StreamController
-            vc.stream = self.streams[self.tableView.indexPathForSelectedRow!.row]
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if (segue.identifier == "displayStream") {
+//            let vc = segue.destination as! StreamController
+//            vc.stream = self.streams[self.tableView.indexPathForSelectedRow!.row]
+//        }
+//    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        HUD.show(.progress)
+        let stream = self.streams[indexPath.row]
+        socketManager.joinStream(userID: CurrentUser.user.id, streamID: stream.streamID) { unparsedStream in
+            do {
+                let stream: Models.Stream = try unbox(dictionary: unparsedStream)
+                CurrentUser.user.tunedInto = stream.streamID
+                CurrentUser.stream = stream
+                HUD.flash(.success, delay: 1.0) { success in
+                    self.tabBarController?.selectedIndex = 1
+                }
+            } catch {
+                print("Error unboxing new stream: ", error)
+            }
         }
     }
     

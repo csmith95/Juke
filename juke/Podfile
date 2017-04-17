@@ -13,5 +13,6 @@ target 'Juke' do
     pod 'KYCircularProgress'
     pod 'RevealingSplashView'
     pod 'PKHUD', '~> 4.0'
+    pod 'ESTMusicIndicator'
 
 end
