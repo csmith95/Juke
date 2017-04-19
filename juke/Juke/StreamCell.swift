@@ -29,10 +29,11 @@ class StreamCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        imageViewDict[0] = ownerIcon
         imageViewDict[1] = member1ImageView
-        imageViewDict[2] = member1ImageView
-        imageViewDict[3] = member1ImageView
-        imageViewDict[4] = member1ImageView
+        imageViewDict[2] = member2ImageView
+        imageViewDict[3] = member3ImageView
+        imageViewDict[4] = member4ImageView
         indicator = ESTMusicIndicatorView.init(frame: musicIndicatorView.bounds)
         indicator.tintColor = .red
         indicator.sizeToFit()
