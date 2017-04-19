@@ -85,7 +85,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
    
     @IBAction func splitButtonPressed(_ sender: AnyObject) {
-        HUD.show(.progress)
         socketManager.splitFromStream(userID: CurrentUser.user.id);
     }
     
@@ -98,6 +97,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.syncPositionWithOwner), name: Notification.Name("syncPositionWithOwner"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.refreshStream), name: Notification.Name("refreshStream"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.handleVisitingStream), name: Notification.Name("handleVisitingStream"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.jamsPlayerReady), name: Notification.Name("jamsPlayerReady"), object: nil)
         currentlyPlayingView.layer.cornerRadius = 10;
         currentlyPlayingView.layer.masksToBounds = true;
         currentlyPlayingView.layer.borderColor = UIColor.gray.cgColor;
@@ -140,6 +140,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
             listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
         }
+        listenButton.isSelected = CurrentUser.stream.isPlaying
     }
     
     func refreshStream(notification: NSNotification) {
@@ -161,9 +162,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
                     CurrentUser.user.tunedInto = stream.streamID
                     CurrentUser.fetched = true
                     DispatchQueue.main.async {
-                        if HUD.isVisible {
-                            HUD.flash(.success, delay: 1.0)
-                        }
                         self.setUpControlButtons()
                         self.tableView.reloadData()
                         if stream.songs.count > 0 {
@@ -184,9 +182,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 0 {
-            return 0    // hide first row -- should be currently playing track
-        }
         return 50
     }
 
@@ -210,7 +205,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let song = CurrentUser.stream!.songs[indexPath.row]
+        let song = CurrentUser.stream.songs[indexPath.row+1]
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
         cell.songName.text = song.songName
         cell.artist.text = song.artistName
@@ -288,6 +283,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func songFinished() {
+        print("received pop")
         CurrentUser.stream.songs.remove(at: 0)
         DispatchQueue.main.async {
             self.tableView.reloadData()
@@ -312,6 +308,10 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     public func setSong(play: Bool) {
+        if CurrentUser.stream.songs.count == 0 {
+            return;
+        }
+        
         self.jamsPlayer.setPlayStatus(shouldPlay: play, song: CurrentUser.stream.songs[0])
         if CurrentUser.user.spotifyID != CurrentUser.stream.owner.spotifyID {
             setTimer(run: !play && CurrentUser.stream.isPlaying)
@@ -359,10 +359,17 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             self.currentlyPlayingArtistLabel.text = song.artistName
             
             updateSlider(song: song)
+            print("loadingTopSong")
+            print("listen selected: ", listenButton.isSelected)
+            print("isPlaying: ", CurrentUser.stream.isPlaying)
             setSong(play: listenButton.isSelected && CurrentUser.stream.isPlaying)
         } else {
             // **** TODO: no songs left -- display custom UI ****
             
         }
+    }
+    
+    func jamsPlayerReady() {
+        setSong(play: listenButton.isSelected && CurrentUser.stream.isPlaying)
     }
 }

@@ -50,36 +50,30 @@ class StreamsTableViewController: UITableViewController {
     
     private func setImage(cell: StreamCell, url: String?, index: Int) {
         let imageFilter = CircleFilter()
-        var imageView:UIImageView!
-        if index == 0 {
-            imageView = cell.ownerIcon
-        } else {
-            imageView = cell.getImageViewForMember(index: index)
-        }
-        
+        let imageView = cell.getImageViewForMember(index: index)
         if let unwrappedUrl = url {
-            imageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: nil, filter: imageFilter)
+            imageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultImage, filter: imageFilter)
         } else {
             imageView.image = imageFilter.filter(defaultImage)
         }
     }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell", for: indexPath) as! StreamCell
-        let stream = streams[indexPath.row]
-        let song = stream.songs[0]
-        cell.artist.text = song.artistName
-        cell.coverArt.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: RoundedCornersFilter(radius: 20.0)) { response in
-            self.streams[indexPath.row].songs[0].coverArt = response.result.value
+    
+    private func loadCellImages(cell: StreamCell, stream: Models.Stream) {
+        // load coverArt
+        if stream.songs.count > 0 {
+            let song = stream.songs[0]
+            cell.coverArt.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: RoundedCornersFilter(radius: 20.0))
         }
-        
+        // load owner icon
         setImage(cell: cell, url: stream.owner.imageURL, index: 0)
+        // load member icons
         let numIconsToDisplay = stream.members.count - 1
         if numIconsToDisplay > 0 {
             for i in 1...numIconsToDisplay {
                 setImage(cell: cell, url: stream.members[i].imageURL, index: i)
             }
         }
+        // if there are more members than we're displaying, show a label
         let remainder = stream.members.count - 5;
         if remainder > 0 {
             cell.moreMembersLabel.text = "+ \(remainder) more member" + ((remainder > 1) ? "s" : "")
@@ -87,19 +81,21 @@ class StreamsTableViewController: UITableViewController {
         } else {
             cell.moreMembersLabel.isHidden = true
         }
+    }
 
-        cell.song.text = song.songName
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell", for: indexPath) as! StreamCell
+        let stream = streams[indexPath.row]
+        loadCellImages(cell: cell, stream: stream)
+        if stream.songs.count > 0 {
+            let song = stream.songs[0]
+            cell.artist.text = song.artistName
+            cell.song.text = song.songName
+        }
         cell.setMusicIndicator(play: stream.isPlaying)
         cell.updateUI()
         return cell
     }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if (segue.identifier == "displayStream") {
-//            let vc = segue.destination as! StreamController
-//            vc.stream = self.streams[self.tableView.indexPathForSelectedRow!.row]
-//        }
-//    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         HUD.show(.progress)
@@ -127,8 +123,8 @@ class StreamsTableViewController: UITableViewController {
                     for unparsedStream in unparsedStreams {
                         do {
                             let fetchedStream: Models.Stream = try unbox(dictionary: unparsedStream)
-                            if (fetchedStream.songs.count > 0 && fetchedStream.streamID != CurrentUser.stream?.streamID) {
-                                self.streams.append(fetchedStream)
+                            if (fetchedStream.streamID != CurrentUser.stream?.streamID) {
+                                self.streams.append(fetchedStream)  // if not tuned into this stream, display it
                             }
                         } catch {
                             print("Error trying to unbox stream: \(error)")

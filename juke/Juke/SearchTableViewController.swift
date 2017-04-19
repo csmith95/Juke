@@ -46,7 +46,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print("did scroll")
         self.view.endEditing(true)
     }
 
