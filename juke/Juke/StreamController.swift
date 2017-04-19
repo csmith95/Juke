@@ -269,6 +269,5 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
         } catch {
             print("error unboxing new stream: ", error)
         }
-    }
-    
+    }    
 }

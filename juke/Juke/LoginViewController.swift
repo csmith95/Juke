@@ -50,7 +50,6 @@ class LoginViewController: UIViewController {
                     }
                 })
             } else {
-                // session is valid. Hide login button and proceed
                 print("session is valid")
                 fetchSpotifyUser(accessToken: session.accessToken)
             }

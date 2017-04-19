@@ -33,17 +33,20 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
+        print("status changed: ", isPlaying)
         // allows background audio streaming
         if isPlaying {
             try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try? AVAudioSession.sharedInstance().setActive(true)
         } else {
-            try? AVAudioSession.sharedInstance().setActive(false)
+//            try? AVAudioSession.sharedInstance().setActive(false)
+            print("tried off")
         }
     }
     
     func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
         print("AudioStreamer logged in!")
+        NotificationCenter.default.post(name: Notification.Name("jamsPlayerReady"), object: nil)
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceiveError error: Error!) {
@@ -59,12 +62,14 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
             if audioStreaming.metadata == nil {
                 return
             }
+            print("received event")
             // track changed -- tell StreamController to pop first song, play next song
             if let currentTrack = audioStreaming.metadata.currentTrack {
                 let duration_ms = currentTrack.duration * 1000
                 if self.position >= duration_ms - 2000 {
                     self.position = 0.0
                     NotificationCenter.default.post(name: Notification.Name("songFinished"), object: nil)
+                    print("posted pop")
                 }
             }
         }
@@ -109,6 +114,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     
     public func setPlayStatus(shouldPlay: Bool, song: Models.Song) {
         if shouldPlay {
+            print("shouldPlay")
             let position = song.progress / 1000
             let uri = "spotify:track:" + song.spotifyID
             sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: position, callback: { (error) in
@@ -116,6 +122,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
                     print(error)
                 } else {
                     self.songJukeID = song.id
+                    print("playing: ", self.songJukeID)
                 }
             })
         } else {

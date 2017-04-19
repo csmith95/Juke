@@ -22,7 +22,6 @@ class Models {
         let duration: Double
         let coverArtURL: String
         let id: String
-        var coverArt: UIImage?  // fetched lazily later -- not stored in DB
     }
     
     struct SpotifySong {
@@ -66,7 +65,6 @@ extension Models.Song: Unboxable {
         self.duration = try unboxer.unbox(key: "duration")
         self.coverArtURL = try unboxer.unbox(key: "coverArtURL")
         self.id = try unboxer.unbox(key: "_id")
-        self.coverArt = nil
     }
 }
 
