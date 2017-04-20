@@ -163,24 +163,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         
         // go through socketManager so that other members will be updated
         socketManager.addSong(params: params);
-        
-        
-//        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate(   ).responseJSON { response in
-//            switch response.result {
-//            case .success:
-//                do {
-//                    let unparsedStream = response.result.value as! UnboxableDictionary
-//                    let stream: Models.Stream = try unbox(dictionary: unparsedStream)
-//                    CurrentUser.stream = stream
-//                    print("added song")
-//                } catch {
-//                    print("error unboxing stream after adding song: ", error)
-//                }
-//                
-//            case .failure(let error):
-//                print("Error adding song to current stream: ", error)
-//            }
-//        }
     }
 
     /*
