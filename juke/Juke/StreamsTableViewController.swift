@@ -16,7 +16,7 @@ class StreamsTableViewController: UITableViewController {
     
     var streams: [Models.Stream] = []
     let socketManager = SocketManager.sharedInstance
-    let defaultImage = UIImage(named: "juke_icon")!
+    let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -97,7 +97,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
                     for i in 0..<items.count {
                         let item = items[i]
                         
-                        // convert to models.spotifySong so we can add to stream. CHECK: make less redundant
+                        // convert to models.spotifySong so we can add to stream.
                         let curr = item as UnboxableDictionary
                         do {
                             let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
@@ -153,8 +153,14 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
  
     func addSongToStream(song: Models.SpotifySong, stream: Models.Stream) {
-        let params: Parameters = ["streamID": stream.streamID, "spotifyID": song.spotifyID, "songName": song.songName, "artistName": song.artistName, "duration": song.duration, "coverArtURL": song.coverArtURL]
-        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate().responseJSON { response in
+        var params: Parameters = ["streamID": stream.streamID, "spotifyID": song.spotifyID, "songName": song.songName, "artistName": song.artistName, "duration": song.duration, "coverArtURL": song.coverArtURL]
+        if let memberImageURL = CurrentUser.user.imageURL {
+            params["memberImageURL"] = memberImageURL
+        } else {
+            params["memberImageURL"] = nil
+        }
+        print(params)
+        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate(   ).responseJSON { response in
             switch response.result {
             case .success:
                 do {

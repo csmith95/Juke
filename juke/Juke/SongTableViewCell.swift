@@ -11,6 +11,7 @@ import UIKit
 class SongTableViewCell: UITableViewCell {
 
     
+    @IBOutlet var memberImageView: UIImageView!
     @IBOutlet var songName: UILabel!
     @IBOutlet var artist: UILabel!
     

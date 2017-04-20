@@ -39,6 +39,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet public var listenButton: UIButton!
     var circularProgress = KYCircularProgress()
     var animationTimer = Timer()
+    let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
     
     @IBAction func toggleListening(_ sender: AnyObject) {
         let newPlayStatus = !listenButton.isSelected
@@ -156,7 +157,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             switch response.result {
             case .success:
                 do {
-                    print("FETCHED")
                     let unparsedStream = response.result.value as! UnboxableDictionary
                     let stream: Models.Stream = try unbox(dictionary: unparsedStream)
                     CurrentUser.stream = stream
@@ -208,6 +208,12 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
         cell.songName.text = song.songName
         cell.artist.text = song.artistName
+        let imageFilter = CircleFilter()
+        if let unwrappedUrl = song.memberImageURL {
+            cell.memberImageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultImage, filter: imageFilter)
+        } else {
+            cell.memberImageView.image = imageFilter.filter(defaultImage)
+        }
         return cell
     }
     

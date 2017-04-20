@@ -32,33 +32,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
             print(err)
         }
     }
-    
-    var backgroundTask: UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
-    
-//    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
-//        print("status changed: ", isPlaying)
-//        // allows background audio streaming
-//        if isPlaying {
-//            
-//            backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
-//                print("background task cancelled :(")
-//                self!.backgroundTask = UIBackgroundTaskInvalid;
-//            }
-//            assert(backgroundTask != UIBackgroundTaskInvalid)
-//            
-////            try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-////            try? AVAudioSession.sharedInstance().setActive(true)
-//        } else {
-//            print("Background task ended.")
-////            UIApplication.shared.endBackgroundTask(self.backgroundTask)
-////            self.backgroundTask = UIBackgroundTaskInvalid
-////            core.backgroundPlaybackTask = self.backgroundTask
-////            try? AVAudioSession.sharedInstance().setActive(false)
-////            print("tried off")
-//        }
-//        core.backgroundPlaybackTask = UInt(self.backgroundTask)
-//    }
-    
+
     func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
         print("AudioStreamer logged in!")
         NotificationCenter.default.post(name: Notification.Name("jamsPlayerReady"), object: nil)
@@ -129,15 +103,11 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     
     public func setPlayStatus(shouldPlay: Bool, song: Models.Song) {
         if shouldPlay {
-            print("shouldPlay")
+            // not sure if this is good style, but these 2 lines are the magic behind background streaming
+            try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            try? AVAudioSession.sharedInstance().setActive(true)
             let position = song.progress / 1000
             let uri = "spotify:track:" + song.spotifyID
-            backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
-                print("background task cancelled :(")
-                self!.backgroundTask = UIBackgroundTaskInvalid;
-            }
-            assert(backgroundTask != UIBackgroundTaskInvalid)
-            core.backgroundPlaybackTask = UInt(backgroundTask)
             sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: position, callback: { (error) in
                 if let error = error {
                     print(error)
