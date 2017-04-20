@@ -73,6 +73,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
         SocketManager.sharedInstance.closeConnection()
+        if !CurrentUser.isHost() {
+            return;
+        }
+        
+        // if host, pause the song
+        let url = ServerConstants.kJukeServerURL + ServerConstants.kChangeOnlineStatus
+        let params: Parameters = ["streamID": CurrentUser.stream.streamID, "isLive": false]
+        Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
+            switch response.result {
+            case .success:
+                print("turned off stream")
+            case .failure(let error):
+                print("error changing live status: ", error)
+            }
+        }
     }
     
     // MARK: - Core Data stack

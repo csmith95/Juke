@@ -43,6 +43,21 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         super.viewDidLoad()
         searchBar.delegate = self
         tableView.delegate = self
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        self.tableView.addGestureRecognizer(tapRecognizer)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        // reset UI a new round of search results
+        self.searchBar.text = ""
+        self.view.endEditing(true)
+        self.posts.removeAll()
+        self.results.removeAll()
+        self.tableView.reloadData()
+    }
+    
+    func hideKeyboard() {
+        self.view.endEditing(true)
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -111,7 +126,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             print(error)
         }
     }
-
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell") as! SearchCell
