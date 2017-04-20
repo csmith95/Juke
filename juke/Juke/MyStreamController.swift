@@ -24,6 +24,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    @IBOutlet var currentlyPlayingImageView: UIImageView!
     @IBOutlet var splitButton: UIButton!
     @IBOutlet var onlineButton: UIButton!
     @IBOutlet var circularProgressFrame: UIView!
@@ -363,10 +364,15 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             self.currentlyPlayingLabel.text = song.songName
             self.currentlyPlayingArtistLabel.text = song.artistName
             
+            // set up background
+            currentlyPlayingImageView.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: BlurFilter()) { response in
+                self.currentlyPlayingImageView.alpha = 0.6
+                if let image = response.result.value {
+                    self.currentlyPlayingImageView.image = RoundedCornersFilter(radius: 20.0).filter(image)
+                }
+            }
+            
             updateSlider(song: song)
-            print("loadingTopSong")
-            print("listen selected: ", listenButton.isSelected)
-            print("isPlaying: ", CurrentUser.stream.isPlaying)
             setSong(play: listenButton.isSelected && CurrentUser.stream.isPlaying)
         } else {
             // **** TODO: no songs left -- display custom UI ****

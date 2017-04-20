@@ -90,7 +90,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         /*
          The persistent container for the application. This implementation
          creates and returns a container, having loaded the store for the
-         application to it. This property is optional since there are legitimate
+         application t o it. This property is optional since there are legitimate
          error conditions that could cause the creation of the store to fail.
          */
         let container = NSPersistentContainer(name: "Juke")
