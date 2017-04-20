@@ -14,6 +14,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     static let shared = JamsPlayer()
     private let userDefaults = UserDefaults.standard
     private let sharedInstance = SPTAudioStreamingController.sharedInstance()
+    private let core = SPTCoreAudioController()
     private var session: SPTSession? = nil
     private let kClientID = "77d4489425fe464483f0934f99847c8b"
     private var position: TimeInterval = 0.0
@@ -32,17 +33,31 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         }
     }
     
-    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
-        print("status changed: ", isPlaying)
-        // allows background audio streaming
-        if isPlaying {
-            try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-            try? AVAudioSession.sharedInstance().setActive(true)
-        } else {
-//            try? AVAudioSession.sharedInstance().setActive(false)
-            print("tried off")
-        }
-    }
+    var backgroundTask: UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
+    
+//    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
+//        print("status changed: ", isPlaying)
+//        // allows background audio streaming
+//        if isPlaying {
+//            
+//            backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
+//                print("background task cancelled :(")
+//                self!.backgroundTask = UIBackgroundTaskInvalid;
+//            }
+//            assert(backgroundTask != UIBackgroundTaskInvalid)
+//            
+////            try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+////            try? AVAudioSession.sharedInstance().setActive(true)
+//        } else {
+//            print("Background task ended.")
+////            UIApplication.shared.endBackgroundTask(self.backgroundTask)
+////            self.backgroundTask = UIBackgroundTaskInvalid
+////            core.backgroundPlaybackTask = self.backgroundTask
+////            try? AVAudioSession.sharedInstance().setActive(false)
+////            print("tried off")
+//        }
+//        core.backgroundPlaybackTask = UInt(self.backgroundTask)
+//    }
     
     func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
         print("AudioStreamer logged in!")
@@ -117,6 +132,12 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
             print("shouldPlay")
             let position = song.progress / 1000
             let uri = "spotify:track:" + song.spotifyID
+            backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
+                print("background task cancelled :(")
+                self!.backgroundTask = UIBackgroundTaskInvalid;
+            }
+            assert(backgroundTask != UIBackgroundTaskInvalid)
+            core.backgroundPlaybackTask = UInt(backgroundTask)
             sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: position, callback: { (error) in
                 if let error = error {
                     print(error)
