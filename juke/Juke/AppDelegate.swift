@@ -23,6 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     @objc func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
         if SPTAuth.defaultInstance().canHandle(url) {
+            print("called appdelegate authenticator")
             SPTAuth.defaultInstance().handleAuthCallback(withTriggeredAuthURL: url as URL, callback: { (error, session) in
                 if error != nil {
                     print("AUTHENTICATION ERROR")
@@ -33,6 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let userDefaults = UserDefaults.standard
                     let sessionData = NSKeyedArchiver.archivedData(withRootObject: session)
                     userDefaults.set(sessionData, forKey: "SpotifySession")
+                    print("userdefaults after authentication is", userDefaults)
                     
                     // notify ViewController to initiate loginSegue
                     NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: session.accessToken)

@@ -308,7 +308,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     public func setSong(play: Bool) {
-        if CurrentUser.stream.songs.count == 0 {
+        if CurrentUser.stream?.songs.count == 0 {
             return;
         }
         

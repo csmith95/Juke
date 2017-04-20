@@ -29,13 +29,13 @@ class LoginViewController: UIViewController {
         
         //check if session is available everytime you launch app
         if let sessionObj = userDefaults.object(forKey: "SpotifySession") { // session available
-            print("session is available")
+            //print("session is available", SPTAuth.defaultInstance().session)
             let sessionDataObj = sessionObj as! Data
             let session = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
             if !session.isValid() {
                 // session is not valid so renew it
                 print("not valid")
-                SPTAuth.defaultInstance().renewSession(SPTAuth.defaultInstance().session, callback: { (error, renewedSession) in
+                SPTAuth.defaultInstance().renewSession(session, callback: { (error, renewedSession) in
                     print(renewedSession)
                     if let session = renewedSession {
                         print("renewed session")
