@@ -25,6 +25,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     var posts = [post]()
     let downloader = ImageDownloader()
     let imageFilter = RoundedCornersFilter(radius: 20.0)
+    let socketManager = SocketManager.sharedInstance
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         let keywords = searchBar.text
@@ -159,23 +160,27 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         } else {
             params["memberImageURL"] = nil
         }
-        print(params)
-        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate(   ).responseJSON { response in
-            switch response.result {
-            case .success:
-                do {
-                    let unparsedStream = response.result.value as! UnboxableDictionary
-                    let stream: Models.Stream = try unbox(dictionary: unparsedStream)
-                    CurrentUser.stream = stream
-                    print("added song")
-                } catch {
-                    print("error unboxing stream after adding song: ", error)
-                }
-                
-            case .failure(let error):
-                print("Error adding song to current stream: ", error)
-            }
-        }
+        
+        // go through socketManager so that other members will be updated
+        socketManager.addSong(params: params);
+        
+        
+//        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate(   ).responseJSON { response in
+//            switch response.result {
+//            case .success:
+//                do {
+//                    let unparsedStream = response.result.value as! UnboxableDictionary
+//                    let stream: Models.Stream = try unbox(dictionary: unparsedStream)
+//                    CurrentUser.stream = stream
+//                    print("added song")
+//                } catch {
+//                    print("error unboxing stream after adding song: ", error)
+//                }
+//                
+//            case .failure(let error):
+//                print("Error adding song to current stream: ", error)
+//            }
+//        }
     }
 
     /*

@@ -62,7 +62,11 @@ class SocketManager: NSObject {
     
     public func songPlayStatusChanged(streamID: String, songID: String, progress: Double, isPlaying: Bool) {
         socket.emit("songPlayStatusChanged", ["streamID": streamID, "songID":  songID, "progress": progress, "isPlaying": isPlaying])
-        print("emitted: ", isPlaying)
+    }
+    
+    public func addSong(params: Dictionary<String, Any>) {
+        print("added song")
+        socket.emit("addSong", params)
     }
     
     public func songEnded(streamID: String) {
