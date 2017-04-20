@@ -22,6 +22,7 @@ class Models {
         let duration: Double
         let coverArtURL: String
         let id: String
+        let memberImageURL: String?
     }
     
     struct SpotifySong {
@@ -65,6 +66,7 @@ extension Models.Song: Unboxable {
         self.duration = try unboxer.unbox(key: "duration")
         self.coverArtURL = try unboxer.unbox(key: "coverArtURL")
         self.id = try unboxer.unbox(key: "_id")
+        self.memberImageURL = unboxer.unbox(key: "memberImageURL")
     }
 }
 

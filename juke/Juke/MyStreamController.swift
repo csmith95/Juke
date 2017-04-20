@@ -24,6 +24,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    @IBOutlet var currentlyPlayingImageView: UIImageView!
     @IBOutlet var splitButton: UIButton!
     @IBOutlet var onlineButton: UIButton!
     @IBOutlet var circularProgressFrame: UIView!
@@ -39,6 +40,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet public var listenButton: UIButton!
     var circularProgress = KYCircularProgress()
     var animationTimer = Timer()
+    let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
     
     @IBAction func toggleListening(_ sender: AnyObject) {
         let newPlayStatus = !listenButton.isSelected
@@ -156,7 +158,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             switch response.result {
             case .success:
                 do {
-                    print("FETCHED")
                     let unparsedStream = response.result.value as! UnboxableDictionary
                     let stream: Models.Stream = try unbox(dictionary: unparsedStream)
                     CurrentUser.stream = stream
@@ -208,6 +209,12 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
         cell.songName.text = song.songName
         cell.artist.text = song.artistName
+        let imageFilter = CircleFilter()
+        if let unwrappedUrl = song.memberImageURL {
+            cell.memberImageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultImage, filter: imageFilter)
+        } else {
+            cell.memberImageView.image = imageFilter.filter(defaultImage)
+        }
         return cell
     }
     
@@ -357,10 +364,15 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             self.currentlyPlayingLabel.text = song.songName
             self.currentlyPlayingArtistLabel.text = song.artistName
             
+            // set up background
+            currentlyPlayingImageView.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: BlurFilter()) { response in
+                self.currentlyPlayingImageView.alpha = 0.6
+                if let image = response.result.value {
+                    self.currentlyPlayingImageView.image = RoundedCornersFilter(radius: 20.0).filter(image)
+                }
+            }
+            
             updateSlider(song: song)
-            print("loadingTopSong")
-            print("listen selected: ", listenButton.isSelected)
-            print("isPlaying: ", CurrentUser.stream.isPlaying)
             setSong(play: listenButton.isSelected && CurrentUser.stream.isPlaying)
         } else {
             // **** TODO: no songs left -- display custom UI ****

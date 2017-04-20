@@ -25,6 +25,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     var posts = [post]()
     let downloader = ImageDownloader()
     let imageFilter = RoundedCornersFilter(radius: 20.0)
+    let socketManager = SocketManager.sharedInstance
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         let keywords = searchBar.text
@@ -97,7 +98,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
                     for i in 0..<items.count {
                         let item = items[i]
                         
-                        // convert to models.spotifySong so we can add to stream. CHECK: make less redundant
+                        // convert to models.spotifySong so we can add to stream.
                         let curr = item as UnboxableDictionary
                         do {
                             let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
@@ -153,23 +154,15 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
  
     func addSongToStream(song: Models.SpotifySong, stream: Models.Stream) {
-        let params: Parameters = ["streamID": stream.streamID, "spotifyID": song.spotifyID, "songName": song.songName, "artistName": song.artistName, "duration": song.duration, "coverArtURL": song.coverArtURL]
-        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kAddSongPath, method: .post, parameters: params).validate().responseJSON { response in
-            switch response.result {
-            case .success:
-                do {
-                    let unparsedStream = response.result.value as! UnboxableDictionary
-                    let stream: Models.Stream = try unbox(dictionary: unparsedStream)
-                    CurrentUser.stream = stream
-                    print("added song")
-                } catch {
-                    print("error unboxing stream after adding song: ", error)
-                }
-                
-            case .failure(let error):
-                print("Error adding song to current stream: ", error)
-            }
+        var params: Parameters = ["streamID": stream.streamID, "spotifyID": song.spotifyID, "songName": song.songName, "artistName": song.artistName, "duration": song.duration, "coverArtURL": song.coverArtURL]
+        if let memberImageURL = CurrentUser.user.imageURL {
+            params["memberImageURL"] = memberImageURL
+        } else {
+            params["memberImageURL"] = nil
         }
+        
+        // go through socketManager so that other members will be updated
+        socketManager.addSong(params: params);
     }
 
     /*

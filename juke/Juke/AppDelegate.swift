@@ -72,22 +72,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
-        SocketManager.sharedInstance.closeConnection()
-        if !CurrentUser.isHost() {
-            return;
-        }
-        
-        // if host, pause the song
-        let url = ServerConstants.kJukeServerURL + ServerConstants.kChangeOnlineStatus
-        let params: Parameters = ["streamID": CurrentUser.stream.streamID, "isLive": false]
-        Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
-            switch response.result {
-            case .success:
-                print("turned off stream")
-            case .failure(let error):
-                print("error changing live status: ", error)
+        if CurrentUser.isHost() {
+            // if host, pause the song
+            if CurrentUser.stream.songs.count == 0 {
+                return
             }
+            let song = CurrentUser.stream.songs[0]
+            SocketManager.sharedInstance.songPlayStatusChanged(streamID: CurrentUser.stream.streamID, songID: song.id, progress: song.progress, isPlaying: false)
+            CurrentUser.stream.isPlaying = false
         }
+        SocketManager.sharedInstance.closeConnection()
     }
     
     // MARK: - Core Data stack
@@ -96,7 +90,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         /*
          The persistent container for the application. This implementation
          creates and returns a container, having loaded the store for the
-         application to it. This property is optional since there are legitimate
+         application t o it. This property is optional since there are legitimate
          error conditions that could cause the creation of the store to fail.
          */
         let container = NSPersistentContainer(name: "Juke")
