@@ -9,6 +9,7 @@
 import Foundation
 import SocketIO
 import Unbox
+import PKHUD
 
 class SocketManager: NSObject {
     
@@ -30,17 +31,8 @@ class SocketManager: NSObject {
         }
         
         socket.on("refreshStream") { data, ack in
-            if data.count == 0 {
-                return
-            }
-            
-            print("socket manager received refresh stream")
-            if let tunedInto = data[0] as? String {
-                if tunedInto == "NO ACK" {
-                    return
-                }
-                NotificationCenter.default.post(name: Notification.Name("refreshStream"), object: tunedInto);
-            }
+            print("socket manager received refresh stream signal")
+            NotificationCenter.default.post(name: Notification.Name("refreshMyStream"), object: nil);
         }
     }
     
@@ -109,18 +101,18 @@ class SocketManager: NSObject {
     
     public func splitFromStream(userID: String) {
         print("splitFromStream emitted")
+        HUD.show(.progress)
         socket.emitWithAck("splitFromStream", ["userID": userID]).timingOut(after: 3) { data in
             print("Received splitFromStream ACK: ", data);
             if data.count == 0 {
                 return
             }
             
-            if let first = data[0] as? String {
-                if first == "NO ACK" {
-                    return;
-                }
-                NotificationCenter.default.post(name: Notification.Name("refreshMyStream"), object: nil);
-            }
+            // note that data[0] is an **unpopulated** stream object. We can do some error 
+            // handling here later trying to unbox into a Models.Stream
+
+            HUD.flash(.success, delay: 1.0)
+            NotificationCenter.default.post(name: Notification.Name("refreshMyStream"), object: nil);
         }
     }
     

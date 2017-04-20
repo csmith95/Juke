@@ -95,7 +95,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songPositionChanged), name: Notification.Name("songPositionChanged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.syncPositionWithOwner), name: Notification.Name("syncPositionWithOwner"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.refreshStream), name: Notification.Name("refreshStream"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.refreshStream), name: Notification.Name("refreshMyStream"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.handleVisitingStream), name: Notification.Name("handleVisitingStream"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.jamsPlayerReady), name: Notification.Name("jamsPlayerReady"), object: nil)
         currentlyPlayingView.layer.cornerRadius = 10;
@@ -119,7 +119,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navBarTitle = "My Jam"
-        fetchMyStream();
+        fetchMyStream()
     }
     
     private func setUpControlButtons() {
@@ -136,10 +136,10 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             // **** TODO: allow host to clear or skip songs ****
         } else {
             splitButton.isHidden = false
-            onlineButton.isHidden = true
             listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
             listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
         }
+        onlineButton.isHidden = !CurrentUser.isHost()
         listenButton.isSelected = CurrentUser.stream.isPlaying
     }
     
@@ -156,18 +156,17 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             switch response.result {
             case .success:
                 do {
+                    print("FETCHED")
                     let unparsedStream = response.result.value as! UnboxableDictionary
                     let stream: Models.Stream = try unbox(dictionary: unparsedStream)
                     CurrentUser.stream = stream
                     CurrentUser.user.tunedInto = stream.streamID
                     CurrentUser.fetched = true
-                    DispatchQueue.main.async {
-                        self.setUpControlButtons()
-                        self.tableView.reloadData()
-                        if stream.songs.count > 0 {
-                            if !JamsPlayer.shared.isPlaying(song: stream.songs[0]) {
-                                self.loadTopSong()  // otherwise sounds choppy if playback progress is adjusted every time page is loaded
-                            }
+                    self.setUpControlButtons()
+                    self.tableView.reloadData()
+                    if stream.songs.count > 0 {
+                        if !JamsPlayer.shared.isPlaying(song: stream.songs[0]) {
+                            self.loadTopSong()  // otherwise sounds choppy if playback progress is adjusted every time page is loaded
                         }
                     }
                     self.socketManager.joinSocketRoom(streamID: CurrentUser.stream.streamID)
@@ -308,7 +307,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     public func setSong(play: Bool) {
-        if CurrentUser.stream?.songs.count == 0 {
+        if CurrentUser.fetched == false || CurrentUser.stream?.songs.count == 0 {
             return;
         }
         
