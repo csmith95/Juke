@@ -88,8 +88,8 @@ class StreamController: UIViewController, UITableViewDelegate, UITableViewDataSo
         currentlyPlayingView.layer.masksToBounds = false;
         currentlyPlayingView.clipsToBounds = false;
         circularProgress = KYCircularProgress(frame: circularProgressFrame.bounds)
-        circularProgress.startAngle =  -1 * M_PI_2
-        circularProgress.endAngle = -1 * M_PI_2 + 2*M_PI
+        circularProgress.startAngle =  -1 * (.pi/2)
+        circularProgress.endAngle = -1 * (.pi/2) + 2*(.pi)
         circularProgress.lineWidth = 2.0
         circularProgress.colors = [.blue, .yellow, .red]
         circularProgressFrame.addSubview(circularProgress)

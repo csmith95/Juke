@@ -43,6 +43,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
     
     @IBAction func toggleListening(_ sender: AnyObject) {
+        print("changed listening status in toggleListening")
         let newPlayStatus = !listenButton.isSelected
         setListeningStatus(status: newPlayStatus)
     }
