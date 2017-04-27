@@ -78,8 +78,8 @@ class LoginViewController: UIViewController {
         auth.clientID = kClientID
         auth.redirectURL = NSURL(string:kCallbackURL)! as URL
         auth.requestedScopes = [SPTAuthStreamingScope]
-        let loginURL = auth.loginURL!
-        UIApplication.shared.open(loginURL)
+        let loginURL = SPTAuth.defaultInstance().spotifyWebAuthenticationURL()
+        UIApplication.shared.open(loginURL!)
     }
     
     func fetchSpotifyUser(accessToken: String) {
