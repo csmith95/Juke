@@ -24,16 +24,10 @@ class LoginViewController: UIViewController {
         let path = Bundle.main.path(forResource: "entrybkgnd", ofType: "mp4")
         player = AVPlayer(url: URL(fileURLWithPath: path!))
         let playerLayer = AVPlayerLayer(player: player)
-        playerLayer.zPosition = -3
+        playerLayer.zPosition = -2
         playerLayer.frame = self.view.frame
         playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
         self.view.layer.addSublayer(playerLayer)
-        let filter = UIView()
-        filter.frame = self.view.frame
-        filter.backgroundColor = UIColor.black
-        filter.layer.zPosition = -1
-        filter.alpha = 0.5
-        self.view.addSubview(filter)
         player?.seek(to: kCMTimeZero)
         
         loginButton.isHidden = true
