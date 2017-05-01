@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import Unbox
+import AVFoundation
 
 class LoginViewController: UIViewController {
 
@@ -16,11 +17,37 @@ class LoginViewController: UIViewController {
     let kClientID = "77d4489425fe464483f0934f99847c8b"
     let kCallbackURL = "juke1231://callback"
     var session:SPTSession!
+    var player:AVPlayer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let path = Bundle.main.path(forResource: "entrybkgnd", ofType: "mp4")
+        player = AVPlayer(url: URL(fileURLWithPath: path!))
+        let playerLayer = AVPlayerLayer(player: player)
+        playerLayer.zPosition = -3
+        playerLayer.frame = self.view.frame
+        playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        self.view.layer.addSublayer(playerLayer)
+        let filter = UIView()
+        filter.frame = self.view.frame
+        filter.backgroundColor = UIColor.black
+        filter.layer.zPosition = -1
+        filter.alpha = 0.5
+        self.view.addSubview(filter)
+        player?.seek(to: kCMTimeZero)
+        
         loginButton.isHidden = true
         NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.updateAfterFirstLogin), name: NSNotification.Name("loginSuccessful"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.playerItemDidReachEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
+        
+//        let filePath = Bundle.main.path(forResource: "entrybkgnd", ofType: "mp4")
+//        print(filePath)
+//        let gif = NSData(contentsOfFile: filePath!)
+//        let webViewBG = UIWebView(frame: self.view.frame)
+//        webViewBG.load(gif! as Data, mimeType: "image/gif", textEncodingName: String(), baseURL: NSURL() as URL)
+//        webViewBG.isUserInteractionEnabled = false;
+//        self.view.addSubview(webViewBG)
+
         
         let userDefaults = UserDefaults.standard
         //config SPTAuth default instance with tokenSwap and refresh
@@ -55,7 +82,8 @@ class LoginViewController: UIViewController {
             }
         } else {
             loginButton.isHidden = false
-        }
+            player?.play()
+                    }
     }
     
     //if you are logging in for the first time and don't have a session that is going to be renewed
@@ -71,6 +99,12 @@ class LoginViewController: UIViewController {
             //fetch user
             fetchSpotifyUser(accessToken: session.accessToken)
         }
+    }
+    
+    func playerItemDidReachEnd() {
+        print("Called playerItemDIdReachEnd")
+        player!.seek(to: kCMTimeZero)
+        player?.play()
     }
 
     @IBAction func loginWithSpotify(_ sender: Any) {
