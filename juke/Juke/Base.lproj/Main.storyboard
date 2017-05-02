@@ -195,11 +195,11 @@
             </objects>
             <point key="canvasLocation" x="2125.5999999999999" y="-72.413793103448285"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Discover-->
         <scene sceneID="qev-iE-LNt">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="aNa-bh-xnM" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" systemItem="contacts" id="te7-SS-y4N"/>
+                    <tabBarItem key="tabBarItem" title="Discover" image="earth-usa" id="te7-SS-y4N"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="KoR-Mg-UzL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -615,11 +615,11 @@
             </objects>
             <point key="canvasLocation" x="2724" y="689.5052473763119"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Stream-->
         <scene sceneID="1v4-e5-TKD">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="nxr-Ui-A1n" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" systemItem="favorites" id="GF9-Xb-POY"/>
+                <navigationController title="Stream" automaticallyAdjustsScrollViewInsets="NO" id="nxr-Ui-A1n" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Current streams" image="rss" id="GF9-Xb-POY"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="FXk-DT-Bjs">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -636,12 +636,14 @@
         </scene>
     </scenes>
     <resources>
+        <image name="earth-usa" width="30" height="30"/>
         <image name="juke_icon" width="1041" height="1051"/>
         <image name="listening" width="25" height="25"/>
         <image name="loginButton" width="244" height="44"/>
         <image name="merge" width="25" height="25"/>
         <image name="online" width="25" height="25"/>
         <image name="play" width="22" height="22"/>
+        <image name="rss" width="30" height="30"/>
         <image name="split" width="25" height="25"/>
     </resources>
 </document>
