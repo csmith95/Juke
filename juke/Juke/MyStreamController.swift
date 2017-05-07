@@ -24,16 +24,10 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
-    @IBOutlet var currentlyPlayingImageView: UIImageView!
-    @IBOutlet var splitButton: UIButton!
-    @IBOutlet var onlineButton: UIButton!
-    @IBOutlet var circularProgressFrame: UIView!
     @IBOutlet var coverArtImage: UIImageView!
-    @IBOutlet var barButton: UIBarButtonItem!
-    @IBOutlet var currTimeLabel: UILabel!
-    @IBOutlet var currentlyPlayingArtistLabel: UILabel!
-    @IBOutlet var currentlyPlayingLabel: UILabel!
-    @IBOutlet var currentlyPlayingView: UIView!
+    //@IBOutlet var currTimeLabel: UILabel!
+    //@IBOutlet var currentlyPlayingArtistLabel: UILabel!
+    //@IBOutlet var currentlyPlayingLabel: UILabel!
     @IBOutlet var tableView: UITableView!
     let jamsPlayer = JamsPlayer.shared
     let socketManager = SocketManager.sharedInstance
@@ -66,30 +60,26 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         setSong(play: status && CurrentUser.stream.isPlaying)
     }
     
-    @IBAction func toggleOnlineStatus(_ sender: AnyObject) {
-        let newOnlineStatus = !onlineButton.isSelected
-        onlineButton.isSelected = newOnlineStatus
-        let url = ServerConstants.kJukeServerURL + ServerConstants.kChangeOnlineStatus
-        let params: Parameters = ["streamID": CurrentUser.stream.streamID, "isLive": newOnlineStatus]
-        Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
-            switch response.result {
-            case .success:
-                do {
-                    let unparsedStream = response.result.value as! UnboxableDictionary
-                    let stream: Models.Stream = try unbox(dictionary: unparsedStream)
-                    CurrentUser.stream = stream
-                } catch {
-                    print("error unboxing new stream after changing online status: ", error)
-                }
-            case .failure(let error):
-                print("error changing live status: ", error)
-            }
-        }
-    }
-   
-    @IBAction func splitButtonPressed(_ sender: AnyObject) {
-        socketManager.splitFromStream(userID: CurrentUser.user.id);
-    }
+//    @IBAction func toggleOnlineStatus(_ sender: AnyObject) {
+//        let url = ServerConstants.kJukeServerURL + ServerConstants.kChangeOnlineStatus
+//        let params: Parameters = ["streamID": CurrentUser.stream.streamID, "isLive": newOnlineStatus]
+//        Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
+//            switch response.result {
+//            case .success:
+//                do {
+//                    let unparsedStream = response.result.value as! UnboxableDictionary
+//                    let stream: Models.Stream = try unbox(dictionary: unparsedStream)
+//                    CurrentUser.stream = stream
+//                } catch {
+//                    print("error unboxing new stream after changing online status: ", error)
+//                }
+//            case .failure(let error):
+//                print("error changing live status: ", error)
+//            }
+//        }
+//    }
+//   
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,27 +91,11 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.refreshStream), name: Notification.Name("refreshMyStream"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.handleVisitingStream), name: Notification.Name("handleVisitingStream"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.jamsPlayerReady), name: Notification.Name("jamsPlayerReady"), object: nil)
-        currentlyPlayingView.layer.cornerRadius = 10;
-        currentlyPlayingView.layer.masksToBounds = true;
-        currentlyPlayingView.layer.borderColor = UIColor.gray.cgColor;
-        currentlyPlayingView.layer.borderWidth = 0.5;
-        currentlyPlayingView.layer.contentsScale = UIScreen.main.scale;
-        currentlyPlayingView.layer.shadowColor = UIColor.black.cgColor;
-        currentlyPlayingView.layer.shadowRadius = 5.0;
-        currentlyPlayingView.layer.shadowOpacity = 0.5;
-        currentlyPlayingView.layer.masksToBounds = false;
-        currentlyPlayingView.clipsToBounds = false;
-        self.circularProgress = KYCircularProgress(frame: self.circularProgressFrame.bounds)
-        self.circularProgress.startAngle =  -1 * M_PI_2
-        self.circularProgress.endAngle = -1 * M_PI_2 + 2*M_PI
-        self.circularProgress.lineWidth = 2.0
-        self.circularProgress.colors = [.blue, .yellow, .red]
-        self.circularProgressFrame.addSubview(self.circularProgress)
-    }
+            }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navBarTitle = "My Jam"
+        navBarTitle = "Current Stream"
         fetchMyStream()
     }
     
@@ -131,18 +105,11 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             listenButton.setImage(UIImage(named: "play.png"), for: .normal)
             listenButton.setImage(UIImage(named: "pause.png"), for: .selected)
             // only let host toggle online/offline
-            onlineButton.setImage(UIImage(named: "online.png"), for: .normal)
-            onlineButton.setImage(UIImage(named: "offline.png"), for: .selected)
-            onlineButton.isSelected = CurrentUser.stream.isLive
-            // allow host to split if more than 1 member
-            splitButton.isHidden = (CurrentUser.stream.members.count == 1)
             // **** TODO: allow host to clear or skip songs ****
         } else {
-            splitButton.isHidden = false
             listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
             listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
         }
-        onlineButton.isHidden = !CurrentUser.isHost()
         listenButton.isSelected = CurrentUser.stream.isPlaying
     }
     
@@ -286,7 +253,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         let normalizedProgress = song.progress / song.duration
         self.circularProgress.progress = normalizedProgress
         self.circularProgress.set(progress: normalizedProgress, duration: 0.5)
-        self.currTimeLabel.text = timeIntervalToString(interval: song.progress/1000)
+        //self.currTimeLabel.text = timeIntervalToString(interval: song.progress/1000)
     }
     
     func songFinished() {
@@ -362,16 +329,9 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             let song = songs[0]
             // place first song in the currentlyPlayingLabel
             coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: CircleFilter())
-            self.currentlyPlayingLabel.text = song.songName
-            self.currentlyPlayingArtistLabel.text = song.artistName
+            //self.currentlyPlayingLabel.text = song.songName
+            //self.currentlyPlayingArtistLabel.text = song.artistName
             
-            // set up background
-            currentlyPlayingImageView.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: BlurFilter()) { response in
-                self.currentlyPlayingImageView.alpha = 0.6
-                if let image = response.result.value {
-                    self.currentlyPlayingImageView.image = RoundedCornersFilter(radius: 20.0).filter(image)
-                }
-            }
             
             updateSlider(song: song)
             setSong(play: listenButton.isSelected && CurrentUser.stream.isPlaying)

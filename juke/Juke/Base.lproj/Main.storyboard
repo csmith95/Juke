@@ -351,6 +351,9 @@
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="21b-0y-uN8">
                                                                     <rect key="frame" x="0.0" y="0.0" width="91" height="30"/>
                                                                     <state key="normal" title="Listen Button"/>
+                                                                    <connections>
+                                                                        <action selector="toggleListening:" destination="MDf-xd-Wgi" eventType="touchUpOutside" id="dRE-vn-dz8"/>
+                                                                    </connections>
                                                                 </button>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ejJ-SU-iib">
                                                                     <rect key="frame" x="113" y="0.0" width="149" height="30"/>
@@ -373,7 +376,7 @@
                                                     <rect key="frame" x="0.0" y="284" width="320" height="284"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <prototypes>
-                                                        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="0kb-sf-i9H">
+                                                        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="0kb-sf-i9H" customClass="SongTableViewCell" customModule="Juke" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="28" width="320" height="44"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0kb-sf-i9H" id="guB-Fj-CpO">
@@ -393,7 +396,7 @@
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nB6-JX-2QM">
-                                                                        <rect key="frame" x="278" y="4" width="87" height="35"/>
+                                                                        <rect key="frame" x="278" y="4" width="32" height="35"/>
                                                                     </imageView>
                                                                 </subviews>
                                                                 <constraints>
@@ -408,6 +411,12 @@
                                                                     <constraint firstAttribute="leadingMargin" secondItem="cIG-we-DoN" secondAttribute="leading" id="uhd-bK-jXB"/>
                                                                 </constraints>
                                                             </tableViewCellContentView>
+                                                            <accessibility key="accessibilityConfiguration" identifier="SongCell"/>
+                                                            <connections>
+                                                                <outlet property="artist" destination="cIG-we-DoN" id="GdW-yF-QAg"/>
+                                                                <outlet property="memberImageView" destination="nB6-JX-2QM" id="iHE-nm-0Rs"/>
+                                                                <outlet property="songName" destination="66x-Jw-w2Y" id="JL1-C8-weW"/>
+                                                            </connections>
                                                         </tableViewCell>
                                                     </prototypes>
                                                 </tableView>
@@ -435,6 +444,11 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="GroupTitle" id="4Hh-Qj-Mtd"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="coverArtImage" destination="uqG-GS-V2m" id="3LV-sy-g6l"/>
+                        <outlet property="listenButton" destination="21b-0y-uN8" id="cmB-EF-yGz"/>
+                        <outlet property="tableView" destination="Jo7-bX-PbC" id="84I-x7-Ouc"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CCt-Z1-8jc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
