@@ -24,6 +24,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    @IBOutlet weak var bgblurimg: UIImageView!
     @IBOutlet var coverArtImage: UIImageView!
     //@IBOutlet var currTimeLabel: UILabel!
     //@IBOutlet var currentlyPlayingArtistLabel: UILabel!
@@ -102,8 +103,8 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     private func setUpControlButtons() {
         if CurrentUser.isHost() {
             // controls for the owner
-            listenButton.setImage(UIImage(named: "play.png"), for: .normal)
-            listenButton.setImage(UIImage(named: "pause.png"), for: .selected)
+            listenButton.setImage(UIImage(named: "ic_play_arrow_white_48pt.png"), for: .normal)
+            listenButton.setImage(UIImage(named: "ic_pause_white_48pt.png"), for: .selected)
             // only let host toggle online/offline
             // **** TODO: allow host to clear or skip songs ****
         } else {
@@ -328,7 +329,8 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         if songs.count > 0 {
             let song = songs[0]
             // place first song in the currentlyPlayingLabel
-            coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: CircleFilter())
+            coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil)
+            bgblurimg.af_setImage(withURL: URL(string:song.coverArtURL)!, placeholderImage: nil)
             //self.currentlyPlayingLabel.text = song.songName
             //self.currentlyPlayingArtistLabel.text = song.artistName
             
