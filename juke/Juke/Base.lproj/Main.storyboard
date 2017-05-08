@@ -350,7 +350,7 @@
                                                             <rect key="frame" x="-0.5" y="0.0" width="375" height="333.5"/>
                                                             <subviews>
                                                                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="eR1-0n-Twz">
-                                                                    <rect key="frame" x="6" y="303" width="363" height="31"/>
+                                                                    <rect key="frame" x="6" y="303.5" width="363" height="31"/>
                                                                 </slider>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
