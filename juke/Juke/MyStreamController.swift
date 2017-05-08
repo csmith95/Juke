@@ -170,11 +170,11 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         if (CurrentUser.fetched == false) {
             return 0
         }
-        return CurrentUser.stream.songs.count-1     // -1 because the first one is loaded up top
+        return CurrentUser.stream.songs.count     // -1 because the first one is loaded up top
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let song = CurrentUser.stream.songs[indexPath.row+1]
+        let song = CurrentUser.stream.songs[indexPath.row]
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
         cell.songName.text = song.songName
         cell.artist.text = song.artistName
