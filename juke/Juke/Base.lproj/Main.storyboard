@@ -256,7 +256,7 @@
                                 <rect key="frame" x="0.0" y="72" width="375" height="119"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oae-Ar-DXl" id="QdY-VV-ach">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="119"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="118.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qlh-2K-FMz">
@@ -378,9 +378,12 @@
                                                                         <action selector="toggleListening:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="1HC-Bg-hgv"/>
                                                                     </connections>
                                                                 </button>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ejJ-SU-iib" userLabel="Skip Button">
+                                                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ejJ-SU-iib" userLabel="Skip Button">
                                                                     <rect key="frame" x="132" y="0.0" width="48" height="48"/>
                                                                     <state key="normal" image="ic_fast_forward_white_48pt"/>
+                                                                    <connections>
+                                                                        <action selector="skipSong:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="Wd7-5i-aAN"/>
+                                                                    </connections>
                                                                 </button>
                                                             </subviews>
                                                         </stackView>
@@ -410,11 +413,11 @@
                                                             <rect key="frame" x="0.0" y="28" width="375" height="46"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0kb-sf-i9H" id="guB-Fj-CpO">
-                                                                <rect key="frame" x="0.0" y="0.0" width="375" height="45"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="375" height="45.5"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song name" textAlignment="natural" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="66x-Jw-w2Y">
-                                                                        <rect key="frame" x="8" y="8" width="78" height="18"/>
+                                                                        <rect key="frame" x="41" y="8" width="78" height="18"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                         <nil key="highlightedColor"/>
@@ -426,8 +429,11 @@
                                                                             <constraint firstAttribute="height" constant="30" id="qzd-Jn-q0g"/>
                                                                         </constraints>
                                                                     </imageView>
+                                                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="play" translatesAutoresizingMaskIntoConstraints="NO" id="JVR-9L-ewP" userLabel="playingSongIndicator">
+                                                                        <rect key="frame" x="8" y="12" width="22" height="22"/>
+                                                                    </imageView>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cIG-we-DoN">
-                                                                        <rect key="frame" x="8" y="22" width="66" height="15"/>
+                                                                        <rect key="frame" x="41" y="22" width="66" height="15"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                         <nil key="highlightedColor"/>
@@ -439,15 +445,17 @@
                                                                     <constraint firstAttribute="trailingMargin" secondItem="nB6-JX-2QM" secondAttribute="trailing" constant="2" id="U7B-t5-47a"/>
                                                                     <constraint firstItem="nB6-JX-2QM" firstAttribute="centerY" secondItem="guB-Fj-CpO" secondAttribute="centerY" id="a5i-gB-2Hn"/>
                                                                     <constraint firstAttribute="bottomMargin" secondItem="cIG-we-DoN" secondAttribute="bottom" constant="0.5" id="gCV-B0-dSD"/>
-                                                                    <constraint firstItem="cIG-we-DoN" firstAttribute="leading" secondItem="66x-Jw-w2Y" secondAttribute="leading" id="rbd-jz-uGC"/>
-                                                                    <constraint firstAttribute="leadingMargin" secondItem="66x-Jw-w2Y" secondAttribute="leading" id="sbX-YJ-bYG"/>
-                                                                    <constraint firstAttribute="leadingMargin" secondItem="cIG-we-DoN" secondAttribute="leading" id="uhd-bK-jXB"/>
+                                                                    <constraint firstAttribute="leadingMargin" secondItem="JVR-9L-ewP" secondAttribute="leading" id="pu6-f1-wx0"/>
+                                                                    <constraint firstItem="cIG-we-DoN" firstAttribute="leading" secondItem="66x-Jw-w2Y" secondAttribute="leading" id="r3e-8d-VQL"/>
+                                                                    <constraint firstItem="cIG-we-DoN" firstAttribute="leading" secondItem="JVR-9L-ewP" secondAttribute="trailing" constant="11" id="vbB-vm-o9X"/>
+                                                                    <constraint firstItem="JVR-9L-ewP" firstAttribute="centerY" secondItem="guB-Fj-CpO" secondAttribute="centerY" id="wq3-wT-Si4"/>
                                                                 </constraints>
                                                             </tableViewCellContentView>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <connections>
                                                                 <outlet property="artist" destination="cIG-we-DoN" id="GdW-yF-QAg"/>
                                                                 <outlet property="memberImageView" destination="nB6-JX-2QM" id="iHE-nm-0Rs"/>
+                                                                <outlet property="playingSongIndicator" destination="JVR-9L-ewP" id="SHF-ui-HnE"/>
                                                                 <outlet property="songName" destination="66x-Jw-w2Y" id="JL1-C8-weW"/>
                                                             </connections>
                                                         </tableViewCell>
@@ -487,6 +495,7 @@
                         <outlet property="bgblurimg" destination="6g6-Dn-cTu" id="nAy-5E-5Ac"/>
                         <outlet property="coverArtImage" destination="uqG-GS-V2m" id="3LV-sy-g6l"/>
                         <outlet property="listenButton" destination="21b-0y-uN8" id="cmB-EF-yGz"/>
+                        <outlet property="skipButton" destination="ejJ-SU-iib" id="qde-uY-gEp"/>
                         <outlet property="tableView" destination="Jo7-bX-PbC" id="84I-x7-Ouc"/>
                     </connections>
                 </viewController>
@@ -522,5 +531,6 @@
         <image name="juke_icon" width="1041" height="1051"/>
         <image name="listening" width="25" height="25"/>
         <image name="loginButton" width="244" height="44"/>
+        <image name="play" width="22" height="22"/>
     </resources>
 </document>
