@@ -26,9 +26,11 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     
     @IBOutlet weak var bgblurimg: UIImageView!
     @IBOutlet var coverArtImage: UIImageView!
+    //@IBOutlet weak var playingSongIndicator: UIImageView!
     //@IBOutlet var currTimeLabel: UILabel!
     //@IBOutlet var currentlyPlayingArtistLabel: UILabel!
     //@IBOutlet var currentlyPlayingLabel: UILabel!
+    @IBOutlet weak var skipButton: UIButton!
     @IBOutlet var tableView: UITableView!
     let jamsPlayer = JamsPlayer.shared
     let socketManager = SocketManager.sharedInstance
@@ -41,6 +43,17 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         print("changed listening status in toggleListening")
         let newPlayStatus = !listenButton.isSelected
         setListeningStatus(status: newPlayStatus)
+    }
+    
+    @IBAction func skipSong(_ sender: Any) {
+        //set song to next thing in stream
+        print("called skip")
+        if CurrentUser.stream.songs.count <= 1 {
+            return
+        }
+        songFinished()
+        setSong(play: true)
+        
     }
     
     func handleVisitingStream(notification: NSNotification) {
@@ -105,6 +118,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             // controls for the owner
             listenButton.setImage(UIImage(named: "ic_play_arrow_white_48pt.png"), for: .normal)
             listenButton.setImage(UIImage(named: "ic_pause_white_48pt.png"), for: .selected)
+            skipButton.isHidden = false
             // only let host toggle online/offline
             // **** TODO: allow host to clear or skip songs ****
         } else {
@@ -184,6 +198,11 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         } else {
             cell.memberImageView.image = imageFilter.filter(defaultImage)
         }
+        if CurrentUser.stream.isPlaying == true && indexPath.row == 0 {
+            cell.playingSongIndicator.isHidden = false
+            cell.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.5)
+        }
+        
         return cell
     }
     
@@ -258,7 +277,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func songFinished() {
-        print("received pop")
+        print("called song finished, received pop")
         CurrentUser.stream.songs.remove(at: 0)
         DispatchQueue.main.async {
             self.tableView.reloadData()
