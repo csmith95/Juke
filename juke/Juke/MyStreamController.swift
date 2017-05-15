@@ -26,6 +26,10 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     
     @IBOutlet weak var bgblurimg: UIImageView!
     @IBOutlet var coverArtImage: UIImageView!
+    @IBOutlet weak var noSongsLabel: UILabel!
+    @IBOutlet weak var exitStreamButton: UIButton!
+    @IBOutlet weak var progressSlider: UISlider!
+    @IBOutlet weak var currTimeLabel: UILabel!
     //@IBOutlet weak var playingSongIndicator: UIImageView!
     //@IBOutlet var currTimeLabel: UILabel!
     //@IBOutlet var currentlyPlayingArtistLabel: UILabel!
@@ -56,6 +60,10 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
     
+    @IBAction func returnToPersonalStream(_ sender: Any) {
+        fetchMyStream(toPersonal: true)
+    }
+    
     func handleVisitingStream(notification: NSNotification) {
         setListeningStatus(status: false)
     }
@@ -73,26 +81,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         
         setSong(play: status && CurrentUser.stream.isPlaying)
     }
-    
-//    @IBAction func toggleOnlineStatus(_ sender: AnyObject) {
-//        let url = ServerConstants.kJukeServerURL + ServerConstants.kChangeOnlineStatus
-//        let params: Parameters = ["streamID": CurrentUser.stream.streamID, "isLive": newOnlineStatus]
-//        Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
-//            switch response.result {
-//            case .success:
-//                do {
-//                    let unparsedStream = response.result.value as! UnboxableDictionary
-//                    let stream: Models.Stream = try unbox(dictionary: unparsedStream)
-//                    CurrentUser.stream = stream
-//                } catch {
-//                    print("error unboxing new stream after changing online status: ", error)
-//                }
-//            case .failure(let error):
-//                print("error changing live status: ", error)
-//            }
-//        }
-//    }
-//   
 
     
     override func viewDidLoad() {
@@ -110,7 +98,8 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navBarTitle = "Current Stream"
-        fetchMyStream()
+        self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Helvetica", size: 15)!]
+        fetchMyStream(toPersonal: false)
     }
     
     private func setUpControlButtons() {
@@ -124,19 +113,20 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         } else {
             listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
             listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
+            exitStreamButton.isHidden = false
         }
         listenButton.isSelected = CurrentUser.stream.isPlaying
     }
     
     func refreshStream(notification: NSNotification) {
         print("my stream controller received refreshStream")
-        fetchMyStream()
+        fetchMyStream(toPersonal: false)
     }
     
-    private func fetchMyStream() {
-        // fetch stream for user. if not tuned in, creates and returns an offline stream by default
+    private func fetchMyStream(toPersonal: Bool) {
+        // fetch stream for user. if not tuned in or is returning to personal stream, creates and returns an offline stream by default
         let url = ServerConstants.kJukeServerURL + ServerConstants.kFetchStream
-        let params: Parameters = ["ownerSpotifyID": CurrentUser.user.spotifyID]
+        let params: Parameters = ["ownerSpotifyID": CurrentUser.user.spotifyID, "toPersonal": toPersonal]
         Alamofire.request(url, method: .get, parameters: params).validate().responseJSON { response in
             switch response.result {
             case .success:
@@ -144,14 +134,19 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
                     let unparsedStream = response.result.value as! UnboxableDictionary
                     let stream: Models.Stream = try unbox(dictionary: unparsedStream)
                     CurrentUser.stream = stream
+                    self.navBarTitle = "Tuned into: " + stream.owner_name + "\'s Stream"
                     CurrentUser.user.tunedInto = stream.streamID
                     CurrentUser.fetched = true
                     self.setUpControlButtons()
                     self.tableView.reloadData()
                     if stream.songs.count > 0 {
+                        self.noSongsLabel.isHidden = true
                         if !JamsPlayer.shared.isPlaying(song: stream.songs[0]) {
                             self.loadTopSong()  // otherwise sounds choppy if playback progress is adjusted every time page is loaded
                         }
+                    } else {
+                        // no songs in stream so show noSongsLabel
+                        self.noSongsLabel.isHidden = false
                     }
                     self.socketManager.joinSocketRoom(streamID: CurrentUser.stream.streamID)
                 } catch {
@@ -271,9 +266,10 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     
     private func updateSlider(song: Models.Song) {
         let normalizedProgress = song.progress / song.duration
-        self.circularProgress.progress = normalizedProgress
-        self.circularProgress.set(progress: normalizedProgress, duration: 0.5)
-        //self.currTimeLabel.text = timeIntervalToString(interval: song.progress/1000)
+        progressSlider.value = Float(normalizedProgress)
+        //self.circularProgress.progress = normalizedProgress
+        //self.circularProgress.set(progress: normalizedProgress, duration: 0.5)
+        self.currTimeLabel.text = timeIntervalToString(interval: song.progress/1000)
     }
     
     func songFinished() {
@@ -358,6 +354,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             setSong(play: listenButton.isSelected && CurrentUser.stream.isPlaying)
         } else {
             // **** TODO: no songs left -- display custom UI ****
+            self.noSongsLabel.isHidden = true
             
         }
     }

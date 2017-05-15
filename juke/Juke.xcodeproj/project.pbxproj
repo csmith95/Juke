@@ -20,7 +20,6 @@
 		4B3A34E51E581F1300C314A0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E41E581F1300C314A0 /* AVFoundation.framework */; };
 		4B3A34E71E581F8F00C314A0 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */; };
 		4B425D6B1E79FADF0040BC3D /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B425D6A1E79FADF0040BC3D /* LocationManager.swift */; };
-		4B63F88C1E5FFC3F00E4224D /* StreamController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B63F88B1E5FFC3F00E4224D /* StreamController.swift */; };
 		4B99E0511E790D150086394A /* SocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B99E0501E790D150086394A /* SocketManager.swift */; };
 		4BA7CB701E8ED007003E3DC8 /* MyStreamController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */; };
 		4BA9B3F51E91B043003D352E /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA9B3F41E91B043003D352E /* CurrentUser.swift */; };
@@ -52,7 +51,6 @@
 		4B3A34E41E581F1300C314A0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4B425D6A1E79FADF0040BC3D /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
-		4B63F88B1E5FFC3F00E4224D /* StreamController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamController.swift; sourceTree = "<group>"; };
 		4B99E0501E790D150086394A /* SocketManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketManager.swift; sourceTree = "<group>"; };
 		4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyStreamController.swift; sourceTree = "<group>"; };
 		4BA9B3F41E91B043003D352E /* CurrentUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
@@ -124,7 +122,6 @@
 				4B3A34DD1E58120F00C314A0 /* Info.plist */,
 				4B3A34CE1E58120F00C314A0 /* Juke.xcdatamodeld */,
 				4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */,
-				4B63F88B1E5FFC3F00E4224D /* StreamController.swift */,
 				4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */,
 				4BDCEC051E720D0B00D9D3EE /* ServerConstants.swift */,
 				4B0490E81E734614003F49DF /* SongTableViewCell.swift */,
@@ -300,7 +297,6 @@
 				4B336A671E8B54A0003CEDBB /* Models.swift in Sources */,
 				4BDCEC061E720D0B00D9D3EE /* ServerConstants.swift in Sources */,
 				4B3A34D01E58120F00C314A0 /* Juke.xcdatamodeld in Sources */,
-				4B63F88C1E5FFC3F00E4224D /* StreamController.swift in Sources */,
 				4B0490E91E734614003F49DF /* SongTableViewCell.swift in Sources */,
 				4B13DE4E1E8AFB850060D29A /* StreamsTableViewController.swift in Sources */,
 				F2DB0B331EA1145A00A13E30 /* SearchTableViewController.swift in Sources */,
