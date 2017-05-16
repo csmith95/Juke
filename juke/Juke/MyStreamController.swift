@@ -62,6 +62,13 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     
     @IBAction func returnToPersonalStream(_ sender: Any) {
         fetchMyStream(toPersonal: true)
+        //loadTopSong()
+        setSong(play: false)
+        currTimeLabel.text = "00:00"
+        progressSlider.value = 0.0
+        let url = ServerConstants.kJukeServerURL + ServerConstants.kReturnToPersonalStream
+        let params: Parameters = ["userID": CurrentUser.user.id, "streamID": CurrentUser.stream.streamID]
+        Alamofire.request(url, method: .post, parameters: params)
     }
     
     func handleVisitingStream(notification: NSNotification) {
@@ -108,11 +115,13 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             listenButton.setImage(UIImage(named: "ic_play_arrow_white_48pt.png"), for: .normal)
             listenButton.setImage(UIImage(named: "ic_pause_white_48pt.png"), for: .selected)
             skipButton.isHidden = false
+            exitStreamButton.isHidden = true
             // only let host toggle online/offline
             // **** TODO: allow host to clear or skip songs ****
         } else {
             listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
             listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
+            skipButton.isHidden = true
             exitStreamButton.isHidden = false
         }
         listenButton.isSelected = CurrentUser.stream.isPlaying
@@ -147,6 +156,8 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
                     } else {
                         // no songs in stream so show noSongsLabel
                         self.noSongsLabel.isHidden = false
+                        self.coverArtImage.image = #imageLiteral(resourceName: "jukedef")
+                        self.bgblurimg.image = #imageLiteral(resourceName: "jukedef")
                     }
                     self.socketManager.joinSocketRoom(streamID: CurrentUser.stream.streamID)
                 } catch {
@@ -330,6 +341,10 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func updateAnimationProgress() {
+        if CurrentUser.stream.songs.count == 0 {
+            progressSlider.value = Float(0)
+            return
+        }
         let song = CurrentUser.stream.songs[0]
         let newProgress = song.progress + 500
         CurrentUser.stream.songs[0].progress = newProgress
@@ -346,15 +361,13 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             // place first song in the currentlyPlayingLabel
             coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil)
             bgblurimg.af_setImage(withURL: URL(string:song.coverArtURL)!, placeholderImage: nil)
-            //self.currentlyPlayingLabel.text = song.songName
-            //self.currentlyPlayingArtistLabel.text = song.artistName
-            
-            
             updateSlider(song: song)
             setSong(play: listenButton.isSelected && CurrentUser.stream.isPlaying)
         } else {
             // **** TODO: no songs left -- display custom UI ****
             self.noSongsLabel.isHidden = true
+            coverArtImage.image = #imageLiteral(resourceName: "jukedef")
+            bgblurimg.image = #imageLiteral(resourceName: "jukedef")
             
         }
     }
