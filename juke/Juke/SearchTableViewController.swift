@@ -13,7 +13,8 @@ import Unbox
 
 struct post {
     let mainImage: UIImage!
-    let name: String!
+    let song_name: String!
+    let artist_name: String!
 }
 
 class SearchTableViewController: UITableViewController, UISearchBarDelegate {
@@ -27,7 +28,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     let imageFilter = RoundedCornersFilter(radius: 20.0)
     let socketManager = SocketManager.sharedInstance
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         let keywords = searchBar.text
         let finalKeywords = keywords?.replacingOccurrences(of: " ", with: "+")
         
@@ -38,6 +39,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         self.tableView.reloadData()
         searchSpotify(url: searchURL)
         self.view.endEditing(true)
+
     }
 
     override func viewDidLoad() {
@@ -55,6 +57,8 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         self.posts.removeAll()
         self.results.removeAll()
         self.tableView.reloadData()
+        loadSavedTracks()
+
     }
     
     func hideKeyboard() {
@@ -90,10 +94,12 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func parseSearchData(JSONData: Data) {
+        print("in parseSearchData")
         do {
             let group = DispatchGroup()
             var readableJSON = try JSONSerialization.jsonObject(with: JSONData, options: .mutableContainers) as! JSONStandard
             if let tracks = readableJSON["tracks"] as? JSONStandard{
+                print("found tracks", tracks)
                 if let items = tracks["items"] as? [JSONStandard] {
                     for i in 0..<items.count {
                         let item = items[i]
@@ -105,7 +111,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
                             group.enter()   // signal that an operation is starting
                             self.downloader.download(URLRequest(url: URL(string: spotifySong.coverArtURL)!)) { response in
                                 if let image = response.result.value {
-                                    self.posts.append(post.init(mainImage: self.imageFilter.filter(image), name: spotifySong.songName))
+                                    self.posts.append(post.init(mainImage: self.imageFilter.filter(image), song_name: spotifySong.songName, artist_name: spotifySong.artistName))
                                     self.results.append(spotifySong)
                                 }
                                 group.leave()   // signal that an operation has ended
@@ -124,7 +130,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             
         }
         catch {
-            print(error)
+            print("error", error)
         }
     }
     
@@ -147,8 +153,10 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         mainImageView.image = posts[indexPath.row].mainImage
         
         let mainLabel = cell.viewWithTag(1) as! UILabel
+        let artistLabel = cell.viewWithTag(3) as! UILabel
         
-        mainLabel.text = posts[indexPath.row].name
+        mainLabel.text = posts[indexPath.row].song_name
+        artistLabel.text = posts[indexPath.row].artist_name
         
         return cell
     }
@@ -163,6 +171,24 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         
         // go through socketManager so that other members will be updated
         socketManager.addSong(params: params);
+    }
+    
+    func loadSavedTracks() {
+        print("called loadSavedTracks")
+        self.navigationItem.title = "Your saved songs"
+        if let sessionObj = UserDefaults.standard.object(forKey: "SpotifySession") {
+            let sessionDataObj = sessionObj as! Data
+            let session = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
+            let savedSongsUrl = "https://api.spotify.com/v1/me/tracks"
+            let headers = [
+                "Authorization": "Bearer" + session.accessToken
+            ]
+            Alamofire.request(savedSongsUrl, headers: headers).responseJSON { response in
+                if let JSON = response.result.value {
+                    print("JSON: \(JSON)")
+                }
+            }
+        }
     }
 
     /*

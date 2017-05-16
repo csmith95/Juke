@@ -252,18 +252,18 @@
                             </connections>
                         </searchBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchCell" rowHeight="119" id="oae-Ar-DXl" customClass="SearchCell" customModule="Juke" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="72" width="375" height="119"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchCell" rowHeight="115" id="oae-Ar-DXl" customClass="SearchCell" customModule="Juke" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="72" width="375" height="115"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oae-Ar-DXl" id="QdY-VV-ach">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="119"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="115"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qlh-2K-FMz">
-                                            <rect key="frame" x="8" y="14" width="90" height="89"/>
+                                            <rect key="frame" x="8" y="14" width="90" height="85.5"/>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="80K-77-ogI">
-                                            <rect key="frame" x="106" y="14" width="261" height="48"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="80K-77-ogI">
+                                            <rect key="frame" x="106" y="14" width="261" height="23.5"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="261" id="EVw-2B-Zay"/>
                                             </constraints>
@@ -272,7 +272,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tjh-8I-GdK">
-                                            <rect key="frame" x="270" y="70" width="97" height="33"/>
+                                            <rect key="frame" x="270" y="66" width="97" height="33.5"/>
                                             <accessibility key="accessibilityConfiguration" identifier="addToStreamButton"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="27"/>
                                             <state key="normal" title="+"/>
@@ -280,14 +280,21 @@
                                                 <action selector="queueSongButtonTapped:" destination="oae-Ar-DXl" eventType="touchUpInside" id="mdE-wd-NM1"/>
                                             </connections>
                                         </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Artist" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DeB-S4-3v2">
+                                            <rect key="frame" x="106" y="44" width="261" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="leadingMargin" secondItem="qlh-2K-FMz" secondAttribute="leading" id="4ox-9a-npt"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="80K-77-ogI" secondAttribute="bottom" constant="48" id="5Mo-et-iy8"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="80K-77-ogI" secondAttribute="bottom" constant="69" id="5Mo-et-iy8"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="tjh-8I-GdK" secondAttribute="bottom" constant="7" id="8e5-PX-TIi"/>
                                         <constraint firstItem="qlh-2K-FMz" firstAttribute="top" secondItem="QdY-VV-ach" secondAttribute="topMargin" constant="6" id="DY0-Qu-y50"/>
                                         <constraint firstItem="80K-77-ogI" firstAttribute="leading" secondItem="qlh-2K-FMz" secondAttribute="trailing" constant="8" id="FnM-DL-w6Y"/>
-                                        <constraint firstItem="tjh-8I-GdK" firstAttribute="top" secondItem="80K-77-ogI" secondAttribute="bottom" constant="8" id="IAU-LQ-y4s"/>
+                                        <constraint firstItem="tjh-8I-GdK" firstAttribute="top" secondItem="80K-77-ogI" secondAttribute="bottom" constant="28.5" id="IAU-LQ-y4s"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="qlh-2K-FMz" secondAttribute="bottom" constant="7" id="Imq-jY-cHi"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="80K-77-ogI" secondAttribute="trailing" id="WXg-ie-0lf"/>
                                         <constraint firstItem="80K-77-ogI" firstAttribute="top" secondItem="QdY-VV-ach" secondAttribute="topMargin" constant="6" id="pgu-ZV-pMX"/>
@@ -349,7 +356,7 @@
                                                         <view alpha="0.40000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8fy-NS-tFB" userLabel="CoverTintView">
                                                             <rect key="frame" x="0.5" y="0.0" width="375" height="333.5"/>
                                                             <subviews>
-                                                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="eR1-0n-Twz">
+                                                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="-6" minValue="-6" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="eR1-0n-Twz">
                                                                     <rect key="frame" x="6" y="303.5" width="318" height="31"/>
                                                                     <color key="thumbTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                 </slider>
