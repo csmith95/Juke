@@ -105,7 +105,7 @@ class LoginViewController: UIViewController {
         let auth = SPTAuth.defaultInstance()!
         auth.clientID = kClientID
         auth.redirectURL = NSURL(string:kCallbackURL)! as URL
-        auth.requestedScopes = [SPTAuthStreamingScope]
+        auth.requestedScopes = [SPTAuthStreamingScope, SPTAuthUserLibraryReadScope, SPTAuthUserReadPrivateScope, SPTAuthUserLibraryModifyScope]
         let loginURL = SPTAuth.defaultInstance().spotifyWebAuthenticationURL()
         UIApplication.shared.open(loginURL!)
     }
