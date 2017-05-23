@@ -12,33 +12,51 @@ import AlamofireImage
 import Unbox
 
 struct post {
-    let mainImage: UIImage!
-    let name: String!
+    let song_name: String!
+    let artist_name: String!
+    //let album_name: String!
 }
 
 class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
     var results:[Models.SpotifySong] = []
+    var savedTracks: [Models.SpotifySong] = []
     
     var searchURL = String()
     typealias JSONStandard = [String: AnyObject]
     var posts = [post]()
-    let downloader = ImageDownloader()
-    let imageFilter = RoundedCornersFilter(radius: 20.0)
     let socketManager = SocketManager.sharedInstance
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    func execSearch() {
         let keywords = searchBar.text
-        let finalKeywords = keywords?.replacingOccurrences(of: " ", with: "+")
-        
-        searchURL = "https://api.spotify.com/v1/search?q=\(finalKeywords!)&type=track"
-        
-        self.posts.removeAll() // reset for a new round of search results
-        self.results.removeAll()
-        self.tableView.reloadData()
-        searchSpotify(url: searchURL)
+        if (keywords?.isEmpty)! {
+            self.posts.removeAll()
+            loadSavedTracks() //optimize this
+        } else {
+            let finalKeywords = keywords?.replacingOccurrences(of: " ", with: "+")
+            searchURL = "https://api.spotify.com/v1/search?q=\(finalKeywords!)&type=track"
+            self.posts.removeAll() // reset for a new round of search results
+            self.results.removeAll()
+            self.tableView.reloadData()
+            searchSpotify(url: searchURL)
+        }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        print("search bar button clicked")
+        execSearch()
         self.view.endEditing(true)
     }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        loadSavedTracks()
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        print("search bar ended editing")
+        execSearch()
+    }
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +73,8 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         self.posts.removeAll()
         self.results.removeAll()
         self.tableView.reloadData()
+        loadSavedTracks()
+
     }
     
     func hideKeyboard() {
@@ -82,18 +102,20 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     func searchSpotify(url: String) {
         // call alamofire with endpoint
+        self.navigationItem.title = "Search results"
         Alamofire.request(url).responseJSON(completionHandler: {
             response in
             self.parseSearchData(JSONData: response.data!)
-            
         })
     }
     
     func parseSearchData(JSONData: Data) {
+        print("in parseSearchData")
         do {
             let group = DispatchGroup()
             var readableJSON = try JSONSerialization.jsonObject(with: JSONData, options: .mutableContainers) as! JSONStandard
             if let tracks = readableJSON["tracks"] as? JSONStandard{
+                //print("found tracks", tracks)
                 if let items = tracks["items"] as? [JSONStandard] {
                     for i in 0..<items.count {
                         let item = items[i]
@@ -102,14 +124,10 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
                         let curr = item as UnboxableDictionary
                         do {
                             let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
-                            group.enter()   // signal that an operation is starting
-                            self.downloader.download(URLRequest(url: URL(string: spotifySong.coverArtURL)!)) { response in
-                                if let image = response.result.value {
-                                    self.posts.append(post.init(mainImage: self.imageFilter.filter(image), name: spotifySong.songName))
-                                    self.results.append(spotifySong)
-                                }
-                                group.leave()   // signal that an operation has ended
-                            }
+                            group.enter()
+                            self.posts.append(post.init(song_name: spotifySong.songName, artist_name: spotifySong.artistName))
+                            self.results.append(spotifySong)
+                            group.leave()
                         } catch {
                             print("error unboxing spotify song: ", error)
                         }
@@ -124,7 +142,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             
         }
         catch {
-            print(error)
+            print("error", error)
         }
     }
     
@@ -141,14 +159,11 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         }
         
         
-        
-        let mainImageView = cell.viewWithTag(2) as! UIImageView
-        
-        mainImageView.image = posts[indexPath.row].mainImage
-        
         let mainLabel = cell.viewWithTag(1) as! UILabel
+        let artistLabel = cell.viewWithTag(2) as! UILabel
         
-        mainLabel.text = posts[indexPath.row].name
+        mainLabel.text = posts[indexPath.row].song_name
+        artistLabel.text = posts[indexPath.row].artist_name
         
         return cell
     }
@@ -163,6 +178,53 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         
         // go through socketManager so that other members will be updated
         socketManager.addSong(params: params);
+    }
+    
+    func loadSavedTracks() {
+        print("called loadSavedTracks")
+        self.navigationItem.title = "From your saved songs"
+        if let sessionObj = UserDefaults.standard.object(forKey: "SpotifySession") {
+            let sessionDataObj = sessionObj as! Data
+            let session = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
+            let savedSongsUrl = "https://api.spotify.com/v1/me/tracks"
+            let headers = [
+                "Authorization": "Bearer " + session.accessToken
+            ]
+            Alamofire.request(savedSongsUrl, headers: headers).responseJSON { response in
+                do {
+                    //let group = DispatchGroup()
+                    var serializedJSON = try JSONSerialization.jsonObject(with: response.data!, options: .mutableContainers) as! JSONStandard
+                    //print("serializedJSON", serializedJSON)
+                    if let items = serializedJSON["items"] as? [JSONStandard] {
+                        for i in 0..<items.count {
+                            let item = items[i]["track"]
+                            //print("item", item)
+                            
+                            // convert to models.spotifySong so we can add to stream.
+                            let curr = item as! UnboxableDictionary
+                            do {
+                                //group.enter()
+                                let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
+                                self.posts.append(post.init(song_name: spotifySong.songName, artist_name: spotifySong.artistName))
+                                self.results.append(spotifySong)
+                                //group.leave()
+                                print("results", self.results)
+                            } catch {
+                                print("error unboxing spotify song: ", error)
+                            }
+                        }
+                        DispatchQueue.main.async { self.tableView.reloadData()}
+                    }
+                    
+                }
+                catch {
+                    print("error unboxing spotify song: ", error)
+                }
+//                if let JSON = response.result.value {
+//                    print("JSON: \(JSON)")
+//                }
+            }
+        }
     }
 
     /*
