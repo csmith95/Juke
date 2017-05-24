@@ -276,7 +276,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     private func updateSlider(song: Models.Song) {
-        let normalizedProgress = song.progress / song.duration
+        let normalizedProgress = (song.progress*100.0) / song.duration
         progressSlider.value = Float(normalizedProgress)
         //self.circularProgress.progress = normalizedProgress
         //self.circularProgress.set(progress: normalizedProgress, duration: 0.5)

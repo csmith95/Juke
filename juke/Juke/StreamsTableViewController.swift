@@ -20,8 +20,7 @@ class StreamsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.backgroundColor = UIColor(red: 240/255.0, green: 240/255.0, blue: 240/255.0, alpha: 1.0)
-        self.title = "Jams"
+        self.title = "Available streams"
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -49,12 +48,11 @@ class StreamsTableViewController: UITableViewController {
     }
     
     private func setImage(cell: StreamCell, url: String?, index: Int) {
-        let imageFilter = CircleFilter()
         let imageView = cell.getImageViewForMember(index: index)
         if let unwrappedUrl = url {
-            imageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultImage, filter: imageFilter)
+            imageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultImage)
         } else {
-            imageView.image = imageFilter.filter(defaultImage)
+            imageView.image = defaultImage
         }
     }
     
@@ -62,7 +60,7 @@ class StreamsTableViewController: UITableViewController {
         // load coverArt
         if stream.songs.count > 0 {
             let song = stream.songs[0]
-            cell.coverArt.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil, filter: RoundedCornersFilter(radius: 20.0))
+            cell.coverArt.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: #imageLiteral(resourceName: "jukedef"))
         }
         // load owner icon
         setImage(cell: cell, url: stream.owner.imageURL, index: 0)
@@ -87,13 +85,13 @@ class StreamsTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell", for: indexPath) as! StreamCell
         let stream = streams[indexPath.row]
         loadCellImages(cell: cell, stream: stream)
+        cell.username.text = stream.owner_name.components(separatedBy: " ").first! + "'s stream"
         if stream.songs.count > 0 {
             let song = stream.songs[0]
             cell.artist.text = song.artistName
             cell.song.text = song.songName
         }
         cell.setMusicIndicator(play: stream.isPlaying)
-        cell.updateUI()
         return cell
     }
     
