@@ -30,10 +30,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var exitStreamButton: UIButton!
     @IBOutlet weak var progressSlider: UISlider!
     @IBOutlet weak var currTimeLabel: UILabel!
-    //@IBOutlet weak var playingSongIndicator: UIImageView!
-    //@IBOutlet var currTimeLabel: UILabel!
-    //@IBOutlet var currentlyPlayingArtistLabel: UILabel!
-    //@IBOutlet var currentlyPlayingLabel: UILabel!
     @IBOutlet weak var skipButton: UIButton!
     @IBOutlet var tableView: UITableView!
     let jamsPlayer = JamsPlayer.shared
@@ -276,7 +272,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     private func updateSlider(song: Models.Song) {
-        let normalizedProgress = (song.progress*100.0) / song.duration
+        let normalizedProgress = song.progress / song.duration
         progressSlider.value = Float(normalizedProgress)
         //self.circularProgress.progress = normalizedProgress
         //self.circularProgress.set(progress: normalizedProgress, duration: 0.5)

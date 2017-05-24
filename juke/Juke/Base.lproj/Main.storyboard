@@ -403,7 +403,7 @@
                                                         <view alpha="0.40000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8fy-NS-tFB" userLabel="CoverTintView">
                                                             <rect key="frame" x="0.5" y="0.0" width="375" height="333.5"/>
                                                             <subviews>
-                                                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="-6" minValue="-6" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="eR1-0n-Twz">
+                                                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="eR1-0n-Twz">
                                                                     <rect key="frame" x="6" y="303.5" width="318" height="31"/>
                                                                     <color key="thumbTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                 </slider>
