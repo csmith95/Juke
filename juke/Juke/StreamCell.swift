@@ -22,7 +22,7 @@ class StreamCell: UITableViewCell {
     @IBOutlet var artist: UILabel!
     @IBOutlet var song: UILabel!
     @IBOutlet var username: UILabel!
-    @IBOutlet var backgroundCardView: UIView!
+    //@IBOutlet var backgroundCardView: UIView!
     private var imageViewDict:[Int:UIImageView] = [:]
     var indicator:ESTMusicIndicatorView!
     
