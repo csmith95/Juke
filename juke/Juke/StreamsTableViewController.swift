@@ -12,8 +12,10 @@ import Alamofire
 import Unbox
 import PKHUD
 
-class StreamsTableViewController: UITableViewController {
+class StreamsTableViewController: UITableViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
+    @IBOutlet var friendsCollectionView: UICollectionView!
+    var friends: [Models.User] = []
     var streams: [Models.Stream] = []
     let socketManager = SocketManager.sharedInstance
     let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
@@ -21,13 +23,62 @@ class StreamsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Available streams"
+        self.friendsCollectionView.delegate = self
+        self.friendsCollectionView.dataSource = self
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
     }
     
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.friends.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell",
+                                                      for: indexPath) as! FriendCollectionViewCell
+        let friend = friends[indexPath.item]
+        if let urlString = friend.imageURL {
+            cell.friendImage.af_setImage(withURL: URL(string: urlString)!, placeholderImage: defaultImage, filter: CircleFilter())
+        } else {
+            cell.friendImage.image = defaultImage
+        }
+      
+        return cell
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         fetchStreams()
+        fetchFriends()
+    }
+    
+    private func fetchFriends() {
+        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kFetchFriends, method: .get)
+            .validate().responseJSON { response in
+            switch response.result {
+            case .success:
+                if let unparsedFriends = response.result.value as? [UnboxableDictionary] {
+                    self.friends = []
+                    for unparsedStream in unparsedFriends {
+                        do {
+                            let friend: Models.User = try unbox(dictionary: unparsedStream)
+                            if (friend.id != CurrentUser.user.id) {
+                                self.friends.append(friend)  // if not tuned into this stream, display it
+                            }
+                        } catch {
+                            print("Error trying to unbox friend: \(error)")
+                        }
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.friendsCollectionView.reloadData()
+                    }
+                    
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
