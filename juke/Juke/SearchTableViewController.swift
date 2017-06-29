@@ -181,48 +181,67 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func loadSavedTracks() {
-        print("called loadSavedTracks")
         self.navigationItem.title = "From your saved songs"
         if let sessionObj = UserDefaults.standard.object(forKey: "SpotifySession") {
             let sessionDataObj = sessionObj as! Data
             let session = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
-            let savedSongsUrl = "https://api.spotify.com/v1/me/tracks"
+            let url = "https://api.spotify.com/v1/me/tracks"
             let headers = [
                 "Authorization": "Bearer " + session.accessToken
             ]
-            Alamofire.request(savedSongsUrl, headers: headers).responseJSON { response in
+            var params: Parameters = ["limit": 50, "offset": 0]
+            Alamofire.request(url, parameters: params, headers: headers).responseJSON { response in
                 do {
-                    //let group = DispatchGroup()
                     var serializedJSON = try JSONSerialization.jsonObject(with: response.data!, options: .mutableContainers) as! JSONStandard
-                    //print("serializedJSON", serializedJSON)
                     if let items = serializedJSON["items"] as? [JSONStandard] {
                         for i in 0..<items.count {
                             let item = items[i]["track"]
-                            //print("item", item)
-                            
-                            // convert to models.spotifySong so we can add to stream.
                             let curr = item as! UnboxableDictionary
                             do {
-                                //group.enter()
                                 let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
                                 self.posts.append(post.init(song_name: spotifySong.songName, artist_name: spotifySong.artistName))
                                 self.results.append(spotifySong)
-                                //group.leave()
-                                print("results", self.results)
                             } catch {
                                 print("error unboxing spotify song: ", error)
                             }
                         }
-                        DispatchQueue.main.async { self.tableView.reloadData()}
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                        
+                        let numItems = serializedJSON["total"] as! Int
+                        var offset = items.count
+                        while (offset < numItems) {
+                            offset += 50
+                            params["offset"] = offset
+                            Alamofire.request(url, parameters: params, headers: headers).responseJSON { response in
+                                do {
+                                    var serializedJSON = try JSONSerialization.jsonObject(with: response.data!, options: .mutableContainers) as! JSONStandard
+                                    if let items = serializedJSON["items"] as? [JSONStandard] {
+                                        for i in 0..<items.count {
+                                            let item = items[i]["track"]
+                                            let curr = item as! UnboxableDictionary
+                                            do {
+                                                let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
+                                                self.posts.append(post.init(song_name: spotifySong.songName, artist_name: spotifySong.artistName))
+                                                self.results.append(spotifySong)
+                                            } catch {
+                                                print("error unboxing spotify song: ", error)
+                                            }
+                                        }
+                                        DispatchQueue.main.async {
+                                            self.tableView.reloadData()
+                                        }
+                                    }
+                                } catch {
+                                    print("error unboxing JSON")
+                                }
+                            }
+                        }
                     }
-                    
+                }catch {
+                    print("error unboxing JSON")
                 }
-                catch {
-                    print("error unboxing spotify song: ", error)
-                }
-//                if let JSON = response.result.value {
-//                    print("JSON: \(JSON)")
-//                }
             }
         }
     }

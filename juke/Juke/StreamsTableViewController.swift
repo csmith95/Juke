@@ -38,8 +38,9 @@ class StreamsTableViewController: UITableViewController, UICollectionViewDelegat
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell",
                                                       for: indexPath) as! FriendCollectionViewCell
         let friend = friends[indexPath.item]
+        let filter = AspectScaledToFillSizeCircleFilter(size: cell.friendImage.frame.size)
         if let urlString = friend.imageURL {
-            cell.friendImage.af_setImage(withURL: URL(string: urlString)!, placeholderImage: defaultImage, filter: CircleFilter())
+            cell.friendImage.af_setImage(withURL: URL(string: urlString)!, placeholderImage: defaultImage, filter: filter)
         } else {
             cell.friendImage.image = defaultImage
         }
@@ -111,7 +112,11 @@ class StreamsTableViewController: UITableViewController, UICollectionViewDelegat
         // load coverArt
         if stream.songs.count > 0 {
             let song = stream.songs[0]
-            cell.coverArt.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: #imageLiteral(resourceName: "jukedef"))
+            let filter = AspectScaledToFillSizeWithRoundedCornersFilter(
+                size: cell.coverArt.frame.size,
+                radius: 20.0
+            )
+            cell.coverArt.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: #imageLiteral(resourceName: "jukedef"), filter: filter)
         }
         // load owner icon
         setImage(cell: cell, url: stream.owner.imageURL, index: 0)
