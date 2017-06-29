@@ -66,7 +66,6 @@ class LoginViewController: UIViewController {
                         userDefaults.synchronize()
                         
                         self.session = renewedSession
-                        //fetch user
                         self.fetchSpotifyUser(accessToken: session.accessToken)
                     }
                 })
@@ -113,6 +112,7 @@ class LoginViewController: UIViewController {
     func fetchSpotifyUser(accessToken: String) {
         // first retrieve user object from spotify server using access token
         print("Fetching user")
+        CurrentUser.accessToken = accessToken
         let headers: HTTPHeaders = ["Authorization": "Bearer " + accessToken]
         let url = ServerConstants.kSpotifyBaseURL + ServerConstants.kCurrentUserPath
         Alamofire.request(url, method: .get, parameters: nil, encoding: URLEncoding.default, headers: headers).validate().responseJSON {

@@ -16,4 +16,5 @@ class CurrentUser {
     public static func isHost() -> Bool {
         return CurrentUser.user.id == CurrentUser.stream.owner.id
     }
+    public static var accessToken = ""
 }

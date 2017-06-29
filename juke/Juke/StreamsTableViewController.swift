@@ -22,7 +22,6 @@ class StreamsTableViewController: UITableViewController, UICollectionViewDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Available streams"
         self.friendsCollectionView.delegate = self
         self.friendsCollectionView.dataSource = self
 
