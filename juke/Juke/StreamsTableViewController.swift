@@ -18,7 +18,7 @@ class StreamsTableViewController: UITableViewController, UICollectionViewDelegat
     var friends: [Models.User] = []
     var streams: [Models.Stream] = []
     let socketManager = SocketManager.sharedInstance
-    let defaultImage = RoundedCornersFilter(radius: 20.0).filter(UIImage(named: "juke_icon")!)
+    let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
     
     override func viewDidLoad() {
         super.viewDidLoad()
