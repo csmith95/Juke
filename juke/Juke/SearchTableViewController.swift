@@ -70,15 +70,10 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         execSearch()
-//        switch selectedScope {
-//        case Scope.MyLibrary.rawValue:
-//            execSearch()
-//        case Scope.Spotify.rawValue:
-//            displayedResults = spotifyResults
-//            tableView.reloadData()
-//        default:
-//            print("idk")
-//        }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        execSearch()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -93,14 +88,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             print("idk")
         }
     }
-    
-//    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-//        var result = [String]()
-//        for char in alphaString.characters {
-//            result.append(String(char))
-//        }
-//        return result
-//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
