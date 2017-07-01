@@ -12,6 +12,7 @@ public class ServerConstants {
     
     // juke & spotify server base URLs
     static let kJukeServerURL = "http://myjukebx.herokuapp.com/"
+//    static let kJukeServerURL = "http://localhost:8000/"
     static let kSpotifyBaseURL = "https://api.spotify.com/v1/"
     
     // spotify full URLs
@@ -27,7 +28,6 @@ public class ServerConstants {
     static let kFetchStream = "fetchStream"
     static let kChangeOnlineStatus = "changeOnlineStatus"
     static let kSplitFromStream = "splitFromStream"
-    static let kReturnToPersonalStream = "returnToPersonalStream"
     static let kFetchFriends = "getFriends"
     
     // spotify paths

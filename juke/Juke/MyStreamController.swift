@@ -47,24 +47,15 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     
     @IBAction func skipSong(_ sender: Any) {
         //set song to next thing in stream
-        print("called skip")
         if CurrentUser.stream.songs.count <= 1 {
             return
         }
         songFinished()
         setSong(play: true)
-        
     }
     
     @IBAction func returnToPersonalStream(_ sender: Any) {
-        fetchMyStream(toPersonal: true)
-        //loadTopSong()
-        setSong(play: false)
-        currTimeLabel.text = "00:00"
-        progressSlider.value = 0.0
-        let url = ServerConstants.kJukeServerURL + ServerConstants.kReturnToPersonalStream
-        let params: Parameters = ["userID": CurrentUser.user.id, "streamID": CurrentUser.stream.streamID]
-        Alamofire.request(url, method: .post, parameters: params)
+        socketManager.splitFromStream(userID: CurrentUser.user.id);
     }
     
     func handleVisitingStream(notification: NSNotification) {
@@ -93,7 +84,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songPositionChanged), name: Notification.Name("songPositionChanged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.syncPositionWithOwner), name: Notification.Name("syncPositionWithOwner"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.refreshStream), name: Notification.Name("refreshMyStream"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.fetchMyStream), name: Notification.Name("refreshMyStream"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.handleVisitingStream), name: Notification.Name("handleVisitingStream"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.jamsPlayerReady), name: Notification.Name("jamsPlayerReady"), object: nil)
             }
@@ -102,7 +93,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewWillAppear(animated)
         navBarTitle = "Current Stream"
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Helvetica", size: 15)!]
-        fetchMyStream(toPersonal: false)
+        fetchMyStream()
     }
     
     private func setUpControlButtons() {
@@ -123,15 +114,10 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         listenButton.isSelected = CurrentUser.stream.isPlaying
     }
     
-    func refreshStream(notification: NSNotification) {
-        print("my stream controller received refreshStream")
-        fetchMyStream(toPersonal: false)
-    }
-    
-    private func fetchMyStream(toPersonal: Bool) {
+    func fetchMyStream() {
         // fetch stream for user. if not tuned in or is returning to personal stream, creates and returns an offline stream by default
         let url = ServerConstants.kJukeServerURL + ServerConstants.kFetchStream
-        let params: Parameters = ["ownerSpotifyID": CurrentUser.user.spotifyID, "toPersonal": toPersonal]
+        let params: Parameters = ["ownerSpotifyID": CurrentUser.user.spotifyID]
         Alamofire.request(url, method: .get, parameters: params).validate().responseJSON { response in
             switch response.result {
             case .success:
@@ -139,7 +125,9 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
                     let unparsedStream = response.result.value as! UnboxableDictionary
                     let stream: Models.Stream = try unbox(dictionary: unparsedStream)
                     CurrentUser.stream = stream
-                    self.navBarTitle = "Tuned into: " + stream.owner_name + "\'s Stream"
+                    if let owner = stream.owner_name {
+                        self.navBarTitle = "Tuned into: " + owner + "\'s Stream"
+                    }
                     CurrentUser.user.tunedInto = stream.streamID
                     CurrentUser.fetched = true
                     self.setUpControlButtons()
@@ -186,11 +174,11 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         if (CurrentUser.fetched == false) {
             return 0
         }
-        return CurrentUser.stream.songs.count     // -1 because the first one is loaded up top
+        return CurrentUser.stream.songs.count-1     // -1 because the first one is loaded up top
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let song = CurrentUser.stream.songs[indexPath.row]
+        let song = CurrentUser.stream.songs[indexPath.row+1]
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
         cell.songName.text = song.songName
         cell.artist.text = song.artistName
@@ -201,7 +189,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             cell.memberImageView.image = imageFilter.filter(defaultImage)
         }
         if CurrentUser.stream.isPlaying == true && indexPath.row == 0 {
-            cell.playingSongIndicator.isHidden = false
             cell.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.5)
         }
         

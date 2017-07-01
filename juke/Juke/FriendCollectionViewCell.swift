@@ -13,4 +13,5 @@ class FriendCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet var friendImage: UIImageView!
     
+    
 }

@@ -18,15 +18,12 @@ class StreamsTableViewController: UITableViewController, UICollectionViewDelegat
     var friends: [Models.User] = []
     var streams: [Models.Stream] = []
     let socketManager = SocketManager.sharedInstance
-    let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
+    let defaultImage = RoundedCornersFilter(radius: 20.0).filter(UIImage(named: "juke_icon")!)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.friendsCollectionView.delegate = self
         self.friendsCollectionView.dataSource = self
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -36,7 +33,7 @@ class StreamsTableViewController: UITableViewController, UICollectionViewDelegat
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell",
                                                       for: indexPath) as! FriendCollectionViewCell
-        let friend = friends[indexPath.item]
+        let friend = friends[indexPath.row]
         let filter = AspectScaledToFillSizeCircleFilter(size: cell.friendImage.frame.size)
         if let urlString = friend.imageURL {
             cell.friendImage.af_setImage(withURL: URL(string: urlString)!, placeholderImage: defaultImage, filter: filter)
@@ -88,11 +85,6 @@ class StreamsTableViewController: UITableViewController, UICollectionViewDelegat
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return streams.count
@@ -109,14 +101,17 @@ class StreamsTableViewController: UITableViewController, UICollectionViewDelegat
     
     private func loadCellImages(cell: StreamCell, stream: Models.Stream) {
         // load coverArt
+        let filter = AspectScaledToFillSizeWithRoundedCornersFilter(
+            size: cell.coverArt.frame.size,
+            radius: 20.0
+        )
         if stream.songs.count > 0 {
             let song = stream.songs[0]
-            let filter = AspectScaledToFillSizeWithRoundedCornersFilter(
-                size: cell.coverArt.frame.size,
-                radius: 20.0
-            )
             cell.coverArt.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: #imageLiteral(resourceName: "jukedef"), filter: filter)
+        } else {
+            cell.coverArt.image = filter.filter(#imageLiteral(resourceName: "jukedef"))
         }
+        
         // load owner icon
         setImage(cell: cell, url: stream.owner.imageURL, index: 0)
         // load member icons
@@ -140,11 +135,20 @@ class StreamsTableViewController: UITableViewController, UICollectionViewDelegat
         let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell", for: indexPath) as! StreamCell
         let stream = streams[indexPath.row]
         loadCellImages(cell: cell, stream: stream)
-        cell.username.text = stream.owner_name.components(separatedBy: " ").first! + "'s stream"
+        if let owner = stream.owner_name {
+            cell.username.text = owner.components(separatedBy: " ").first! + "'s stream"
+        } else {
+            cell.username.text = "???"
+        }
         if stream.songs.count > 0 {
             let song = stream.songs[0]
             cell.artist.text = song.artistName
             cell.song.text = song.songName
+            cell.blurredBgImage.af_setImage(withURL: URL(string: song.coverArtURL)!)
+        } else {
+            cell.artist.text = ""
+            cell.song.text = ""
+            cell.blurredBgImage.image = #imageLiteral(resourceName: "jukedef")
         }
         cell.setMusicIndicator(play: stream.isPlaying)
         return cell
@@ -168,11 +172,11 @@ class StreamsTableViewController: UITableViewController, UICollectionViewDelegat
     }
     
     func fetchStreams() {
+        self.streams.removeAll()
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kFetchStreamsPath, method: .get).validate().responseJSON { response in
             switch response.result {
             case .success:
                 if let unparsedStreams = response.result.value as? [UnboxableDictionary] {
-                    self.streams = []    // clear groups that have already been fetched to avoid duplicate displays
                     for unparsedStream in unparsedStreams {
                         do {
                             let fetchedStream: Models.Stream = try unbox(dictionary: unparsedStream)
