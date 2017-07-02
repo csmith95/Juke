@@ -39,6 +39,7 @@ class Models {
         let imageURL: String?
         let id: String
         var tunedInto: String?   // streamID
+        var image: UIImage?
     }
     
     struct SpotifyUser {
@@ -49,7 +50,7 @@ class Models {
     
     struct Stream {
         let owner: User
-        let owner_name: String
+        let owner_name: String?
         let members: [User]
         let streamID: String
         var songs: [Song]
@@ -92,7 +93,7 @@ extension Models.SpotifyUser: Unboxable {
 extension Models.Stream: Unboxable {
     init(unboxer: Unboxer) throws {
         self.owner = try unboxer.unbox(key: "owner")
-        self.owner_name = try unboxer.unbox(key: "owner_name")
+        self.owner_name = unboxer.unbox(key: "owner_name")
         self.members = try unboxer.unbox(key: "members")
         self.streamID = try unboxer.unbox(key: "_id")
         self.songs = try unboxer.unbox(key: "songs")

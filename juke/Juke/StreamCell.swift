@@ -11,6 +11,7 @@ import ESTMusicIndicator
 
 class StreamCell: UITableViewCell {
 
+    @IBOutlet var blurredBgImage: UIImageView!
     @IBOutlet var musicIndicatorView: UIView!
     @IBOutlet var moreMembersLabel: UILabel!
     @IBOutlet var member4ImageView: UIImageView!
@@ -22,7 +23,6 @@ class StreamCell: UITableViewCell {
     @IBOutlet var artist: UILabel!
     @IBOutlet var song: UILabel!
     @IBOutlet var username: UILabel!
-    //@IBOutlet var backgroundCardView: UIView!
     private var imageViewDict:[Int:UIImageView] = [:]
     var indicator:ESTMusicIndicatorView!
     
@@ -46,6 +46,16 @@ class StreamCell: UITableViewCell {
     
     public func setMusicIndicator(play: Bool) {
         indicator.state = (play) ? ESTMusicIndicatorViewState.playing : ESTMusicIndicatorViewState.paused
+    }
+    
+    public func clearMemberIcons() {
+        for (i, imageView) in imageViewDict {
+            if i == 0 {
+                continue    // don't clear owner icon
+            }
+            imageView.image = nil
+        }
+        moreMembersLabel.text = ""
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

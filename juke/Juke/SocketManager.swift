@@ -108,14 +108,8 @@ class SocketManager: NSObject {
         print("splitFromStream emitted")
         HUD.show(.progress)
         socket.emitWithAck("splitFromStream", ["userID": userID]).timingOut(after: 3) { data in
-            print("Received splitFromStream ACK: ", data);
-            if data.count == 0 {
-                return
-            }
-            
-            // note that data[0] is an **unpopulated** stream object. We can do some error 
-            // handling here later trying to unbox into a Models.Stream
-
+            print("Received splitFromStream ACK: ", data)
+            // prompt user to re-fetch new personal stream
             HUD.flash(.success, delay: 1.0)
             NotificationCenter.default.post(name: Notification.Name("refreshMyStream"), object: nil);
         }

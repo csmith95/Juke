@@ -20,6 +20,7 @@
 		4B3A34E51E581F1300C314A0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E41E581F1300C314A0 /* AVFoundation.framework */; };
 		4B3A34E71E581F8F00C314A0 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */; };
 		4B425D6B1E79FADF0040BC3D /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B425D6A1E79FADF0040BC3D /* LocationManager.swift */; };
+		4B467E7E1F043E19000EA03C /* FriendCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B467E7D1F043E19000EA03C /* FriendCollectionViewCell.swift */; };
 		4B99E0511E790D150086394A /* SocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B99E0501E790D150086394A /* SocketManager.swift */; };
 		4BA7CB701E8ED007003E3DC8 /* MyStreamController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */; };
 		4BA9B3F51E91B043003D352E /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA9B3F41E91B043003D352E /* CurrentUser.swift */; };
@@ -51,6 +52,7 @@
 		4B3A34E41E581F1300C314A0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4B425D6A1E79FADF0040BC3D /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		4B467E7D1F043E19000EA03C /* FriendCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendCollectionViewCell.swift; sourceTree = "<group>"; };
 		4B99E0501E790D150086394A /* SocketManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketManager.swift; sourceTree = "<group>"; };
 		4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyStreamController.swift; sourceTree = "<group>"; };
 		4BA9B3F41E91B043003D352E /* CurrentUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 				4BA9B3F41E91B043003D352E /* CurrentUser.swift */,
 				F2DB0B321EA1145A00A13E30 /* SearchTableViewController.swift */,
 				F2DB0B361EA14BA200A13E30 /* SearchCell.swift */,
+				4B467E7D1F043E19000EA03C /* FriendCollectionViewCell.swift */,
 			);
 			path = Juke;
 			sourceTree = "<group>";
@@ -203,7 +206,7 @@
 				TargetAttributes = {
 					4B3A34C81E58120F00C314A0 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 2746PGXGF5;
+						DevelopmentTeam = UZ9Y7C37N9;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
@@ -301,6 +304,7 @@
 				4B13DE4E1E8AFB850060D29A /* StreamsTableViewController.swift in Sources */,
 				F2DB0B331EA1145A00A13E30 /* SearchTableViewController.swift in Sources */,
 				4B99E0511E790D150086394A /* SocketManager.swift in Sources */,
+				4B467E7E1F043E19000EA03C /* FriendCollectionViewCell.swift in Sources */,
 				4BA7CB701E8ED007003E3DC8 /* MyStreamController.swift in Sources */,
 				4BF307B11E7797B9002CAE9E /* CardTableViewCell.swift in Sources */,
 				4B425D6B1E79FADF0040BC3D /* LocationManager.swift in Sources */,
@@ -427,7 +431,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = 2746PGXGF5;
+				DEVELOPMENT_TEAM = UZ9Y7C37N9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -440,7 +444,7 @@
 					"-ObjC",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = jukedev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.csmith95.juke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Juke/Juke-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -454,7 +458,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = 2746PGXGF5;
+				DEVELOPMENT_TEAM = UZ9Y7C37N9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -467,7 +471,7 @@
 					"-ObjC",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = jukedev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.csmith95.juke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Juke/Juke-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;

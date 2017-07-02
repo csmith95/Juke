@@ -11,55 +11,86 @@ import Alamofire
 import AlamofireImage
 import Unbox
 
-struct post {
-    let song_name: String!
-    let artist_name: String!
-    //let album_name: String!
-}
-
 class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
-    var results:[Models.SpotifySong] = []
-    var savedTracks: [Models.SpotifySong] = []
+    var libraryResults:[Models.SpotifySong] = []       // saves list of user's library
+    var spotifyResults:[Models.SpotifySong] = []    // saved spotify search results
+    var displayedResults:[Models.SpotifySong] = [] // what is displayed to user
     
     var searchURL = String()
     typealias JSONStandard = [String: AnyObject]
-    var posts = [post]()
     let socketManager = SocketManager.sharedInstance
     
+    enum Scope: Int {
+        case MyLibrary = 0, Spotify
+    }
+    
     func execSearch() {
-        let keywords = searchBar.text
-        if (keywords?.isEmpty)! {
-            self.posts.removeAll()
-            loadSavedTracks() //optimize this
-        } else {
-            let finalKeywords = keywords?.replacingOccurrences(of: " ", with: "+")
-            searchURL = "https://api.spotify.com/v1/search?q=\(finalKeywords!)&type=track"
-            self.posts.removeAll() // reset for a new round of search results
-            self.results.removeAll()
-            self.tableView.reloadData()
-            searchSpotify(url: searchURL)
+        let keywords = searchBar.text!.lowercased()
+        switch searchBar.selectedScopeButtonIndex {
+        case Scope.MyLibrary.rawValue:
+            filterLibrary(keywords: keywords)
+        case Scope.Spotify.rawValue:
+            if keywords.characters.count == 0 {
+                displayedResults.removeAll()
+                tableView.reloadData()
+                return
+            }
+            let finalKeywords = keywords.replacingOccurrences(of: " ", with: "+")
+            searchSpotify(keywords: finalKeywords)
+        default:
+            print("idk")
         }
     }
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        print("search bar button clicked")
+    func filterLibrary(keywords: String) {
+        if keywords.characters.count == 0 {
+            showMyLibrary()
+        } else {
+            displayedResults = libraryResults.filter({ (song) -> Bool in
+                return song.songName.lowercased().contains(keywords) || song.artistName.lowercased().contains(keywords)
+            })
+            tableView.reloadData()
+        }
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         execSearch()
-        self.view.endEditing(true)
+    }
+    
+    func showMyLibrary() {
+        if libraryResults.count == 0 {
+            loadSavedTracks()   // if not already cached, load and display in this method
+        } else {
+            displayedResults = libraryResults // otherwise show cached results
+            tableView.reloadData()
+        }
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        execSearch()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        execSearch()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        loadSavedTracks()
+        switch searchBar.selectedScopeButtonIndex {
+        case Scope.MyLibrary.rawValue:
+            showMyLibrary()
+        case Scope.Spotify.rawValue:
+            spotifyResults.removeAll()
+            displayedResults.removeAll()
+            tableView.reloadData()
+        default:
+            print("idk")
+        }
     }
-    
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        print("search bar ended editing")
-        execSearch()
-    }
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        searchBar.scopeButtonTitles = ["My Library", "Spotify"]
         searchBar.delegate = self
         tableView.delegate = self
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
@@ -67,14 +98,12 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        // reset UI a new round of search results
+        // reset UI
+        self.navigationItem.title = "Search"
         self.searchBar.text = ""
         self.view.endEditing(true)
-        self.posts.removeAll()
-        self.results.removeAll()
-        self.tableView.reloadData()
-        loadSavedTracks()
-
+        self.searchBar.selectedScopeButtonIndex = 0
+        showMyLibrary()
     }
     
     func hideKeyboard() {
@@ -97,37 +126,45 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return posts.count
+        return displayedResults.count
     }
     
-    func searchSpotify(url: String) {
-        // call alamofire with endpoint
-        self.navigationItem.title = "Search results"
-        Alamofire.request(url).responseJSON(completionHandler: {
-            response in
-            self.parseSearchData(JSONData: response.data!)
-        })
+    func searchSpotify(keywords: String) {
+        self.spotifyResults.removeAll()
+        let params: Parameters = [
+            "query" : keywords,
+            "type" : "track,artist,album",
+            "offset": "00",
+            "limit": "50",
+            "market": "US"
+        ]
+        
+        let headers = [
+            "Authorization": "Bearer " + CurrentUser.accessToken
+        ]
+        
+        Alamofire.request(ServerConstants.kSpotifySearchURL, method: .get, parameters: params, headers: headers)
+            .validate().responseJSON { response in
+            switch response.result {
+            case .success:
+                self.parseSearchData(JSONData: response.data!)
+            case .failure(let error):
+                print("error searching spotify: ", error)
+            }
+        }
     }
     
     func parseSearchData(JSONData: Data) {
-        print("in parseSearchData")
         do {
-            let group = DispatchGroup()
             var readableJSON = try JSONSerialization.jsonObject(with: JSONData, options: .mutableContainers) as! JSONStandard
             if let tracks = readableJSON["tracks"] as? JSONStandard{
-                //print("found tracks", tracks)
                 if let items = tracks["items"] as? [JSONStandard] {
-                    for i in 0..<items.count {
-                        let item = items[i]
-                        
+                    for item in items {
                         // convert to models.spotifySong so we can add to stream.
                         let curr = item as UnboxableDictionary
                         do {
                             let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
-                            group.enter()
-                            self.posts.append(post.init(song_name: spotifySong.songName, artist_name: spotifySong.artistName))
-                            self.results.append(spotifySong)
-                            group.leave()
+                            self.spotifyResults.append(spotifySong)
                         } catch {
                             print("error unboxing spotify song: ", error)
                         }
@@ -135,8 +172,9 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
                 }
             }
             
-            // all images fetched -- update tableView on main thread
-            group.notify(queue: DispatchQueue.main) {
+            DispatchQueue.main.async {
+                self.displayedResults = self.spotifyResults
+                print(self.displayedResults)
                 self.tableView.reloadData()
             }
             
@@ -151,19 +189,18 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         cell.addToStreamButton.isSelected = false
         cell.tapAction = { (cell) in
             // post to server
-            self.addSongToStream(song: self.results[indexPath.row], stream: CurrentUser.stream!)
+            self.addSongToStream(song: self.displayedResults[indexPath.row], stream: CurrentUser.stream!)
             
             // animate button text change from "+" to "Added!"
             cell.addToStreamButton.isSelected = true
-            //cell.addToStreamButton!.titleLabel?.font = UIFont(name: "System", size: 16)
         }
         
         
         let mainLabel = cell.viewWithTag(1) as! UILabel
         let artistLabel = cell.viewWithTag(2) as! UILabel
         
-        mainLabel.text = posts[indexPath.row].song_name
-        artistLabel.text = posts[indexPath.row].artist_name
+        mainLabel.text = displayedResults[indexPath.row].songName
+        artistLabel.text = displayedResults[indexPath.row].artistName
         
         return cell
     }
@@ -181,48 +218,57 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func loadSavedTracks() {
-        print("called loadSavedTracks")
-        self.navigationItem.title = "From your saved songs"
-        if let sessionObj = UserDefaults.standard.object(forKey: "SpotifySession") {
-            let sessionDataObj = sessionObj as! Data
-            let session = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
-            let savedSongsUrl = "https://api.spotify.com/v1/me/tracks"
-            let headers = [
-                "Authorization": "Bearer " + session.accessToken
-            ]
-            Alamofire.request(savedSongsUrl, headers: headers).responseJSON { response in
-                do {
-                    //let group = DispatchGroup()
-                    var serializedJSON = try JSONSerialization.jsonObject(with: response.data!, options: .mutableContainers) as! JSONStandard
-                    //print("serializedJSON", serializedJSON)
-                    if let items = serializedJSON["items"] as? [JSONStandard] {
-                        for i in 0..<items.count {
-                            let item = items[i]["track"]
-                            //print("item", item)
-                            
-                            // convert to models.spotifySong so we can add to stream.
-                            let curr = item as! UnboxableDictionary
-                            do {
-                                //group.enter()
-                                let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
-                                self.posts.append(post.init(song_name: spotifySong.songName, artist_name: spotifySong.artistName))
-                                self.results.append(spotifySong)
-                                //group.leave()
-                                print("results", self.results)
-                            } catch {
-                                print("error unboxing spotify song: ", error)
-                            }
+        let url = "https://api.spotify.com/v1/me/tracks"
+        let headers = [
+            "Authorization": "Bearer " + CurrentUser.accessToken
+        ]
+        var params: Parameters = ["limit": 50, "offset": 0]
+        Alamofire.request(url, parameters: params, headers: headers).responseJSON { response in
+            do {
+                var serializedJSON = try JSONSerialization.jsonObject(with: response.data!, options: .mutableContainers) as! JSONStandard
+                if let items = serializedJSON["items"] as? [JSONStandard] {
+                    for i in 0..<items.count {
+                        let item = items[i]["track"]
+                        let curr = item as! UnboxableDictionary
+                        do {
+                            let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
+                            self.libraryResults.append(spotifySong)
+                        } catch {
+                            print("error unboxing spotify song: ", error)
                         }
-                        DispatchQueue.main.async { self.tableView.reloadData()}
                     }
                     
+                    let numItems = serializedJSON["total"] as! Int
+                    var offset = items.count
+                    while (offset < numItems) {
+                        offset += 50
+                        params["offset"] = offset
+                        Alamofire.request(url, parameters: params, headers: headers).responseJSON { response in
+                            do {
+                                var serializedJSON = try JSONSerialization.jsonObject(with: response.data!, options: .mutableContainers) as! JSONStandard
+                                if let items = serializedJSON["items"] as? [JSONStandard] {
+                                    for item in items {
+                                        let curr = item["track"] as! UnboxableDictionary
+                                        do {
+                                            let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
+                                            self.libraryResults.append(spotifySong)
+                                        } catch {
+                                            print("error unboxing spotify song: ", error)
+                                        }
+                                    }
+                                    self.displayedResults = self.libraryResults
+                                    DispatchQueue.main.async {
+                                        self.tableView.reloadData()
+                                    }
+                                }
+                            } catch {
+                                print("error unboxing JSON")
+                            }
+                        }
+                    }
                 }
-                catch {
-                    print("error unboxing spotify song: ", error)
-                }
-//                if let JSON = response.result.value {
-//                    print("JSON: \(JSON)")
-//                }
+            }catch {
+                print("error unboxing JSON")
             }
         }
     }
