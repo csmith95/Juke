@@ -14,5 +14,6 @@ target 'Juke' do
     pod 'RevealingSplashView'
     pod 'PKHUD', '~> 4.0'
     pod 'ESTMusicIndicator'
+    pod 'SCLAlertView'
 
 end

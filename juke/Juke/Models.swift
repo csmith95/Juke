@@ -39,6 +39,7 @@ class Models {
         let imageURL: String?
         let id: String
         var tunedInto: String?   // streamID
+        var image: UIImage?
     }
     
     struct SpotifyUser {

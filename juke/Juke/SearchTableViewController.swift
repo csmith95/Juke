@@ -20,7 +20,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     var searchURL = String()
     typealias JSONStandard = [String: AnyObject]
     let socketManager = SocketManager.sharedInstance
-//    let alphaString = "abcdefghijklmnopqrstuvwxyz"
     
     enum Scope: Int {
         case MyLibrary = 0, Spotify

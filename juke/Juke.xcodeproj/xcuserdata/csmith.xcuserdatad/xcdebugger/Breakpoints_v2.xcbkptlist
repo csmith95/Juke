@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Juke/SearchTableViewController.swift"
-            timestampString = "520461104.224283"
+            timestampString = "520564252.271255"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "44"
-            endingLineNumber = "44"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
             landmarkName = "execSearch()"
             landmarkType = "7">
          </BreakpointContent>

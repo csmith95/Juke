@@ -11,9 +11,12 @@ import AlamofireImage
 import Alamofire
 import Unbox
 import PKHUD
+import SCLAlertView
 
-class StreamsTableViewController: UITableViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource {
     
+    @IBOutlet var backgroundImage: UIImageView!
+    @IBOutlet var tableView: UITableView!
     @IBOutlet var friendsCollectionView: UICollectionView!
     var friends: [Models.User] = []
     var streams: [Models.Stream] = []
@@ -24,6 +27,9 @@ class StreamsTableViewController: UITableViewController, UICollectionViewDelegat
         super.viewDidLoad()
         self.friendsCollectionView.delegate = self
         self.friendsCollectionView.dataSource = self
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.title = "Discover Streams"
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -36,7 +42,9 @@ class StreamsTableViewController: UITableViewController, UICollectionViewDelegat
         let friend = friends[indexPath.row]
         let filter = AspectScaledToFillSizeCircleFilter(size: cell.friendImage.frame.size)
         if let urlString = friend.imageURL {
-            cell.friendImage.af_setImage(withURL: URL(string: urlString)!, placeholderImage: defaultImage, filter: filter)
+            cell.friendImage.af_setImage(withURL: URL(string: urlString)!, placeholderImage: defaultImage, filter: filter) { response in
+                self.friends[indexPath.row].image = response.value
+            }
         } else {
             cell.friendImage.image = defaultImage
         }
@@ -44,7 +52,26 @@ class StreamsTableViewController: UITableViewController, UICollectionViewDelegat
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let friend = self.friends[indexPath.row]
+        let username = (friend.username == nil) ? "???" : friend.username!
+        let appearance = SCLAlertView.SCLAppearance(
+            kCircleHeight: 50, kCircleIconHeight: 50
+        )
+        let alertView = SCLAlertView(appearance: appearance)
+        alertView.addButton("Invite to my stream") {
+            print("blah")
+        }
+        alertView.addButton("Join stream") {
+            self.joinStream(streamID: friend.tunedInto!)
+        }
+        
+        alertView.showSuccess(username, subTitle: "", circleIconImage: friend.image)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
+        backgroundImage.image = #imageLiteral(resourceName: "jukedef")
+        self.navigationController?.title = "Discover"
         fetchStreams()
         fetchFriends()
     }
@@ -85,7 +112,7 @@ class StreamsTableViewController: UITableViewController, UICollectionViewDelegat
 
     // MARK: - Table view data source
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return streams.count
     }
@@ -120,6 +147,8 @@ class StreamsTableViewController: UITableViewController, UICollectionViewDelegat
             for i in 1...numIconsToDisplay {
                 setImage(cell: cell, url: stream.members[i].imageURL, index: i)
             }
+        } else {
+            cell.clearMemberIcons()
         }
         // if there are more members than we're displaying, show a label
         let remainder = stream.members.count - 5;
@@ -131,7 +160,7 @@ class StreamsTableViewController: UITableViewController, UICollectionViewDelegat
         }
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell", for: indexPath) as! StreamCell
         let stream = streams[indexPath.row]
         loadCellImages(cell: cell, stream: stream)
@@ -154,10 +183,9 @@ class StreamsTableViewController: UITableViewController, UICollectionViewDelegat
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func joinStream(streamID: String) {
         HUD.show(.progress)
-        let stream = self.streams[indexPath.row]
-        socketManager.joinStream(userID: CurrentUser.user.id, streamID: stream.streamID) { unparsedStream in
+        socketManager.joinStream(userID: CurrentUser.user.id, streamID: streamID) { unparsedStream in
             do {
                 let stream: Models.Stream = try unbox(dictionary: unparsedStream)
                 CurrentUser.user.tunedInto = stream.streamID
@@ -171,8 +199,13 @@ class StreamsTableViewController: UITableViewController, UICollectionViewDelegat
         }
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        joinStream(streamID: self.streams[indexPath.row].streamID)
+    }
+    
     func fetchStreams() {
         self.streams.removeAll()
+        print("inside fetchStreams")
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kFetchStreamsPath, method: .get).validate().responseJSON { response in
             switch response.result {
             case .success:
@@ -189,6 +222,7 @@ class StreamsTableViewController: UITableViewController, UICollectionViewDelegat
                     }
                     
                     DispatchQueue.main.async {
+                        print("fetched streams: ", self.streams)
                         self.tableView.reloadData()
                     }
                 

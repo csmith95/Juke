@@ -24,6 +24,9 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    @IBOutlet var addSongButton: UIButton!
+    @IBOutlet var currentArtistLabel: UILabel!
+    @IBOutlet var currentSongLabel: UILabel!
     @IBOutlet weak var bgblurimg: UIImageView!
     @IBOutlet var coverArtImage: UIImageView!
     @IBOutlet weak var noSongsLabel: UILabel!
@@ -38,6 +41,24 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     var circularProgress = KYCircularProgress()
     var animationTimer = Timer()
     let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
+    
+    @IBAction func addSongToLibPressed(_ sender: Any) {
+        
+        if addSongButton.isSelected {
+            return // don't try to save song twice
+        }
+        
+        let song = CurrentUser.stream.songs[0]
+        let headers = [
+            "Authorization": "Bearer " + CurrentUser.accessToken
+        ]
+        let url = URL(string: ServerConstants.kSpotifyBaseURL+ServerConstants.kAddSongByIDPath+song.spotifyID)!
+        Alamofire.request(url, method: .put, headers: headers)
+            .validate().response() { response in
+            self.addSongButton.isSelected = true
+            self.addSongButton.isUserInteractionEnabled = false
+        }
+    }
     
     @IBAction func toggleListening(_ sender: AnyObject) {
         print("changed listening status in toggleListening")
@@ -126,7 +147,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
                     let stream: Models.Stream = try unbox(dictionary: unparsedStream)
                     CurrentUser.stream = stream
                     if let owner = stream.owner_name {
-                        self.navBarTitle = "Tuned into: " + owner + "\'s Stream"
+                        self.navBarTitle = owner + "'s Stream"
                     }
                     CurrentUser.user.tunedInto = stream.streamID
                     CurrentUser.fetched = true
@@ -187,9 +208,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             cell.memberImageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultImage, filter: imageFilter)
         } else {
             cell.memberImageView.image = imageFilter.filter(defaultImage)
-        }
-        if CurrentUser.stream.isPlaying == true && indexPath.row == 0 {
-            cell.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.5)
         }
         
         return cell
@@ -267,7 +285,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func songFinished() {
-        print("called song finished, received pop")
         CurrentUser.stream.songs.remove(at: 0)
         DispatchQueue.main.async {
             self.tableView.reloadData()
@@ -344,6 +361,11 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             // place first song in the currentlyPlayingLabel
             coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil)
             bgblurimg.af_setImage(withURL: URL(string:song.coverArtURL)!, placeholderImage: nil)
+            currentSongLabel.text = song.songName
+            currentArtistLabel.text = song.artistName
+            addSongButton.isSelected = false
+            addSongButton.isUserInteractionEnabled = true
+            checkIfUserLibContainsCurrentSong(song: song)
             updateSlider(song: song)
             setSong(play: listenButton.isSelected && CurrentUser.stream.isPlaying)
         } else {
@@ -351,7 +373,25 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             self.noSongsLabel.isHidden = true
             coverArtImage.image = #imageLiteral(resourceName: "jukedef")
             bgblurimg.image = #imageLiteral(resourceName: "jukedef")
-            
+            self.addSongButton.isHidden = true
+        }
+    }
+    
+    func checkIfUserLibContainsCurrentSong(song: Models.Song) {
+        let headers = [
+            "Authorization": "Bearer " + CurrentUser.accessToken
+        ]
+        let url = URL(string: ServerConstants.kSpotifyBaseURL+ServerConstants.kContainsSongPath+song.spotifyID)!
+        Alamofire.request(url, method: .get, headers: headers)
+            .validate().responseJSON { response in
+                switch response.result {
+                    case .success:
+                        let array = response.value as! [Bool]
+                        let containsSong = array[0]
+                        self.addSongButton.isHidden = containsSong
+                    case .failure(let error):
+                        print("error checking if song is already in lib: ", error)
+                }
         }
     }
     

@@ -32,4 +32,6 @@ public class ServerConstants {
     
     // spotify paths
     static let kCurrentUserPath = "me"
+    static let kAddSongByIDPath = "me/tracks?ids="
+    static let kContainsSongPath = "me/tracks/contains?ids="
 }

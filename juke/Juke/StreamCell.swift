@@ -47,6 +47,16 @@ class StreamCell: UITableViewCell {
     public func setMusicIndicator(play: Bool) {
         indicator.state = (play) ? ESTMusicIndicatorViewState.playing : ESTMusicIndicatorViewState.paused
     }
+    
+    public func clearMemberIcons() {
+        for (i, imageView) in imageViewDict {
+            if i == 0 {
+                continue    // don't clear owner icon
+            }
+            imageView.image = nil
+        }
+        moreMembersLabel.text = ""
+    }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
