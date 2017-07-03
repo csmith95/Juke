@@ -11,8 +11,8 @@ import Foundation
 public class ServerConstants {
     
     // juke & spotify server base URLs
-    static let kJukeServerURL = "http://myjukebx.herokuapp.com/"
-//    static let kJukeServerURL = "http://localhost:8000/"
+    //static let kJukeServerURL = "http://myjukebx.herokuapp.com/"
+    static let kJukeServerURL = "http://localhost:8000/"
     static let kSpotifyBaseURL = "https://api.spotify.com/v1/"
     
     // spotify full URLs
