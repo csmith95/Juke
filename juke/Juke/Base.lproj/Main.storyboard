@@ -375,7 +375,6 @@
         <!--Search-->
         <scene sceneID="EV7-Go-aSa">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Zko-NL-YwT" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="YWD-e6-Wwb" customClass="SearchTableViewController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" id="KeZ-PG-sdK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -449,6 +448,7 @@
                         <outlet property="searchBar" destination="L6q-ZC-dxU" id="Wmg-PL-ya8"/>
                     </connections>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Zko-NL-YwT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1607.2" y="1661.9190404797603"/>
         </scene>
@@ -474,18 +474,18 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" baselineRelativeArrangement="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lAb-zJ-YKO">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="668"/>
                                             <subviews>
                                                 <view contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="oH1-Vg-VTU" userLabel="CurrPlayingView">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="333.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="334"/>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uqG-GS-V2m">
-                                                            <rect key="frame" x="0.0" y="0.0" width="375" height="333.5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="375" height="334"/>
                                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                         </imageView>
                                                         <view alpha="0.40000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8fy-NS-tFB" userLabel="CoverTintView">
-                                                            <rect key="frame" x="0.0" y="0.0" width="375" height="333.5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="375" height="334"/>
                                                             <subviews>
                                                                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="eR1-0n-Twz">
                                                                     <rect key="frame" x="6" y="304" width="318" height="31"/>
@@ -500,14 +500,17 @@ Hit the search tab to add new songs.</string>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uai-2k-heq">
-                                                                    <rect key="frame" x="330" y="311" width="37" height="16"/>
+                                                                    <rect key="frame" x="330.5" y="311" width="36.5" height="16"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BEA-4i-jB0">
-                                                                    <rect key="frame" x="327" y="263" width="40" height="40"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BEA-4i-jB0">
+                                                                    <rect key="frame" x="329" y="263" width="40" height="40"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" constant="40" id="5j1-38-tt6"/>
+                                                                        <constraint firstAttribute="height" constant="40" id="ZnD-X7-jlB"/>
+                                                                    </constraints>
                                                                     <state key="normal" title="Button" image="add_song"/>
                                                                     <state key="selected" image="checkmark"/>
                                                                     <connections>
@@ -517,18 +520,20 @@ Hit the search tab to add new songs.</string>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                             <constraints>
+                                                                <constraint firstItem="eR1-0n-Twz" firstAttribute="top" secondItem="tkt-ad-C7g" secondAttribute="bottom" constant="9" id="0PB-ie-IO5"/>
                                                                 <constraint firstAttribute="trailing" secondItem="eR1-0n-Twz" secondAttribute="trailing" constant="53" id="1fW-uO-GFN"/>
-                                                                <constraint firstItem="Uai-2k-heq" firstAttribute="leading" secondItem="eR1-0n-Twz" secondAttribute="trailing" constant="8" id="Rp5-Xo-noV"/>
+                                                                <constraint firstAttribute="trailing" secondItem="Uai-2k-heq" secondAttribute="trailing" constant="8" id="7w8-zu-l4w"/>
                                                                 <constraint firstAttribute="bottom" secondItem="eR1-0n-Twz" secondAttribute="bottom" constant="-0.5" id="Ssm-cA-1v5"/>
                                                                 <constraint firstItem="tkt-ad-C7g" firstAttribute="centerX" secondItem="8fy-NS-tFB" secondAttribute="centerX" id="b6N-6c-sLm"/>
-                                                                <constraint firstAttribute="bottom" secondItem="Uai-2k-heq" secondAttribute="bottom" constant="6.5" id="iQi-tF-Y26"/>
-                                                                <constraint firstAttribute="trailing" secondItem="Uai-2k-heq" secondAttribute="trailing" constant="8" id="lay-RW-TSq"/>
+                                                                <constraint firstItem="Uai-2k-heq" firstAttribute="top" secondItem="BEA-4i-jB0" secondAttribute="bottom" constant="8" id="kfq-ev-SxO"/>
                                                                 <constraint firstItem="eR1-0n-Twz" firstAttribute="leading" secondItem="8fy-NS-tFB" secondAttribute="leading" constant="8" id="onT-uH-viy"/>
+                                                                <constraint firstItem="Uai-2k-heq" firstAttribute="centerY" secondItem="eR1-0n-Twz" secondAttribute="centerY" id="wny-iq-wAY"/>
                                                                 <constraint firstItem="eR1-0n-Twz" firstAttribute="centerX" secondItem="8fy-NS-tFB" secondAttribute="centerX" constant="-22.5" id="ypk-LZ-ToZ"/>
+                                                                <constraint firstAttribute="trailing" secondItem="BEA-4i-jB0" secondAttribute="trailing" constant="6" id="zZe-cB-pIV"/>
                                                             </constraints>
                                                         </view>
                                                         <stackView opaque="NO" contentMode="scaleAspectFill" distribution="fillEqually" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="19Q-Iy-Nua" userLabel="Controls Stack View">
-                                                            <rect key="frame" x="97.5" y="143" width="180" height="48"/>
+                                                            <rect key="frame" x="98" y="143" width="180" height="48"/>
                                                             <subviews>
                                                                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ezo-F5-eLp" userLabel="Leave Button">
                                                                     <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
@@ -556,27 +561,36 @@ Hit the search tab to add new songs.</string>
                                                                 </button>
                                                             </subviews>
                                                         </stackView>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q6y-f2-E0O">
-                                                            <rect key="frame" x="8" y="199" width="359" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q6y-f2-E0O">
+                                                            <rect key="frame" x="8" y="196" width="359" height="34"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2fl-wu-vGl">
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2fl-wu-vGl">
                                                             <rect key="frame" x="8" y="228" width="359" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="21" id="6Kn-BL-lVr"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <constraints>
+                                                        <constraint firstItem="19Q-Iy-Nua" firstAttribute="leading" secondItem="oH1-Vg-VTU" secondAttribute="leading" constant="98" id="42S-S3-9Oc"/>
+                                                        <constraint firstItem="q6y-f2-E0O" firstAttribute="top" secondItem="19Q-Iy-Nua" secondAttribute="bottom" constant="5" id="65X-GP-a7T"/>
+                                                        <constraint firstAttribute="bottom" secondItem="2fl-wu-vGl" secondAttribute="bottom" constant="85" id="7nE-Zt-8Np"/>
+                                                        <constraint firstItem="2fl-wu-vGl" firstAttribute="top" secondItem="q6y-f2-E0O" secondAttribute="bottom" constant="-2" id="CAm-Gq-aU4"/>
                                                         <constraint firstItem="8fy-NS-tFB" firstAttribute="centerX" secondItem="19Q-Iy-Nua" secondAttribute="centerX" id="D3Q-ku-ndw"/>
+                                                        <constraint firstItem="2fl-wu-vGl" firstAttribute="leading" secondItem="q6y-f2-E0O" secondAttribute="leading" id="JdQ-hP-Eyp"/>
                                                         <constraint firstItem="8fy-NS-tFB" firstAttribute="height" secondItem="oH1-Vg-VTU" secondAttribute="height" id="MkR-Ch-KkA"/>
+                                                        <constraint firstItem="19Q-Iy-Nua" firstAttribute="centerX" secondItem="2fl-wu-vGl" secondAttribute="centerX" id="NdR-r3-8oO"/>
                                                         <constraint firstItem="19Q-Iy-Nua" firstAttribute="centerY" secondItem="oH1-Vg-VTU" secondAttribute="centerY" id="UK3-sC-3rf"/>
                                                         <constraint firstItem="19Q-Iy-Nua" firstAttribute="centerX" secondItem="oH1-Vg-VTU" secondAttribute="centerX" id="Vch-U5-lQy"/>
+                                                        <constraint firstItem="2fl-wu-vGl" firstAttribute="leading" secondItem="oH1-Vg-VTU" secondAttribute="leadingMargin" id="VgL-Pb-Rvv"/>
+                                                        <constraint firstItem="19Q-Iy-Nua" firstAttribute="centerX" secondItem="q6y-f2-E0O" secondAttribute="centerX" id="ZaV-p6-M0o"/>
                                                         <constraint firstItem="uqG-GS-V2m" firstAttribute="width" secondItem="oH1-Vg-VTU" secondAttribute="width" id="eBe-cU-1KG"/>
                                                         <constraint firstItem="tkt-ad-C7g" firstAttribute="top" secondItem="19Q-Iy-Nua" secondAttribute="bottom" constant="63" id="m71-1u-cbw"/>
                                                         <constraint firstItem="uqG-GS-V2m" firstAttribute="height" secondItem="oH1-Vg-VTU" secondAttribute="height" id="mdh-PE-aQW"/>
@@ -587,7 +601,7 @@ Hit the search tab to add new songs.</string>
                                                     </constraints>
                                                 </view>
                                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="46" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Jo7-bX-PbC">
-                                                    <rect key="frame" x="0.0" y="333.5" width="375" height="333.5"/>
+                                                    <rect key="frame" x="0.0" y="334" width="375" height="334"/>
                                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.41437709731543626" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                     <color key="sectionIndexColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -597,11 +611,11 @@ Hit the search tab to add new songs.</string>
                                                             <rect key="frame" x="0.0" y="28" width="375" height="46"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0kb-sf-i9H" id="guB-Fj-CpO">
-                                                                <rect key="frame" x="0.0" y="0.0" width="375" height="45.5"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="375" height="46"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Song name" textAlignment="natural" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="66x-Jw-w2Y">
-                                                                        <rect key="frame" x="41" y="8" width="78" height="18"/>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song name" textAlignment="natural" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="66x-Jw-w2Y">
+                                                                        <rect key="frame" x="11" y="8" width="78" height="18"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                         <nil key="highlightedColor"/>
@@ -613,8 +627,8 @@ Hit the search tab to add new songs.</string>
                                                                             <constraint firstAttribute="height" constant="30" id="qzd-Jn-q0g"/>
                                                                         </constraints>
                                                                     </imageView>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Artist name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cIG-we-DoN">
-                                                                        <rect key="frame" x="41" y="22" width="66" height="15"/>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cIG-we-DoN">
+                                                                        <rect key="frame" x="11" y="22" width="66" height="15"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                         <nil key="highlightedColor"/>
@@ -622,10 +636,12 @@ Hit the search tab to add new songs.</string>
                                                                 </subviews>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                 <constraints>
+                                                                    <constraint firstItem="cIG-we-DoN" firstAttribute="leading" secondItem="guB-Fj-CpO" secondAttribute="leadingMargin" constant="3" id="60a-AF-T4h"/>
                                                                     <constraint firstAttribute="topMargin" secondItem="66x-Jw-w2Y" secondAttribute="top" id="KsA-ms-qor"/>
                                                                     <constraint firstAttribute="trailingMargin" secondItem="nB6-JX-2QM" secondAttribute="trailing" constant="2" id="U7B-t5-47a"/>
                                                                     <constraint firstItem="nB6-JX-2QM" firstAttribute="centerY" secondItem="guB-Fj-CpO" secondAttribute="centerY" id="a5i-gB-2Hn"/>
                                                                     <constraint firstAttribute="bottomMargin" secondItem="cIG-we-DoN" secondAttribute="bottom" constant="0.5" id="gCV-B0-dSD"/>
+                                                                    <constraint firstItem="66x-Jw-w2Y" firstAttribute="leading" secondItem="guB-Fj-CpO" secondAttribute="leadingMargin" constant="3" id="mOu-89-QgC"/>
                                                                     <constraint firstItem="cIG-we-DoN" firstAttribute="leading" secondItem="66x-Jw-w2Y" secondAttribute="leading" id="r3e-8d-VQL"/>
                                                                 </constraints>
                                                             </tableViewCellContentView>
@@ -640,6 +656,11 @@ Hit the search tab to add new songs.</string>
                                                 </tableView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="Jo7-bX-PbC" secondAttribute="trailing" id="0wV-NK-t7F"/>
+                                                <constraint firstItem="Jo7-bX-PbC" firstAttribute="leading" secondItem="lAb-zJ-YKO" secondAttribute="leading" id="ISR-wC-c81"/>
+                                                <constraint firstItem="Jo7-bX-PbC" firstAttribute="top" secondItem="oH1-Vg-VTU" secondAttribute="bottom" id="mv5-7h-kwf"/>
+                                            </constraints>
                                         </stackView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -657,6 +678,7 @@ Hit the search tab to add new songs.</string>
                         <constraints>
                             <constraint firstItem="6g6-Dn-cTu" firstAttribute="height" secondItem="anw-CE-bmV" secondAttribute="height" id="0sN-jH-SeF"/>
                             <constraint firstItem="HkN-cu-19h" firstAttribute="centerY" secondItem="anw-CE-bmV" secondAttribute="centerY" id="7vh-3w-3rh"/>
+                            <constraint firstItem="FBD-Bc-P0S" firstAttribute="top" secondItem="Jo7-bX-PbC" secondAttribute="bottom" id="87v-2Z-A7h"/>
                             <constraint firstItem="6g6-Dn-cTu" firstAttribute="centerX" secondItem="anw-CE-bmV" secondAttribute="centerX" id="Cle-5R-HyU"/>
                             <constraint firstItem="6g6-Dn-cTu" firstAttribute="centerY" secondItem="anw-CE-bmV" secondAttribute="centerY" id="Gct-dQ-XzZ"/>
                             <constraint firstItem="HkN-cu-19h" firstAttribute="height" secondItem="anw-CE-bmV" secondAttribute="height" id="MwK-jB-8tz"/>
