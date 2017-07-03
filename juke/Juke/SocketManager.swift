@@ -34,6 +34,10 @@ class SocketManager: NSObject {
             print("socket manager received refresh stream signal")
             NotificationCenter.default.post(name: Notification.Name("refreshMyStream"), object: nil);
         }
+        
+        socket.on("songFinished") { data, ack in
+            NotificationCenter.default.post(name: Notification.Name("songFinished"), object: nil);            
+        }
     }
     
     public func openConnection() {
@@ -108,10 +112,14 @@ class SocketManager: NSObject {
         print("splitFromStream emitted")
         HUD.show(.progress)
         socket.emitWithAck("splitFromStream", ["userID": userID]).timingOut(after: 3) { data in
-            print("Received splitFromStream ACK: ", data)
-            // prompt user to re-fetch new personal stream
             HUD.flash(.success, delay: 1.0)
             NotificationCenter.default.post(name: Notification.Name("refreshMyStream"), object: nil);
+        }
+    }
+    
+    public func popSong(data: [Any]) {
+        if let streamID = data[0] as? String {
+            socket.emit("popSong", ["streamID": streamID])
         }
     }
     
@@ -120,7 +128,6 @@ class SocketManager: NSObject {
             return;
         }
         
-        print("owner song status changed")
         if let values = data[0] as? NSDictionary {
             NotificationCenter.default.post(name: Notification.Name("syncPositionWithOwner"), object: values)
         }
