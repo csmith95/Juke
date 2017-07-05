@@ -10,6 +10,12 @@ import Foundation
 import SocketIO
 import Unbox
 import PKHUD
+import Alamofire
+
+struct CurrSocket {
+    static var socketid = ""
+}
+
 
 class SocketManager: NSObject {
     
@@ -19,7 +25,8 @@ class SocketManager: NSObject {
     override private init() {
         super.init()
         socket.on("connect") { data, ack in
-            print("socket connected")
+            print("socket connected: ", self.socket.sid!)
+            CurrSocket.socketid = self.socket.sid!
         }
         
         socket.on("disconnect") { data, ack in

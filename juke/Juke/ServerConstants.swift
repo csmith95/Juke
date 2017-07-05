@@ -29,6 +29,7 @@ public class ServerConstants {
     static let kChangeOnlineStatus = "changeOnlineStatus"
     static let kSplitFromStream = "splitFromStream"
     static let kFetchFriends = "getFriends"
+    static let kAddClientToDb = "addClientToDb"
     
     // spotify paths
     static let kCurrentUserPath = "me"

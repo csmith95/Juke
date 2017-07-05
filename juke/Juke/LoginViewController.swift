@@ -33,14 +33,6 @@ class LoginViewController: UIViewController {
         loginButton.isHidden = true
         NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.updateAfterFirstLogin), name: NSNotification.Name("loginSuccessful"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.playerItemDidReachEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
-        
-//        let filePath = Bundle.main.path(forResource: "entrybkgnd", ofType: "mp4")
-//        print(filePath)
-//        let gif = NSData(contentsOfFile: filePath!)
-//        let webViewBG = UIWebView(frame: self.view.frame)
-//        webViewBG.load(gif! as Data, mimeType: "image/gif", textEncodingName: String(), baseURL: NSURL() as URL)
-//        webViewBG.isUserInteractionEnabled = false;
-//        self.view.addSubview(webViewBG)
 
         
         let userDefaults = UserDefaults.standard
@@ -139,7 +131,8 @@ class LoginViewController: UIViewController {
         let params: Parameters = [
             "spotifyID": spotifyUser.spotifyID,
             "username": (spotifyUser.username != nil) ? spotifyUser.username! : "",
-            "imageURL": (spotifyUser.imageURL != nil) ? spotifyUser.imageURL! : ""
+            "imageURL": (spotifyUser.imageURL != nil) ? spotifyUser.imageURL! : "",
+            "socketID": CurrSocket.socketid
         ]
         
         Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
