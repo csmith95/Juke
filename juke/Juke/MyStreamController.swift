@@ -71,8 +71,8 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         if CurrentUser.stream.songs.count == 0 {
             return
         }
+        
         songFinished()
-        setSong(play: true)
     }
     
     @IBAction func returnToPersonalStream(_ sender: Any) {
@@ -103,6 +103,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         self.tableView.delegate = self
         self.tableView.dataSource = self
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.fetchMyStream), name: Notification.Name("onNextSongSignalFromServer"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songPositionChanged), name: Notification.Name("songPositionChanged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.syncPositionWithOwner), name: Notification.Name("syncPositionWithOwner"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.fetchMyStream), name: Notification.Name("refreshMyStream"), object: nil)
@@ -227,10 +228,9 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         
         if let data = notification.object as? NSDictionary {
             if let eventString = data["event"] as? String {
-                
                 let songID = data["songID"] as? String
                 if songID != CurrentUser.stream.songs[0].id {
-                    return // notification meant for a visited StreamController
+                    return
                 }
                 
                 switch eventString {
@@ -258,8 +258,9 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         if let data = notification.object as? NSDictionary {
             let songID = data["songID"] as! String
             if songID != song.id {
-                return  // notification meant for a visited StreamController
+                return
             }
+            
             let progress = data["progress"] as! Double
             CurrentUser.stream.songs[0].progress = progress
             // update progress in db if current user is playlist owner
@@ -296,12 +297,12 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     public func setSong(play: Bool) {
-        if CurrentUser.fetched == false || CurrentUser.stream?.songs.count == 0 {
+        if CurrentUser.fetched == false || CurrentUser.stream.songs.count == 0 {
             return;
         }
         
-        self.jamsPlayer.setPlayStatus(shouldPlay: play, song: CurrentUser.stream.songs[0])
-        if CurrentUser.user.spotifyID != CurrentUser.stream.owner.spotifyID {
+        jamsPlayer.setPlayStatus(shouldPlay: play, song: CurrentUser.stream.songs[0])
+        if !CurrentUser.isHost() {
             setTimer(run: !play && CurrentUser.stream.isPlaying)
         }
     }
@@ -367,6 +368,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         currentSongLabel.text = ""
         currentArtistLabel.text = ""
         addSongButton.isHidden = true
+        setSong(play: false)
     }
     
     func checkIfUserLibContainsCurrentSong(song: Models.Song) {

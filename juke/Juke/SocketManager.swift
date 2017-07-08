@@ -35,8 +35,8 @@ class SocketManager: NSObject {
             NotificationCenter.default.post(name: Notification.Name("refreshMyStream"), object: nil);
         }
         
-        socket.on("songFinished") { data, ack in
-            NotificationCenter.default.post(name: Notification.Name("songFinished"), object: nil);            
+        socket.on("onNextSongSignalFromServer") { data, ack in
+            NotificationCenter.default.post(name: Notification.Name("onNextSongSignalFromServer"), object: nil);
         }
     }
     
@@ -119,6 +119,7 @@ class SocketManager: NSObject {
     
     public func popSong(data: [Any]) {
         if let streamID = data[0] as? String {
+            print("popSong")
             socket.emit("popSong", ["streamID": streamID])
         }
     }
