@@ -79,7 +79,8 @@ extension Models.User: Unboxable {
         self.username = unboxer.unbox(key: "username")
         self.imageURL = unboxer.unbox(key: "imageURL")
         self.tunedInto = unboxer.unbox(key: "tunedInto")
-        self.id = try unboxer.unbox(key: "_id");
+        self.id = try unboxer.unbox(key: "_id")
+        self.socketID = unboxer.unbox(keyPath: "socketID")
     }
 }
 
