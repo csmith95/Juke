@@ -59,12 +59,14 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func showMyLibrary() {
-        if libraryResults.count == 0 {
-            loadSavedTracks()   // if not already cached, load and display in this method
-        } else {
-            displayedResults = libraryResults // otherwise show cached results
-            tableView.reloadData()
-        }
+        loadSavedTracks()
+        // TODO: later support caching but need to remember to refresh if user added a song
+//        if libraryResults.count == 0 {
+//            loadSavedTracks()   // if not already cached, load and display in this method
+//        } else {
+//            displayedResults = libraryResults // otherwise show cached results
+//            tableView.reloadData()
+//        }
     }
     
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
