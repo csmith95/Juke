@@ -40,6 +40,7 @@ class Models {
         let id: String
         var tunedInto: String?   // streamID
         var image: UIImage?
+        var socketID: String?
     }
     
     struct SpotifyUser {
