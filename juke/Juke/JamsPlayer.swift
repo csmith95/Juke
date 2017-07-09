@@ -58,7 +58,6 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
                 if self.position >= duration_ms - 2000 {
                     self.position = 0.0
                     NotificationCenter.default.post(name: Notification.Name("songFinished"), object: nil)
-                    print("posted pop")
                 }
             }
         }
@@ -88,7 +87,9 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         }
         
         if let audioStreamer = sharedInstance {
-            return audioStreamer.playbackState.isPlaying   // check that song is playing, not paused
+            if let playbackState = audioStreamer.playbackState {
+                return playbackState.isPlaying
+            }
         }
         return false
     }
@@ -102,6 +103,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     }
     
     public func setPlayStatus(shouldPlay: Bool, song: Models.Song) {
+        self.songJukeID = song.id
         if shouldPlay {
             // not sure if this is good style, but these 2 lines are the magic behind background streaming
             try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
@@ -111,17 +113,14 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
             sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: position, callback: { (error) in
                 if let error = error {
                     print(error)
-                } else {
-                    self.songJukeID = song.id
-                    print("playing: ", self.songJukeID)
                 }
-            })
+            });
         } else {
             sharedInstance?.setIsPlaying(false, callback: { (err) in
                 if let err = err {
                     print(err)
                 }
-            })
+            });
         }
     }
 }
