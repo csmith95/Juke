@@ -533,10 +533,10 @@ Hit the search tab to add new songs.</string>
                                                             </constraints>
                                                         </view>
                                                         <stackView opaque="NO" contentMode="scaleAspectFill" distribution="fillEqually" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="19Q-Iy-Nua" userLabel="Controls Stack View">
-                                                            <rect key="frame" x="98" y="143" width="180" height="48"/>
+                                                            <rect key="frame" x="163.5" y="143" width="48" height="48"/>
                                                             <subviews>
                                                                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ezo-F5-eLp" userLabel="Leave Button">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="0.0" height="48"/>
                                                                     <accessibility key="accessibilityConfiguration" hint="Leave stream" label="Leave stream">
                                                                         <accessibilityTraits key="traits" button="YES"/>
                                                                     </accessibility>
@@ -546,14 +546,14 @@ Hit the search tab to add new songs.</string>
                                                                     </connections>
                                                                 </button>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="21b-0y-uN8">
-                                                                    <rect key="frame" x="66" y="0.0" width="48" height="48"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
                                                                     <state key="normal" image="ic_play_arrow_white_48pt"/>
                                                                     <connections>
                                                                         <action selector="toggleListening:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="1HC-Bg-hgv"/>
                                                                     </connections>
                                                                 </button>
                                                                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ejJ-SU-iib" userLabel="Skip Button">
-                                                                    <rect key="frame" x="132" y="0.0" width="48" height="48"/>
+                                                                    <rect key="frame" x="48" y="0.0" width="0.0" height="48"/>
                                                                     <state key="normal" image="ic_fast_forward_white_48pt"/>
                                                                     <connections>
                                                                         <action selector="skipSong:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="Wd7-5i-aAN"/>

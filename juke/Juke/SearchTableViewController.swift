@@ -174,7 +174,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             
             DispatchQueue.main.async {
                 self.displayedResults = self.spotifyResults
-                print(self.displayedResults)
                 self.tableView.reloadData()
             }
             
@@ -236,6 +235,11 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
                         } catch {
                             print("error unboxing spotify song: ", error)
                         }
+                    }
+                    
+                    self.displayedResults = self.libraryResults
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
                     }
                     
                     let numItems = serializedJSON["total"] as! Int

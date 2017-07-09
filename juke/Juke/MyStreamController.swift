@@ -68,7 +68,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     
     @IBAction func skipSong(_ sender: Any) {
         //set song to next thing in stream
-        if CurrentUser.stream.songs.count <= 1 {
+        if CurrentUser.stream.songs.count == 0 {
             return
         }
         songFinished()
@@ -124,8 +124,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             listenButton.setImage(UIImage(named: "ic_pause_white_48pt.png"), for: .selected)
             skipButton.isHidden = false
             exitStreamButton.isHidden = true
-            // only let host toggle online/offline
-            // **** TODO: allow host to clear or skip songs ****
         } else {
             listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
             listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
@@ -160,9 +158,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
                         }
                     } else {
                         // no songs in stream so show noSongsLabel
-                        self.noSongsLabel.isHidden = false
-                        self.coverArtImage.image = #imageLiteral(resourceName: "jukedef")
-                        self.bgblurimg.image = #imageLiteral(resourceName: "jukedef")
+                        self.setEmptyStreamUI()
                     }
                     self.socketManager.joinSocketRoom(streamID: CurrentUser.stream.streamID)
                 } catch {
@@ -296,16 +292,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             return; // if you are not the owner, don't post to DB. let owner's device manage DB
         }
         
-        let stream = CurrentUser.stream!
-        let params: Parameters = ["streamID": stream.streamID]
-        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kPopSong, method: .post, parameters: params).responseJSON { response in
-            switch response.result {
-            case .success:
-                print("Popped finished song from DB")
-            case .failure(let error):
-                print(error)
-            }
-        }
+        socketManager.popSong(data: [CurrentUser.stream.streamID])
     }
     
     public func setSong(play: Bool) {
@@ -369,12 +356,17 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             updateSlider(song: song)
             setSong(play: listenButton.isSelected && CurrentUser.stream.isPlaying)
         } else {
-            // **** TODO: no songs left -- display custom UI ****
-            self.noSongsLabel.isHidden = true
-            coverArtImage.image = #imageLiteral(resourceName: "jukedef")
-            bgblurimg.image = #imageLiteral(resourceName: "jukedef")
-            self.addSongButton.isHidden = true
+            setEmptyStreamUI()
         }
+    }
+    
+    private func setEmptyStreamUI() {
+        self.noSongsLabel.isHidden = false
+        coverArtImage.image = #imageLiteral(resourceName: "jukedef")
+        bgblurimg.image = #imageLiteral(resourceName: "jukedef")
+        currentSongLabel.text = ""
+        currentArtistLabel.text = ""
+        addSongButton.isHidden = true
     }
     
     func checkIfUserLibContainsCurrentSong(song: Models.Song) {
