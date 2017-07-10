@@ -26,7 +26,15 @@ class SocketManager: NSObject {
         super.init()
         socket.on("connect") { data, ack in
             print("socket connected: ", self.socket.sid!)
+            
+            // only set socketID for current user after connection opened
             CurrSocket.socketid = self.socket.sid!
+            let url = ServerConstants.kJukeServerURL + ServerConstants.kSetSocketID
+            let params: Parameters = [
+                "_id": CurrentUser.user.id,
+                "socketID": CurrSocket.socketid
+            ]
+            Alamofire.request(url, method: .post, parameters: params)
         }
         
         socket.on("disconnect") { data, ack in
@@ -40,10 +48,6 @@ class SocketManager: NSObject {
         socket.on("refreshStream") { data, ack in
             print("socket manager received refresh stream signal")
             NotificationCenter.default.post(name: Notification.Name("refreshMyStream"), object: nil);
-        }
-        
-        socket.on("onNextSongSignalFromServer") { data, ack in
-            NotificationCenter.default.post(name: Notification.Name("onNextSongSignalFromServer"), object: nil);
         }
     }
     
@@ -126,7 +130,6 @@ class SocketManager: NSObject {
     
     public func popSong(data: [Any]) {
         if let streamID = data[0] as? String {
-            print("popSong")
             socket.emit("popSong", ["streamID": streamID])
         }
     }

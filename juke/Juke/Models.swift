@@ -40,7 +40,7 @@ class Models {
         let id: String
         var tunedInto: String?   // streamID
         var image: UIImage?
-        var socketID: String?
+//        var socketID: String?
     }
     
     struct SpotifyUser {
@@ -80,7 +80,7 @@ extension Models.User: Unboxable {
         self.imageURL = unboxer.unbox(key: "imageURL")
         self.tunedInto = unboxer.unbox(key: "tunedInto")
         self.id = try unboxer.unbox(key: "_id")
-        self.socketID = unboxer.unbox(keyPath: "socketID")
+//        self.socketID = unboxer.unbox(key: "socketID")
     }
 }
 

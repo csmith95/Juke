@@ -59,9 +59,6 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
             kCircleHeight: 50, kCircleIconHeight: 50
         )
         let alertView = SCLAlertView(appearance: appearance)
-        alertView.addButton("Invite to my stream") {
-            print("blah")
-        }
         alertView.addButton("Join stream") {
             self.joinStream(streamID: friend.tunedInto!)
         }

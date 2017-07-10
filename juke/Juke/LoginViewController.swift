@@ -49,7 +49,6 @@ class LoginViewController: UIViewController {
                 // session is not valid so renew it
                 print("not valid")
                 SPTAuth.defaultInstance().renewSession(session, callback: { (error, renewedSession) in
-                    print(renewedSession)
                     if let session = renewedSession {
                         print("renewed session")
                         SPTAuth.defaultInstance().session = session
@@ -131,8 +130,7 @@ class LoginViewController: UIViewController {
         let params: Parameters = [
             "spotifyID": spotifyUser.spotifyID,
             "username": (spotifyUser.username != nil) ? spotifyUser.username! : "",
-            "imageURL": (spotifyUser.imageURL != nil) ? spotifyUser.imageURL! : "",
-            "socketID": CurrSocket.socketid
+            "imageURL": (spotifyUser.imageURL != nil) ? spotifyUser.imageURL! : ""
         ]
         
         Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
@@ -142,6 +140,7 @@ class LoginViewController: UIViewController {
                     let unparsedJukeUser = response.result.value as! UnboxableDictionary
                     let user: Models.User = try unbox(dictionary: unparsedJukeUser)
                     CurrentUser.user = user
+                    SocketManager.sharedInstance.openConnection()
                     DispatchQueue.main.async {
                         print("loginSegue")
                         self.performSegue(withIdentifier: "loginSegue", sender: nil)

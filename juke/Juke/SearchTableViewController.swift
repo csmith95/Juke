@@ -59,8 +59,8 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func showMyLibrary() {
-        loadSavedTracks()
-        // TODO: later support caching but need to remember to refresh if user added a song
+        displayedResults = libraryResults
+        tableView.reloadData()
 //        if libraryResults.count == 0 {
 //            loadSavedTracks()   // if not already cached, load and display in this method
 //        } else {
@@ -105,7 +105,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         self.searchBar.text = ""
         self.view.endEditing(true)
         self.searchBar.selectedScopeButtonIndex = 0
-        showMyLibrary()
+        loadSavedTracks()
     }
     
     func hideKeyboard() {
@@ -219,6 +219,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func loadSavedTracks() {
+        self.libraryResults.removeAll()
         let url = "https://api.spotify.com/v1/me/tracks"
         let headers = [
             "Authorization": "Bearer " + CurrentUser.accessToken
@@ -239,16 +240,20 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
                         }
                     }
                     
-                    self.displayedResults = self.libraryResults
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
-                    
                     let numItems = serializedJSON["total"] as! Int
+                    if numItems <= items.count {
+                        // necessary in case there aren't enough songs to do multiple calls (below)
+                        self.displayedResults = self.libraryResults
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                    }
                     var offset = items.count
+                    let group = DispatchGroup()
                     while (offset < numItems) {
                         offset += 50
                         params["offset"] = offset
+                        group.enter()
                         Alamofire.request(url, parameters: params, headers: headers).responseJSON { response in
                             do {
                                 var serializedJSON = try JSONSerialization.jsonObject(with: response.data!, options: .mutableContainers) as! JSONStandard
@@ -262,16 +267,22 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
                                             print("error unboxing spotify song: ", error)
                                         }
                                     }
-                                    self.displayedResults = self.libraryResults
-                                    DispatchQueue.main.async {
-                                        self.tableView.reloadData()
-                                    }
+                                    
+                                    group.leave()
                                 }
                             } catch {
                                 print("error unboxing JSON")
                             }
                         }
                     }
+                    
+                    group.notify(queue: DispatchQueue.global(qos: .background)) {
+                        self.displayedResults = self.libraryResults
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                    }
+                    
                 }
             }catch {
                 print("error unboxing JSON")

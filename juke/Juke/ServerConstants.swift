@@ -29,6 +29,7 @@ public class ServerConstants {
     static let kSplitFromStream = "splitFromStream"
     static let kFetchFriends = "getFriends"
     static let kAddClientToDb = "addClientToDb"
+    static let kSetSocketID = "setSocketID"
     
     // spotify paths
     static let kCurrentUserPath = "me"
