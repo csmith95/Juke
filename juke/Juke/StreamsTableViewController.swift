@@ -161,7 +161,7 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
         let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell", for: indexPath) as! StreamCell
         let stream = streams[indexPath.row]
         loadCellImages(cell: cell, stream: stream)
-        if let owner = stream.owner_name {
+        if let owner = stream.owner.username {
             cell.username.text = owner.components(separatedBy: " ").first! + "'s stream"
         } else {
             cell.username.text = "???"
@@ -202,7 +202,6 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
     
     func fetchStreams() {
         self.streams.removeAll()
-        print("inside fetchStreams")
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kFetchStreamsPath, method: .get).validate().responseJSON { response in
             switch response.result {
             case .success:
@@ -219,7 +218,6 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
                     }
                     
                     DispatchQueue.main.async {
-                        print("fetched streams: ", self.streams)
                         self.tableView.reloadData()
                     }
                 

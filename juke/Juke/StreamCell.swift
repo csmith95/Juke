@@ -45,7 +45,7 @@ class StreamCell: UITableViewCell {
     }
     
     public func setMusicIndicator(play: Bool) {
-        indicator.state = (play) ? ESTMusicIndicatorViewState.playing : ESTMusicIndicatorViewState.paused
+        indicator.state = (play) ? .playing : .stopped
     }
     
     public func clearMemberIcons() {

@@ -132,7 +132,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func searchSpotify(keywords: String) {
-        self.spotifyResults.removeAll()
         let params: Parameters = [
             "query" : keywords,
             "type" : "track,artist,album",
@@ -157,6 +156,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func parseSearchData(JSONData: Data) {
+        self.spotifyResults.removeAll()
         do {
             var readableJSON = try JSONSerialization.jsonObject(with: JSONData, options: .mutableContainers) as! JSONStandard
             if let tracks = readableJSON["tracks"] as? JSONStandard{
