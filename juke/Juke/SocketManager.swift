@@ -20,7 +20,8 @@ struct CurrSocket {
 class SocketManager: NSObject {
     
     static let sharedInstance = SocketManager()
-    let socket = SocketIOClient(socketURL: URL(string: ServerConstants.kJukeServerURL)!)
+    let socket = SocketIOClient(socketURL: URL(string: ServerConstants.kJukeServerURL)!,
+                                config: [.log(true), .voipEnabled(true), .reconnects(true)])
     
     override private init() {
         super.init()
@@ -47,7 +48,7 @@ class SocketManager: NSObject {
         
         socket.on("refreshStream") { data, ack in
             print("socket manager received refresh stream signal")
-            NotificationCenter.default.post(name: Notification.Name("refreshMyStream"), object: nil);
+            NotificationCenter.default.post(name: Notification.Name("refreshStream"), object: nil);
         }
     }
     
@@ -124,7 +125,7 @@ class SocketManager: NSObject {
         HUD.show(.progress)
         socket.emitWithAck("splitFromStream", ["userID": userID]).timingOut(after: 3) { data in
             HUD.flash(.success, delay: 1.0)
-            NotificationCenter.default.post(name: Notification.Name("refreshMyStream"), object: nil);
+            NotificationCenter.default.post(name: Notification.Name("refreshStream"), object: nil);
         }
     }
     
@@ -141,6 +142,12 @@ class SocketManager: NSObject {
         
         if let values = data[0] as? NSDictionary {
             NotificationCenter.default.post(name: Notification.Name("syncPositionWithOwner"), object: values)
+        }
+    }
+    
+    public func clearStream() {
+        socket.emitWithAck("clearStream", ["streamID": CurrentUser.stream.streamID]).timingOut(after: 3) { data in
+            NotificationCenter.default.post(name: Notification.Name("refreshStream"), object: nil);
         }
     }
     

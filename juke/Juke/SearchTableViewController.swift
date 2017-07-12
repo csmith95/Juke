@@ -108,6 +108,10 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         loadSavedTracks()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        self.tableView.reloadData() // to clear the "Added!" markers before user navigates back
+    }
+    
     func hideKeyboard() {
         self.view.endEditing(true)
     }

@@ -187,7 +187,7 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
                 let stream: Models.Stream = try unbox(dictionary: unparsedStream)
                 CurrentUser.user.tunedInto = stream.streamID
                 CurrentUser.stream = stream
-                HUD.flash(.success, delay: 1.0) { success in
+                HUD.flash(.success, delay: 0.75) { success in
                     self.tabBarController?.selectedIndex = 1
                 }
             } catch {
@@ -197,7 +197,8 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        joinStream(streamID: self.streams[indexPath.row].streamID)
+        let selectedStream = streams.remove(at: indexPath.row)
+        joinStream(streamID: selectedStream.streamID)
     }
     
     func fetchStreams() {
