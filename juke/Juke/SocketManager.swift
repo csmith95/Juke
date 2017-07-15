@@ -21,7 +21,7 @@ class SocketManager: NSObject {
     
     static let sharedInstance = SocketManager()
     let socket = SocketIOClient(socketURL: URL(string: ServerConstants.kJukeServerURL)!,
-                                config: [.log(true), .voipEnabled(true), .reconnects(true)])
+                                config: [.voipEnabled(true), .reconnects(true)])
     
     override private init() {
         super.init()
@@ -81,8 +81,10 @@ class SocketManager: NSObject {
     }
     
     public func addSong(params: Dictionary<String, Any>) {
-        print("added song")
-        socket.emit("addSong", params)
+        socket.emitWithAck("addSong", params).timingOut(after: 3) { data in
+            print("received ack");
+            NotificationCenter.default.post(name: Notification.Name("refreshStream"), object: nil);
+        }
     }
     
     public func songEnded(streamID: String) {

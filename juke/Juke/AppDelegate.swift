@@ -9,17 +9,35 @@
 import UIKit
 import CoreData
 import Alamofire
+import UserNotifications
 
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     var window: UIWindow?
     let kCallbackURL = "juke1231://callback"
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
+            // Enable or disable features based on authorization.
+        }
+        application.registerForRemoteNotifications()
         return true
+    }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        print("** did register: ", deviceToken)
+    }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print("** failed to register: ", error)
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        print("** received remote notification");
     }
     
     @objc func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
@@ -68,6 +86,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // for some reason the viewWillAppear isn't firing when app reopens, so this is
         // necessary to trigger a stream refresh
         NotificationCenter.default.post(name: Notification.Name("refreshStream"), object: nil);
+        
+        // refresh spotify token
+        
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
