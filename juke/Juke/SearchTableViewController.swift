@@ -182,7 +182,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
                 self.displayedResults = self.spotifyResults
                 self.tableView.reloadData()
             }
-            
         }
         catch {
             print("error", error)
@@ -196,7 +195,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             // post to server
             self.addSongToStream(song: self.displayedResults[indexPath.row], stream: CurrentUser.stream!)
             
-            // animate button text change from "+" to "Added!"
+            // animate button text change fro   m "+" to "Added!"
             cell.addToStreamButton.isSelected = true
         }
         
@@ -228,7 +227,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         let headers = [
             "Authorization": "Bearer " + CurrentUser.accessToken
         ]
-        var params: Parameters = ["limit": 50, "offset": 0]
+        let params: Parameters = ["limit": 50, "offset": 0]
         Alamofire.request(url, parameters: params, headers: headers).responseJSON { response in
             do {
                 var serializedJSON = try JSONSerialization.jsonObject(with: response.data!, options: .mutableContainers) as! JSONStandard
@@ -244,52 +243,47 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
                         }
                     }
                     
-                    let numItems = serializedJSON["total"] as! Int
-                    if numItems <= items.count {
-                        // necessary in case there aren't enough songs to do multiple calls (below)
+                    // to make UI more responsive, display first 50 immediately
+                    // then load the rest
+                    DispatchQueue.main.async {
                         self.displayedResults = self.libraryResults
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                        }
+                        self.tableView.reloadData()
                     }
-                    var offset = items.count
-                    let group = DispatchGroup()
-                    while (offset < numItems) {
-                        offset += 50
-                        params["offset"] = offset
-                        group.enter()
-                        Alamofire.request(url, parameters: params, headers: headers).responseJSON { response in
-                            do {
-                                var serializedJSON = try JSONSerialization.jsonObject(with: response.data!, options: .mutableContainers) as! JSONStandard
-                                if let items = serializedJSON["items"] as? [JSONStandard] {
-                                    for item in items {
-                                        let curr = item["track"] as! UnboxableDictionary
-                                        do {
-                                            let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
-                                            self.libraryResults.append(spotifySong)
-                                        } catch {
-                                            print("error unboxing spotify song: ", error)
-                                        }
-                                    }
-                                    
-                                    group.leave()
-                                }
-                            } catch {
-                                print("error unboxing JSON")
-                            }
-                        }
-                    }
-                    
-                    group.notify(queue: DispatchQueue.global(qos: .background)) {
-                        self.displayedResults = self.libraryResults
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                        }
-                    }
-                    
+                    self.recursiveLoadTracks(urlString: serializedJSON["next"] as? String, headers: headers)
                 }
             }catch {
                 print("error unboxing JSON")
+            }
+        }
+    }
+    
+    private func recursiveLoadTracks(urlString: String?, headers: HTTPHeaders) {
+        if let urlString = urlString, let url = URL(string: urlString) {
+            Alamofire.request(url, headers: headers).validate().responseJSON { response in
+                do {
+                    var serializedJSON = try JSONSerialization.jsonObject(with: response.data!, options: .mutableContainers) as! JSONStandard
+                    if let items = serializedJSON["items"] as? [JSONStandard] {
+                        for item in items {
+                            let curr = item["track"] as! UnboxableDictionary
+                            do {
+                                let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
+                                self.libraryResults.append(spotifySong)
+                            } catch {
+                                print("error unboxing spotify song: ", error)
+                            }
+                        }
+                        
+                        self.recursiveLoadTracks(urlString: serializedJSON["next"] as? String, headers: headers)
+                    }
+                } catch {
+                    print("error unboxing JSON")
+                }
+            }
+        } else {
+            // url is nil -- all songs have been loaded, so update table on main thread
+            DispatchQueue.main.async {
+                self.displayedResults = self.libraryResults
+                self.tableView.reloadData()
             }
         }
     }

@@ -104,6 +104,9 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Helvetica", size: 15)!]
+        if !CurrentUser.fetched {
+            setEmptyStreamUI()
+        }
         fetchMyStream()
     }
     
