@@ -4,7 +4,6 @@ PODS:
     - Alamofire (~> 4.1)
   - ESTMusicIndicator (0.1.3)
   - Floaty (3.0.0)
-  - KYCircularProgress (1.0.0)
   - PKHUD (4.2.0)
   - RevealingSplashView (0.1.0)
   - SCLAlertView (0.7.0)
@@ -16,7 +15,6 @@ DEPENDENCIES:
   - AlamofireImage (~> 3.1)
   - ESTMusicIndicator
   - Floaty (~> 3.0.0)
-  - KYCircularProgress
   - PKHUD (~> 4.0)
   - RevealingSplashView
   - SCLAlertView
@@ -28,13 +26,12 @@ SPEC CHECKSUMS:
   AlamofireImage: 157ed682cc81d3b9db4fb90c1f12180ac552d93b
   ESTMusicIndicator: 0b28ed54b5ec2206aa135b2b9db3fe255bb6e6ef
   Floaty: d1be5d323094f0de422bb615452d00ba26ac74dd
-  KYCircularProgress: e83d5346247c917182b451c6357fd96b3c3d71b6
   PKHUD: 48af884cf00c2213b0313b739d914e6cab1c0f5e
   RevealingSplashView: 501dd03d975ba2c4165dd463ea1c7c407fb9d13e
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
   Socket.IO-Client-Swift: 7ad3aded3c0f74d99555e950ac3aa82ca3eefbaf
   Unbox: c8b2ab69d3337597b4a3f47a0538807dc12db670
 
-PODFILE CHECKSUM: 8a895adf8dd408de9c9c914a9b7bb134da880796
+PODFILE CHECKSUM: b67e8e60828cab09e1672ac29acd82ab537d5f2b
 
 COCOAPODS: 1.2.0
