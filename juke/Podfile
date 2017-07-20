@@ -10,10 +10,10 @@ target 'Juke' do
     pod 'Socket.IO-Client-Swift', '~> 8.3.0'
     pod 'AlamofireImage', '~> 3.1'
     pod 'Unbox'
-    pod 'KYCircularProgress'
     pod 'RevealingSplashView'
     pod 'PKHUD', '~> 4.0'
     pod 'ESTMusicIndicator'
     pod 'SCLAlertView'
+    pod 'Floaty', '~> 3.0.0'
 
 end

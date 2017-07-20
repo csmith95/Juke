@@ -161,7 +161,7 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
         let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell", for: indexPath) as! StreamCell
         let stream = streams[indexPath.row]
         loadCellImages(cell: cell, stream: stream)
-        if let owner = stream.owner_name {
+        if let owner = stream.owner.username {
             cell.username.text = owner.components(separatedBy: " ").first! + "'s stream"
         } else {
             cell.username.text = "???"
@@ -187,7 +187,7 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
                 let stream: Models.Stream = try unbox(dictionary: unparsedStream)
                 CurrentUser.user.tunedInto = stream.streamID
                 CurrentUser.stream = stream
-                HUD.flash(.success, delay: 1.0) { success in
+                HUD.flash(.success, delay: 0.75) { success in
                     self.tabBarController?.selectedIndex = 1
                 }
             } catch {
@@ -197,12 +197,12 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        joinStream(streamID: self.streams[indexPath.row].streamID)
+        let selectedStream = streams.remove(at: indexPath.row)
+        joinStream(streamID: selectedStream.streamID)
     }
     
     func fetchStreams() {
         self.streams.removeAll()
-        print("inside fetchStreams")
         Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kFetchStreamsPath, method: .get).validate().responseJSON { response in
             switch response.result {
             case .success:
@@ -219,7 +219,6 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
                     }
                     
                     DispatchQueue.main.async {
-                        print("fetched streams: ", self.streams)
                         self.tableView.reloadData()
                     }
                 

@@ -102,14 +102,14 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
     }
     
-    public func setPlayStatus(shouldPlay: Bool, song: Models.Song) {
-        self.songJukeID = song.id
-        if shouldPlay {
+    public func setPlayStatus(shouldPlay: Bool, song: Models.Song?) {
+        if shouldPlay && song != nil {
+            self.songJukeID = song?.id
             // not sure if this is good style, but these 2 lines are the magic behind background streaming
             try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try? AVAudioSession.sharedInstance().setActive(true)
-            let position = song.progress / 1000
-            let uri = "spotify:track:" + song.spotifyID
+            let position = song!.progress / 1000
+            let uri = "spotify:track:" + song!.spotifyID
             sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: position, callback: { (error) in
                 if let error = error {
                     print(error)

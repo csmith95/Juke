@@ -108,6 +108,10 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         loadSavedTracks()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        self.tableView.reloadData() // to clear the "Added!" markers before user navigates back
+    }
+    
     func hideKeyboard() {
         self.view.endEditing(true)
     }
@@ -132,7 +136,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func searchSpotify(keywords: String) {
-        self.spotifyResults.removeAll()
         let params: Parameters = [
             "query" : keywords,
             "type" : "track,artist,album",
@@ -157,6 +160,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func parseSearchData(JSONData: Data) {
+        self.spotifyResults.removeAll()
         do {
             var readableJSON = try JSONSerialization.jsonObject(with: JSONData, options: .mutableContainers) as! JSONStandard
             if let tracks = readableJSON["tracks"] as? JSONStandard{

@@ -2,11 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "earth.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "offline.png",
+      "filename" : "icons8-Google Earth Filled-58.png",
       "scale" : "2x"
     },
     {

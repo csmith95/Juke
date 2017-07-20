@@ -67,7 +67,7 @@ class LoginViewController: UIViewController {
         } else {
             loginButton.isHidden = false
             player?.play()
-                    }
+        }
     }
     
     //if you are logging in for the first time and don't have a session that is going to be renewed

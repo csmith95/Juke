@@ -30,9 +30,12 @@ public class ServerConstants {
     static let kFetchFriends = "getFriends"
     static let kAddClientToDb = "addClientToDb"
     static let kSetSocketID = "setSocketID"
+    static let kClearStream = "clearStream"
     
     // spotify paths
     static let kCurrentUserPath = "me"
     static let kAddSongByIDPath = "me/tracks?ids="
+    static let kDeleteSongByIDPath = "me/tracks?ids="
     static let kContainsSongPath = "me/tracks/contains?ids="
+    
 }

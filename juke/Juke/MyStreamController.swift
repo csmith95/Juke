@@ -9,7 +9,6 @@
 import UIKit
 import Alamofire
 import Unbox
-import KYCircularProgress
 import AlamofireImage
 import PKHUD
 
@@ -24,6 +23,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    @IBOutlet var clearStreamButton: UIButton!
     @IBOutlet var addSongButton: UIButton!
     @IBOutlet var currentArtistLabel: UILabel!
     @IBOutlet var currentSongLabel: UILabel!
@@ -38,32 +38,44 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     let jamsPlayer = JamsPlayer.shared
     let socketManager = SocketManager.sharedInstance
     @IBOutlet public var listenButton: UIButton!
-    var circularProgress = KYCircularProgress()
     var animationTimer = Timer()
     let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
     
     @IBAction func addSongToLibPressed(_ sender: Any) {
-        
-        if addSongButton.isSelected {
-            return // don't try to save song twice
-        }
-        
+    
+        let path = addSongButton.isSelected ? ServerConstants.kDeleteSongByIDPath : ServerConstants.kAddSongByIDPath
+        let method: HTTPMethod = addSongButton.isSelected ? .delete : .put
         let song = CurrentUser.stream.songs[0]
         let headers = [
             "Authorization": "Bearer " + CurrentUser.accessToken
         ]
-        let url = URL(string: ServerConstants.kSpotifyBaseURL+ServerConstants.kAddSongByIDPath+song.spotifyID)!
-        Alamofire.request(url, method: .put, headers: headers)
-            .validate().response() { response in
-            self.addSongButton.isSelected = true
-            self.addSongButton.isUserInteractionEnabled = false
+        let url = URL(string: ServerConstants.kSpotifyBaseURL+path+song.spotifyID)!
+        let message = addSongButton.isSelected ? "Removed from your library" : "Saved to your library!"
+        self.addSongButton.isSelected = !self.addSongButton.isSelected
+        Alamofire.request(url, method: method, headers: headers).validate().response() { response in
+            self.delay(1.0) {
+                HUD.flash(.label(message), delay: 0.75)
+            }
         }
     }
     
+    func delay(_ delay: Double, closure:@escaping () -> Void) {
+        DispatchQueue.main.asyncAfter(
+            deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
+    }
+    
     @IBAction func toggleListening(_ sender: AnyObject) {
-        print("changed listening status in toggleListening")
-        let newPlayStatus = !listenButton.isSelected
-        setListeningStatus(status: newPlayStatus)
+        if CurrentUser.stream.songs.count == 0 {
+            return
+        }
+        let status = !listenButton.isSelected
+        listenButton.isSelected = status
+        let song = CurrentUser.stream.songs[0]
+        if CurrentUser.isHost() {
+            socketManager.songPlayStatusChanged(streamID: CurrentUser.stream.streamID, songID: song.id, progress: song.progress, isPlaying: status)
+            CurrentUser.stream.isPlaying = status
+        }
+        setSong(play: status && CurrentUser.stream.isPlaying)
     }
     
     @IBAction func skipSong(_ sender: Any) {
@@ -71,32 +83,12 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         if CurrentUser.stream.songs.count == 0 {
             return
         }
-        
         songFinished()
     }
     
     @IBAction func returnToPersonalStream(_ sender: Any) {
         socketManager.splitFromStream(userID: CurrentUser.user.id);
     }
-    
-    func handleVisitingStream(notification: NSNotification) {
-        setListeningStatus(status: false)
-    }
-    
-    private func setListeningStatus(status: Bool) {
-        if CurrentUser.stream.songs.count == 0 {
-            return
-        }
-        let song = CurrentUser.stream.songs[0]
-        listenButton.isSelected = status
-        if CurrentUser.isHost() {
-            socketManager.songPlayStatusChanged(streamID: CurrentUser.stream.streamID, songID: song.id, progress: song.progress, isPlaying: status)
-            CurrentUser.stream.isPlaying = status
-        }
-        
-        setSong(play: status && CurrentUser.stream.isPlaying)
-    }
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,14 +97,12 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songPositionChanged), name: Notification.Name("songPositionChanged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.syncPositionWithOwner), name: Notification.Name("syncPositionWithOwner"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.fetchMyStream), name: Notification.Name("refreshMyStream"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.handleVisitingStream), name: Notification.Name("handleVisitingStream"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.fetchMyStream), name: Notification.Name("refreshStream"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.jamsPlayerReady), name: Notification.Name("jamsPlayerReady"), object: nil)
-            }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navBarTitle = "Current Stream"
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Helvetica", size: 15)!]
         fetchMyStream()
     }
@@ -124,13 +114,13 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             listenButton.setImage(UIImage(named: "ic_pause_white_48pt.png"), for: .selected)
             skipButton.isHidden = false
             exitStreamButton.isHidden = true
+            listenButton.isSelected = CurrentUser.stream.isPlaying
         } else {
             listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
             listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
             skipButton.isHidden = true
             exitStreamButton.isHidden = false
         }
-        listenButton.isSelected = CurrentUser.stream.isPlaying
     }
     
     func fetchMyStream() {
@@ -144,8 +134,10 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
                     let unparsedStream = response.result.value as! UnboxableDictionary
                     let stream: Models.Stream = try unbox(dictionary: unparsedStream)
                     CurrentUser.stream = stream
-                    if let owner = stream.owner_name {
+                    if let owner = stream.owner.username {
                         self.navBarTitle = owner + "'s Stream"
+                    } else {
+                        self.navBarTitle = "Current Stream"
                     }
                     CurrentUser.user.tunedInto = stream.streamID
                     CurrentUser.fetched = true
@@ -275,8 +267,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     private func updateSlider(song: Models.Song) {
         let normalizedProgress = song.progress / song.duration
         progressSlider.value = Float(normalizedProgress)
-        //self.circularProgress.progress = normalizedProgress
-        //self.circularProgress.set(progress: normalizedProgress, duration: 0.5)
         self.currTimeLabel.text = timeIntervalToString(interval: song.progress/1000)
     }
     
@@ -284,7 +274,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         CurrentUser.stream.songs.remove(at: 0)
         DispatchQueue.main.async {
             self.tableView.reloadData()
-            self.circularProgress.progress = 0.0
             self.loadTopSong()
         }
         
@@ -296,11 +285,12 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     public func setSong(play: Bool) {
-        if CurrentUser.fetched == false || CurrentUser.stream.songs.count == 0 {
+        if CurrentUser.fetched == false {
             return;
         }
         
-        jamsPlayer.setPlayStatus(shouldPlay: play, song: CurrentUser.stream.songs[0])
+        let song: Models.Song? = CurrentUser.stream.songs.count > 0 ? CurrentUser.stream.songs[0] : nil
+        jamsPlayer.setPlayStatus(shouldPlay: play, song: song)
         if !CurrentUser.isHost() {
             setTimer(run: !play && CurrentUser.stream.isPlaying)
         }
@@ -309,7 +299,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     private func setTimer(run: Bool) {
         
         DispatchQueue.main.async {
-            if CurrentUser.isHost() {
+            if (CurrentUser.isHost() || CurrentUser.stream.songs.count == 0) {
                 return  // if owner, don't use timer at all
             }
             
@@ -350,8 +340,10 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             bgblurimg.af_setImage(withURL: URL(string:song.coverArtURL)!, placeholderImage: nil)
             currentSongLabel.text = song.songName
             currentArtistLabel.text = song.artistName
-            addSongButton.isSelected = false
-            addSongButton.isUserInteractionEnabled = true
+            addSongButton.isHidden = false
+            listenButton.isHidden = false
+            skipButton.isHidden = !CurrentUser.isHost()
+            clearStreamButton.isHidden = !CurrentUser.isHost()
             checkIfUserLibContainsCurrentSong(song: song)
             updateSlider(song: song)
             setSong(play: listenButton.isSelected && CurrentUser.stream.isPlaying)
@@ -367,6 +359,10 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         currentSongLabel.text = ""
         currentArtistLabel.text = ""
         addSongButton.isHidden = true
+        progressSlider.value = 0.0
+        listenButton.isHidden = true
+        skipButton.isHidden = true
+        clearStreamButton.isHidden = true
         setSong(play: false)
     }
     
@@ -381,7 +377,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
                     case .success:
                         let array = response.value as! [Bool]
                         let containsSong = array[0]
-                        self.addSongButton.isHidden = containsSong
+                        self.addSongButton.isSelected = containsSong
                     case .failure(let error):
                         print("error checking if song is already in lib: ", error)
                 }
@@ -390,5 +386,9 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     
     func jamsPlayerReady() {
         setSong(play: listenButton.isSelected && CurrentUser.stream.isPlaying)
+    }
+    
+    @IBAction func clearStreamButtonPressed(_ sender: Any) {
+        socketManager.clearStream()
     }
 }
