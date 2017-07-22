@@ -86,6 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // for some reason the viewWillAppear isn't firing when app reopens, so this is
         // necessary to trigger a stream refresh
         NotificationCenter.default.post(name: Notification.Name("refreshStream"), object: nil);
+        SocketManager.sharedInstance.openConnection();
         
         // refresh spotify token
         

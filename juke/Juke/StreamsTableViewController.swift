@@ -83,7 +83,7 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
                     for unparsedStream in unparsedFriends {
                         do {
                             let friend: Models.User = try unbox(dictionary: unparsedStream)
-                            if (friend.id != CurrentUser.user.id) {
+                            if (friend.id != CurrentUser.user.id && friend.tunedInto != CurrentUser.stream.streamID) {
                                 self.friends.append(friend)  // if not tuned into this stream, display it
                             }
                         } catch {

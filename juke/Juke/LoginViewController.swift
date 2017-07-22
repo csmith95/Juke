@@ -51,13 +51,12 @@ class LoginViewController: UIViewController {
                 SPTAuth.defaultInstance().renewSession(session, callback: { (error, renewedSession) in
                     if let session = renewedSession {
                         print("renewed session")
+                        self.fetchSpotifyUser(accessToken: session.accessToken)
                         SPTAuth.defaultInstance().session = session
                         let sessionData = NSKeyedArchiver.archivedData(withRootObject: session)
                         userDefaults.set(sessionData, forKey: "SpotifySession")
                         userDefaults.synchronize()
-                        
                         self.session = renewedSession
-                        self.fetchSpotifyUser(accessToken: session.accessToken)
                     }
                 })
             } else {
@@ -77,11 +76,10 @@ class LoginViewController: UIViewController {
         let userDefaults = UserDefaults.standard
         if let sessionObj = userDefaults.object(forKey: "SpotifySession") {
             print("Found session in first login")
+            fetchSpotifyUser(accessToken: session.accessToken)
             let sessionDataObj = sessionObj as! Data
             let firstTimeSession = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
             self.session = firstTimeSession
-            //fetch user
-            fetchSpotifyUser(accessToken: session.accessToken)
         }
     }
     
@@ -140,7 +138,6 @@ class LoginViewController: UIViewController {
                     let unparsedJukeUser = response.result.value as! UnboxableDictionary
                     let user: Models.User = try unbox(dictionary: unparsedJukeUser)
                     CurrentUser.user = user
-                    SocketManager.sharedInstance.openConnection()
                     DispatchQueue.main.async {
                         print("loginSegue")
                         self.performSegue(withIdentifier: "loginSegue", sender: nil)

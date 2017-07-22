@@ -187,7 +187,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             print("error", error)
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell") as! SearchCell
         cell.addToStreamButton.isSelected = false
@@ -195,7 +195,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             // post to server
             self.addSongToStream(song: self.displayedResults[indexPath.row], stream: CurrentUser.stream!)
             
-            // animate button text change fro   m "+" to "Added!"
+            // animate button text change from "+" to "Added!"
             cell.addToStreamButton.isSelected = true
         }
         

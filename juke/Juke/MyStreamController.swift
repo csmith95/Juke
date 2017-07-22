@@ -144,6 +144,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
                     }
                     CurrentUser.user.tunedInto = stream.streamID
                     CurrentUser.fetched = true
+                    SocketManager.sharedInstance.setSocketID()  // try to set after user has been fetched
                     self.setUpControlButtons()
                     self.tableView.reloadData()
                     if stream.songs.count > 0 {
