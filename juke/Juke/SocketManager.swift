@@ -14,7 +14,6 @@ import Alamofire
 
 struct CurrSocket {
     static var socketid = ""
-    static var alreadySet = false
 }
 
 class SocketManager: NSObject {
@@ -28,7 +27,6 @@ class SocketManager: NSObject {
         socket.on("connect") { data, ack in
             print("socket connected: ", self.socket.sid!)
             CurrSocket.socketid = self.socket.sid!
-            CurrSocket.alreadySet = false // new socketID assigned, should set socketid again
         }
         
         socket.on("disconnect") { data, ack in
@@ -46,10 +44,9 @@ class SocketManager: NSObject {
     }
     
     public func setSocketID() {
-        // set socketID only once
         // set socket only after user has been fetched (need id)
         // set socket id after socket has connected (need socketid)
-        if !CurrSocket.alreadySet && CurrentUser.user != nil && CurrSocket.socketid != "" {
+        if CurrentUser.user != nil && CurrSocket.socketid != "" {
             print("making call to set socketID")
             let url = ServerConstants.kJukeServerURL + ServerConstants.kSetSocketID
             let params: Parameters = [
@@ -57,7 +54,6 @@ class SocketManager: NSObject {
                 "socketID": CurrSocket.socketid
             ]
             Alamofire.request(url, method: .post, parameters: params)
-            CurrSocket.alreadySet = true
         }
     }
     
