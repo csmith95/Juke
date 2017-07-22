@@ -75,11 +75,11 @@ class LoginViewController: UIViewController {
         print("updateAfterFirstLogin")
         let userDefaults = UserDefaults.standard
         if let sessionObj = userDefaults.object(forKey: "SpotifySession") {
-            print("Found session in first login")
-            fetchSpotifyUser(accessToken: session.accessToken)
             let sessionDataObj = sessionObj as! Data
             let firstTimeSession = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
             self.session = firstTimeSession
+            print("Found session in first login")
+            fetchSpotifyUser(accessToken: session.accessToken)
         }
     }
     
