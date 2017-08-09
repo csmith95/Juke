@@ -15,5 +15,6 @@ target 'Juke' do
     pod 'ESTMusicIndicator'
     pod 'SCLAlertView'
     pod 'Floaty', '~> 3.0.0'
+    pod 'Firebase/Core'
 
 end
