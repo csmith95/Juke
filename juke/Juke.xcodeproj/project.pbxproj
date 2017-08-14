@@ -28,6 +28,7 @@
 		4BDCEC061E720D0B00D9D3EE /* ServerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEC051E720D0B00D9D3EE /* ServerConstants.swift */; };
 		4BF307B11E7797B9002CAE9E /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF307B01E7797B9002CAE9E /* CardTableViewCell.swift */; };
 		F2317CB41EB78FA8003ACBE7 /* entrybkgnd.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F2317CB31EB78FA8003ACBE7 /* entrybkgnd.mp4 */; };
+		F250A6D51F4181A600816AAC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F250A6D41F4181A600816AAC /* GoogleService-Info.plist */; };
 		F26A65301EB194F100ADB14E /* SpotifyAudioPlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26A652D1EB194F100ADB14E /* SpotifyAudioPlayback.framework */; };
 		F26A65311EB194F100ADB14E /* SpotifyAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26A652E1EB194F100ADB14E /* SpotifyAuthentication.framework */; };
 		F26A65321EB194F100ADB14E /* SpotifyMetadata.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26A652F1EB194F100ADB14E /* SpotifyMetadata.framework */; };
@@ -64,6 +65,7 @@
 		D9D54D33C710A946C6515520 /* Pods_Juke.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Juke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECDA8CAF8FCA9C3B7EFCAFF4 /* Pods-Juke.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Juke/Pods-Juke.debug.xcconfig"; sourceTree = "<group>"; };
 		F2317CB31EB78FA8003ACBE7 /* entrybkgnd.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = entrybkgnd.mp4; sourceTree = "<group>"; };
+		F250A6D41F4181A600816AAC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F26A652D1EB194F100ADB14E /* SpotifyAudioPlayback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAudioPlayback.framework; sourceTree = "<group>"; };
 		F26A652E1EB194F100ADB14E /* SpotifyAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAuthentication.framework; sourceTree = "<group>"; };
 		F26A652F1EB194F100ADB14E /* SpotifyMetadata.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyMetadata.framework; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 		4B3A34CB1E58120F00C314A0 /* Juke */ = {
 			isa = PBXGroup;
 			children = (
+				F250A6D41F4181A600816AAC /* GoogleService-Info.plist */,
 				F2317CB31EB78FA8003ACBE7 /* entrybkgnd.mp4 */,
 				4B3F95171F143BCA00CBEF79 /* Assets.xcassets */,
 				F2317CB51EB7D3A5003ACBE7 /* Videos */,
@@ -236,6 +239,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F2317CB41EB78FA8003ACBE7 /* entrybkgnd.mp4 in Resources */,
+				F250A6D51F4181A600816AAC /* GoogleService-Info.plist in Resources */,
 				4B3F95181F143BCA00CBEF79 /* Assets.xcassets in Resources */,
 				4B3A34D71E58120F00C314A0 /* Main.storyboard in Resources */,
 			);

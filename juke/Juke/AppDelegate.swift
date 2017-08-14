@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import Alamofire
 import UserNotifications
+import Firebase
 
 
 @UIApplicationMain
@@ -19,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     let kCallbackURL = "juke1231://callback"
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        FirebaseApp.configure()
         // Override point for customization after application launch.
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
