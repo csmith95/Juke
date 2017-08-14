@@ -11,18 +11,16 @@ import Alamofire
 import Unbox
 import AlamofireImage
 import PKHUD
+import Firebase
 
 class MyStreamController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var navBarTitle: String? {
-        get {
-            return self.navigationItem.title
-        }
-        set (newValue) {
-            self.navigationItem.title = newValue
-        }
-    }
+    // firebase vars
+    var ref: DatabaseReference!
+    fileprivate var _refHandle: DatabaseHandle!
+    var streams: [DataSnapshot]! = []
     
+    // app vars
     @IBOutlet var clearStreamButton: UIButton!
     @IBOutlet var addSongButton: UIButton!
     @IBOutlet var currentArtistLabel: UILabel!
@@ -40,6 +38,33 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet public var listenButton: UIButton!
     var animationTimer = Timer()
     let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
+    
+    // deinit firebase
+    deinit {
+        
+    }
+    
+    func configureStreamsDatabase() {
+        ref = Database.database().reference()
+        _refHandle = self.ref.child("streams").observe(.childAdded, with: { [weak self] (snapshot) -> Void in
+            guard let strongSelf = self else { return }
+            strongSelf.streams.append(snapshot)
+            strongSelf.tableView.insertRows(at: [IndexPath(row: strongSelf.streams.count-1, section: 0)], with: .automatic)
+        })
+        
+        
+    }
+    
+    var navBarTitle: String? {
+        get {
+            return self.navigationItem.title
+        }
+        set (newValue) {
+            self.navigationItem.title = newValue
+        }
+    }
+    
+    
     
     @IBAction func addSongToLibPressed(_ sender: Any) {
     

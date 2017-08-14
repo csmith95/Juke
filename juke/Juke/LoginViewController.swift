@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import Unbox
 import AVFoundation
+import Firebase
 
 class LoginViewController: UIViewController {
 
@@ -18,6 +19,11 @@ class LoginViewController: UIViewController {
     let kCallbackURL = "juke1231://callback"
     var session:SPTSession!
     var player:AVPlayer?
+    
+    // firebase vars
+    var ref: DatabaseReference!
+    fileprivate var _refHandle: DatabaseHandle!
+    var users: [DataSnapshot]! = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -125,6 +131,7 @@ class LoginViewController: UIViewController {
     func addUserToJukeServer(spotifyUser: Models.SpotifyUser) {
         // create new user object in DB. if already exists with spotifyID, returns user object
         let url = ServerConstants.kJukeServerURL + ServerConstants.kAddUser
+        //self.ref.child("users").setValue(spotifyUser)
         let params: Parameters = [
             "spotifyID": spotifyUser.spotifyID,
             "username": (spotifyUser.username != nil) ? spotifyUser.username! : "",
