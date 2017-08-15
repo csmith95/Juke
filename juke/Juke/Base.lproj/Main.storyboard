@@ -113,6 +113,38 @@
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="byF-rY-c59">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceHorizontal="YES" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Kvd-5E-z8k">
+                                            <rect key="frame" x="0.0" y="64" width="375" height="74"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="wAj-Q7-v3A">
+                                                <size key="itemSize" width="64" height="83"/>
+                                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            </collectionViewFlowLayout>
+                                            <cells>
+                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="yVD-1V-Xmy" customClass="FriendCollectionViewCell" customModule="Juke" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="-4.5" width="64" height="83"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                                        <rect key="frame" x="0.0" y="0.0" width="64" height="83"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <subviews>
+                                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UCB-dm-Trs">
+                                                                <rect key="frame" x="7" y="16" width="50" height="50"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            </imageView>
+                                                        </subviews>
+                                                    </view>
+                                                    <connections>
+                                                        <outlet property="friendImage" destination="UCB-dm-Trs" id="uaM-1a-5x1"/>
+                                                    </connections>
+                                                </collectionViewCell>
+                                            </cells>
+                                        </collectionView>
+                                    </subviews>
                                 </view>
                                 <blurEffect style="light"/>
                             </visualEffectView>
@@ -290,36 +322,6 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Kvd-5E-z8k">
-                                <rect key="frame" x="0.0" y="64" width="375" height="74"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="wAj-Q7-v3A">
-                                    <size key="itemSize" width="64" height="83"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="yVD-1V-Xmy" customClass="FriendCollectionViewCell" customModule="Juke" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="-4.5" width="64" height="83"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="64" height="83"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UCB-dm-Trs">
-                                                    <rect key="frame" x="7" y="16" width="50" height="50"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                </imageView>
-                                            </subviews>
-                                        </view>
-                                        <connections>
-                                            <outlet property="friendImage" destination="UCB-dm-Trs" id="uaM-1a-5x1"/>
-                                        </connections>
-                                    </collectionViewCell>
-                                </cells>
-                            </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -747,6 +749,7 @@ Hit the search tab to add new songs.</string>
                         <outlet property="exitStreamButton" destination="ezo-F5-eLp" id="mFE-oS-pfQ"/>
                         <outlet property="listenButton" destination="21b-0y-uN8" id="cmB-EF-yGz"/>
                         <outlet property="noSongsLabel" destination="tkt-ad-C7g" id="aXU-RR-aK0"/>
+                        <outlet property="numMembersLabel" destination="btf-jU-fnV" id="tMz-Lj-7g4"/>
                         <outlet property="progressSlider" destination="eR1-0n-Twz" id="ezU-e0-roi"/>
                         <outlet property="skipButton" destination="ejJ-SU-iib" id="qde-uY-gEp"/>
                         <outlet property="tableView" destination="Jo7-bX-PbC" id="84I-x7-Ouc"/>

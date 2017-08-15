@@ -23,6 +23,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    @IBOutlet var numMembersLabel: UILabel!
     @IBOutlet var clearStreamButton: UIButton!
     @IBOutlet var addSongButton: UIButton!
     @IBOutlet var currentArtistLabel: UILabel!
@@ -157,6 +158,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
                         self.setEmptyStreamUI()
                     }
                     self.socketManager.joinSocketRoom(streamID: CurrentUser.stream.streamID)
+                    self.numMembersLabel.text = String(stream.members.count)
                 } catch {
                     print("Error unboxing stream: ", error)
                 }
