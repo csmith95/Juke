@@ -21,7 +21,7 @@ class LoginViewController: UIViewController {
     var player:AVPlayer?
     
     // firebase vars
-    var ref: DatabaseReference!
+    var ref: DatabaseReference!    
     fileprivate var _refHandle: DatabaseHandle!
     var users: [DataSnapshot]! = []
     
@@ -39,6 +39,9 @@ class LoginViewController: UIViewController {
         loginButton.isHidden = true
         NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.updateAfterFirstLogin), name: NSNotification.Name("loginSuccessful"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.playerItemDidReachEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
+        
+        // setup firebase db ref
+        ref = Database.database().reference()
 
         
         let userDefaults = UserDefaults.standard
@@ -129,9 +132,10 @@ class LoginViewController: UIViewController {
     }
     
     func addUserToJukeServer(spotifyUser: Models.SpotifyUser) {
+        //print(spotifyUser)
         // create new user object in DB. if already exists with spotifyID, returns user object
         let url = ServerConstants.kJukeServerURL + ServerConstants.kAddUser
-        //self.ref.child("users").setValue(spotifyUser)
+        //self.ref.child("users/(user.uid)/username").setValue(spotifyUser.username)
         let params: Parameters = [
             "spotifyID": spotifyUser.spotifyID,
             "username": (spotifyUser.username != nil) ? spotifyUser.username! : "",
@@ -145,6 +149,7 @@ class LoginViewController: UIViewController {
                     let unparsedJukeUser = response.result.value as! UnboxableDictionary
                     let user: Models.User = try unbox(dictionary: unparsedJukeUser)
                     CurrentUser.user = user
+                    self.ref.child("users").setValue([user.spotifyID: spotifyUser])
                     DispatchQueue.main.async {
                         print("loginSegue")
                         self.performSegue(withIdentifier: "loginSegue", sender: nil)
