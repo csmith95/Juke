@@ -15,5 +15,6 @@ target 'Juke' do
     pod 'ESTMusicIndicator'
     pod 'SCLAlertView'
     pod 'Firebase/Core'
+    pod 'Firebase/Database'
 
 end

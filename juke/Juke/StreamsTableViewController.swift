@@ -12,8 +12,9 @@ import Alamofire
 import Unbox
 import PKHUD
 import SCLAlertView
+import Firebase
 
-class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource {
+class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     @IBOutlet var backgroundImage: UIImageView!
     @IBOutlet var tableView: UITableView!
@@ -22,13 +23,19 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
     var streams: [Models.Stream] = []
     let socketManager = SocketManager.sharedInstance
     let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
+    let firebase = FIRDatabase.database().reference()
+    var dataSource: FUITableViewDataSource!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.friendsCollectionView.delegate = self
         self.friendsCollectionView.dataSource = self
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
+        self.dataSource = self.tableView.bind(to: self.firebase) { tableView, indexPath, snapshot in
+            // Dequeue cell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+            /* populate cell */
+            return cell
+        }
         self.title = "Discover Streams"
     }
     
