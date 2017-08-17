@@ -110,6 +110,7 @@ class LoginViewController: UIViewController {
     func fetchSpotifyUser(accessToken: String) {
         // first retrieve user object from spotify server using access token
         print("Fetching user")
+        
         CurrentUser.accessToken = accessToken
         let headers: HTTPHeaders = ["Authorization": "Bearer " + accessToken]
         let url = ServerConstants.kSpotifyBaseURL + ServerConstants.kCurrentUserPath
@@ -121,6 +122,7 @@ class LoginViewController: UIViewController {
                     let dictionary = response.result.value as! UnboxableDictionary
                     let spotifyUser: Models.SpotifyUser = try unbox(dictionary: dictionary)
                     self.addUserToJukeServer(spotifyUser: spotifyUser)
+                    self.addUserToFirebase(spotifyUser: spotifyUser)
                     print("Fetched user")
                 } catch {
                     print("error unboxing spotify user: ", error)
@@ -129,6 +131,15 @@ class LoginViewController: UIViewController {
                 print(error)
             }
         };
+    }
+    
+    func addUserToFirebase(spotifyUser: Models.SpotifyUser) {
+        //print(spotifyUser.username)
+        // TODO: check if user is in db then skip
+        
+        self.ref.child("users").child(spotifyUser.spotifyID).setValue(["tunedInto": "test", "username": spotifyUser.username!, "imageURL": spotifyUser.imageURL!, "online": true])
+        
+        
     }
     
     func addUserToJukeServer(spotifyUser: Models.SpotifyUser) {
@@ -149,7 +160,7 @@ class LoginViewController: UIViewController {
                     let unparsedJukeUser = response.result.value as! UnboxableDictionary
                     let user: Models.User = try unbox(dictionary: unparsedJukeUser)
                     CurrentUser.user = user
-                    self.ref.child("users").setValue([user.spotifyID: spotifyUser])
+                    //self.ref.child("users").setValue([user.spotifyID: spotifyUser])
                     DispatchQueue.main.async {
                         print("loginSegue")
                         self.performSegue(withIdentifier: "loginSegue", sender: nil)
