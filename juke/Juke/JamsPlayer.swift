@@ -19,10 +19,28 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     private let kClientID = "77d4489425fe464483f0934f99847c8b"
     private var position: TimeInterval = 0.0
     private var songJukeID: String? // Juke id of currently playing song
+//    private var player: AVPlayer!
     
     
     override private init() {
         super.init()
+//        *** hack to for background sync
+//        do {
+//            print("trying to play")
+//            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: .mixWithOthers)
+//            print("2")
+//            let path = Bundle.main.path(forResource: "silence", ofType: "mp3")!
+//            print(path)
+//            let url = NSURL(fileURLWithPath: path) as URL
+//            print(url)
+//            let item = AVPlayerItem(url: url)
+//            player = AVPlayer.init(playerItem: item)
+//            player.actionAtItemEnd = .none
+//            player.play()
+//            print("played")
+//        } catch let err {
+//            print(err)
+//        }
         do {
             try sharedInstance?.start(withClientId: kClientID)
             sharedInstance?.delegate = self

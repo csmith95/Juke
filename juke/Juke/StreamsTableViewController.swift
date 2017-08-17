@@ -12,25 +12,44 @@ import Alamofire
 import Unbox
 import PKHUD
 import SCLAlertView
+import Firebase
+import FirebaseDatabaseUI
 
-class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource {
+class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     @IBOutlet var backgroundImage: UIImageView!
     @IBOutlet var tableView: UITableView!
     @IBOutlet var friendsCollectionView: UICollectionView!
     var friends: [Models.User] = []
     var streams: [Models.Stream] = []
+    var firebaseStreams: [Models.FirebaseStream] = []
     let socketManager = SocketManager.sharedInstance
     let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
+    let firebaseRef = Database.database().reference()
+    var dataSource: FUITableViewDataSource!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Discover Streams"
         self.friendsCollectionView.delegate = self
         self.friendsCollectionView.dataSource = self
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        self.title = "Discover Streams"
+        self.dataSource = self.tableView.bind(to: self.firebaseRef.child("streams")) { tableView, indexPath, snapshot in
+            // Dequeue cell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell", for: indexPath) as! StreamCell
+            /* populate cell */
+            do {
+                let stream = Models.FirebaseStream(snapshot: snapshot)
+//                self.firebaseStreams[indexPath.row] = stream
+                cell.populateCell(stream: stream)
+            } catch let err {
+                print("Error trying to unbox stream: \(err)")
+            }
+            return cell
+        }
     }
+    
+    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.friends.count
@@ -105,79 +124,6 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-
-    // MARK: - Table view data source
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return streams.count
-    }
-    
-    private func setImage(cell: StreamCell, url: String?, index: Int) {
-        let imageView = cell.getImageViewForMember(index: index)
-        if let unwrappedUrl = url {
-            imageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultImage)
-        } else {
-            imageView.image = defaultImage
-        }
-    }
-    
-    private func loadCellImages(cell: StreamCell, stream: Models.Stream) {
-        // load coverArt
-        let filter = AspectScaledToFillSizeWithRoundedCornersFilter(
-            size: cell.coverArt.frame.size,
-            radius: 20.0
-        )
-        if stream.songs.count > 0 {
-            let song = stream.songs[0]
-            cell.coverArt.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: #imageLiteral(resourceName: "jukedef"), filter: filter)
-        } else {
-            cell.coverArt.image = filter.filter(#imageLiteral(resourceName: "jukedef"))
-        }
-        
-        // load owner icon
-        setImage(cell: cell, url: stream.owner.imageURL, index: 0)
-        // load member icons
-        let numIconsToDisplay = stream.members.count - 1
-        if numIconsToDisplay > 0 {
-            for i in 1...numIconsToDisplay {
-                setImage(cell: cell, url: stream.members[i].imageURL, index: i)
-            }
-        } else {
-            cell.clearMemberIcons()
-        }
-        // if there are more members than we're displaying, show a label
-        let remainder = stream.members.count - 5;
-        if remainder > 0 {
-            cell.moreMembersLabel.text = "+ \(remainder) more member" + ((remainder > 1) ? "s" : "")
-            cell.moreMembersLabel.isHidden = false
-        } else {
-            cell.moreMembersLabel.isHidden = true
-        }
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell", for: indexPath) as! StreamCell
-        let stream = streams[indexPath.row]
-        loadCellImages(cell: cell, stream: stream)
-        if let owner = stream.owner.username {
-            cell.username.text = owner.components(separatedBy: " ").first! + "'s stream"
-        } else {
-            cell.username.text = "???"
-        }
-        if stream.songs.count > 0 {
-            let song = stream.songs[0]
-            cell.artist.text = song.artistName
-            cell.song.text = song.songName
-            cell.blurredBgImage.af_setImage(withURL: URL(string: song.coverArtURL)!)
-        } else {
-            cell.artist.text = ""
-            cell.song.text = ""
-            cell.blurredBgImage.image = #imageLiteral(resourceName: "jukedef")
-        }
-        cell.setMusicIndicator(play: stream.isPlaying)
-        return cell
     }
     
     func joinStream(streamID: String) {

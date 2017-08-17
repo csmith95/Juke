@@ -14,10 +14,10 @@ target 'Juke' do
     pod 'PKHUD', '~> 4.0'
     pod 'ESTMusicIndicator'
     pod 'SCLAlertView'
-    pod 'Floaty', '~> 3.0.0'
     pod 'Firebase/Core'
     pod 'Firebase/Database'
     pod 'Firebase/Auth'
     pod 'Firebase/Storage'
+    pod 'FirebaseUI/Database', '~> 4.0'
 
 end

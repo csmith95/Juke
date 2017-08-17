@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import AlamofireImage
 import Unbox
+import Firebase
 
 class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
@@ -19,7 +20,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     var searchURL = String()
     typealias JSONStandard = [String: AnyObject]
-    let socketManager = SocketManager.sharedInstance
+    let firebaseRef = Database.database().reference()
     
     enum Scope: Int {
         case MyLibrary = 0, Spotify
@@ -210,15 +211,14 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
  
     func addSongToStream(song: Models.SpotifySong, stream: Models.Stream) {
-        var params: Parameters = ["streamID": stream.streamID, "spotifyID": song.spotifyID, "songName": song.songName, "artistName": song.artistName, "duration": song.duration, "coverArtURL": song.coverArtURL]
-        if let memberImageURL = CurrentUser.user.imageURL {
-            params["memberImageURL"] = memberImageURL
-        } else {
-            params["memberImageURL"] = nil
-        }
-        
-        // go through socketManager so that other members will be updated
-        socketManager.addSong(params: params);
+        let key = firebaseRef.child("songs/stream1").childByAutoId().key
+        let post: [String: Any] = ["spotifyID": song.spotifyID,
+                    "artistName": song.artistName,
+                    "songName": song.songName,
+                    "duration": song.duration,
+                    "votes": 0,
+                    "coverArtURL": song.coverArtURL]
+        firebaseRef.child("/songs/stream1/\(key)").setValue(post)
     }
     
     func loadSavedTracks() {

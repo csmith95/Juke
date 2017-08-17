@@ -34,7 +34,8 @@ PODS:
     - FirebaseAnalytics (~> 4.0)
     - FirebaseCore (~> 4.0)
     - GTMSessionFetcher/Core (~> 1.1)
-  - Floaty (3.0.0)
+  - FirebaseUI/Database (4.1.1):
+    - Firebase/Database
   - GoogleToolboxForMac/DebugUtils (2.1.1):
     - GoogleToolboxForMac/Defines (= 2.1.1)
   - GoogleToolboxForMac/Defines (2.1.1)
@@ -65,7 +66,7 @@ DEPENDENCIES:
   - Firebase/Core
   - Firebase/Database
   - Firebase/Storage
-  - Floaty (~> 3.0.0)
+  - FirebaseUI/Database (~> 4.0)
   - PKHUD (~> 4.0)
   - RevealingSplashView
   - SCLAlertView
@@ -83,7 +84,7 @@ SPEC CHECKSUMS:
   FirebaseDatabase: d829b3a8c3e2ac7a16773c5df226966b0805dfc2
   FirebaseInstanceID: 9fbf536668f4d3f0880e7438456dabd1376e294b
   FirebaseStorage: 8110a1ed2034c8fbfd83890d2acc9cdbbd99afec
-  Floaty: d1be5d323094f0de422bb615452d00ba26ac74dd
+  FirebaseUI: 5ebebe2c096c71f20abd1d43d0388958373bdaa0
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
   GTMSessionFetcher: 5ad62e8200fa00ed011fe5e08d27fef72c5b1429
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
@@ -93,6 +94,6 @@ SPEC CHECKSUMS:
   Socket.IO-Client-Swift: 7ad3aded3c0f74d99555e950ac3aa82ca3eefbaf
   Unbox: c8b2ab69d3337597b4a3f47a0538807dc12db670
 
-PODFILE CHECKSUM: 9986c857f4149fdc2f3b6b679da19feb2c5a3b94
+PODFILE CHECKSUM: c8ac778cfa4aabdeed3ad035f579f876afaabacc
 
 COCOAPODS: 1.2.0
