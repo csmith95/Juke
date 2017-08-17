@@ -26,7 +26,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Auth.auth().signInAnonymously(completion: { (user, error) in
             print("user auth completed", user!.uid)
         })
-        
         // Override point for customization after application launch.
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
