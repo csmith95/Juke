@@ -134,12 +134,15 @@ class LoginViewController: UIViewController {
     }
     
     func addUserToFirebase(spotifyUser: Models.SpotifyUser) {
-        //print(spotifyUser.username)
-        // TODO: check if user is in db then skip
-        
-        self.ref.child("users").child(spotifyUser.spotifyID).setValue(["tunedInto": "test", "username": spotifyUser.username!, "imageURL": spotifyUser.imageURL!, "online": true])
-        
-        
+        ref.child("users").child(spotifyUser.spotifyID).observeSingleEvent(of: .value, with: { (snapshot) in
+            let value = snapshot.value as? NSDictionary
+            if value == nil {
+                // add user if user does not exist
+                self.ref.child("users").child(spotifyUser.spotifyID).setValue(["tunedInto": "test", "username": spotifyUser.username!, "imageURL": spotifyUser.imageURL!, "online": true])
+            }
+        }) {(error) in
+            print(error.localizedDescription)
+        }
     }
     
     func addUserToJukeServer(spotifyUser: Models.SpotifyUser) {
