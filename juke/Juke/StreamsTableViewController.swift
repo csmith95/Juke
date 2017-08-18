@@ -23,7 +23,6 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
     var friends: [Models.User] = []
     var streams: [Models.Stream] = []
     var firebaseStreams: [Models.FirebaseStream] = []
-    let socketManager = SocketManager.sharedInstance
     let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
     let firebaseRef = Database.database().reference()
     var dataSource: FUITableViewDataSource!
@@ -35,16 +34,10 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
         self.friendsCollectionView.delegate = self
         self.friendsCollectionView.dataSource = self
         self.dataSource = self.tableView.bind(to: self.firebaseRef.child("streams")) { tableView, indexPath, snapshot in
-            // Dequeue cell
             let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell", for: indexPath) as! StreamCell
-            /* populate cell */
-            do {
-                let stream = Models.FirebaseStream(snapshot: snapshot)
+            let stream = Models.FirebaseStream(snapshot: snapshot)
 //                self.firebaseStreams[indexPath.row] = stream
-                cell.populateCell(stream: stream)
-            } catch let err {
-                print("Error trying to unbox stream: \(err)")
-            }
+            cell.populateCell(stream: stream)
             return cell
         }
     }
@@ -72,107 +65,76 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let friend = self.friends[indexPath.row]
-        let username = (friend.username == nil) ? "???" : friend.username!
-        let appearance = SCLAlertView.SCLAppearance(
-            kCircleHeight: 50, kCircleIconHeight: 50
-        )
-        let alertView = SCLAlertView(appearance: appearance)
-        alertView.addButton("Join stream") {
-            self.joinStream(streamID: friend.tunedInto!)
-        }
-        
-        alertView.showSuccess(username, subTitle: "", circleIconImage: friend.image)
+//        let friend = self.friends[indexPath.row]
+//        let username = (friend.username == nil) ? "???" : friend.username!
+//        let appearance = SCLAlertView.SCLAppearance(
+//            kCircleHeight: 50, kCircleIconHeight: 50
+//        )
+//        let alertView = SCLAlertView(appearance: appearance)
+//        alertView.addButton("Join stream") {
+//            self.joinStream(streamID: friend.tunedInto!)
+//        }
+//        
+//        alertView.showSuccess(username, subTitle: "", circleIconImage: friend.image)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         backgroundImage.image = #imageLiteral(resourceName: "jukedef")
         self.navigationController?.title = "Discover"
-        fetchStreams()
-        fetchFriends()
+//        fetchFriends()
     }
     
-    private func fetchFriends() {
-        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kFetchFriends, method: .get)
-            .validate().responseJSON { response in
-            switch response.result {
-            case .success:
-                if let unparsedFriends = response.result.value as? [UnboxableDictionary] {
-                    self.friends = []
-                    for unparsedStream in unparsedFriends {
-                        do {
-                            let friend: Models.User = try unbox(dictionary: unparsedStream)
-                            if (friend.id != CurrentUser.user.id && friend.tunedInto != CurrentUser.user.tunedInto) {
-                                self.friends.append(friend)  // if not tuned into this stream, display it
-                            }
-                        } catch {
-                            print("Error trying to unbox friend: \(error)")
-                        }
-                    }
-                    
-                    DispatchQueue.main.async {
-                        self.friendsCollectionView.reloadData()
-                    }
-                    
-                }
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
+//    private func fetchFriends() {
+//        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kFetchFriends, method: .get)
+//            .validate().responseJSON { response in
+//            switch response.result {
+//            case .success:
+//                if let unparsedFriends = response.result.value as? [UnboxableDictionary] {
+//                    self.friends = []
+//                    for unparsedStream in unparsedFriends {
+//                        do {
+//                            let friend: Models.User = try unbox(dictionary: unparsedStream)
+//                            if (friend.id != CurrentUser.user.id && friend.tunedInto != CurrentUser.user.tunedInto) {
+//                                self.friends.append(friend)  // if not tuned into this stream, display it
+//                            }
+//                        } catch {
+//                            print("Error trying to unbox friend: \(error)")
+//                        }
+//                    }
+//                    
+//                    DispatchQueue.main.async {
+//                        self.friendsCollectionView.reloadData()
+//                    }
+//                    
+//                }
+//            case .failure(let error):
+//                print(error)
+//            }
+//        }
+//    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    func joinStream(streamID: String) {
-        HUD.show(.progress)
-        socketManager.joinStream(userID: CurrentUser.user.id, streamID: streamID) { unparsedStream in
-            do {
-                let stream: Models.Stream = try unbox(dictionary: unparsedStream)
-                CurrentUser.user.tunedInto = stream.streamID
-                CurrentUser.stream = stream
-                HUD.flash(.success, delay: 0.75) { success in
-                    self.tabBarController?.selectedIndex = 1
-                }
-            } catch {
-                print("Error unboxing new stream: ", error)
-            }
-        }
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedStream = streams.remove(at: indexPath.row)
-        joinStream(streamID: selectedStream.streamID)
-    }
-    
-    func fetchStreams() {
-        self.streams.removeAll()
-        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kFetchStreamsPath, method: .get).validate().responseJSON { response in
-            switch response.result {
-            case .success:
-                if let unparsedStreams = response.result.value as? [UnboxableDictionary] {
-                    for unparsedStream in unparsedStreams {
-                        do {
-                            let fetchedStream: Models.Stream = try unbox(dictionary: unparsedStream)
-                            if (fetchedStream.streamID != CurrentUser.stream?.streamID) {
-                                self.streams.append(fetchedStream)  // if not tuned into this stream, display it
-                            }
-                        } catch {
-                            print("Error trying to unbox stream: \(error)")
-                        }
-                    }
-                    
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
-                
-                }
-            case .failure(let error):
-                print(error)
-            }
-        }
+//        let selectedStream = streams.remove(at: indexPath.row)
+//        joinStream(streamID: selectedStream.streamID)
+        // TODO: join stream.... old implementation below
+//        HUD.show(.progress)
+//        socketManager.joinStream(userID: CurrentUser.user.id, streamID: streamID) { unparsedStream in
+//            do {
+//                let stream: Models.Stream = try unbox(dictionary: unparsedStream)
+//                CurrentUser.user.tunedInto = stream.streamID
+//                CurrentUser.stream = stream
+//                HUD.flash(.success, delay: 0.75) { success in
+//                    self.tabBarController?.selectedIndex = 1
+//                }
+//            } catch {
+//                print("Error unboxing new stream: ", error)
+//            }
+//        }
     }
 
 }

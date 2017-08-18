@@ -17,30 +17,11 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     private let core = SPTCoreAudioController()
     private var session: SPTSession? = nil
     private let kClientID = "77d4489425fe464483f0934f99847c8b"
-    private var position: TimeInterval = 0.0
-    private var songJukeID: String? // Juke id of currently playing song
-//    private var player: AVPlayer!
+    private var position_ms: TimeInterval = 0.0
     
     
     override private init() {
         super.init()
-//        *** hack to for background sync
-//        do {
-//            print("trying to play")
-//            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: .mixWithOthers)
-//            print("2")
-//            let path = Bundle.main.path(forResource: "silence", ofType: "mp3")!
-//            print(path)
-//            let url = NSURL(fileURLWithPath: path) as URL
-//            print(url)
-//            let item = AVPlayerItem(url: url)
-//            player = AVPlayer.init(playerItem: item)
-//            player.actionAtItemEnd = .none
-//            player.play()
-//            print("played")
-//        } catch let err {
-//            print(err)
-//        }
         do {
             try sharedInstance?.start(withClientId: kClientID)
             sharedInstance?.delegate = self
@@ -52,7 +33,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     }
 
     func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
-        print("AudioStreamer logged in!")
+        print("** JamsPlayer audio logged in")
         NotificationCenter.default.post(name: Notification.Name("jamsPlayerReady"), object: nil)
     }
     
@@ -61,7 +42,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceiveMessage message: String!) {
-        print("Received message: ", message)
+        print("** JamsPlayer received message: ", message)
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceive event: SpPlaybackEvent) {
@@ -69,12 +50,11 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
             if audioStreaming.metadata == nil {
                 return
             }
-            print("received event")
             // track changed -- tell StreamController to pop first song, play next song
             if let currentTrack = audioStreaming.metadata.currentTrack {
                 let duration_ms = currentTrack.duration * 1000
-                if self.position >= duration_ms - 2000 {
-                    self.position = 0.0
+                if self.position_ms >= duration_ms - 2000 {
+                    self.position_ms = 0.0
                     NotificationCenter.default.post(name: Notification.Name("songFinished"), object: nil)
                 }
             }
@@ -94,40 +74,23 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         }
     }
     
-    public func isPlaying(song: Models.Song) -> Bool {
-        
-        if self.songJukeID == nil {
-            return false   // first, check that a song is playing or loaded
-        }
-        
-        if self.songJukeID != song.id {
-            return false    // check that they are the same song objects in Juke DB, not just the same spotify song
-        }
-        
-        if let audioStreamer = sharedInstance {
-            if let playbackState = audioStreamer.playbackState {
-                return playbackState.isPlaying
-            }
-        }
-        return false
-    }
-    
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePosition position: TimeInterval) {
         // signal StreamController so that it can update UISlider
         let position_ms = position * 1000
-        self.position = position_ms
-        let data: [String:Any] = ["songID": self.songJukeID, "progress": self.position]
+        self.position_ms = position_ms
+        let data: [String:Any] = ["progress": position_ms]
         NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
     }
     
-    public func setPlayStatus(shouldPlay: Bool, song: Models.Song?) {
-        if shouldPlay && song != nil {
-            self.songJukeID = song?.id
+    public func setPlayStatus(shouldPlay: Bool, song: Models.FirebaseSong, progress: Double) {
+        print(shouldPlay)
+        if shouldPlay {
             // not sure if this is good style, but these 2 lines are the magic behind background streaming
             try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try? AVAudioSession.sharedInstance().setActive(true)
-            let position = song!.progress / 1000
-            let uri = "spotify:track:" + song!.spotifyID
+            let position = progress / 1000
+            let uri = "spotify:track:" + song.spotifyID
+            print("playing ", position)
             sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: position, callback: { (error) in
                 if let error = error {
                     print(error)

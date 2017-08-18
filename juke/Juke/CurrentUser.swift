@@ -10,11 +10,10 @@ import Foundation
 import Unbox
 
 class CurrentUser {
-    public static var user: Models.User!
-    public static var stream: Models.Stream!
-    public static var fetched: Bool = false
+    public static var user: Models.FirebaseUser!
+    public static var stream: Models.FirebaseStream!
     public static func isHost() -> Bool {
-        return CurrentUser.user.id == CurrentUser.stream.owner.id
+        return CurrentUser.user.username == CurrentUser.stream.host.username
     }
     public static var accessToken = ""
 }

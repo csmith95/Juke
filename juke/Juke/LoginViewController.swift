@@ -121,7 +121,6 @@ class LoginViewController: UIViewController {
                 do {
                     let dictionary = response.result.value as! UnboxableDictionary
                     let spotifyUser: Models.SpotifyUser = try unbox(dictionary: dictionary)
-                    self.addUserToJukeServer(spotifyUser: spotifyUser)
                     self.addUserToFirebase(spotifyUser: spotifyUser)
                     print("Fetched user")
                 } catch {
@@ -134,47 +133,48 @@ class LoginViewController: UIViewController {
     }
     
     func addUserToFirebase(spotifyUser: Models.SpotifyUser) {
-        ref.child("users").child(spotifyUser.spotifyID).observeSingleEvent(of: .value, with: { (snapshot) in
-            let value = snapshot.value as? NSDictionary
-            if value == nil {
+        ref.child("users/\(spotifyUser.spotifyID)").observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            if snapshot.exists() {
+                if var userDict = snapshot.value as? [String: Any] {
+                    print(snapshot)
+                    userDict["spotifyID"] = spotifyUser.spotifyID
+                    CurrentUser.user = Models.FirebaseUser(dict: userDict)
+                }
+            } else {
                 // add user if user does not exist
-                self.ref.child("users").child(spotifyUser.spotifyID).setValue(["tunedInto": "test", "username": spotifyUser.username!, "imageURL": spotifyUser.imageURL!, "online": true])
+                var newUserDict: [String: Any?] = ["imageURL": spotifyUser.imageURL,
+                                                   "tunedInto": nil,
+                                                   "online": true]
+                if let username = spotifyUser.username {
+                    newUserDict["username"] = username
+                } else {
+                    newUserDict["username"] = spotifyUser.spotifyID // use spotifyID if no spotify username
+                }
+                self.ref.child("users").child(spotifyUser.spotifyID).setValue(newUserDict)
+                newUserDict["spotifyID"] = spotifyUser.spotifyID
+                CurrentUser.user = Models.FirebaseUser(dict: newUserDict)
             }
+            
+            // for testing right now
+            var stream: [String: Any?] = [:]
+            let host = Models.FirebaseMember(username: CurrentUser.user.username, imageURL: CurrentUser.user.imageURL)
+            stream["host"] = host.dictionary
+            stream["members"] = host.dictionary
+            stream["song"] = nil
+            stream["isPlaying"] = false
+            CurrentUser.stream = Models.FirebaseStream(dict: stream)
+            print(CurrentUser.stream)
+            
+            // login transition
+            DispatchQueue.main.async {
+                print("loginSegue")
+                self.performSegue(withIdentifier: "loginSegue", sender: nil)
+            }
+            
         }) {(error) in
             print(error.localizedDescription)
         }
-    }
-    
-    func addUserToJukeServer(spotifyUser: Models.SpotifyUser) {
-        //print(spotifyUser)
-        // create new user object in DB. if already exists with spotifyID, returns user object
-        let url = ServerConstants.kJukeServerURL + ServerConstants.kAddUser
-        //self.ref.child("users/(user.uid)/username").setValue(spotifyUser.username)
-        let params: Parameters = [
-            "spotifyID": spotifyUser.spotifyID,
-            "username": (spotifyUser.username != nil) ? spotifyUser.username! : "",
-            "imageURL": (spotifyUser.imageURL != nil) ? spotifyUser.imageURL! : ""
-        ]
-        
-        Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
-            switch response.result {
-            case .success:
-                do {
-                    let unparsedJukeUser = response.result.value as! UnboxableDictionary
-                    let user: Models.User = try unbox(dictionary: unparsedJukeUser)
-                    CurrentUser.user = user
-                    //self.ref.child("users").setValue([user.spotifyID: spotifyUser])
-                    DispatchQueue.main.async {
-                        print("loginSegue")
-                        self.performSegue(withIdentifier: "loginSegue", sender: nil)
-                    }
-                } catch {
-                    print("Error unboxing user: ", error)
-                }
-            case .failure(let error):
-                print("Error adding user to database: ", error)
-            }
-        };
     }
 
     override func didReceiveMemoryWarning() {

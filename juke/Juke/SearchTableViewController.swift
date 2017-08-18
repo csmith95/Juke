@@ -194,7 +194,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         cell.addToStreamButton.isSelected = false
         cell.tapAction = { (cell) in
             // post to server
-            self.addSongToStream(song: self.displayedResults[indexPath.row], stream: CurrentUser.stream!)
+            self.addSongToStream(song: self.displayedResults[indexPath.row])
             
             // animate button text change from "+" to "Added!"
             cell.addToStreamButton.isSelected = true
@@ -210,15 +210,25 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         return cell
     }
  
-    func addSongToStream(song: Models.SpotifySong, stream: Models.Stream) {
-        let key = firebaseRef.child("songs/stream1").childByAutoId().key
-        let post: [String: Any] = ["spotifyID": song.spotifyID,
+    func addSongToStream(song: Models.SpotifySong) {
+        let key = firebaseRef.child("/songs/\(CurrentUser.stream.streamID)").childByAutoId().key
+        let newSong: [String: Any?] = ["spotifyID": song.spotifyID,
                     "artistName": song.artistName,
                     "songName": song.songName,
                     "duration": song.duration,
                     "votes": 0,
-                    "coverArtURL": song.coverArtURL]
-        firebaseRef.child("/songs/stream1/\(key)").setValue(post)
+                    "coverArtURL": song.coverArtURL,
+                    "memberImageURL": CurrentUser.user.imageURL]
+        firebaseRef.child("/streams/\(CurrentUser.stream.streamID)/song").observeSingleEvent(of: .value, with: { (snapshot) in
+            if snapshot.exists() {
+                self.firebaseRef.child("/songs/\(CurrentUser.stream.streamID)/\(key)").setValue(newSong)
+            } else {
+                // no current song - set current song
+                self.firebaseRef.child("/streams/\(CurrentUser.stream.streamID)/song").setValue(newSong)
+            }
+        }) { (error) in
+            print(error.localizedDescription)
+        }
     }
     
     func loadSavedTracks() {

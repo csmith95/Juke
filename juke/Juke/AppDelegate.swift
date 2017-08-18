@@ -90,12 +90,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        // for some reason the viewWillAppear isn't firing when app reopens, so this is
-        // necessary to trigger a stream refresh
-        NotificationCenter.default.post(name: Notification.Name("refreshStream"), object: nil);
-        SocketManager.sharedInstance.openConnection();
-        
-        // refresh spotify token
         
     }
     
@@ -103,7 +97,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
-        SocketManager.sharedInstance.closeConnection()
     }
     
     // MARK: - Core Data stack

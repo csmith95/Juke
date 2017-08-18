@@ -12,13 +12,15 @@ import Unbox
 import AlamofireImage
 import PKHUD
 import Firebase
+import FirebaseDatabaseUI
 
-class MyStreamController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class MyStreamController: UIViewController, UITableViewDelegate {
     
     // firebase vars
-    var ref: DatabaseReference!
+    let ref = Database.database().reference()
     fileprivate var _refHandle: DatabaseHandle!
     var streams: [DataSnapshot]! = []
+    var dataSource: FUITableViewDataSource!
     
     // app vars
     @IBOutlet var clearStreamButton: UIButton!
@@ -34,10 +36,10 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var skipButton: UIButton!
     @IBOutlet var tableView: UITableView!
     let jamsPlayer = JamsPlayer.shared
-    let socketManager = SocketManager.sharedInstance
     @IBOutlet public var listenButton: UIButton!
     var animationTimer = Timer()
-    let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
+    
+    var currSongProgress = 0.0
     
     // deinit firebase
     deinit {
@@ -45,14 +47,11 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func configureStreamsDatabase() {
-        ref = Database.database().reference()
-        _refHandle = self.ref.child("streams").observe(.childAdded, with: { [weak self] (snapshot) -> Void in
-            guard let strongSelf = self else { return }
-            strongSelf.streams.append(snapshot)
-            strongSelf.tableView.insertRows(at: [IndexPath(row: strongSelf.streams.count-1, section: 0)], with: .automatic)
-        })
-        
-        
+//        _refHandle = self.ref.child("streams").observe(.childAdded, with: { [weak self] (snapshot) -> Void in
+//            guard let strongSelf = self else { return }
+//            strongSelf.streams.append(snapshot)
+//            strongSelf.tableView.insertRows(at: [IndexPath(row: strongSelf.streams.count-1, section: 0)], with: .automatic)
+//        })
     }
     
     var navBarTitle: String? {
@@ -65,21 +64,21 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
-    
     @IBAction func addSongToLibPressed(_ sender: Any) {
     
         let path = addSongButton.isSelected ? ServerConstants.kDeleteSongByIDPath : ServerConstants.kAddSongByIDPath
         let method: HTTPMethod = addSongButton.isSelected ? .delete : .put
-        let song = CurrentUser.stream.songs[0]
-        let headers = [
-            "Authorization": "Bearer " + CurrentUser.accessToken
-        ]
-        let url = URL(string: ServerConstants.kSpotifyBaseURL+path+song.spotifyID)!
-        let message = addSongButton.isSelected ? "Removed from your library" : "Saved to your library!"
-        self.addSongButton.isSelected = !self.addSongButton.isSelected
-        Alamofire.request(url, method: method, headers: headers).validate().response() { response in
-            self.delay(1.0) {
-                HUD.flash(.label(message), delay: 0.75)
+        if let song = CurrentUser.stream.song {
+            let headers = [
+                "Authorization": "Bearer " + CurrentUser.accessToken
+            ]
+            let url = URL(string: ServerConstants.kSpotifyBaseURL+path+song.spotifyID)!
+            let message = addSongButton.isSelected ? "Removed from your library" : "Saved to your library!"
+            self.addSongButton.isSelected = !self.addSongButton.isSelected
+            Alamofire.request(url, method: method, headers: headers).validate().response() { response in
+                self.delay(1.0) {
+                    HUD.flash(.label(message), delay: 0.75)
+                }
             }
         }
     }
@@ -90,14 +89,13 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     @IBAction func toggleListening(_ sender: AnyObject) {
-        if CurrentUser.stream.songs.count == 0 {
+        if CurrentUser.stream.song == nil {
             return
         }
         let status = !listenButton.isSelected
         listenButton.isSelected = status
-        let song = CurrentUser.stream.songs[0]
         if CurrentUser.isHost() {
-            socketManager.songPlayStatusChanged(streamID: CurrentUser.stream.streamID, songID: song.id, progress: song.progress, isPlaying: status)
+            ref.child("/streams/\(CurrentUser.stream.streamID)/isPlaying").setValue(status)
             CurrentUser.stream.isPlaying = status
         }
         setSong(play: status && CurrentUser.stream.isPlaying)
@@ -105,35 +103,49 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     
     @IBAction func skipSong(_ sender: Any) {
         //set song to next thing in stream
-        if CurrentUser.stream.songs.count == 0 {
+        if CurrentUser.stream.song == nil {
             return
         }
         songFinished()
     }
     
     @IBAction func returnToPersonalStream(_ sender: Any) {
-        socketManager.splitFromStream(userID: CurrentUser.user.id);
+        let streamID = ref.child("/streams").childByAutoId().key
+        let host = Models.FirebaseMember(username: CurrentUser.user.username, imageURL: CurrentUser.user.imageURL)
+        var stream: [String: Any?] = [:]
+        stream["host"] = host.dictionary
+        stream["members"] = host.dictionary
+        stream["song"] = nil
+        stream["isPlaying"] = false
+        let childUpdates: [String: Any] = ["/streams/\(streamID)": stream,
+                            "/songs/\(streamID)": NSNull()]
+        ref.updateChildValues(childUpdates)
+        stream["streamID"] = streamID
+        CurrentUser.stream = Models.FirebaseStream(dict: stream)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.delegate = self
-        self.tableView.dataSource = self
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songPositionChanged), name: Notification.Name("songPositionChanged"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.syncPositionWithOwner), name: Notification.Name("syncPositionWithOwner"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.fetchMyStream), name: Notification.Name("refreshStream"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.jamsPlayerReady), name: Notification.Name("jamsPlayerReady"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Helvetica", size: 15)!]
-        if !CurrentUser.fetched {
-            setEmptyStreamUI()
-        }
-        fetchMyStream()
+        self.dataSource = self.tableView.bind(to: self.ref.child("/songs/\(CurrentUser.stream.streamID)"))
+            { tableView, indexPath, snapshot in
+                let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
+                guard let song = Models.FirebaseSong(snapshot: snapshot) else { return cell }
+                //                self.songs[indexPath.row] = song
+                cell.populateCell(song: song)
+                return cell
+            }
+        loadTopSong()
     }
+    
     
     private func setUpControlButtons() {
         if CurrentUser.isHost() {
@@ -150,47 +162,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
             exitStreamButton.isHidden = false
         }
     }
-    
-    func fetchMyStream() {
-        // fetch stream for user. if not tuned in or is returning to personal stream, creates and returns an offline stream by default
-        let url = ServerConstants.kJukeServerURL + ServerConstants.kFetchStream
-        let params: Parameters = ["ownerSpotifyID": CurrentUser.user.spotifyID]
-        Alamofire.request(url, method: .get, parameters: params).validate().responseJSON { response in
-            switch response.result {
-            case .success:
-                do {
-                    let unparsedStream = response.result.value as! UnboxableDictionary
-                    let stream: Models.Stream = try unbox(dictionary: unparsedStream)
-                    CurrentUser.stream = stream
-                    if let owner = stream.owner.username {
-                        self.navBarTitle = owner + "'s Stream"
-                    } else {
-                        self.navBarTitle = "Current Stream"
-                    }
-                    CurrentUser.user.tunedInto = stream.streamID
-                    CurrentUser.fetched = true
-                    SocketManager.sharedInstance.setSocketID()  // try to set after user has been fetched
-                    self.setUpControlButtons()
-                    self.tableView.reloadData()
-                    if stream.songs.count > 0 {
-                        self.noSongsLabel.isHidden = true
-                        if !JamsPlayer.shared.isPlaying(song: stream.songs[0]) {
-                            self.loadTopSong()  // otherwise sounds choppy if playback progress is adjusted every time page is loaded
-                        }
-                    } else {
-                        // no songs in stream so show noSongsLabel
-                        self.setEmptyStreamUI()
-                    }
-                    self.socketManager.joinSocketRoom(streamID: CurrentUser.stream.streamID)
-                } catch {
-                    print("Error unboxing stream: ", error)
-                }
-                
-            case .failure(let error):
-                print("Error fetching stream: ", error)
-            }
-        }
-    }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
@@ -200,35 +171,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-//    // MARK: - Table view data source
-    func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        if (CurrentUser.fetched == false) {
-            return 0
-        }
-        return CurrentUser.stream.songs.count-1     // -1 because the first one is loaded up top
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let song = CurrentUser.stream.songs[indexPath.row+1]
-        let cell = self.tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
-        cell.songName.text = song.songName
-        cell.artist.text = song.artistName
-        let imageFilter = CircleFilter()
-        if let unwrappedUrl = song.memberImageURL {
-            cell.memberImageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultImage, filter: imageFilter)
-        } else {
-            cell.memberImageView.image = imageFilter.filter(defaultImage)
-        }
-        
-        return cell
-    }
     
     private func timeIntervalToString(interval: TimeInterval) -> String {
         let ti = NSInteger(interval)
@@ -237,109 +179,70 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         return NSString(format: "%0.2d:%0.2d", minutes, seconds) as String
     }
     
-    func syncPositionWithOwner(notification: NSNotification) {
-        if CurrentUser.stream.songs.count == 0 {
-            return
-        }
-        
-        if CurrentUser.isHost() {
-            return  // owner is already synced with device
-        }
-        
-        if let data = notification.object as? NSDictionary {
-            if let eventString = data["event"] as? String {
-                let songID = data["songID"] as? String
-                if songID != CurrentUser.stream.songs[0].id {
-                    return
-                }
-                
-                switch eventString {
-                case "playStatusChanged":
-                    let isPlaying = data["isPlaying"] as! Bool
-                    CurrentUser.stream.isPlaying = isPlaying
-                    let progress = data["progress"] as! Double
-                    CurrentUser.stream.songs[0].progress = progress
-                    updateSlider(song: CurrentUser.stream.songs[0])
-                    setSong(play: isPlaying && listenButton.isSelected)
-                default:
-                    print("Received unrecognized ownerSongStatusChanged event: ", eventString);
-                }
-            }
-        }
-    }
-    
     func songPositionChanged(notification: NSNotification) {
-        if CurrentUser.stream.songs.count == 0 {
-            return
-        }
-        
-        let songs = CurrentUser.stream.songs
-        let song = songs[0]
-        if let data = notification.object as? NSDictionary {
-            let songID = data["songID"] as! String
-            if songID != song.id {
-                return
-            }
-            
+        if let song = CurrentUser.stream.song, let data = notification.object as? NSDictionary {
             let progress = data["progress"] as! Double
-            CurrentUser.stream.songs[0].progress = progress
-            // update progress in db if current user is playlist owner
+            currSongProgress = progress
             if CurrentUser.isHost() {
-                socketManager.songPositionChanged(songID: song.id, position: progress)
+                ref.child("/songProgressTable/\(CurrentUser.stream.streamID)").setValue(currSongProgress)
             }
-            
-            // update slider
             updateSlider(song: song)
         }
     }
     
-    private func updateSlider(song: Models.Song) {
-        let normalizedProgress = song.progress / song.duration
+    private func updateSlider(song: Models.FirebaseSong) {
+        let normalizedProgress = currSongProgress / song.duration
         progressSlider.value = Float(normalizedProgress)
-        self.currTimeLabel.text = timeIntervalToString(interval: song.progress/1000)
+        self.currTimeLabel.text = timeIntervalToString(interval: currSongProgress/1000)
     }
     
     func songFinished() {
-        CurrentUser.stream.songs.remove(at: 0)
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-            self.loadTopSong()
+        if CurrentUser.stream.song == nil  {
+            return
         }
-        
-        if !CurrentUser.isHost() {
-            return; // if you are not the owner, don't post to DB. let owner's device manage DB
+        loadTopSong()
+        if (CurrentUser.isHost()) {
+            ref.child("/songs/\(CurrentUser.stream.streamID)/").queryOrdered(byChild: "/votes")
+                .queryLimited(toLast: 1).observeSingleEvent(of: .value, with: { (snapshot) in
+                    print("** songFinished: \(snapshot)")
+                    if let nextSong = snapshot.value as? [String: Any] {
+                        print(nextSong)
+                        self.ref.child("/streams/\(CurrentUser.stream.streamID)/song").setValue(nextSong)
+                        self.ref.child("/songs/\(CurrentUser.stream.streamID)/\(snapshot.key)").setValue(NSNull())
+                    } else {
+                        self.ref.child("/streams/\(CurrentUser.stream.streamID)/song").setValue(NSNull())
+                    }
+                    self.ref.child("/songProgressTable/\(CurrentUser.stream.streamID))").setValue(0.0)
+            }) { error in
+                print(error.localizedDescription)
+            }
         }
-        
-        socketManager.popSong(data: [CurrentUser.stream.streamID])
     }
     
     public func setSong(play: Bool) {
-        if CurrentUser.fetched == false {
-            return;
-        }
-        
-        let song: Models.Song? = CurrentUser.stream.songs.count > 0 ? CurrentUser.stream.songs[0] : nil
-        jamsPlayer.setPlayStatus(shouldPlay: play, song: song)
-        if !CurrentUser.isHost() {
-            setTimer(run: !play && CurrentUser.stream.isPlaying)
+        if let song = CurrentUser.stream.song {
+            jamsPlayer.setPlayStatus(shouldPlay: play, song: song, progress: currSongProgress)
+            if !CurrentUser.isHost() {
+                setTimer(run: !play && CurrentUser.stream.isPlaying)
+            }
         }
     }
     
     private func setTimer(run: Bool) {
         
         DispatchQueue.main.async {
-            if (CurrentUser.isHost() || CurrentUser.stream.songs.count == 0) {
+            if (CurrentUser.isHost() || CurrentUser.stream.song == nil) {
                 return  // if owner, don't use timer at all
             }
             
             if (run) {
                 if !self.animationTimer.isValid {
-                    CurrentUser.stream.songs[0].progress += 300 // trying to offset for the time transition between stopping timer and starting song
+                    self.currSongProgress += 300 // trying to offset for the time transition between stopping timer and starting song
                     self.animationTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.updateAnimationProgress), userInfo: nil, repeats: true)
                 }
             } else {
                 if self.animationTimer.isValid {
-                    CurrentUser.stream.songs[0].progress += 300 // trying to offset for the time transition between stopping timer and starting song
+                    self.currSongProgress += 300 // trying to offset for the time transition between stopping timer and starting song
                     self.animationTimer.invalidate()
                 }
             }
@@ -347,37 +250,41 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func updateAnimationProgress() {
-        if CurrentUser.stream.songs.count == 0 {
+        if let song = CurrentUser.stream.song {
+            let newProgress = self.currSongProgress + 500
+            updateSlider(song: song)
+            if abs(newProgress - song.duration) < 1000 {
+                songFinished()  // force pop song based on timer
+            }
+        } else {
             progressSlider.value = Float(0)
-            return
-        }
-        let song = CurrentUser.stream.songs[0]
-        let newProgress = song.progress + 500
-        CurrentUser.stream.songs[0].progress = newProgress
-        updateSlider(song: CurrentUser.stream.songs[0])
-        if abs(newProgress - song.duration) < 1000 {
-            songFinished()  // force pop song based on timer
         }
     }
     
     private func loadTopSong() {
-        let songs = CurrentUser.stream.songs
-        if songs.count > 0 {
-            let song = songs[0]
-            // place first song in the currentlyPlayingLabel
-            coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil)
-            bgblurimg.af_setImage(withURL: URL(string:song.coverArtURL)!, placeholderImage: nil)
-            currentSongLabel.text = song.songName
-            currentArtistLabel.text = song.artistName
-            addSongButton.isHidden = false
-            listenButton.isHidden = false
-            skipButton.isHidden = !CurrentUser.isHost()
-            clearStreamButton.isHidden = !CurrentUser.isHost()
-            checkIfUserLibContainsCurrentSong(song: song)
-            updateSlider(song: song)
-            setSong(play: listenButton.isSelected && CurrentUser.stream.isPlaying)
-        } else {
-            setEmptyStreamUI()
+        ref.child("/streams/\(CurrentUser.stream.streamID)/song").observeSingleEvent(of: .value, with: { (snapshot) in
+            if snapshot.exists() {
+                print(snapshot)
+                if let song = Models.FirebaseSong(snapshot: snapshot) {
+                    print("got song: ", song)
+                    CurrentUser.stream.song = song
+                    self.coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil)
+                    self.bgblurimg.af_setImage(withURL: URL(string:song.coverArtURL)!, placeholderImage: nil)
+                    self.currentSongLabel.text = song.songName
+                    self.currentArtistLabel.text = song.artistName
+                    self.addSongButton.isHidden = false
+                    self.listenButton.isHidden = false
+                    self.skipButton.isHidden = !CurrentUser.isHost()
+                    self.clearStreamButton.isHidden = !CurrentUser.isHost()
+                    self.checkIfUserLibContainsCurrentSong(song: song)
+                    self.updateSlider(song: song)
+                    self.setSong(play: self.listenButton.isSelected && CurrentUser.stream.isPlaying)
+                }
+            } else {
+                self.setEmptyStreamUI()
+            }
+        }) { error in
+            print(error.localizedDescription)
         }
     }
     
@@ -395,7 +302,7 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         setSong(play: false)
     }
     
-    func checkIfUserLibContainsCurrentSong(song: Models.Song) {
+    func checkIfUserLibContainsCurrentSong(song: Models.FirebaseSong) {
         let headers = [
             "Authorization": "Bearer " + CurrentUser.accessToken
         ]
@@ -418,6 +325,8 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     @IBAction func clearStreamButtonPressed(_ sender: Any) {
-        socketManager.clearStream()
+        let childUpdates = ["/streams/\(CurrentUser.stream.streamID)/song": NSNull(),
+                            "/songs/\(CurrentUser.stream.streamID)": NSNull()]
+        ref.updateChildValues(childUpdates)
     }
 }

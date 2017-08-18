@@ -50,6 +50,7 @@ class StreamCell: UITableViewCell {
     }
     
     public func populateCell(stream: Models.FirebaseStream) {
+        print("populate: ", stream)
         loadCellImages(stream: stream)
         self.username.text = stream.host.username.components(separatedBy: " ").first! + "'s stream"
         if let song = stream.song {
