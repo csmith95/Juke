@@ -10,14 +10,14 @@ import Foundation
 import Firebase
 import FirebaseDatabaseUI
 import Whisper
+import ChameleonFramework
 
 class FirebaseAPI {
     
     enum FirebaseEvent {
         case MemberJoined
         case MemberLeft
-        case ResyncTopSong
-        case ResyncQueue
+        case ResyncStream
     }
     
     // to avoid calling twice
@@ -30,21 +30,14 @@ class FirebaseAPI {
     // audio player
     private static let jamsPlayer = JamsPlayer.shared
     
-    public static func addStreamChangeListener() {
-        
-        
-    }
-    
     public static func addListeners() {
         addMemberJoinedListener()
         addMemberLeftListener()
         addTopSongChangedListener()
-        addStreamChangeListener()
     }
     
     private static func addMemberJoinedListener() {
         ref.child("/streams/\(Current.stream.streamID)/members").observe(.childAdded, with:{ (snapshot) in
-            print(snapshot)
             // update Current stream
             let member = Models.FirebaseMember(username: snapshot.key, imageURL: snapshot.value as? String)
             if member.username == Current.user.username { return }      // because this event fires once at start up with all members (including host)
@@ -58,8 +51,7 @@ class FirebaseAPI {
             }
             
             // display Whisper notification
-            let colors: [UIColor] = [.red, .green, .blue]
-            whisper(title: "\(snapshot.key) joined your stream!" , backgroundColor: colors[Int(arc4random_uniform(UInt32(colors.count)))])
+            whisper(title: "\(snapshot.key) joined your stream!" , backgroundColor: RandomFlatColorWithShade(.light))
             
             // post event telling controller to resync
             NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.MemberJoined)
@@ -80,8 +72,7 @@ class FirebaseAPI {
             Current.stream.members.remove(at: index)
             
             // display Whisper notification
-            let colors: [UIColor] = [.red, .green, .blue]
-            whisper(title: "\(snapshot.key) left your stream" , backgroundColor: colors[Int(arc4random_uniform(UInt32(colors.count)))])
+            whisper(title: "\(snapshot.key) left your stream" , backgroundColor: RandomFlatColorWithShade(.light))
             
             // post event telling controller to resync
             // post event telling controller to resync
@@ -144,7 +135,6 @@ class FirebaseAPI {
     }
     
     private static func topSongChangedHandler(snapshot: DataSnapshot) {
-        print("** topSongChangedHandler: ", snapshot)
         if let songDict = snapshot.value as? [String: Any?], let song = Models.FirebaseSong(dict: songDict) {
             Current.stream.song = song
         }
@@ -194,6 +184,49 @@ class FirebaseAPI {
             return cell
         }
         return dataSource
+    }
+    
+    public static func queueSong(spotifySong: Models.SpotifySong) {
+        let song = Models.FirebaseSong(song: spotifySong)
+        self.ref.child("/streams/\(Current.stream.streamID)/song").observeSingleEvent(of: .value, with: { (snapshot) in
+            if snapshot.exists() {
+                // if there is already a top song right now (queue not empty), write it to the song queue
+                self.ref.child("/songs/\(Current.stream.streamID)/\(song.key)").setValue(song.firebaseDict)
+            } else {
+                // no current song - set current song
+                self.ref.child("/streams/\(Current.stream.streamID)/song").setValue(song.firebaseDict)
+            }
+        }) {error in print(error.localizedDescription)}
+    }
+    
+    // called from StreamsTableViewController when user selects a new stream to join
+    public static func joinStream(stream: Models.FirebaseStream, callback: @escaping ((_: Bool) -> Void)) {
+        let streamID = stream.streamID
+        let currentStreamID = Current.user.tunedInto
+        if currentStreamID != streamID || currentStreamID != Current.stream.streamID {
+            ref.child("/streams/\(streamID)").observeSingleEvent(of: .value, with: { (snapshot) in
+                if !snapshot.exists() { callback(false); return; }    // do nothing if this new stream doesn't exist anymore (concurrency)
+                
+                // resync to new stream
+                Current.user.tunedInto = streamID
+                Current.stream = stream
+                
+                // when these views reload, we need to reattach new listeners
+                self.streamsTableViewSet = false
+                self.myStreamTableViewSet = false
+                
+                // post event telling controller to resync
+                NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.ResyncStream)
+                
+                // callback provided by StreamsTableViewController to communicate success/failure
+                callback(true)
+                
+                // write to firebase stream members lists
+                let childUpdates: [String: Any?] = ["/streams/\(streamID)/members/\(Current.user.username)": Current.user.imageURL,
+                                                    "/streams/\(String(describing: currentStreamID))/members/\(Current.user.username)": NSNull()]
+                self.ref.updateChildValues(childUpdates)
+            }) {error in print(error.localizedDescription)}
+        }
     }
     
     public static func removeListeners() {

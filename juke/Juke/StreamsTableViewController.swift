@@ -15,7 +15,7 @@ import SCLAlertView
 import Firebase
 import FirebaseDatabaseUI
 
-class StreamsTableViewController: UIViewController, UICollectionViewDelegate {
+class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UITableViewDelegate {
     
     @IBOutlet var backgroundImage: UIImageView!
     @IBOutlet var tableView: UITableView!
@@ -33,6 +33,7 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate {
         if let newDataSource = FirebaseAPI.addDiscoverStreamsTableViewListener(allStreamsTableView: tableView) {
             self.dataSource = newDataSource
         }
+        tableView.delegate = self
     }
     
     
@@ -113,22 +114,18 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let selectedStream = streams.remove(at: indexPath.row)
-//        joinStream(streamID: selectedStream.streamID)
-        // TODO: join stream.... old implementation below
-//        HUD.show(.progress)
-//        socketManager.joinStream(userID: Current.user.id, streamID: streamID) { unparsedStream in
-//            do {
-//                let stream: Models.Stream = try unbox(dictionary: unparsedStream)
-//                Current.user.tunedInto = stream.streamID
-//                Current.stream = stream
-//                HUD.flash(.success, delay: 0.75) { success in
-//                    self.tabBarController?.selectedIndex = 1
-//                }
-//            } catch {
-//                print("Error unboxing new stream: ", error)
-//            }
-//        }
+        guard let stream = Models.FirebaseStream(snapshot: self.dataSource.items[indexPath.row]) else { return }
+        if stream.streamID == Current.stream.streamID { return }    // do nothing if already tuned in
+        HUD.show(.progress)
+        FirebaseAPI.joinStream(stream: stream) { success in
+            if success {
+                HUD.flash(.success, delay: 0.75) { success in
+                    self.tabBarController?.selectedIndex = 1
+                }
+            } else {
+                HUD.flash(.error, delay: 1.0)
+            }
+        }
     }
 
 }

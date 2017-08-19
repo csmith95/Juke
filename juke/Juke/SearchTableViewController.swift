@@ -194,7 +194,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         cell.addToStreamButton.isSelected = false
         cell.tapAction = { (cell) in
             // write to firebase
-            self.addSongToStream(spotifySong: self.displayedResults[indexPath.row])
+            FirebaseAPI.queueSong(spotifySong: self.displayedResults[indexPath.row])
             
             // animate button text change from "+" to "Added!"
             cell.addToStreamButton.isSelected = true
@@ -208,22 +208,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         artistLabel.text = displayedResults[indexPath.row].artistName
         
         return cell
-    }
- 
-    func addSongToStream(spotifySong: Models.SpotifySong) {
-        let song = Models.FirebaseSong(song: spotifySong)
-        firebaseRef.child("/streams/\(Current.stream.streamID)/song").observeSingleEvent(of: .value, with: { (snapshot) in
-            if snapshot.exists() {
-                print(song.firebaseDict)
-                // if there is already a top song right now (queue not empty), write it to the song queue
-                self.firebaseRef.child("/songs/\(Current.stream.streamID)/\(song.key)").setValue(song.firebaseDict)
-            } else {
-                // no current song - set current song
-                self.firebaseRef.child("/streams/\(Current.stream.streamID)/song").setValue(song.firebaseDict)
-            }
-        }) { (error) in
-            print(error.localizedDescription)
-        }
     }
     
     func loadSavedTracks() {

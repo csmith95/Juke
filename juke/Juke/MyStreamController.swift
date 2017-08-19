@@ -244,6 +244,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     
     func loadTopSong() {
         if let song = Current.stream.song {
+            print(song)
             self.coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil)
             self.bgblurimg.af_setImage(withURL: URL(string:song.coverArtURL)!, placeholderImage: nil)
             self.currentSongLabel.text = song.songName
@@ -306,15 +307,13 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         guard let event = notification.object as? FirebaseAPI.FirebaseEvent else { print("erro"); return }
         switch event {
         case .MemberJoined, .MemberLeft:
-            print(Current.stream.members)
-            print(Current.stream.members.count)
             self.numMembersLabel.text = String(Current.stream.members.count)
             break
-        case .ResyncTopSong:
-            
-            break
-        case .ResyncQueue:
-            
+        case .ResyncStream:
+            self.loadTopSong()
+            if let newDataSource = FirebaseAPI.addSongQueueTableViewListener(songQueueTableView: self.tableView) {
+                self.dataSource = newDataSource
+            }
             break
         }
     }
