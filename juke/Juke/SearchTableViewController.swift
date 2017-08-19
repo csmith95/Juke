@@ -146,7 +146,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         ]
         
         let headers = [
-            "Authorization": "Bearer " + CurrentUser.accessToken
+            "Authorization": "Bearer " + Current.accessToken
         ]
         
         Alamofire.request(ServerConstants.kSpotifySearchURL, method: .get, parameters: params, headers: headers)
@@ -193,8 +193,8 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell") as! SearchCell
         cell.addToStreamButton.isSelected = false
         cell.tapAction = { (cell) in
-            // post to server
-            self.addSongToStream(song: self.displayedResults[indexPath.row])
+            // write to firebase
+            self.addSongToStream(spotifySong: self.displayedResults[indexPath.row])
             
             // animate button text change from "+" to "Added!"
             cell.addToStreamButton.isSelected = true
@@ -210,21 +210,16 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         return cell
     }
  
-    func addSongToStream(song: Models.SpotifySong) {
-        let key = firebaseRef.child("/songs/\(CurrentUser.stream.streamID)").childByAutoId().key
-        let newSong: [String: Any?] = ["spotifyID": song.spotifyID,
-                    "artistName": song.artistName,
-                    "songName": song.songName,
-                    "duration": song.duration,
-                    "votes": 0,
-                    "coverArtURL": song.coverArtURL,
-                    "memberImageURL": CurrentUser.user.imageURL]
-        firebaseRef.child("/streams/\(CurrentUser.stream.streamID)/song").observeSingleEvent(of: .value, with: { (snapshot) in
+    func addSongToStream(spotifySong: Models.SpotifySong) {
+        let song = Models.FirebaseSong(song: spotifySong)
+        firebaseRef.child("/streams/\(Current.stream.streamID)/song").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
-                self.firebaseRef.child("/songs/\(CurrentUser.stream.streamID)/\(key)").setValue(newSong)
+                print(song.firebaseDict)
+                // if there is already a top song right now (queue not empty), write it to the song queue
+                self.firebaseRef.child("/songs/\(Current.stream.streamID)/\(song.key)").setValue(song.firebaseDict)
             } else {
                 // no current song - set current song
-                self.firebaseRef.child("/streams/\(CurrentUser.stream.streamID)/song").setValue(newSong)
+                self.firebaseRef.child("/streams/\(Current.stream.streamID)/song").setValue(song.firebaseDict)
             }
         }) { (error) in
             print(error.localizedDescription)
@@ -235,7 +230,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         self.libraryResults.removeAll()
         let url = "https://api.spotify.com/v1/me/tracks"
         let headers = [
-            "Authorization": "Bearer " + CurrentUser.accessToken
+            "Authorization": "Bearer " + Current.accessToken
         ]
         let params: Parameters = ["limit": 50, "offset": 0]
         Alamofire.request(url, parameters: params, headers: headers).responseJSON { response in

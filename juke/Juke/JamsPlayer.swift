@@ -17,7 +17,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     private let core = SPTCoreAudioController()
     private var session: SPTSession? = nil
     private let kClientID = "77d4489425fe464483f0934f99847c8b"
-    private var position_ms: TimeInterval = 0.0
+    public var position_ms: TimeInterval = 0.0
     
     
     override private init() {
@@ -82,16 +82,25 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
     }
     
-    public func setPlayStatus(shouldPlay: Bool, song: Models.FirebaseSong, progress: Double) {
-        print(shouldPlay)
+    public func setPlayStatus(shouldPlay: Bool, topSong: Models.FirebaseSong?) {
+        guard let player = sharedInstance else { return }
+        guard let song = topSong else {                     // turn off if nil passed in for topSong
+            player.setIsPlaying(false, callback: { (err) in
+                if let err = err {
+                    print(err)
+                }
+            });
+            return
+        }
+        
+        
         if shouldPlay {
             // not sure if this is good style, but these 2 lines are the magic behind background streaming
             try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try? AVAudioSession.sharedInstance().setActive(true)
-            let position = progress / 1000
+            let position = JamsPlayer.shared.position_ms / 1000
             let uri = "spotify:track:" + song.spotifyID
-            print("playing ", position)
-            sharedInstance?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: position, callback: { (error) in
+            player.playSpotifyURI(uri, startingWith: 0, startingWithPosition: position, callback: { (error) in
                 if let error = error {
                     print(error)
                 }
@@ -104,5 +113,11 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
             });
         }
     }
+    
+    public func resync() {
+        setPlayStatus(shouldPlay: Current.stream.isPlaying, topSong: Current.stream.song)
+    }
+    
+    
 }
 

@@ -15,14 +15,11 @@ import SCLAlertView
 import Firebase
 import FirebaseDatabaseUI
 
-class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class StreamsTableViewController: UIViewController, UICollectionViewDelegate {
     
     @IBOutlet var backgroundImage: UIImageView!
     @IBOutlet var tableView: UITableView!
     @IBOutlet var friendsCollectionView: UICollectionView!
-    var friends: [Models.User] = []
-    var streams: [Models.Stream] = []
-    var firebaseStreams: [Models.FirebaseStream] = []
     let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
     let firebaseRef = Database.database().reference()
     var dataSource: FUITableViewDataSource!
@@ -31,38 +28,34 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Discover Streams"
-        self.friendsCollectionView.delegate = self
-        self.friendsCollectionView.dataSource = self
-        self.dataSource = self.tableView.bind(to: self.firebaseRef.child("streams")) { tableView, indexPath, snapshot in
-            let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell", for: indexPath) as! StreamCell
-            let stream = Models.FirebaseStream(snapshot: snapshot)
-//                self.firebaseStreams[indexPath.row] = stream
-            cell.populateCell(stream: stream)
-            return cell
+//        self.friendsCollectionView.delegate = self
+//        self.friendsCollectionView.dataSource = self
+        if let newDataSource = FirebaseAPI.addDiscoverStreamsTableViewListener(allStreamsTableView: tableView) {
+            self.dataSource = newDataSource
         }
     }
     
     
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.friends.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell",
-                                                      for: indexPath) as! FriendCollectionViewCell
-        let friend = friends[indexPath.row]
-        let filter = AspectScaledToFillSizeCircleFilter(size: cell.friendImage.frame.size)
-        if let urlString = friend.imageURL {
-            cell.friendImage.af_setImage(withURL: URL(string: urlString)!, placeholderImage: defaultImage, filter: filter) { response in
-                self.friends[indexPath.row].image = response.value
-            }
-        } else {
-            cell.friendImage.image = defaultImage
-        }
-      
-        return cell
-    }
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        return self.friends.count
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell",
+//                                                      for: indexPath) as! FriendCollectionViewCell
+//        let friend = friends[indexPath.row]
+//        let filter = AspectScaledToFillSizeCircleFilter(size: cell.friendImage.frame.size)
+//        if let urlString = friend.imageURL {
+//            cell.friendImage.af_setImage(withURL: URL(string: urlString)!, placeholderImage: defaultImage, filter: filter) { response in
+//                self.friends[indexPath.row].image = response.value
+//            }
+//        } else {
+//            cell.friendImage.image = defaultImage
+//        }
+//      
+//        return cell
+//    }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 //        let friend = self.friends[indexPath.row]
@@ -81,6 +74,7 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
     override func viewWillAppear(_ animated: Bool) {
         backgroundImage.image = #imageLiteral(resourceName: "jukedef")
         self.navigationController?.title = "Discover"
+        FirebaseAPI.addDiscoverStreamsTableViewListener(allStreamsTableView: self.tableView)
 //        fetchFriends()
     }
     
@@ -94,7 +88,7 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
 //                    for unparsedStream in unparsedFriends {
 //                        do {
 //                            let friend: Models.User = try unbox(dictionary: unparsedStream)
-//                            if (friend.id != CurrentUser.user.id && friend.tunedInto != CurrentUser.user.tunedInto) {
+//                            if (friend.id != Current.user.id && friend.tunedInto != Current.user.tunedInto) {
 //                                self.friends.append(friend)  // if not tuned into this stream, display it
 //                            }
 //                        } catch {
@@ -123,11 +117,11 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
 //        joinStream(streamID: selectedStream.streamID)
         // TODO: join stream.... old implementation below
 //        HUD.show(.progress)
-//        socketManager.joinStream(userID: CurrentUser.user.id, streamID: streamID) { unparsedStream in
+//        socketManager.joinStream(userID: Current.user.id, streamID: streamID) { unparsedStream in
 //            do {
 //                let stream: Models.Stream = try unbox(dictionary: unparsedStream)
-//                CurrentUser.user.tunedInto = stream.streamID
-//                CurrentUser.stream = stream
+//                Current.user.tunedInto = stream.streamID
+//                Current.stream = stream
 //                HUD.flash(.success, delay: 0.75) { success in
 //                    self.tabBarController?.selectedIndex = 1
 //                }

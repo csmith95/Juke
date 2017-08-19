@@ -55,8 +55,8 @@ PODS:
   - PKHUD (4.2.0)
   - RevealingSplashView (0.1.0)
   - SCLAlertView (0.7.0)
-  - Socket.IO-Client-Swift (8.3.0)
   - Unbox (2.4.0)
+  - Whisper (5.0.0)
 
 DEPENDENCIES:
   - Alamofire (~> 4.4)
@@ -70,8 +70,8 @@ DEPENDENCIES:
   - PKHUD (~> 4.0)
   - RevealingSplashView
   - SCLAlertView
-  - Socket.IO-Client-Swift (~> 8.3.0)
   - Unbox
+  - Whisper
 
 SPEC CHECKSUMS:
   Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
@@ -91,9 +91,9 @@ SPEC CHECKSUMS:
   PKHUD: 48af884cf00c2213b0313b739d914e6cab1c0f5e
   RevealingSplashView: 501dd03d975ba2c4165dd463ea1c7c407fb9d13e
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
-  Socket.IO-Client-Swift: 7ad3aded3c0f74d99555e950ac3aa82ca3eefbaf
   Unbox: c8b2ab69d3337597b4a3f47a0538807dc12db670
+  Whisper: 051f25e704bf8992641ffd28b20d5682ddc5f5d3
 
-PODFILE CHECKSUM: c8ac778cfa4aabdeed3ad035f579f876afaabacc
+PODFILE CHECKSUM: 5427ffab36a2c73fff78b987e5143220965365d1
 
 COCOAPODS: 1.2.0

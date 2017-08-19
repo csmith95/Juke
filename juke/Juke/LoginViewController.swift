@@ -111,7 +111,7 @@ class LoginViewController: UIViewController {
         // first retrieve user object from spotify server using access token
         print("Fetching user")
         
-        CurrentUser.accessToken = accessToken
+        Current.accessToken = accessToken
         let headers: HTTPHeaders = ["Authorization": "Bearer " + accessToken]
         let url = ServerConstants.kSpotifyBaseURL + ServerConstants.kCurrentUserPath
         Alamofire.request(url, method: .get, parameters: nil, encoding: URLEncoding.default, headers: headers).validate().responseJSON {
@@ -121,7 +121,7 @@ class LoginViewController: UIViewController {
                 do {
                     let dictionary = response.result.value as! UnboxableDictionary
                     let spotifyUser: Models.SpotifyUser = try unbox(dictionary: dictionary)
-                    self.addUserToFirebase(spotifyUser: spotifyUser)
+                    self.fetchFirebaseUser(spotifyUser: spotifyUser)
                     print("Fetched user")
                 } catch {
                     print("error unboxing spotify user: ", error)
@@ -132,14 +132,12 @@ class LoginViewController: UIViewController {
         };
     }
     
-    func addUserToFirebase(spotifyUser: Models.SpotifyUser) {
+    func fetchFirebaseUser(spotifyUser: Models.SpotifyUser) {
         ref.child("users/\(spotifyUser.spotifyID)").observeSingleEvent(of: .value, with: { (snapshot) in
-            
             if snapshot.exists() {
-                if var userDict = snapshot.value as? [String: Any] {
-                    print(snapshot)
+                if var userDict = snapshot.value as? [String: Any?] {
                     userDict["spotifyID"] = spotifyUser.spotifyID
-                    CurrentUser.user = Models.FirebaseUser(dict: userDict)
+                    Current.user = Models.FirebaseUser(dict: userDict)
                 }
             } else {
                 // add user if user does not exist
@@ -151,29 +149,59 @@ class LoginViewController: UIViewController {
                 } else {
                     newUserDict["username"] = spotifyUser.spotifyID // use spotifyID if no spotify username
                 }
+                // write to firebase DB
                 self.ref.child("users").child(spotifyUser.spotifyID).setValue(newUserDict)
                 newUserDict["spotifyID"] = spotifyUser.spotifyID
-                CurrentUser.user = Models.FirebaseUser(dict: newUserDict)
+                Current.user = Models.FirebaseUser(dict: newUserDict)
             }
             
-            // for testing right now
-            var stream: [String: Any?] = [:]
-            let host = Models.FirebaseMember(username: CurrentUser.user.username, imageURL: CurrentUser.user.imageURL)
-            stream["host"] = host.dictionary
-            stream["members"] = host.dictionary
-            stream["song"] = nil
-            stream["isPlaying"] = false
-            CurrentUser.stream = Models.FirebaseStream(dict: stream)
-            print(CurrentUser.stream)
-            
-            // login transition
-            DispatchQueue.main.async {
-                print("loginSegue")
-                self.performSegue(withIdentifier: "loginSegue", sender: nil)
-            }
+            // now that current user is set, fetch the user's stream object
+            self.fetchFirebaseStream()
             
         }) {(error) in
             print(error.localizedDescription)
+        }
+    }
+    
+    private func fetchFirebaseStream() {
+        guard let tunedInto = Current.user.tunedInto else {
+            createNewStream()
+            return
+        }
+        
+        self.ref.child("streams/\(tunedInto)").observeSingleEvent(of: .value, with : { (snapshot) in
+            if let streamDict = snapshot.value as? [String: Any] {
+                guard let stream = Models.FirebaseStream(snapshot: snapshot) else { return }
+                Current.stream = stream
+                // after stream assigned, addFirebaseHandlers
+                FirebaseAPI.addListeners()
+                
+                // login transition
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "loginSegue", sender: nil)
+                }
+            } else {
+                self.createNewStream()
+            }
+        }) {error in print(error.localizedDescription)}
+    }
+    
+    func createNewStream() {
+        // if no stream exists, create empty one for user
+        let host = Models.FirebaseMember(username: Current.user.username, imageURL: Current.user.imageURL)
+        Current.stream = Models.FirebaseStream(host: host)
+        Current.user.tunedInto = Current.stream.streamID
+        
+        // write to firebase
+        self.ref.child("streams/\(Current.stream.streamID)").setValue(Current.stream.firebaseDict) // create stream in firebase
+        self.ref.child("/users/\(Current.user.spotifyID)/tunedInto").setValue(Current.stream.streamID) // show that user is tuned into this stream
+        
+        // after stream assigned, addFirebaseHandlers
+        FirebaseAPI.addListeners()
+        
+        // login transition
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "loginSegue", sender: nil)
         }
     }
 
