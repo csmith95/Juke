@@ -244,7 +244,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     }
     
     func loadTopSong() {
-        print("***************calling load top song******************")
         if let song = Current.stream.song {
             print(song)
             self.coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil)
@@ -259,7 +258,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             self.updateSlider(song: song)
             self.setSong(play: self.listenButton.isSelected && Current.stream.isPlaying)
         } else {
-            print("&&&&Going to else case&&&&&&&&&&&&")
             self.setEmptyStreamUI()
         }
     }
