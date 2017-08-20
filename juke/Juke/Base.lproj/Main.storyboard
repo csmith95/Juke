@@ -407,11 +407,11 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tjh-8I-GdK">
-                                            <rect key="frame" x="337" y="8" width="30" height="34"/>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tjh-8I-GdK">
+                                            <rect key="frame" x="337" y="8" width="30" height="33.5"/>
                                             <accessibility key="accessibilityConfiguration" identifier="addToStreamButton"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="27"/>
-                                            <state key="normal" title="+"/>
+                                            <state key="normal" image="ic_playlist_add"/>
+                                            <state key="selected" image="ic_playlist_add_check"/>
                                             <connections>
                                                 <action selector="queueSongButtonTapped:" destination="oae-Ar-DXl" eventType="touchUpInside" id="mdE-wd-NM1"/>
                                             </connections>
@@ -757,6 +757,8 @@ Hit the search tab to add new songs.</string>
         <image name="ic_fast_forward_white_48pt" width="48" height="48"/>
         <image name="ic_pause_white_48pt" width="48" height="48"/>
         <image name="ic_play_arrow_white_48pt" width="48" height="48"/>
+        <image name="ic_playlist_add" width="24" height="24"/>
+        <image name="ic_playlist_add_check" width="24" height="24"/>
         <image name="jukedef" width="486" height="486"/>
         <image name="loginButton" width="244" height="44"/>
         <image name="music" width="29" height="29"/>
