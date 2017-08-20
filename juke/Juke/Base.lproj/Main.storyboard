@@ -525,6 +525,7 @@ Hit the search tab to add new songs.</string>
                                                                         <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="21b-0y-uN8">
                                                                             <rect key="frame" x="93" y="0.0" width="48" height="48"/>
                                                                             <state key="normal" image="ic_play_arrow_white_48pt"/>
+                                                                            <state key="selected" image="ic_pause_white_48pt"/>
                                                                             <connections>
                                                                                 <action selector="toggleListening:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="1HC-Bg-hgv"/>
                                                                             </connections>
@@ -754,6 +755,7 @@ Hit the search tab to add new songs.</string>
         <image name="ic_account_circle_white" width="24" height="24"/>
         <image name="ic_exit_to_app_white_48pt" width="48" height="48"/>
         <image name="ic_fast_forward_white_48pt" width="48" height="48"/>
+        <image name="ic_pause_white_48pt" width="48" height="48"/>
         <image name="ic_play_arrow_white_48pt" width="48" height="48"/>
         <image name="jukedef" width="486" height="486"/>
         <image name="loginButton" width="244" height="44"/>
