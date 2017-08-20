@@ -18,7 +18,7 @@ class Models {
     private static let ref = Database.database().reference()
     
     struct FirebaseSong {
-        var key: String       // key in db -- helpful for access if queued (/streams/{streamID}/{key} list)
+        var key: String?       // key in db -- helpful for access if queued (/streams/{streamID}/{key} list)
                                 // but not needed for top song (/streams/{streamID}/song object) -- just set to "song"
         
         var spotifyID: String   // careful not to use this as key in DB
@@ -45,7 +45,6 @@ class Models {
             guard let coverArtURL = dict["coverArtURL"] as? String else { return nil }
             guard let votes = dict["votes"] as? Int else { return nil }
             guard let duration = dict["duration"] as? Double else { return nil }
-            guard let key = dict["key"] as? String else { return nil }
             
             self.spotifyID = spotifyID
             self.songName = songName
@@ -54,7 +53,7 @@ class Models {
             self.votes = votes
             self.duration = duration
             self.memberImageURL = dict["memberImageURL"] as? String
-            self.key = key
+            self.key = dict["key"] as? String
         }
         
         init?(snapshot: DataSnapshot) {
@@ -126,6 +125,7 @@ class Models {
         
             self.streamID = streamID
             self.isPlaying = isPlaying
+            // this song dict is not going to have a key
             if let songDict = dict["song"] as? [String: Any?], let song = FirebaseSong(dict: songDict) {
                 self.song = song
             }

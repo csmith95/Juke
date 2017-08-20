@@ -175,8 +175,12 @@ class LoginViewController: UIViewController {
             if let streamDict = snapshot.value as? [String: Any] {
                 guard let stream = Models.FirebaseStream(snapshot: snapshot) else { return }
                 Current.stream = stream
+                print("******Set current stream ********", Current.stream)
+
                 // after stream assigned, addFirebaseHandlers
                 FirebaseAPI.addListeners()
+                
+                
                 
                 // login transition
                 DispatchQueue.main.async {
