@@ -27,6 +27,8 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // setup intro background vid
         let path = Bundle.main.path(forResource: "entrybkgnd", ofType: "mp4")
         player = AVPlayer(url: URL(fileURLWithPath: path!))
         let playerLayer = AVPlayerLayer(player: player)

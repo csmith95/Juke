@@ -395,7 +395,7 @@
                                 <rect key="frame" x="0.0" y="72" width="375" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oae-Ar-DXl" id="QdY-VV-ach">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="80K-77-ogI">
@@ -626,7 +626,7 @@ Hit the search tab to add new songs.</string>
                                                             <rect key="frame" x="0.0" y="28" width="375" height="46"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0kb-sf-i9H" id="guB-Fj-CpO">
-                                                                <rect key="frame" x="0.0" y="0.0" width="375" height="46"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="375" height="45.5"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="66x-Jw-w2Y">
@@ -648,32 +648,16 @@ Hit the search tab to add new songs.</string>
                                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KvG-n0-d1q" userLabel="NumVotes">
-                                                                        <rect key="frame" x="309" y="14" width="18" height="19"/>
-                                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
-                                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Una-Uf-Ig4" userLabel="UpvoteButton">
-                                                                        <rect key="frame" x="282" y="11" width="24" height="24"/>
-                                                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                                                        <color key="tintColor" red="0.22924725709999999" green="0.79605468749999997" blue="0.1238992755" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                        <state key="normal" image="ic_thumb_up_white"/>
-                                                                    </button>
                                                                 </subviews>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                 <constraints>
                                                                     <constraint firstItem="cIG-we-DoN" firstAttribute="leading" secondItem="guB-Fj-CpO" secondAttribute="leadingMargin" constant="3" id="60a-AF-T4h"/>
-                                                                    <constraint firstItem="nB6-JX-2QM" firstAttribute="centerY" secondItem="KvG-n0-d1q" secondAttribute="centerY" id="9x5-l8-eRF"/>
                                                                     <constraint firstAttribute="topMargin" secondItem="66x-Jw-w2Y" secondAttribute="top" id="KsA-ms-qor"/>
                                                                     <constraint firstAttribute="trailingMargin" secondItem="nB6-JX-2QM" secondAttribute="trailing" constant="2" id="U7B-t5-47a"/>
                                                                     <constraint firstItem="nB6-JX-2QM" firstAttribute="centerY" secondItem="guB-Fj-CpO" secondAttribute="centerY" id="a5i-gB-2Hn"/>
                                                                     <constraint firstAttribute="bottomMargin" secondItem="cIG-we-DoN" secondAttribute="bottom" constant="0.5" id="gCV-B0-dSD"/>
-                                                                    <constraint firstItem="KvG-n0-d1q" firstAttribute="centerY" secondItem="Una-Uf-Ig4" secondAttribute="centerY" id="lTs-8b-4F4"/>
                                                                     <constraint firstItem="66x-Jw-w2Y" firstAttribute="leading" secondItem="guB-Fj-CpO" secondAttribute="leadingMargin" constant="3" id="mOu-89-QgC"/>
                                                                     <constraint firstItem="cIG-we-DoN" firstAttribute="leading" secondItem="66x-Jw-w2Y" secondAttribute="leading" id="r3e-8d-VQL"/>
-                                                                    <constraint firstItem="KvG-n0-d1q" firstAttribute="leading" secondItem="Una-Uf-Ig4" secondAttribute="trailing" constant="3" id="rcQ-6y-4Gh"/>
-                                                                    <constraint firstItem="nB6-JX-2QM" firstAttribute="leading" secondItem="KvG-n0-d1q" secondAttribute="trailing" constant="8" id="wES-5h-I30"/>
                                                                 </constraints>
                                                             </tableViewCellContentView>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -771,7 +755,6 @@ Hit the search tab to add new songs.</string>
         <image name="ic_exit_to_app_white_48pt" width="48" height="48"/>
         <image name="ic_fast_forward_white_48pt" width="48" height="48"/>
         <image name="ic_play_arrow_white_48pt" width="48" height="48"/>
-        <image name="ic_thumb_up_white" width="24" height="24"/>
         <image name="jukedef" width="486" height="486"/>
         <image name="loginButton" width="244" height="44"/>
         <image name="music" width="29" height="29"/>
