@@ -77,10 +77,12 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     }
     
     @IBAction func toggleListening(_ sender: AnyObject) {
+        print("called toggleListening")
         if Current.stream.song == nil {
             return
         }
         let status = !listenButton.isSelected
+        print("**STATUS**", status)
         listenButton.isSelected = status
         if Current.isHost() {
             ref.child("/streams/\(Current.stream.streamID)/isPlaying").setValue(status)
