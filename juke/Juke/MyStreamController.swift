@@ -121,6 +121,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         
         // resyncing
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.firebaseEventHandler), name: Notification.Name("firebaseEvent"), object: nil)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -130,6 +131,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             self.dataSource = newDataSource
         }
         loadTopSong()
+        FirebaseAPI.listenForSongProgress()
     }
     
     
