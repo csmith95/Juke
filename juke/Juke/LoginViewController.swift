@@ -172,15 +172,11 @@ class LoginViewController: UIViewController {
         }
         
         self.ref.child("streams/\(tunedInto)").observeSingleEvent(of: .value, with : { (snapshot) in
-            if let streamDict = snapshot.value as? [String: Any] {
-                guard let stream = Models.FirebaseStream(snapshot: snapshot) else { return }
+            if let stream = Models.FirebaseStream(snapshot: snapshot) {
                 Current.stream = stream
-                print("******Set current stream ********", Current.stream)
 
                 // after stream assigned, addFirebaseHandlers
                 FirebaseAPI.addListeners()
-                
-                
                 
                 // login transition
                 DispatchQueue.main.async {
@@ -194,13 +190,7 @@ class LoginViewController: UIViewController {
     
     func createNewStream() {
         // if no stream exists, create empty one for user
-        let host = Models.FirebaseMember(username: Current.user.username, imageURL: Current.user.imageURL)
-        Current.stream = Models.FirebaseStream(host: host)
-        Current.user.tunedInto = Current.stream.streamID
-        
-        // write to firebase
-        self.ref.child("streams/\(Current.stream.streamID)").setValue(Current.stream.firebaseDict) // create stream in firebase
-        self.ref.child("/users/\(Current.user.spotifyID)/tunedInto").setValue(Current.stream.streamID) // show that user is tuned into this stream
+        FirebaseAPI.createNewStream()
         
         // after stream assigned, addFirebaseHandlers
         FirebaseAPI.addListeners()

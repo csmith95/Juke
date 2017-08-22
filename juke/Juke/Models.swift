@@ -18,7 +18,7 @@ class Models {
     private static let ref = Database.database().reference()
     
     struct FirebaseSong {
-        var key: String?       // key in db -- helpful for access if queued (/streams/{streamID}/{key} list)
+        var key: String       // key in db -- helpful for access if queued (/streams/{streamID}/{key} list)
                                 // but not needed for top song (/streams/{streamID}/song object) -- just set to "song"
         
         var spotifyID: String   // careful not to use this as key in DB
@@ -30,12 +30,16 @@ class Models {
         var memberImageURL: String?
         
         // formatted to be written directly to /streams/{streamID}/song/ or /songs/{streamID}/{key}/
-        var firebaseDict: [String: Any?] {
-            return ["spotifyID": self.spotifyID, "songName":self.songName,
+        var firebaseDict: [String: Any] {
+            var dict: [String: Any] = ["spotifyID": self.spotifyID, "songName":self.songName,
                     "artistName": self.artistName, "coverArtURL": self.coverArtURL,
-                    "memberImageURL": self.memberImageURL, "votes": self.votes,
+                    "votes": self.votes,
                     "duration": self.duration
                     ]
+            if let memberImageURL = self.memberImageURL {
+                dict["memberImageURL"] = memberImageURL
+            }
+            return dict
         }
         
         init?(dict: [String: Any?]) {
@@ -45,6 +49,7 @@ class Models {
             guard let coverArtURL = dict["coverArtURL"] as? String else { return nil }
             guard let votes = dict["votes"] as? Int else { return nil }
             guard let duration = dict["duration"] as? Double else { return nil }
+            guard let key = dict["key"] as? String else { return nil }
             
             self.spotifyID = spotifyID
             self.songName = songName
@@ -53,13 +58,16 @@ class Models {
             self.votes = votes
             self.duration = duration
             self.memberImageURL = dict["memberImageURL"] as? String
-            self.key = dict["key"] as? String
+            self.key = key
         }
         
         init?(snapshot: DataSnapshot) {
-            var dict = snapshot.value as! [String: Any?]
-            dict["key"] = snapshot.key
-            self.init(dict: dict)
+            if snapshot.exists(), var dict = snapshot.value as? [String: Any?] {
+                dict["key"] = snapshot.key
+                self.init(dict: dict)
+            } else {
+                return nil
+            }
         }
         
         init(song: Models.SpotifySong) {
@@ -101,13 +109,16 @@ class Models {
         var isPlaying: Bool = false
         var song: FirebaseSong? = nil
         
-        // formatted to be written directly to the /streams/{streamID} path
+        // formatted to be written directly to the /streams/{streamID}/ path
         var firebaseDict: [String: Any?] {
             var dict: [String: Any?] = [:]
             dict = ["host": host.firebaseDict,
                     "members": host.firebaseDict,
                     "isPlaying": self.isPlaying,
-                    "song": self.song?.firebaseDict]
+                    "song": NSNull()]
+            if let song = self.song {
+                dict["song"] = song.firebaseDict
+            }
             return dict
         }
         
@@ -132,9 +143,8 @@ class Models {
         }
         
         init?(snapshot: DataSnapshot) {
-            var dict = snapshot.value as! [String: Any?]
+            guard var dict = snapshot.value as? [String: Any?] else { return nil }
             dict["streamID"] = snapshot.key
-            print(dict)
             self.init(dict: dict)
         }
         

@@ -75,7 +75,9 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
     override func viewWillAppear(_ animated: Bool) {
         backgroundImage.image = #imageLiteral(resourceName: "jukedef")
         self.navigationController?.title = "Discover"
-        FirebaseAPI.addDiscoverStreamsTableViewListener(allStreamsTableView: self.tableView)
+        if let dataSource = FirebaseAPI.addDiscoverStreamsTableViewListener(allStreamsTableView: self.tableView) {
+            self.dataSource = dataSource
+        }
 //        fetchFriends()
     }
     
