@@ -17,8 +17,6 @@ import FirebaseDatabaseUI
 class MyStreamController: UIViewController, UITableViewDelegate {
     
     // firebase vars
-    let ref = Database.database().reference()
-//    fileprivate var _refHandle: DatabaseHandle!
     var dataSource: FUITableViewDataSource!
     
     // app vars
@@ -38,11 +36,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     let jamsPlayer = JamsPlayer.shared
     @IBOutlet public var listenButton: UIButton!
     var animationTimer = Timer()
-    
-    // deinit firebase
-    deinit {
-        
-    }
     
     var navBarTitle: String? {
         get {
@@ -82,31 +75,20 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             return
         }
         let status = !listenButton.isSelected
-        print("**STATUS**", status)
         listenButton.isSelected = status
         if Current.isHost() {
-            ref.child("/streams/\(Current.stream.streamID)/isPlaying").setValue(status)
+            FirebaseAPI.setPlayStatus(status: status)
             Current.stream.isPlaying = status
         }
         setSong(play: status && Current.stream.isPlaying)
     }
     
     @IBAction func skipSong(_ sender: Any) {
-        //set song to next thing in stream
-        if Current.stream.song == nil {
-            return
-        }
         songFinished()
     }
     
-    // TODO: Delete
     @IBAction func returnToPersonalStream(_ sender: Any) {
-        let host = Models.FirebaseMember(username: Current.user.username, imageURL: Current.user.imageURL)
-        let newStream = Models.FirebaseStream(host: host)
-        let childUpdates: [String: Any] = ["/streams/": newStream.firebaseDict,
-                            "/songs/\(newStream.streamID)": NSNull()]
-        ref.updateChildValues(childUpdates)
-        Current.stream = newStream
+        FirebaseAPI.createNewStream()
     }
     
     override func viewDidLoad() {
@@ -127,11 +109,10 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Helvetica", size: 15)!]
-        if let newDataSource = FirebaseAPI.addSongQueueTableViewListener(songQueueTableView: self.tableView) {
-            self.dataSource = newDataSource
-        }
-        loadTopSong()
         FirebaseAPI.listenForSongProgress()
+        if let dataSource = FirebaseAPI.addSongQueueTableViewListener(songQueueTableView: self.tableView) {
+            self.dataSource = dataSource
+        }
     }
     
     
@@ -172,13 +153,18 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             let progress = data["progress"] as! Double
             jamsPlayer.position_ms = progress
             if Current.isHost() {
-                ref.child("/songProgressTable/\(Current.stream.streamID)").setValue(jamsPlayer.position_ms)
+                FirebaseAPI.updateSongProgress()
             }
             updateSlider(song: song)
         }
     }
     
-    private func updateSlider(song: Models.FirebaseSong) {
+    private func updateSlider(song: Models.FirebaseSong?) {
+        guard let song = song else {
+            progressSlider.value = Float(0.0)
+            self.currTimeLabel.text = timeIntervalToString(interval: 0.0/1000)
+            return
+        }
         let normalizedProgress = jamsPlayer.position_ms / song.duration
         progressSlider.value = Float(normalizedProgress)
         self.currTimeLabel.text = timeIntervalToString(interval: jamsPlayer.position_ms/1000)
@@ -188,22 +174,8 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         if Current.stream.song == nil  {
             return
         }
-        loadTopSong()
         if (Current.isHost()) {
-            ref.child("/songs/\(Current.stream.streamID)/").queryOrdered(byChild: "/votes")
-                .queryLimited(toLast: 1).observeSingleEvent(of: .value, with: { (snapshot) in
-                    print("** songFinished: \(snapshot)")
-                    if let nextSong = snapshot.value as? [String: Any] {
-                        print(nextSong)
-                        self.ref.child("/streams/\(Current.stream.streamID)/song").setValue(nextSong)
-                        self.ref.child("/songs/\(Current.stream.streamID)/\(snapshot.key)").setValue(NSNull())
-                    } else {
-                        self.ref.child("/streams/\(Current.stream.streamID)/song").setValue(NSNull())
-                    }
-                    self.ref.child("/songProgressTable/\(Current.stream.streamID))").setValue(0.0)
-            }) { error in
-                print(error.localizedDescription)
-            }
+            FirebaseAPI.popTopSong(dataSource: dataSource) // this pops top song and loads next, if any
         }
     }
     
@@ -235,6 +207,10 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         }
     }
     
+    @IBAction func clearStream(_ sender: Any) {
+        FirebaseAPI.clearStream()
+    }
+
     func updateAnimationProgress() {
         if let song = Current.stream.song {
             let newProgress = jamsPlayer.position_ms + 500
@@ -249,18 +225,20 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     
     func loadTopSong() {
         if let song = Current.stream.song {
-            print(song)
+            print("Load top song: ", song)
             self.coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil)
             self.bgblurimg.af_setImage(withURL: URL(string:song.coverArtURL)!, placeholderImage: nil)
             self.currentSongLabel.text = song.songName
             self.currentArtistLabel.text = song.artistName
             self.addSongButton.isHidden = false
             self.listenButton.isHidden = false
+            self.listenButton.isSelected = Current.stream.isPlaying
             self.skipButton.isHidden = !Current.isHost()
             self.clearStreamButton.isHidden = !Current.isHost()
             self.checkIfUserLibContainsCurrentSong(song: song)
             self.updateSlider(song: song)
             self.setSong(play: self.listenButton.isSelected && Current.stream.isPlaying)
+            self.noSongsLabel.isHidden = true
         } else {
             self.setEmptyStreamUI()
         }
@@ -302,12 +280,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         setSong(play: listenButton.isSelected && Current.stream.isPlaying)
     }
     
-    @IBAction func clearStreamButtonPressed(_ sender: Any) {
-        let childUpdates = ["/streams/\(Current.stream.streamID)/song": NSNull(),
-                            "/songs/\(Current.stream.streamID)": NSNull()]
-        ref.updateChildValues(childUpdates)
-    }
-    
     func firebaseEventHandler(notification: NSNotification) {
         guard let event = notification.object as? FirebaseAPI.FirebaseEvent else { print("erro"); return }
         switch event {
@@ -315,11 +287,23 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             self.numMembersLabel.text = String(Current.stream.members.count)
             break
         case .ResyncStream:
+            print("fired resync")
             self.loadTopSong()
+            self.jamsPlayer.resync()
+            break
+            
+        case .SwitchedStreams:
+            print("fired switched")
+            self.loadTopSong()
+            self.jamsPlayer.resync()
+            
+            // update queue data source
             if let newDataSource = FirebaseAPI.addSongQueueTableViewListener(songQueueTableView: self.tableView) {
                 self.dataSource = newDataSource
             }
             break
+        case .SetProgress:
+            self.updateSlider(song: Current.stream.song)
         }
     }
 

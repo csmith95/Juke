@@ -519,7 +519,7 @@ Hit the search tab to add new songs.</string>
                                                                             <rect key="frame" x="56" y="0.0" width="29" height="48"/>
                                                                             <state key="normal" image="trash"/>
                                                                             <connections>
-                                                                                <action selector="clearStreamButtonPressed:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="SdG-ol-wN2"/>
+                                                                                <action selector="clearStream:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="cRf-SQ-r5b"/>
                                                                             </connections>
                                                                         </button>
                                                                         <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="21b-0y-uN8">
