@@ -140,6 +140,7 @@ class LoginViewController: UIViewController {
                 if var userDict = snapshot.value as? [String: Any?] {
                     userDict["spotifyID"] = spotifyUser.spotifyID
                     Current.user = Models.FirebaseUser(dict: userDict)
+                    self.ref.child("users").child("\(spotifyUser.spotifyID)/online").setValue(true)
                 }
             } else {
                 // add user if user does not exist
@@ -178,6 +179,7 @@ class LoginViewController: UIViewController {
                 print("******Set current stream ********", Current.stream)
 
                 // after stream assigned, addFirebaseHandlers
+                // MARK - why are you adding listeners here instead of elsewhere?
                 FirebaseAPI.addListeners()
                 
                 
