@@ -38,6 +38,7 @@ class FirebaseAPI {
     public static func addListeners() {
         addMemberJoinedListener()
         addMemberLeftListener()
+        addPresenceListener()
         addTopSongChangedListener()
         addSongPlayStatusListener()
     }
@@ -217,6 +218,10 @@ class FirebaseAPI {
             return cell
         }
         return dataSource
+    }
+    
+    public static func addPresenceListener() {
+        self.ref.child("/users/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
     }
     
     public static func queueSong(spotifySong: Models.SpotifySong) {
