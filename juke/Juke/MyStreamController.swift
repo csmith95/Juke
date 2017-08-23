@@ -114,6 +114,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         if let dataSource = FirebaseAPI.addSongQueueTableViewListener(songQueueTableView: self.tableView) {
             self.dataSource = dataSource
         }
+        self.setUpControlButtons()
     }
     
     
@@ -125,10 +126,11 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             skipButton.isHidden = false
             exitStreamButton.isHidden = true
             listenButton.isSelected = Current.stream.isPlaying
+            print("\n\n ** host")
         } else {
             listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
             listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
-            print("here")
+            print("\n\n ** not host")
             skipButton.isHidden = true
             exitStreamButton.isHidden = false
         }
