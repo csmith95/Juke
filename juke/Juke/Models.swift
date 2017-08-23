@@ -82,8 +82,7 @@ class Models {
         }
     }
     
-    // made into a class so that the host/member fetching methods will work
-    class FirebaseStream {
+    struct FirebaseStream {
         var streamID: String            // key in /streams table and /songs table
         var isPlaying: Bool = false
         var song: FirebaseSong? = nil
@@ -115,16 +114,6 @@ class Models {
                     self.song = song
                 }
             }
-            
-            
-            
-//            FirebaseAPI.fetchMembers(streamID: streamID) { members in
-//                self.members = members
-//            }
-//            
-//            FirebaseAPI.fetchHost(streamID: streamID) { host in
-//                self.host = host
-//            }
         }
         
         convenience init?(snapshot: DataSnapshot) {

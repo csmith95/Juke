@@ -50,11 +50,11 @@ class StreamCell: UITableViewCell {
     
     public func populateCell(stream: Models.FirebaseStream) {
         loadCellImages(stream: stream)
-//        var titleString = stream.host.username.components(separatedBy: " ").first! + "'s stream"
-//        if Current.isHost() {
-//            titleString = "Your Stream"
-//        }
-//        self.username.text = titleString
+        var titleString = stream.host.username.components(separatedBy: " ").first! + "'s stream"
+        if Current.isHost() {
+            titleString = "Your Stream"
+        }
+        self.username.text = titleString
         self.isUserInteractionEnabled = (Current.stream.streamID != stream.streamID)
         if let song = stream.song {
             self.artist.text = song.artistName
@@ -87,26 +87,25 @@ class StreamCell: UITableViewCell {
     
     private func loadCellImages(stream: Models.FirebaseStream) {
         loadCoverArt(stream: stream)
-        
-//        // load owner icon
-//        loadUserIcon(url: stream.host.imageURL, imageView: self.ownerIcon)
-//        let numMemberIcons = stream.members.count
-//        if numMemberIcons > 0 {
-//            let numMemberIconsToDisplay = min(numMemberIcons, self.imageViewDict.count)
-//            for i in 0..<numMemberIconsToDisplay {
-//                loadUserIcon(url: stream.members[i].imageURL, imageView: self.imageViewDict[i]!)
-//            }
-//        } else {
-//            self.clearMemberIcons()
-//        }
-//        // if there are more members than we're displaying, show a label
-//        let remainder = stream.members.count - 5;
-//        if remainder > 0 {
-//            self.moreMembersLabel.text = "+ \(remainder) more member" + ((remainder > 1) ? "s" : "")
-//            self.moreMembersLabel.isHidden = false
-//        } else {
-//            self.moreMembersLabel.isHidden = true
-//        }
+        // load owner icon
+        loadUserIcon(url: stream.host.imageURL, imageView: self.ownerIcon)
+        let numMemberIcons = stream.members.count
+        if numMemberIcons > 0 {
+            let numMemberIconsToDisplay = min(numMemberIcons, self.imageViewDict.count)
+            for i in 0..<numMemberIconsToDisplay {
+                loadUserIcon(url: stream.members[i].imageURL, imageView: self.imageViewDict[i]!)
+            }
+        } else {
+            self.clearMemberIcons()
+        }
+        // if there are more members than we're displaying, show a label
+        let remainder = stream.members.count - 5;
+        if remainder > 0 {
+            self.moreMembersLabel.text = "+ \(remainder) more member" + ((remainder > 1) ? "s" : "")
+            self.moreMembersLabel.isHidden = false
+        } else {
+            self.moreMembersLabel.isHidden = true
+        }
     }
     
     public func clearMemberIcons() {

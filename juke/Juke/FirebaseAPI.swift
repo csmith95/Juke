@@ -310,8 +310,6 @@ class FirebaseAPI {
         self.ref.child("/streams/\(currentStreamID)").removeValue()
         self.ref.child("/songs/\(currentStreamID)").removeValue()
         self.ref.child("/songProgressTable/\(currentStreamID)").removeValue()
-        self.ref.child("/members/\(currentStreamID)").removeValue()
-        self.ref.child("/hosts/\(currentStreamID)").removeValue()
     }
     
     // creates and joins empty stream with user
