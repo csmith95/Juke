@@ -38,11 +38,10 @@ class StreamCell: UITableViewCell {
             radius: 20.0
         )
         defaultCoverArtImage = coverArtFilter.filter(#imageLiteral(resourceName: "jukedef"))
-        imageViewDict[0] = ownerIcon
-        imageViewDict[1] = member1ImageView
-        imageViewDict[2] = member2ImageView
-        imageViewDict[3] = member3ImageView
-        imageViewDict[4] = member4ImageView
+        imageViewDict[0] = member1ImageView
+        imageViewDict[1] = member2ImageView
+        imageViewDict[2] = member3ImageView
+        imageViewDict[3] = member4ImageView
         indicator = ESTMusicIndicatorView.init(frame: musicIndicatorView.bounds)
         indicator.tintColor = .red
         indicator.sizeToFit()
@@ -65,8 +64,7 @@ class StreamCell: UITableViewCell {
     }
     
     // set user icons
-    private func loadUserIcon(url: String?, index: Int) {
-        let imageView = self.imageViewDict[index]!
+    private func loadUserIcon(url: String?, imageView: UIImageView) {
         if let unwrappedUrl = url {
             imageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultIcon)
         } else {
@@ -86,13 +84,13 @@ class StreamCell: UITableViewCell {
         loadCoverArt(stream: stream)
         
         // load owner icon
-        loadUserIcon(url: stream.host.imageURL, index: 0)
+        loadUserIcon(url: stream.host.imageURL, imageView: self.ownerIcon)
         
-        // load member icons
-        let numIconsToDisplay = stream.members.count - 1
-        if numIconsToDisplay > 0 {
-            for i in 1...numIconsToDisplay {
-                loadUserIcon(url: stream.members[i].imageURL, index: i)
+        let numMemberIcons = stream.members.count
+        if numMemberIcons > 0 {
+            let numMemberIconsToDisplay = min(numMemberIcons, self.imageViewDict.count)
+            for i in 0..<numMemberIconsToDisplay {
+                loadUserIcon(url: stream.members[i].imageURL, imageView: self.imageViewDict[i]!)
             }
         } else {
             self.clearMemberIcons()

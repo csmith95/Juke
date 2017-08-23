@@ -112,8 +112,12 @@ class Models {
         // formatted to be written directly to the /streams/{streamID}/ path
         var firebaseDict: [String: Any?] {
             var dict: [String: Any?] = [:]
+            var memberDict: [String: Any?] = [:]
+            for member in self.members {
+                memberDict[member.username] = member.imageURL
+            }
             dict = ["host": host.firebaseDict,
-                    "members": host.firebaseDict,
+                    "members": memberDict,
                     "isPlaying": self.isPlaying,
                     "song": NSNull()]
             if let song = self.song {
@@ -136,8 +140,9 @@ class Models {
         
             self.streamID = streamID
             self.isPlaying = isPlaying
-            // this song dict is not going to have a key
-            if let songDict = dict["song"] as? [String: Any?], let song = FirebaseSong(dict: songDict) {
+            guard var songDict = dict["song"] as? [String: Any?] else { return nil }
+            songDict["key"] = "song"    // placeholder key
+            if let song = FirebaseSong(dict: songDict) {
                 self.song = song
             }
         }
@@ -153,7 +158,7 @@ class Models {
             let streamID = ref.childByAutoId().key
             self.streamID = streamID
             self.host = host
-            self.members = [host]
+            self.members = []
         }
         
     }

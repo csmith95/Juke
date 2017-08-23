@@ -182,9 +182,8 @@ class FirebaseAPI {
         // listen for top song changes -- includes song skips and song finishes
         self.ref.child("/streams/\(Current.stream.streamID)/song").observe(.value, with:{ (snapshot) in
             Current.stream.song = Models.FirebaseSong(snapshot: snapshot)
-            // resync regardless of whether song is there or not
-            self.jamsPlayer.resync()
-            self.listenForSongProgress() // fetch new progress
+            
+            self.listenForSongProgress() // fetch new progress, sync jamsPlayer
             
             // post event telling controller to resync
             NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.ResyncStream)
@@ -200,7 +199,6 @@ class FirebaseAPI {
         { tableView, indexPath, snapshot in
             let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
             guard let song = Models.FirebaseSong(snapshot: snapshot) else { return cell }
-            print("\n\(song.firebaseDict)\n")
             cell.populateCell(song: song)
             return cell
         }
@@ -241,12 +239,15 @@ class FirebaseAPI {
     public static func joinStream(stream: Models.FirebaseStream, callback: @escaping ((_: Bool) -> Void)) {
         
         // TODO: detach listeners to the current stream
+        self.ref.removeAllObservers()
         
         let streamID = stream.streamID
         let currentStreamID = Current.user.tunedInto
         if currentStreamID != streamID || currentStreamID != Current.stream.streamID {
             ref.child("/streams/\(streamID)").observeSingleEvent(of: .value, with: { (snapshot) in
                 if !snapshot.exists() { callback(false); return; }    // do nothing if this new stream doesn't exist anymore (concurrency)
+                
+                // delete stream if no
                 
                 // resync to new stream
                 Current.user.tunedInto = streamID
@@ -264,6 +265,9 @@ class FirebaseAPI {
                 let childUpdates: [String: Any?] = ["/streams/\(streamID)/members/\(Current.user.username)": Current.user.imageURL,
                                                     "/streams/\(String(describing: currentStreamID))/members/\(Current.user.username)": NSNull()]
                 self.ref.updateChildValues(childUpdates)
+                
+                // add listeners back for new stream
+                self.addListeners()
             }) {error in print(error.localizedDescription)}
         }
     }

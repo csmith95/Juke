@@ -122,13 +122,14 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             listenButton.setImage(UIImage(named: "ic_play_arrow_white_48pt.png"), for: .normal)
             listenButton.setImage(UIImage(named: "ic_pause_white_48pt.png"), for: .selected)
             skipButton.isHidden = false
-            exitStreamButton.isHidden = true
+            exitStreamButton.isHidden = false
             listenButton.isSelected = Current.stream.isPlaying
         } else {
             listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
             listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
             skipButton.isHidden = true
             exitStreamButton.isHidden = false
+            print("not hidden")
         }
     }
 
@@ -225,7 +226,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     
     func loadTopSong() {
         if let song = Current.stream.song {
-            print("Load top song: ", song)
             self.coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil)
             self.bgblurimg.af_setImage(withURL: URL(string:song.coverArtURL)!, placeholderImage: nil)
             self.currentSongLabel.text = song.songName
@@ -284,7 +284,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         guard let event = notification.object as? FirebaseAPI.FirebaseEvent else { print("erro"); return }
         switch event {
         case .MemberJoined, .MemberLeft:
-            self.numMembersLabel.text = String(Current.stream.members.count)
+            self.numMembersLabel.text = String(Current.stream.members.count+1) // +1 for host
             break
         case .ResyncStream:
             print("fired resync")
@@ -303,6 +303,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             }
             break
         case .SetProgress:
+            print("fired set progress")
             self.updateSlider(song: Current.stream.song)
         }
     }
