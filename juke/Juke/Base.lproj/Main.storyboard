@@ -588,9 +588,7 @@ Hit the search tab to add new songs.</string>
                                                                     <rect key="frame" x="343" y="72" width="24" height="24"/>
                                                                     <state key="normal" image="ic_account_circle_white"/>
                                                                     <connections>
-                                                                        <segue destination="i5P-dU-G7f" kind="popoverPresentation" popoverAnchorView="LcZ-kx-edO" id="fGd-Hc-Qna">
-                                                                            <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                                                        </segue>
+                                                                        <segue destination="i5P-dU-G7f" kind="show" id="fGd-Hc-Qna"/>
                                                                     </connections>
                                                                 </button>
                                                             </subviews>
@@ -737,6 +735,7 @@ Hit the search tab to add new songs.</string>
         <!--Stream Members Table View Controller-->
         <scene sceneID="IL1-OL-EOl">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Dh4-ct-6hD" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="i5P-dU-G7f" userLabel="Stream Members Table View Controller" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="5on-VX-IKG">
                         <rect key="frame" x="0.0" y="94" width="375" height="524"/>
@@ -784,7 +783,6 @@ Hit the search tab to add new songs.</string>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics" barStyle="black" translucent="NO"/>
                 </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Dh4-ct-6hD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3474" y="680"/>
         </scene>
