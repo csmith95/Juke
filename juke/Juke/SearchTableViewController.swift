@@ -192,12 +192,11 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell") as! SearchCell
         cell.addToStreamButton.isSelected = false
+        cell.isUserInteractionEnabled = true
         cell.tapAction = { (cell) in
-            // write to firebase
             FirebaseAPI.queueSong(spotifySong: self.displayedResults[indexPath.row])
-            
-            // animate button text change from "+" to "Added!"
             cell.addToStreamButton.isSelected = true
+            cell.isUserInteractionEnabled = false
         }
         
         

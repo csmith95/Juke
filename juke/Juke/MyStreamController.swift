@@ -70,10 +70,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     }
     
     @IBAction func toggleListening(_ sender: AnyObject) {
-        print("called toggleListening")
-        if Current.stream.song == nil {
-            return
-        }
         let status = !listenButton.isSelected
         listenButton.isSelected = status
         if Current.isHost() {
@@ -109,6 +105,11 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Helvetica", size: 15)!]
+        if Current.isHost() {
+            navBarTitle = "Your Stream"
+        } else {
+            navBarTitle = Current.stream.host.username + "'s Stream"
+        }
         FirebaseAPI.listenForSongProgress()
         if let dataSource = FirebaseAPI.addSongQueueTableViewListener(songQueueTableView: self.tableView) {
             self.dataSource = dataSource
@@ -122,14 +123,13 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             listenButton.setImage(UIImage(named: "ic_play_arrow_white_48pt.png"), for: .normal)
             listenButton.setImage(UIImage(named: "ic_pause_white_48pt.png"), for: .selected)
             skipButton.isHidden = false
-            exitStreamButton.isHidden = false
+            exitStreamButton.isHidden = true
             listenButton.isSelected = Current.stream.isPlaying
         } else {
             listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
             listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
             skipButton.isHidden = true
             exitStreamButton.isHidden = false
-            print("not hidden")
         }
     }
 
@@ -232,7 +232,9 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             self.currentArtistLabel.text = song.artistName
             self.addSongButton.isHidden = false
             self.listenButton.isHidden = false
-            self.listenButton.isSelected = Current.stream.isPlaying
+            if Current.isHost() {
+                self.listenButton.isSelected = Current.stream.isPlaying
+            }
             self.skipButton.isHidden = !Current.isHost()
             self.clearStreamButton.isHidden = !Current.isHost()
             self.checkIfUserLibContainsCurrentSong(song: song)

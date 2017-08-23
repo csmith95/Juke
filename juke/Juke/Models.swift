@@ -82,43 +82,21 @@ class Models {
         }
     }
     
-    struct FirebaseMember {
-        var username: String
-        var imageURL: String?
-        
-        var firebaseDict: [String: Any?] {
-            return [self.username: self.imageURL]
-        }
-        
-        init?(dict: [String: Any?]) {
-            guard let username = dict["username"] as? String else { return nil }
-            self.username = username
-            self.imageURL = dict["username"] as? String
-        }
-        
-        init(username: String, imageURL: String?) {
-            self.username = username
-            self.imageURL = imageURL
-        }
-    }
-    
-    struct FirebaseStream {
+    // made into a class so that the host/member fetching methods will work
+    class FirebaseStream {
         var streamID: String            // key in /streams table and /songs table
-        var host: FirebaseMember
-        var members: [FirebaseMember] = []
         var isPlaying: Bool = false
         var song: FirebaseSong? = nil
+        
+        // properties stored in different db paths 
+        // these are fetched in this class at stream init
+        var host: FirebaseUser!
+        var members: [FirebaseUser] = []
         
         // formatted to be written directly to the /streams/{streamID}/ path
         var firebaseDict: [String: Any?] {
             var dict: [String: Any?] = [:]
-            var memberDict: [String: Any?] = [:]
-            for member in self.members {
-                memberDict[member.username] = member.imageURL
-            }
-            dict = ["host": host.firebaseDict,
-                    "members": memberDict,
-                    "isPlaying": self.isPlaying,
+            dict = ["isPlaying": self.isPlaying,
                     "song": NSNull()]
             if let song = self.song {
                 dict["song"] = song.firebaseDict
@@ -129,38 +107,37 @@ class Models {
         init?(dict: [String: Any?]) {
             guard let streamID = dict["streamID"] as? String else { return nil }
             guard let isPlaying = dict["isPlaying"] as? Bool else { return nil }
-            guard let hostDict = dict["host"] as? [String: String?] else { return nil }
-            self.host = FirebaseMember(username: hostDict.first!.key, imageURL: hostDict.first?.value)
-            
-            if let memberDict = dict["members"] as? [String: String] {
-                for mem in memberDict {
-                    self.members.append(FirebaseMember(username: mem.key, imageURL: mem.value))
-                }
-            }
-        
             self.streamID = streamID
             self.isPlaying = isPlaying
-            guard var songDict = dict["song"] as? [String: Any?] else { return nil }
-            songDict["key"] = "song"    // placeholder key
-            if let song = FirebaseSong(dict: songDict) {
-                self.song = song
+            if var songDict = dict["song"] as? [String: Any?] {
+                songDict["key"] = "song"    // placeholder key
+                if let song = FirebaseSong(dict: songDict) {
+                    self.song = song
+                }
             }
+            
+            
+            
+//            FirebaseAPI.fetchMembers(streamID: streamID) { members in
+//                self.members = members
+//            }
+//            
+//            FirebaseAPI.fetchHost(streamID: streamID) { host in
+//                self.host = host
+//            }
         }
         
-        init?(snapshot: DataSnapshot) {
+        convenience init?(snapshot: DataSnapshot) {
             guard var dict = snapshot.value as? [String: Any?] else { return nil }
             dict["streamID"] = snapshot.key
             self.init(dict: dict)
         }
         
         // called to generate new stream with solely host
-        init(host: FirebaseMember) {
+        init() {
             let streamID = ref.childByAutoId().key
             self.streamID = streamID
-            self.host = host
-            self.members = []
         }
-        
     }
     
     struct FirebaseUser {
@@ -170,12 +147,28 @@ class Models {
         var imageURL: String?
         var online: Bool
         
+        // formatted to be written to /hosts/{streamID}/{spotifyID}/
+        // or /users/{spotifyID}/
+        var firebaseDict: [String: Any] {
+            var dict: [String: Any] = ["username": username,
+                                        "online": online]
+            if let tunedInto = tunedInto { dict["tunedInto"] = tunedInto }
+            if let imageURL = imageURL { dict["imageURL"] = imageURL }
+            return dict
+        }
+        
         init(dict: [String: Any?]) {
             self.spotifyID = dict["spotifyID"] as! String
             self.tunedInto = dict["tunedInto"] as? String
             self.username = dict["username"] as! String
             self.imageURL = dict["imageURL"] as? String
             self.online = dict["online"] as! Bool
+        }
+        
+        init(snapshot: DataSnapshot) {
+            var dict = snapshot.value as! [String: Any?]
+            dict["spotifyID"] = snapshot.key
+            self.init(dict: dict)
         }
     }
     
