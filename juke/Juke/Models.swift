@@ -103,8 +103,6 @@ class Models {
                 dict["song"] = song.firebaseDict
             }
             
-            print("\n", host.firebaseDict)
-            print("\n", dict)
             return dict
         }
         

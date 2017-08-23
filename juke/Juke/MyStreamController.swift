@@ -128,6 +128,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         } else {
             listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
             listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
+            print("here")
             skipButton.isHidden = true
             exitStreamButton.isHidden = false
         }
@@ -307,6 +308,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         case .SetProgress:
             print("fired set progress")
             self.updateSlider(song: Current.stream.song)
+            self.jamsPlayer.resync()
         }
     }
 

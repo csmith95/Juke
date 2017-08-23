@@ -41,13 +41,13 @@ class FirebaseAPI {
         addPresenceListener()
         addTopSongChangedListener()
         addSongPlayStatusListener()
-        addStreamDeletedListener() // temporary while figuring out what to do when host leaves
+        addStreamDeletedListener() // handles case when host leaves
     }
     
     private static func addStreamDeletedListener() {
         // listen for stream deleted
         ref.child("/streams/\(Current.stream.streamID)").observe(.childRemoved, with:{ (snapshot) in
-            print("\n\n child removed: ", snapshot)
+            print("** snapshot: ", snapshot)
         })
         
         
@@ -59,8 +59,7 @@ class FirebaseAPI {
         ref.child("streams/\(Current.stream.streamID)/isPlaying").observe(.value, with:{ (snapshot) in
             if snapshot.exists(), let isPlaying = snapshot.value as? Bool {
                 Current.stream.isPlaying = isPlaying
-                // post event telling controller to resync
-                NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.ResyncStream)
+                self.listenForSongProgress()    // fetch updated status
             }
         }) { err in print(err.localizedDescription)}
     }
@@ -68,13 +67,7 @@ class FirebaseAPI {
     private static func addMemberJoinedListener() {
         ref.child("/streams/\(Current.stream.streamID)/members").observe(.childAdded, with:{ (snapshot) in
             // update Current stream
-            
-            print(snapshot)
-            let dict = snapshot.value as! [String: Any?]
-            let spotifyID = dict.first!.key
-            var userDict = dict.first!.value as! [String: Any?]
-            userDict["spotifyID"] = spotifyID
-            let member = Models.FirebaseUser(dict: userDict)
+            let member = Models.FirebaseUser(snapshot: snapshot)
             if Current.stream.members.contains(where: { (other) -> Bool in
                 return member.spotifyID == other.spotifyID
             }) || Current.user.spotifyID == member.spotifyID {
@@ -163,7 +156,6 @@ class FirebaseAPI {
             } else {
                 jamsPlayer.position_ms = 0.0
             }
-            jamsPlayer.resync()
             
             // post event telling controller to resync
             NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.SetProgress)
@@ -178,6 +170,9 @@ class FirebaseAPI {
         // reset progress in any case
         self.ref.child("/songProgressTable/\(Current.stream.streamID)").setValue(0.0)
         jamsPlayer.position_ms = 0.0
+        
+        // post event telling controller to resync
+        NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.ResyncStream)
         
         guard let snapshot = dataSource.items.first else {
             // no songs queued
@@ -203,10 +198,13 @@ class FirebaseAPI {
         self.ref.child("/streams/\(Current.stream.streamID)/song").observe(.value, with:{ (snapshot) in
             Current.stream.song = Models.FirebaseSong(snapshot: snapshot)
             
-            self.listenForSongProgress() // fetch new progress, sync jamsPlayer
-            
+            // in case progressTable isn't updated by the time listenForSongProgress goes through
+            jamsPlayer.position_ms = 0.0
             // post event telling controller to resync
             NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.ResyncStream)
+            
+            print("\n** top song changed\n")
+            self.listenForSongProgress() // fetch new progress, sync jamsPlayer
         }) { error in print(error.localizedDescription) }
     }
     
@@ -275,7 +273,7 @@ class FirebaseAPI {
                 // resync to new stream
                 Current.user.tunedInto = streamID
                 Current.stream = stream
-                let childUpdates: [String: Any] = ["/streams/\(streamID)/members\(Current.user.spotifyID)": Current.user.firebaseDict,
+                let childUpdates: [String: Any] = ["/streams/\(streamID)/members/\(Current.user.spotifyID)": Current.user.firebaseDict,
                                                     "/streams/\(currentStreamID)/members/\(Current.user.spotifyID)": NSNull(),
                                                     "/users/\(Current.user.spotifyID)/tunedInto": streamID]
                 self.ref.updateChildValues(childUpdates)
@@ -320,7 +318,6 @@ class FirebaseAPI {
     
     // creates and joins empty stream with user
     public static func createNewStream() {
-        print("***********")
         let newStream = Models.FirebaseStream()
         Current.stream = newStream
         Current.user.tunedInto = newStream.streamID
