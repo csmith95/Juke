@@ -86,20 +86,25 @@ class Models {
         var streamID: String            // key in /streams table and /songs table
         var isPlaying: Bool = false
         var song: FirebaseSong? = nil
-        
-        // properties stored in different db paths 
-        // these are fetched in this class at stream init
-        var host: FirebaseUser!
+        var host: FirebaseUser! = Current.user
         var members: [FirebaseUser] = []
         
         // formatted to be written directly to the /streams/{streamID}/ path
-        var firebaseDict: [String: Any?] {
-            var dict: [String: Any?] = [:]
-            dict = ["isPlaying": self.isPlaying,
-                    "song": NSNull()]
+        var firebaseDict: [String: Any] {
+            var dict: [String: Any] = ["isPlaying": self.isPlaying,
+                                       "song": NSNull()]
+            dict["host"] = [host.spotifyID: host.firebaseDict]
+            var result: [String: Any] = [:]
+            for member in members {
+                result[member.spotifyID] = member.firebaseDict
+            }
+            dict["members"] = result
             if let song = self.song {
                 dict["song"] = song.firebaseDict
             }
+            
+            print("\n", host.firebaseDict)
+            print("\n", dict)
             return dict
         }
         
@@ -108,6 +113,18 @@ class Models {
             guard let isPlaying = dict["isPlaying"] as? Bool else { return nil }
             self.streamID = streamID
             self.isPlaying = isPlaying
+            // jesus this is tedious
+            let otherDict = dict["host"] as! [String: Any?]
+            var userDict = otherDict.first!.value as! [String: Any?]
+            userDict["spotifyID"] = otherDict.first!.key
+            self.host = FirebaseUser(dict: userDict)
+            
+            if let members = dict["members"] as? [[String: Any?]] {
+                for member in members {
+                    self.members.append(FirebaseUser(dict: member))
+                }
+            }
+            
             if var songDict = dict["song"] as? [String: Any?] {
                 songDict["key"] = "song"    // placeholder key
                 if let song = FirebaseSong(dict: songDict) {
@@ -116,7 +133,7 @@ class Models {
             }
         }
         
-        convenience init?(snapshot: DataSnapshot) {
+        init?(snapshot: DataSnapshot) {
             guard var dict = snapshot.value as? [String: Any?] else { return nil }
             dict["streamID"] = snapshot.key
             self.init(dict: dict)

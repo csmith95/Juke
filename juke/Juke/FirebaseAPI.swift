@@ -66,9 +66,15 @@ class FirebaseAPI {
     }
     
     private static func addMemberJoinedListener() {
-        ref.child("/members/\(Current.stream.streamID)").observe(.childAdded, with:{ (snapshot) in
+        ref.child("/streams/\(Current.stream.streamID)/members").observe(.childAdded, with:{ (snapshot) in
             // update Current stream
-            let member = Models.FirebaseUser(snapshot: snapshot)
+            
+            print(snapshot)
+            let dict = snapshot.value as! [String: Any?]
+            let spotifyID = dict.first!.key
+            var userDict = dict.first!.value as! [String: Any?]
+            userDict["spotifyID"] = spotifyID
+            let member = Models.FirebaseUser(dict: userDict)
             if Current.stream.members.contains(where: { (other) -> Bool in
                 return member.spotifyID == other.spotifyID
             }) || Current.user.spotifyID == member.spotifyID {
@@ -89,7 +95,7 @@ class FirebaseAPI {
     }
     
     private static func addMemberLeftListener() {
-        ref.child("/members/\(Current.stream.streamID)").observe(.childRemoved, with:{ (snapshot) in
+        ref.child("/streams/\(Current.stream.streamID)/members").observe(.childRemoved, with:{ (snapshot) in
             
             // update Current stream
             let member = Models.FirebaseUser(snapshot: snapshot)
@@ -269,8 +275,8 @@ class FirebaseAPI {
                 // resync to new stream
                 Current.user.tunedInto = streamID
                 Current.stream = stream
-                let childUpdates: [String: Any] = ["/members/\(streamID)/\(Current.user.spotifyID)": Current.user.firebaseDict,
-                                                    "/members/\(currentStreamID))/\(Current.user.spotifyID)": NSNull(),
+                let childUpdates: [String: Any] = ["/streams/\(streamID)/members\(Current.user.spotifyID)": Current.user.firebaseDict,
+                                                    "/streams/\(currentStreamID)/members/\(Current.user.spotifyID)": NSNull(),
                                                     "/users/\(Current.user.spotifyID)/tunedInto": streamID]
                 self.ref.updateChildValues(childUpdates)
                 
@@ -314,12 +320,13 @@ class FirebaseAPI {
     
     // creates and joins empty stream with user
     public static func createNewStream() {
+        print("***********")
         let newStream = Models.FirebaseStream()
         Current.stream = newStream
         Current.user.tunedInto = newStream.streamID
         let childUpdates: [String: Any] = ["/streams/\(newStream.streamID)": newStream.firebaseDict,
-                                           "/users/\(Current.user.spotifyID)/tunedInto": newStream.streamID,
-                                           "/hosts/\(newStream.streamID)/\(Current.user.spotifyID)": Current.user.firebaseDict]
+                                           "/users/\(Current.user.spotifyID)/tunedInto": newStream.streamID]
+        
         ref.updateChildValues(childUpdates)
         
         // tell view controllers to resync
@@ -333,29 +340,5 @@ class FirebaseAPI {
         ref.child("/songProgressTable/\(Current.stream.streamID)").setValue(jamsPlayer.position_ms)
     }
     
-    public static func fetchMembers(streamID: String, callback: @escaping ((_: [Models.FirebaseUser]) -> Void)) {
-        self.ref.child("/members/\(streamID)").observeSingleEvent(of: .value, with: { (snapshot) in
-            var result: [Models.FirebaseUser] = []
-            if snapshot.exists(), let members = snapshot.value as? [String: Any?] {
-                for member in members {
-                    var dict = member.value as! [String: Any?]
-                    dict["spotifyID"] = member.key
-                    result.append(Models.FirebaseUser(dict:dict))
-                }
-            }
-            callback(result)
-        })
-    }
-    
-    public static func fetchHost(streamID: String, callback: @escaping ((_: Models.FirebaseUser) -> Void)) {
-        self.ref.child("/hosts/\(streamID)").observeSingleEvent(of: .value, with: { (snapshot) in
-            let dict = snapshot.value as! [String: Any?]
-            let userTuple = dict.first!
-            var userDict = userTuple.value as! [String: Any?]
-            userDict["spotifyID"] = userTuple.key
-            let result = Models.FirebaseUser(dict: userDict)
-            callback(result)
-        })
-    }
     
 }
