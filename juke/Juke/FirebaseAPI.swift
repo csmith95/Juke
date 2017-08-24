@@ -239,7 +239,6 @@ class FirebaseAPI {
             // you are not the host so update stream/members
             self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
         }
-        
     }
     
     public static func setOnlineTrue() {
@@ -314,6 +313,7 @@ class FirebaseAPI {
                             "streams/\(Current.stream.streamID)/song": NSNull(),
                             "streams/\(Current.stream.streamID)/isPlaying": false,
                             "songProgressTable/\(Current.stream.streamID)": 0.0]
+        jamsPlayer.position_ms = 0.0
         self.ref.updateChildValues(childUpdates)
         NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.ResyncStream)
     }
@@ -342,7 +342,7 @@ class FirebaseAPI {
         var childUpdates: [String: Any] = ["/streams/\(newStream.streamID)": newStream.firebaseDict,
                                            "/users/\(Current.user.spotifyID)/tunedInto": newStream.streamID]
         if removeFromCurrentStream {
-            childUpdates["/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)"] = NSNull()
+            ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)").removeValue()
         }
         
         ref.updateChildValues(childUpdates)
