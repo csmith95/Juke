@@ -7,17 +7,35 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseDatabaseUI
 
 class StreamMembersTableViewController: UITableViewController {
 
+    @IBOutlet var streamMembersTableView: UITableView!
+    var dataSource: FUITableViewDataSource!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print("called view did load in stream membesr")
+        if let newDataSource = FirebaseAPI.addStreamMembersTableViewListener(streamMembersTableView: streamMembersTableView) {
+            self.dataSource = newDataSource
+        }
+        //streamMembersTableView.delegate = self
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+//        if let newDataSource = FirebaseAPI.addStreamMembersTableViewListener(streamMembersTableView: streamMembersTableView) {
+//            self.dataSource = newDataSource
+//        }
     }
 
     override func didReceiveMemoryWarning() {

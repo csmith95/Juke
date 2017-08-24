@@ -28,6 +28,7 @@ class FirebaseAPI {
     // if user joins new stream, these are reset to false
     private static var songQueueDataSourceSet = false
     private static var allStreamsDataSourceSet = false
+    private static var streamMembersDataSourceSet = false
     
     // firebase ref
     private static let ref = Database.database().reference()
@@ -336,6 +337,18 @@ class FirebaseAPI {
     public static func updateSongProgress() {
         ref.child("/songProgressTable/\(Current.stream.streamID)").setValue(jamsPlayer.position_ms)
     }
+    
+    public static func addStreamMembersTableViewListener(streamMembersTableView: UITableView?) -> FUITableViewDataSource? {
+        guard let tableView = streamMembersTableView else { return nil }
+        let dataSource = tableView.bind(to: FirebaseAPI.ref.child("streams/\(Current.stream.streamID)/members")) { tableView, indexPath, snapshot in
+            let cell = tableView.dequeueReusableCell(withIdentifier: "StreamMemberCell", for: indexPath) as! StreamMemberCell
+            let member = Models.FirebaseUser(snapshot: snapshot)
+            cell.populateMemberCell(member: member)
+            return cell
+        }
+        return dataSource
+    }
+
     
     
 }

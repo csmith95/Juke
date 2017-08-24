@@ -9,10 +9,13 @@
 import UIKit
 import AlamofireImage
 
-class StreamMemberTableViewCell: UITableViewCell {
+class StreamMemberCell: UITableViewCell {
 
     @IBOutlet weak var memberImage: UIImageView!
     @IBOutlet weak var memberName: UILabel!
+    @IBOutlet weak var presenceDot: UIImageView!
+    
+    
     private let defaultIcon = CircleFilter().filter(UIImage(named: "juke_icon")!)
     
     override func awakeFromNib() {
@@ -29,6 +32,13 @@ class StreamMemberTableViewCell: UITableViewCell {
     public func populateMemberCell(member: Models.FirebaseUser) {
         self.memberName.text = member.username
         loadUserIcon(url: member.imageURL, imageView: memberImage)
+        if member.online {
+            // set presence dot to be green
+            presenceDot.image = #imageLiteral(resourceName: "green dot")
+        } else {
+            // set presence dot to be red
+            presenceDot.image = #imageLiteral(resourceName: "red dot")
+        }
         
     }
     
