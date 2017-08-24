@@ -21,7 +21,7 @@
 		4B3F95181F143BCA00CBEF79 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B3F95171F143BCA00CBEF79 /* Assets.xcassets */; };
 		4B467E7E1F043E19000EA03C /* FriendCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B467E7D1F043E19000EA03C /* FriendCollectionViewCell.swift */; };
 		4B7C1EA11F484DF00064F1C3 /* FirebaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */; };
-		4BA7CB701E8ED007003E3DC8 /* id.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA7CB6F1E8ED007003E3DC8 /* id.swift */; };
+		4BA7CB701E8ED007003E3DC8 /* MyStreamController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */; };
 		4BA9B3F51E91B043003D352E /* Current.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA9B3F41E91B043003D352E /* Current.swift */; };
 		4BDCEBA81E709F7F00D9D3EE /* JamsPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */; };
 		4BDCEC061E720D0B00D9D3EE /* ServerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEC051E720D0B00D9D3EE /* ServerConstants.swift */; };
@@ -55,7 +55,7 @@
 		4B3F95171F143BCA00CBEF79 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4B467E7D1F043E19000EA03C /* FriendCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendCollectionViewCell.swift; sourceTree = "<group>"; };
 		4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseAPI.swift; sourceTree = "<group>"; };
-		4BA7CB6F1E8ED007003E3DC8 /* id.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = id.swift; sourceTree = "<group>"; };
+		4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyStreamController.swift; sourceTree = "<group>"; };
 		4BA9B3F41E91B043003D352E /* Current.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Current.swift; sourceTree = "<group>"; };
 		4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Juke-Bridging-Header.h"; sourceTree = "<group>"; };
 		4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JamsPlayer.swift; sourceTree = "<group>"; };
@@ -122,7 +122,7 @@
 				4B3F95171F143BCA00CBEF79 /* Assets.xcassets */,
 				F2317CB51EB7D3A5003ACBE7 /* Videos */,
 				F2E815571E90BBBC00404DDF /* LoginViewController.swift */,
-				4BA7CB6F1E8ED007003E3DC8 /* id.swift */,
+				4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */,
 				4BF307B01E7797B9002CAE9E /* CardTableViewCell.swift */,
 				4B3A34CC1E58120F00C314A0 /* AppDelegate.swift */,
 				4B3A34D51E58120F00C314A0 /* Main.storyboard */,
@@ -311,7 +311,7 @@
 				4B13DE4E1E8AFB850060D29A /* StreamsTableViewController.swift in Sources */,
 				F2DB0B331EA1145A00A13E30 /* SearchTableViewController.swift in Sources */,
 				4B467E7E1F043E19000EA03C /* FriendCollectionViewCell.swift in Sources */,
-				4BA7CB701E8ED007003E3DC8 /* id.swift in Sources */,
+				4BA7CB701E8ED007003E3DC8 /* MyStreamController.swift in Sources */,
 				4BF307B11E7797B9002CAE9E /* CardTableViewCell.swift in Sources */,
 				4B7C1EA11F484DF00064F1C3 /* FirebaseAPI.swift in Sources */,
 				F2E815581E90BBBC00404DDF /* LoginViewController.swift in Sources */,
