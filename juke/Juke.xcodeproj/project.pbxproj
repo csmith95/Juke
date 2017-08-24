@@ -19,7 +19,6 @@
 		4B3A34E51E581F1300C314A0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E41E581F1300C314A0 /* AVFoundation.framework */; };
 		4B3A34E71E581F8F00C314A0 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */; };
 		4B3F95181F143BCA00CBEF79 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B3F95171F143BCA00CBEF79 /* Assets.xcassets */; };
-		4B425D6B1E79FADF0040BC3D /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B425D6A1E79FADF0040BC3D /* LocationManager.swift */; };
 		4B467E7E1F043E19000EA03C /* FriendCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B467E7D1F043E19000EA03C /* FriendCollectionViewCell.swift */; };
 		4B7C1EA11F484DF00064F1C3 /* FirebaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */; };
 		4BA7CB701E8ED007003E3DC8 /* MyStreamController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */; };
@@ -54,7 +53,6 @@
 		4B3A34E41E581F1300C314A0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4B3F95171F143BCA00CBEF79 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		4B425D6A1E79FADF0040BC3D /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		4B467E7D1F043E19000EA03C /* FriendCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendCollectionViewCell.swift; sourceTree = "<group>"; };
 		4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseAPI.swift; sourceTree = "<group>"; };
 		4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyStreamController.swift; sourceTree = "<group>"; };
@@ -134,7 +132,6 @@
 				4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */,
 				4BDCEC051E720D0B00D9D3EE /* ServerConstants.swift */,
 				4B0490E81E734614003F49DF /* SongTableViewCell.swift */,
-				4B425D6A1E79FADF0040BC3D /* LocationManager.swift */,
 				4B13DE4B1E8AFA970060D29A /* StreamCell.swift */,
 				4B13DE4D1E8AFB850060D29A /* StreamsTableViewController.swift */,
 				4B336A661E8B54A0003CEDBB /* Models.swift */,
@@ -317,7 +314,6 @@
 				4BA7CB701E8ED007003E3DC8 /* MyStreamController.swift in Sources */,
 				F24B3C571F4E3A3C0056CAA2 /* StreamMembersTableViewController.swift in Sources */,
 				4BF307B11E7797B9002CAE9E /* CardTableViewCell.swift in Sources */,
-				4B425D6B1E79FADF0040BC3D /* LocationManager.swift in Sources */,
 				4B7C1EA11F484DF00064F1C3 /* FirebaseAPI.swift in Sources */,
 				F2E815581E90BBBC00404DDF /* LoginViewController.swift in Sources */,
 				F2B49C501F4E710A007B55DA /* StreamMemberCell.swift in Sources */,

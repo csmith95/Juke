@@ -192,7 +192,7 @@ class LoginViewController: UIViewController {
     
     func createNewStream() {
         // if no stream exists, create empty one for user
-        FirebaseAPI.createNewStream()
+        FirebaseAPI.createNewStream(removeFromCurrentStream: false) // no current stream to leave
         
         // after stream assigned, addFirebaseHandlers
         FirebaseAPI.addListeners()

@@ -61,6 +61,7 @@ class FirebaseAPI {
             if snapshot.exists(), let isPlaying = snapshot.value as? Bool {
                 Current.stream.isPlaying = isPlaying
                 self.listenForSongProgress()    // fetch updated status
+                NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.ResyncStream)
             }
         }) { err in print(err.localizedDescription)}
     }
@@ -169,9 +170,6 @@ class FirebaseAPI {
         self.ref.child("/songProgressTable/\(Current.stream.streamID)").setValue(0.0)
         jamsPlayer.position_ms = 0.0
         
-        // post event telling controller to resync
-        NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.ResyncStream)
-        
         guard let snapshot = dataSource.items.first else {
             // no songs queued
             self.ref.child("/streams/\(Current.stream.streamID)/song").removeValue()
@@ -195,8 +193,6 @@ class FirebaseAPI {
         // listen for top song changes -- includes song skips and song finishes
         self.ref.child("/streams/\(Current.stream.streamID)/song").observe(.value, with:{ (snapshot) in
             Current.stream.song = Models.FirebaseSong(snapshot: snapshot)
-            
-            // in case progressTable isn't updated by the time listenForSongProgress goes through
             jamsPlayer.position_ms = 0.0
             // post event telling controller to resync
             NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.ResyncStream)
@@ -256,7 +252,7 @@ class FirebaseAPI {
             ref.child("/streams/\(streamID)").observeSingleEvent(of: .value, with: { (snapshot) in
                 if !snapshot.exists() { callback(false); return; }    // do nothing if this new stream doesn't exist anymore (concurrency)
                 
-                if Current.isHost() {
+                if Current.isHost() || Current.stream.members.isEmpty {
                     self.deleteCurrentStream()  // remove observers and delete resources if host
                 } else {
                     self.ref.removeAllObservers()   // simply remove observers if not host
@@ -312,14 +308,24 @@ class FirebaseAPI {
     }
     
     // creates and joins empty stream with user
-    public static func createNewStream() {
+    // this boolean is false in login view controller because we don't want to try to remove
+    // user from a stream that doesn't exist -- it will crash (Current.stream is a FirebaseStream!)
+    // this method can be used to go from no stream --> new stream or
+    // current stream --> new stream. set bool to true for latter case
+    public static func createNewStream(removeFromCurrentStream: Bool) {
         let newStream = Models.FirebaseStream()
         Current.stream = newStream
         Current.user.tunedInto = newStream.streamID
-        let childUpdates: [String: Any] = ["/streams/\(newStream.streamID)": newStream.firebaseDict,
+        var childUpdates: [String: Any] = ["/streams/\(newStream.streamID)": newStream.firebaseDict,
                                            "/users/\(Current.user.spotifyID)/tunedInto": newStream.streamID]
+        if removeFromCurrentStream {
+            childUpdates["/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)"] = NSNull()
+        }
         
         ref.updateChildValues(childUpdates)
+        print(newStream)
+        print("\n\n", childUpdates)
+        jamsPlayer.position_ms = 0.0
         
         // tell view controllers to resync
         songQueueDataSourceSet = false

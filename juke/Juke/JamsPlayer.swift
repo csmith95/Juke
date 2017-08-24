@@ -91,6 +91,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePosition position: TimeInterval) {
         // signal StreamController so that it can update UISlider
         let position_ms = position * 1000
+        self.position_ms_private = position_ms  // update private copy to compare against db pushed progress in setter
         let data: [String:Any] = ["progress": position_ms]
         NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
     }

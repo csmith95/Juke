@@ -117,9 +117,11 @@ class Models {
             userDict["spotifyID"] = otherDict.first!.key
             self.host = FirebaseUser(dict: userDict)
             
-            if let members = dict["members"] as? [[String: Any?]] {
-                for member in members {
-                    self.members.append(FirebaseUser(dict: member))
+            if let membersDict = dict["members"] as? [String: Any?] {
+                for member in membersDict {
+                    var memberDict = member.value as! [String: Any?]
+                    memberDict["spotifyID"] = member.key
+                    self.members.append(FirebaseUser(dict: memberDict))
                 }
             }
             

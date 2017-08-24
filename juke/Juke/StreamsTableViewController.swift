@@ -30,9 +30,6 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
         self.title = "Discover Streams"
 //        self.friendsCollectionView.delegate = self
 //        self.friendsCollectionView.dataSource = self
-        if let newDataSource = FirebaseAPI.addDiscoverStreamsTableViewListener(allStreamsTableView: tableView) {
-            self.dataSource = newDataSource
-        }
         tableView.delegate = self
     }
     
