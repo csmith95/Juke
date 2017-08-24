@@ -229,6 +229,12 @@ class FirebaseAPI {
     
     public static func addPresenceListener() {
         self.ref.child("/users/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
+        self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
+    }
+    
+    public static func setOnlineTrue() {
+        self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").setValue(true)
+        self.ref.child("/users/\(Current.user.spotifyID)/online").setValue(true)
     }
     
     public static func queueSong(spotifySong: Models.SpotifySong) {

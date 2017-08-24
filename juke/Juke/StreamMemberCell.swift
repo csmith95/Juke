@@ -33,10 +33,12 @@ class StreamMemberCell: UITableViewCell {
         self.memberName.text = member.username
         loadUserIcon(url: member.imageURL, imageView: memberImage)
         if member.online {
+            print("member is online, setting presence to green dot", member)
             // set presence dot to be green
             presenceDot.image = #imageLiteral(resourceName: "green dot")
         } else {
             // set presence dot to be red
+            print("member is offline, setting presence to red dot", member)
             presenceDot.image = #imageLiteral(resourceName: "red dot")
         }
         
