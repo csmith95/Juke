@@ -735,43 +735,59 @@ Hit the search tab to add new songs.</string>
         <!--Stream Members Table View Controller-->
         <scene sceneID="IL1-OL-EOl">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Dh4-ct-6hD" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tableViewController id="i5P-dU-G7f" userLabel="Stream Members Table View Controller" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="5on-VX-IKG">
+                <tableViewController id="i5P-dU-G7f" userLabel="Stream Members Table View Controller" customClass="StreamMembersTableViewController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" sectionHeaderHeight="28" sectionFooterHeight="28" id="5on-VX-IKG">
                         <rect key="frame" x="0.0" y="94" width="375" height="524"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="t7C-1l-08S" userLabel="Now Playing View">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="88"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Now playing stuff goes here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wof-Xu-oq2">
-                                    <rect key="frame" x="51" y="34" width="279" height="21"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <nil key="textColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="OuN-xA-Ji0">
-                                <rect key="frame" x="0.0" y="116" width="375" height="44"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="StreamMemberCell" rowHeight="80" id="OuN-xA-Ji0" customClass="StreamMemberCell" customModule="Juke" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="375" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OuN-xA-Ji0" id="mAU-xD-MAp">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="stuff in prototype cell" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B9C-eM-2Rc">
-                                            <rect key="frame" x="66" y="11" width="266" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qYk-iK-OWM" userLabel="Stream Member Image View">
+                                            <rect key="frame" x="8" y="8" width="65" height="65"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="65" id="0rd-wN-7YL"/>
+                                                <constraint firstAttribute="height" constant="65" id="UM8-f4-Yhd"/>
+                                            </constraints>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                    <real key="value" value="32.5"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Au6-cf-I7P" userLabel="Member Display Name Label">
+                                            <rect key="frame" x="82" y="27.5" width="49.5" height="25"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="21"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4zd-MG-7u5">
+                                            <rect key="frame" x="52" y="49" width="25" height="25"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="25" id="UQJ-eq-ems"/>
+                                                <constraint firstAttribute="width" constant="25" id="pqg-jJ-mvm"/>
+                                            </constraints>
+                                        </imageView>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="Au6-cf-I7P" firstAttribute="centerY" secondItem="mAU-xD-MAp" secondAttribute="centerY" id="3Bh-5h-7Du"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="4zd-MG-7u5" secondAttribute="bottom" constant="-2.5" id="BJ4-Hu-2m8"/>
+                                        <constraint firstItem="Au6-cf-I7P" firstAttribute="leading" secondItem="qYk-iK-OWM" secondAttribute="trailing" constant="9" id="OAv-Cp-JSx"/>
+                                        <constraint firstItem="qYk-iK-OWM" firstAttribute="centerY" secondItem="mAU-xD-MAp" secondAttribute="centerY" id="PNR-eT-LkM"/>
+                                        <constraint firstItem="4zd-MG-7u5" firstAttribute="leading" secondItem="mAU-xD-MAp" secondAttribute="leadingMargin" constant="44" id="UBe-R0-zTo"/>
+                                        <constraint firstAttribute="leadingMargin" secondItem="qYk-iK-OWM" secondAttribute="leading" id="lZs-BI-TKj"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="memberImage" destination="qYk-iK-OWM" id="fsD-r3-Y2O"/>
+                                    <outlet property="memberName" destination="Au6-cf-I7P" id="loe-qS-mJd"/>
+                                    <outlet property="presenceDot" destination="4zd-MG-7u5" id="UU8-9m-hVQ"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -782,9 +798,14 @@ Hit the search tab to add new songs.</string>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics" barStyle="black" translucent="NO"/>
+                    <connections>
+                        <outlet property="streamMembersTableView" destination="5on-VX-IKG" id="sco-4q-0Ko"/>
+                        <outlet property="tableView" destination="5on-VX-IKG" id="g6R-9V-1WT"/>
+                    </connections>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Dh4-ct-6hD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3474" y="680"/>
+            <point key="canvasLocation" x="3472.8000000000002" y="679.61019490254876"/>
         </scene>
         <!--Stream-->
         <scene sceneID="1v4-e5-TKD">
