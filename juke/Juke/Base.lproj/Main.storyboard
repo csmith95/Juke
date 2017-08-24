@@ -740,9 +740,57 @@ Hit the search tab to add new songs.</string>
                         <rect key="frame" x="0.0" y="94" width="375" height="524"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="Khg-3a-nLV" userLabel="Host View">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="v2L-Fk-a5w" userLabel="Host Image View">
+                                    <rect key="frame" x="8" y="8" width="65" height="65"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="65" id="QEF-hy-fVd"/>
+                                        <constraint firstAttribute="width" constant="65" id="vLn-q2-kYR"/>
+                                    </constraints>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                            <real key="value" value="32.5"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Host" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fXH-dE-9cz">
+                                    <rect key="frame" x="81" y="8" width="42" height="21"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-ThinItalic" family="Helvetica Neue" pointSize="14"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ovx-TS-wzz" userLabel="Host name">
+                                    <rect key="frame" x="82" y="27.5" width="49.5" height="25"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="21"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="RaB-ze-BSj" userLabel="Host Presence Indicator">
+                                    <rect key="frame" x="52" y="54" width="20" height="20"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="20" id="6Wn-eb-e09"/>
+                                        <constraint firstAttribute="width" constant="20" id="w1v-WC-5ZD"/>
+                                    </constraints>
+                                </imageView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="RaB-ze-BSj" firstAttribute="leading" secondItem="Khg-3a-nLV" secondAttribute="leading" constant="52" id="HDd-ce-9FI"/>
+                                <constraint firstItem="v2L-Fk-a5w" firstAttribute="leading" secondItem="Khg-3a-nLV" secondAttribute="leading" constant="8" id="Qak-uz-Lao"/>
+                                <constraint firstItem="ovx-TS-wzz" firstAttribute="leading" secondItem="v2L-Fk-a5w" secondAttribute="trailing" constant="9" id="a6E-U0-1am"/>
+                                <constraint firstItem="v2L-Fk-a5w" firstAttribute="centerY" secondItem="Khg-3a-nLV" secondAttribute="centerY" id="c9l-FT-V1f"/>
+                                <constraint firstItem="ovx-TS-wzz" firstAttribute="centerY" secondItem="Khg-3a-nLV" secondAttribute="centerY" id="fmf-nl-vZk"/>
+                                <constraint firstAttribute="bottom" secondItem="RaB-ze-BSj" secondAttribute="bottom" constant="6" id="lWA-HT-AzP"/>
+                            </constraints>
+                        </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="StreamMemberCell" rowHeight="80" id="OuN-xA-Ji0" customClass="StreamMemberCell" customModule="Juke" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="80"/>
+                                <rect key="frame" x="0.0" y="108" width="375" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OuN-xA-Ji0" id="mAU-xD-MAp">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
@@ -767,10 +815,10 @@ Hit the search tab to add new songs.</string>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4zd-MG-7u5">
-                                            <rect key="frame" x="52" y="49" width="25" height="25"/>
+                                            <rect key="frame" x="52" y="54" width="20" height="20"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="25" id="UQJ-eq-ems"/>
-                                                <constraint firstAttribute="width" constant="25" id="pqg-jJ-mvm"/>
+                                                <constraint firstAttribute="height" constant="20" id="UQJ-eq-ems"/>
+                                                <constraint firstAttribute="width" constant="20" id="pqg-jJ-mvm"/>
                                             </constraints>
                                         </imageView>
                                     </subviews>
@@ -799,6 +847,9 @@ Hit the search tab to add new songs.</string>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics" barStyle="black" translucent="NO"/>
                     <connections>
+                        <outlet property="hostImage" destination="v2L-Fk-a5w" id="PXq-OS-w76"/>
+                        <outlet property="hostName" destination="ovx-TS-wzz" id="FtI-vp-aSf"/>
+                        <outlet property="hostPresenceDot" destination="RaB-ze-BSj" id="szw-Sc-CUF"/>
                         <outlet property="streamMembersTableView" destination="5on-VX-IKG" id="sco-4q-0Ko"/>
                         <outlet property="tableView" destination="5on-VX-IKG" id="g6R-9V-1WT"/>
                     </connections>

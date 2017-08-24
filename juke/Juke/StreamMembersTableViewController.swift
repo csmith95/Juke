@@ -9,11 +9,17 @@
 import UIKit
 import Firebase
 import FirebaseDatabaseUI
+import AlamofireImage
 
 class StreamMembersTableViewController: UITableViewController {
 
+    @IBOutlet weak var hostImage: UIImageView!
     @IBOutlet var streamMembersTableView: UITableView!
+    @IBOutlet weak var hostPresenceDot: UIImageView!
+    @IBOutlet weak var hostName: UILabel!
     var dataSource: FUITableViewDataSource!
+    private let defaultIcon = CircleFilter().filter(UIImage(named: "juke_icon")!)
+
     
     
     override func viewDidLoad() {
@@ -36,6 +42,7 @@ class StreamMembersTableViewController: UITableViewController {
 //        if let newDataSource = FirebaseAPI.addStreamMembersTableViewListener(streamMembersTableView: streamMembersTableView) {
 //            self.dataSource = newDataSource
 //        }
+        setHost()
     }
 
     override func didReceiveMemoryWarning() {
@@ -53,6 +60,26 @@ class StreamMembersTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return 0
+    }
+    
+    func setHost() {
+        loadUserIcon(url: Current.stream.host.imageURL, imageView: hostImage)
+        hostName.text = Current.stream.host.username
+        if Current.stream.host.online {
+            // set presence dot to be green
+            hostPresenceDot.image = #imageLiteral(resourceName: "green dot")
+        } else {
+            // set presence dot to be red
+            hostPresenceDot.image = #imageLiteral(resourceName: "red dot")
+        }
+    }
+    
+    private func loadUserIcon(url: String?, imageView: UIImageView) {
+        if let unwrappedUrl = url {
+            imageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultIcon)
+        } else {
+            imageView.image = defaultIcon
+        }
     }
 
     /*
