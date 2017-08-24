@@ -229,7 +229,10 @@ class FirebaseAPI {
     
     public static func addPresenceListener() {
         self.ref.child("/users/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
-        self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
+        if !Current.isHost() {
+            self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
+        }
+        
     }
     
     public static func setOnlineTrue() {
