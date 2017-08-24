@@ -337,17 +337,15 @@ class FirebaseAPI {
     // current stream --> new stream. set bool to true for latter case
     public static func createNewStream(removeFromCurrentStream: Bool) {
         let newStream = Models.FirebaseStream()
+        var childUpdates: [String: Any] = ["streams/\(newStream.streamID)": newStream.firebaseDict,
+                                           "users/\(Current.user.spotifyID)/tunedInto": newStream.streamID]
+        if removeFromCurrentStream {
+            ref.child("streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)").removeValue()
+        }
         Current.stream = newStream
         Current.user.tunedInto = newStream.streamID
-        var childUpdates: [String: Any] = ["/streams/\(newStream.streamID)": newStream.firebaseDict,
-                                           "/users/\(Current.user.spotifyID)/tunedInto": newStream.streamID]
-        if removeFromCurrentStream {
-            ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)").removeValue()
-        }
         
         ref.updateChildValues(childUpdates)
-        print(newStream)
-        print("\n\n", childUpdates)
         jamsPlayer.position_ms = 0.0
         
         // tell view controllers to resync

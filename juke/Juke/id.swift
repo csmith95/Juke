@@ -138,6 +138,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         if !Current.user.online {
             FirebaseAPI.setOnlineTrue()
         }
+        loadTopSong()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -263,6 +264,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         } else {
             self.setEmptyStreamUI()
         }
+        numMembersLabel.text = String(Current.stream.members.count+1) // +1 for host
     }
     
     private func setEmptyStreamUI() {

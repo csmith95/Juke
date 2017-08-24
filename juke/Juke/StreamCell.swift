@@ -49,6 +49,7 @@ class StreamCell: UITableViewCell {
     }
     
     public func populateCell(stream: Models.FirebaseStream) {
+        clearMemberIcons()
         loadCellImages(stream: stream)
         var titleString = stream.host.username.components(separatedBy: " ").first! + "'s stream"
         if Current.stream.streamID == stream.streamID {
