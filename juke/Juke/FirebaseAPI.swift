@@ -302,6 +302,7 @@ class FirebaseAPI {
                             "streams/\(Current.stream.streamID)/song": NSNull(),
                             "streams/\(Current.stream.streamID)/isPlaying": false,
                             "songProgressTable/\(Current.stream.streamID)": 0.0]
+        jamsPlayer.position_ms = 0.0
         self.ref.updateChildValues(childUpdates)
         NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.ResyncStream)
     }

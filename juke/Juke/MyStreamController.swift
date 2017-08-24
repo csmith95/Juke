@@ -312,10 +312,10 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             self.numMembersLabel.text = String(Current.stream.members.count+1) // +1 for host
             break
         case .ResyncStream:
+            self.progressSliderValue = jamsPlayer.position_ms
             self.loadTopSong()
             self.refreshSongPlayStatus()
             break
-            
         case .SwitchedStreams:
             self.loadTopSong()
             self.refreshSongPlayStatus()
