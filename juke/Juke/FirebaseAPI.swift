@@ -149,9 +149,6 @@ class FirebaseAPI {
     public static func listenForSongProgress() {
         self.ref.child("/songProgressTable/\(Current.stream.streamID)").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists(), let updatedProgress = snapshot.value as? Double {
-                if abs(jamsPlayer.position_ms - updatedProgress) <= 3000 {
-                    return
-                }
                 jamsPlayer.position_ms = updatedProgress
             } else {
                 jamsPlayer.position_ms = 0.0
@@ -202,9 +199,6 @@ class FirebaseAPI {
             jamsPlayer.position_ms = 0.0
             // post event telling controller to resync
             NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.ResyncStream)
-            
-            print("\n** top song changed\n")
-            self.listenForSongProgress() // fetch new progress, sync jamsPlayer
         }) { error in print(error.localizedDescription) }
     }
     
@@ -333,8 +327,8 @@ class FirebaseAPI {
         NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.SwitchedStreams)
     }
     
-    public static func updateSongProgress() {
-        ref.child("/songProgressTable/\(Current.stream.streamID)").setValue(jamsPlayer.position_ms)
+    public static func updateSongProgress(progress: Double) {
+        ref.child("/songProgressTable/\(Current.stream.streamID)").setValue(progress)
     }
     
     

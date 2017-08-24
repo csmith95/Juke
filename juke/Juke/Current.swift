@@ -14,9 +14,8 @@ class Current {
     public static var user: Models.FirebaseUser!
     public static var stream: Models.FirebaseStream! = Models.FirebaseStream()  // empty at first
     public static func isHost() -> Bool {
-        print(Current.stream)
-        print(Current.user)
         return Current.stream.host.spotifyID == Current.user.spotifyID
     }
+    public static var listenSelected: Bool = false // if user has listen button selected -- used in jamsPlayer.resync
     public static var accessToken = ""
 }

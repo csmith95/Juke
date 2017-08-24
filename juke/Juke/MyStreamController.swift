@@ -36,6 +36,28 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     let jamsPlayer = JamsPlayer.shared
     @IBOutlet public var listenButton: UIButton!
     var animationTimer = Timer()
+    private var progressValue: Double = 0.0
+    private var progressSliderValue: Double {
+        get {
+            return progressValue
+        }
+        
+        set(newValue) {
+            guard let song = Current.stream.song else {
+                self.progressValue = 0.0
+                self.currTimeLabel.text = timeIntervalToString(interval: 0.0/1000)
+                return
+            }
+            if abs(self.progressValue - song.duration) < 1000 {
+                self.songFinished()  // force pop song based on timer
+            }
+            
+            let normalizedProgress = newValue / song.duration
+            self.progressSlider.value = Float(normalizedProgress)
+            self.currTimeLabel.text = timeIntervalToString(interval: newValue/1000)
+            self.progressValue = newValue
+        }
+    }
     
     var navBarTitle: String? {
         get {
@@ -72,11 +94,12 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     @IBAction func toggleListening(_ sender: AnyObject) {
         let status = !listenButton.isSelected
         listenButton.isSelected = status
+        Current.listenSelected = status
         if Current.isHost() {
             FirebaseAPI.setPlayStatus(status: status)
             Current.stream.isPlaying = status
         }
-        setSong(play: status && Current.stream.isPlaying)
+        refreshSongPlayStatus()
     }
     
     @IBAction func skipSong(_ sender: Any) {
@@ -110,7 +133,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         } else {
             navBarTitle = Current.stream.host.username + "'s Stream"
         }
-        FirebaseAPI.listenForSongProgress()
+        FirebaseAPI.listenForSongProgress() // will update if progress difference > 3 seconds
         if let dataSource = FirebaseAPI.addSongQueueTableViewListener(songQueueTableView: self.tableView) {
             self.dataSource = dataSource
         }
@@ -153,25 +176,13 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     }
     
     func songPositionChanged(notification: NSNotification) {
-        if let song = Current.stream.song, let data = notification.object as? NSDictionary {
+        if let data = notification.object as? NSDictionary {
             let progress = data["progress"] as! Double
-            jamsPlayer.position_ms = progress
+            self.progressSliderValue = progress
             if Current.isHost() {
-                FirebaseAPI.updateSongProgress()
+                FirebaseAPI.updateSongProgress(progress: progress)
             }
-            updateSlider(song: song)
         }
-    }
-    
-    private func updateSlider(song: Models.FirebaseSong?) {
-        guard let song = song else {
-            progressSlider.value = Float(0.0)
-            self.currTimeLabel.text = timeIntervalToString(interval: 0.0/1000)
-            return
-        }
-        let normalizedProgress = jamsPlayer.position_ms / song.duration
-        progressSlider.value = Float(normalizedProgress)
-        self.currTimeLabel.text = timeIntervalToString(interval: jamsPlayer.position_ms/1000)
     }
     
     func songFinished() {
@@ -183,30 +194,26 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         }
     }
     
-    public func setSong(play: Bool) {
-        jamsPlayer.setPlayStatus(shouldPlay: play, topSong: Current.stream.song)
-        if !Current.isHost() {
-            setTimer(run: !play && Current.stream.isPlaying)
-        }
+    private func refreshSongPlayStatus() {
+        jamsPlayer.resync()
+        handleAutomaticProgressSlider()
     }
     
-    private func setTimer(run: Bool) {
+    private func handleAutomaticProgressSlider() {
+        if Current.isHost() {
+            return  // if owner, don't use timer at all
+        }
         
-        DispatchQueue.main.async {
-            if (Current.isHost() || Current.stream.song == nil) {
-                return  // if owner, don't use timer at all
+        if (!Current.listenSelected && Current.stream.isPlaying) {
+            if !self.animationTimer.isValid {
+                 // trying to offset for the time transition between stopping timer and starting song
+                self.progressSliderValue = self.progressSliderValue + 300
+                // set function to increment progress slider every .5 seconds
+                self.animationTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.updateAnimationProgress), userInfo: nil, repeats: true)
             }
-            
-            if (run) {
-                if !self.animationTimer.isValid {
-                    self.jamsPlayer.position_ms += 300 // trying to offset for the time transition between stopping timer and starting song
-                    self.animationTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.updateAnimationProgress), userInfo: nil, repeats: true)
-                }
-            } else {
-                if self.animationTimer.isValid {
-                    self.jamsPlayer.position_ms += 300 // trying to offset for the time transition between stopping timer and starting song
-                    self.animationTimer.invalidate()
-                }
+        } else {
+            if self.animationTimer.isValid {
+                self.animationTimer.invalidate()
             }
         }
     }
@@ -214,17 +221,10 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     @IBAction func clearStream(_ sender: Any) {
         FirebaseAPI.clearStream()
     }
-
+    
+    // fires every half second when timer is on
     func updateAnimationProgress() {
-        if let song = Current.stream.song {
-            let newProgress = jamsPlayer.position_ms + 500
-            updateSlider(song: song)
-            if abs(newProgress - song.duration) < 1000 {
-                songFinished()  // force pop song based on timer
-            }
-        } else {
-            progressSlider.value = Float(0)
-        }
+        self.progressSliderValue += 500
     }
     
     func loadTopSong() {
@@ -241,9 +241,10 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             self.skipButton.isHidden = !Current.isHost()
             self.clearStreamButton.isHidden = !Current.isHost()
             self.checkIfUserLibContainsCurrentSong(song: song)
-            self.updateSlider(song: song)
-            self.setSong(play: self.listenButton.isSelected && Current.stream.isPlaying)
+            self.refreshSongPlayStatus()
             self.noSongsLabel.isHidden = true
+            progressSlider.isHidden = false
+            currTimeLabel.isHidden = false
         } else {
             self.setEmptyStreamUI()
         }
@@ -258,9 +259,13 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         addSongButton.isHidden = true
         progressSlider.value = 0.0
         listenButton.isHidden = true
+        listenButton.isSelected = false
+        Current.listenSelected = false
         skipButton.isHidden = true
         clearStreamButton.isHidden = true
-        setSong(play: false)
+        progressSlider.isHidden = true
+        currTimeLabel.isHidden = true
+        refreshSongPlayStatus()
     }
     
     func checkIfUserLibContainsCurrentSong(song: Models.FirebaseSong) {
@@ -282,7 +287,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     }
     
     func jamsPlayerReady() {
-        setSong(play: listenButton.isSelected && Current.stream.isPlaying)
+        refreshSongPlayStatus()
     }
     
     func firebaseEventHandler(notification: NSNotification) {
@@ -294,13 +299,13 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         case .ResyncStream:
             print("fired resync")
             self.loadTopSong()
-            self.jamsPlayer.resync()
+            self.refreshSongPlayStatus()
             break
             
         case .SwitchedStreams:
             print("fired switched")
             self.loadTopSong()
-            self.jamsPlayer.resync()
+            self.refreshSongPlayStatus()
             
             // update queue data source
             if let newDataSource = FirebaseAPI.addSongQueueTableViewListener(songQueueTableView: self.tableView) {
@@ -309,8 +314,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             break
         case .SetProgress:
             print("fired set progress")
-            self.updateSlider(song: Current.stream.song)
-            self.jamsPlayer.resync()
         }
     }
 

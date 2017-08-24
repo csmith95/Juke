@@ -17,7 +17,21 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     private let core = SPTCoreAudioController()
     private var session: SPTSession? = nil
     private let kClientID = "77d4489425fe464483f0934f99847c8b"
-    public var position_ms: TimeInterval = 0.0
+    private var position_ms_private: TimeInterval = 0.0
+    public var position_ms: TimeInterval {
+        get {
+            return self.position_ms_private
+        }
+        
+        set(newPosition) {
+            if abs(self.position_ms_private - newPosition) >= 3000 {
+                self.position_ms_private = newPosition
+                self.resync()
+            }
+            self.position_ms_private = newPosition
+        }
+        
+    }
     
     
     override private init() {
@@ -77,13 +91,12 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePosition position: TimeInterval) {
         // signal StreamController so that it can update UISlider
         let position_ms = position * 1000
-        self.position_ms = position_ms
         let data: [String:Any] = ["progress": position_ms]
         NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
     }
     
-    public func setPlayStatus(shouldPlay: Bool, topSong: Models.FirebaseSong?) {
-        guard let player = sharedInstance else { return }
+    private func setPlayStatus(shouldPlay: Bool, topSong: Models.FirebaseSong?) {
+        guard let player = sharedInstance else { self.refreshSession(); return; }
         guard let song = topSong else {                     // turn off if nil passed in for topSong
             player.setIsPlaying(false, callback: { (err) in
                 if let err = err {
@@ -98,7 +111,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
             // not sure if this is good style, but these 2 lines are the magic behind background streaming
             try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try? AVAudioSession.sharedInstance().setActive(true)
-            let position = JamsPlayer.shared.position_ms / 1000
+            let position = position_ms / 1000
             let uri = "spotify:track:" + song.spotifyID
             player.playSpotifyURI(uri, startingWith: 0, startingWithPosition: position, callback: { (error) in
                 if let error = error {
@@ -115,9 +128,17 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     }
     
     public func resync() {
-        setPlayStatus(shouldPlay: Current.stream.isPlaying, topSong: Current.stream.song)
+        if !Current.stream.isPlaying {
+            setPlayStatus(shouldPlay: false, topSong: Current.stream.song)
+            return
+        }
+        
+        if Current.isHost() {
+            setPlayStatus(shouldPlay: true, topSong: Current.stream.song)
+        } else {
+            setPlayStatus(shouldPlay: Current.listenSelected, topSong: Current.stream.song)
+        }
     }
-    
-    
+
 }
 
