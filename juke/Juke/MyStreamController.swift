@@ -153,7 +153,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             self.dataSource = dataSource
         }
         self.setUpControlButtons()
-        loadTopSong()
     }
     
     
