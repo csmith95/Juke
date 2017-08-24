@@ -327,7 +327,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             break
         case .SetProgress:
             self.progressSliderValue = jamsPlayer.position_ms
-            self.refreshSongPlayStatus()
         }
     }
 
