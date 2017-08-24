@@ -171,6 +171,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             skipButton.isHidden = true
             exitStreamButton.isHidden = false
         }
+        numMembersLabel.text = String(Current.stream.members.count+1)
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

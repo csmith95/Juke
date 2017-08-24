@@ -236,7 +236,9 @@ class FirebaseAPI {
     }
     
     public static func setOnlineTrue() {
-        self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").setValue(true)
+        if !Current.isHost() {
+            self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").setValue(true)
+        }
         self.ref.child("/users/\(Current.user.spotifyID)/online").setValue(true)
     }
     

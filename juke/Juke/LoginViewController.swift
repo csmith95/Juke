@@ -140,7 +140,7 @@ class LoginViewController: UIViewController {
                 if var userDict = snapshot.value as? [String: Any?] {
                     userDict["spotifyID"] = spotifyUser.spotifyID
                     Current.user = Models.FirebaseUser(dict: userDict)
-                    self.ref.child("users").child("\(spotifyUser.spotifyID)/online").setValue(true)
+                    self.ref.child("users/\(spotifyUser.spotifyID)/online").setValue(true)
                 }
             } else {
                 // add user if user does not exist
