@@ -241,6 +241,10 @@ class FirebaseAPI {
         self.ref.child("/users/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
     }
     
+    public static func setOnlineTrue() {
+        self.ref.child("/users/\(Current.user.spotifyID)/online").setValue(true)
+    }
+    
     public static func queueSong(spotifySong: Models.SpotifySong) {
         let song = Models.FirebaseSong(song: spotifySong)
         self.ref.child("/streams/\(Current.stream.streamID)/song").observeSingleEvent(of: .value, with: { (snapshot) in

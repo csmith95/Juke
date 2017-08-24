@@ -100,6 +100,11 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         // resyncing
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.firebaseEventHandler), name: Notification.Name("firebaseEvent"), object: nil)
         
+        // set to online if not marked online
+        if !Current.user.online {
+            FirebaseAPI.setOnlineTrue()
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
