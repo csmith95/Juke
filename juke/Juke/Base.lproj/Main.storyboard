@@ -835,7 +835,7 @@ Hit the search tab to add new songs.</string>
                                     <outlet property="memberImage" destination="qYk-iK-OWM" id="fsD-r3-Y2O"/>
                                     <outlet property="memberName" destination="Au6-cf-I7P" id="loe-qS-mJd"/>
                                     <outlet property="presenceDot" destination="4zd-MG-7u5" id="UU8-9m-hVQ"/>
-                                    <segue destination="0tk-uQ-BnL" kind="show" identifier="userProfileSegue" id="tUG-Sn-MZ0"/>
+                                    <segue destination="0tk-uQ-BnL" kind="show" identifier="userProfileSegue" id="Rax-g2-H4s"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -857,7 +857,7 @@ Hit the search tab to add new songs.</string>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dh4-ct-6hD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3472.8000000000002" y="679.61019490254876"/>
+            <point key="canvasLocation" x="3473" y="680"/>
         </scene>
         <!--User Profile View Controller-->
         <scene sceneID="sit-Nu-K5u">
