@@ -56,7 +56,6 @@ PODS:
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
   - PKHUD (4.2.0)
-  - RevealingSplashView (0.1.0)
   - SCLAlertView (0.7.0)
   - Unbox (2.4.0)
   - Whisper (5.0.0)
@@ -72,7 +71,6 @@ DEPENDENCIES:
   - Firebase/Storage
   - FirebaseUI/Database (~> 4.0)
   - PKHUD (~> 4.0)
-  - RevealingSplashView
   - SCLAlertView
   - Unbox
   - Whisper
@@ -103,11 +101,10 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5ad62e8200fa00ed011fe5e08d27fef72c5b1429
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   PKHUD: 48af884cf00c2213b0313b739d914e6cab1c0f5e
-  RevealingSplashView: 501dd03d975ba2c4165dd463ea1c7c407fb9d13e
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
   Unbox: c8b2ab69d3337597b4a3f47a0538807dc12db670
   Whisper: 051f25e704bf8992641ffd28b20d5682ddc5f5d3
 
-PODFILE CHECKSUM: bc7c7700d3fe16329c984f3cdcad56e9b8f4c859
+PODFILE CHECKSUM: 5ab5264d7ab51422c0a03d26c944068a6bf0ea26
 
 COCOAPODS: 1.2.0

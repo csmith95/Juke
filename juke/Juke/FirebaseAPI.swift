@@ -29,6 +29,7 @@ class FirebaseAPI {
     private static var songQueueDataSourceSet = false
     private static var allStreamsDataSourceSet = false
     private static var streamMembersDataSourceSet = false
+    private static var streamDeletedListenerSet = false
     
     private static var observedPaths: [String] = []
     
@@ -49,15 +50,16 @@ class FirebaseAPI {
     
     // if user stream deleted because host leaves, create a new one
     private static func addStreamDeletedListener() {
-        let path = "/streams"
-        ref.child(path).observe(.childRemoved, with:{ (snapshot) in
-            // necessary because this method fires for any immediate child node
-            print("** \n\n ", snapshot)
+        // don't add handle to list of handles for this method
+        // because it will disable the tableview binding
+        // for discover streams table (shit firebase cmon)
+        if (streamDeletedListenerSet) { return }
+        streamDeletedListenerSet = true
+        ref.child("/streams").observe(.childRemoved, with:{ (snapshot) in
             if snapshot.key == Current.stream.streamID {
                 self.createNewStream(removeFromCurrentStream: false)
             }
         })
-        observedPaths.append(path)
     }
     
     private static func addSongPlayStatusListener() {
