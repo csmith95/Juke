@@ -138,7 +138,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         if !Current.user.online {
             FirebaseAPI.setOnlineTrue()
         }
-        loadTopSong()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -154,6 +153,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             self.dataSource = dataSource
         }
         self.setUpControlButtons()
+        loadTopSong()
     }
     
     
@@ -257,7 +257,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             self.skipButton.isHidden = !Current.isHost()
             self.clearStreamButton.isHidden = !Current.isHost()
             self.checkIfUserLibContainsCurrentSong(song: song)
-            self.refreshSongPlayStatus()
             self.noSongsLabel.isHidden = true
             progressSlider.isHidden = false
             currTimeLabel.isHidden = false
@@ -325,6 +324,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             // update queue data source
             if let newDataSource = FirebaseAPI.addSongQueueTableViewListener(songQueueTableView: self.tableView) {
                 self.dataSource = newDataSource
+                tableView.reloadData()
             }
             break
         case .SetProgress:

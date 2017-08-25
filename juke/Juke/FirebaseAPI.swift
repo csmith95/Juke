@@ -284,12 +284,15 @@ class FirebaseAPI {
                 self.songQueueDataSourceSet = false
                 
                 // resync to new stream
-                Current.user.tunedInto = streamID
-                Current.stream = stream
                 let childUpdates: [String: Any] = ["/streams/\(streamID)/members/\(Current.user.spotifyID)": Current.user.firebaseDict,
                                                     "/streams/\(currentStreamID)/members/\(Current.user.spotifyID)": NSNull(),
                                                     "/users/\(Current.user.spotifyID)/tunedInto": streamID]
                 self.ref.updateChildValues(childUpdates)
+                
+                // sync local stream/user info with what was just written to the db above
+                Current.user.tunedInto = streamID
+                Current.stream = stream
+                Current.stream.members.append(Current.user)
                 
                 // add listeners back for new stream
                 self.addListeners()
@@ -337,7 +340,7 @@ class FirebaseAPI {
     // current stream --> new stream. set bool to true for latter case
     public static func createNewStream(removeFromCurrentStream: Bool) {
         let newStream = Models.FirebaseStream()
-        var childUpdates: [String: Any] = ["streams/\(newStream.streamID)": newStream.firebaseDict,
+        let childUpdates: [String: Any] = ["streams/\(newStream.streamID)": newStream.firebaseDict,
                                            "users/\(Current.user.spotifyID)/tunedInto": newStream.streamID]
         if removeFromCurrentStream {
             ref.child("streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)").removeValue()

@@ -49,7 +49,6 @@ class StreamCell: UITableViewCell {
     }
     
     public func populateCell(stream: Models.FirebaseStream) {
-        clearMemberIcons()
         loadCellImages(stream: stream)
         var titleString = stream.host.username.components(separatedBy: " ").first! + "'s stream"
         if Current.stream.streamID == stream.streamID {
@@ -87,6 +86,7 @@ class StreamCell: UITableViewCell {
     }
     
     private func loadCellImages(stream: Models.FirebaseStream) {
+        clearMemberIcons()  // start fresh
         loadCoverArt(stream: stream)
         // load owner icon
         loadUserIcon(url: stream.host.imageURL, imageView: self.ownerIcon)
@@ -111,9 +111,6 @@ class StreamCell: UITableViewCell {
     
     public func clearMemberIcons() {
         for (i, imageView) in imageViewDict {
-            if i == 0 {
-                continue    // don't clear owner icon
-            }
             imageView.image = nil
         }
         moreMembersLabel.text = ""
