@@ -28,8 +28,8 @@ class StreamsTableViewController: UIViewController, UITableViewDelegate, UISearc
         super.viewDidLoad()
         self.title = "Discover Streams"
         tableView.delegate = self
-        searchBar.scopeButtonTitles = ["Streams", "Friends"]
-        searchBar.delegate = self
+//        searchBar.scopeButtonTitles = ["Streams", "Friends"]
+//        searchBar.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
