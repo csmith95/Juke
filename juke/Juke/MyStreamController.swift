@@ -42,13 +42,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             return progressValue
         }
         
-        set(newValue) {
-//            if newValue == 0.0 {
-//                self.progressValue = 0.0
-//                self.currTimeLabel.text = timeIntervalToString(interval: 0.0/1000)
-//                return
-//            }
-            
+        set(newValue) {            
             guard let song = Current.stream.song else {
                 self.progressValue = 0.0
                 self.currTimeLabel.text = timeIntervalToString(interval: 0.0/1000)

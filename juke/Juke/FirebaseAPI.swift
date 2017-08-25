@@ -44,19 +44,20 @@ class FirebaseAPI {
         addPresenceListener()
         addTopSongChangedListener()
         addSongPlayStatusListener()
-        addStreamDeletedListener() // observedPaths case when host leaves
+        addStreamDeletedListener()
     }
     
+    // if user stream deleted because host leaves, create a new one
     private static func addStreamDeletedListener() {
-        // listen for stream deleted
-        let path = "/streams/\(Current.stream.streamID)"
+        let path = "/streams"
         ref.child(path).observe(.childRemoved, with:{ (snapshot) in
+            // necessary because this method fires for any immediate child node
+            print("** \n\n ", snapshot)
+            if snapshot.key == Current.stream.streamID {
+                self.createNewStream(removeFromCurrentStream: false)
+            }
         })
-        
-        
-        
-        // sync UI
-        
+        observedPaths.append(path)
     }
     
     private static func addSongPlayStatusListener() {
