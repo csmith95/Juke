@@ -14,6 +14,7 @@ class StreamMemberCell: UITableViewCell {
     @IBOutlet weak var memberImage: UIImageView!
     @IBOutlet weak var memberName: UILabel!
     @IBOutlet weak var presenceDot: UIImageView!
+    var tapAction: ((StreamMemberCell) -> Void)?
     
     
     private let defaultIcon = CircleFilter().filter(UIImage(named: "juke_icon")!)

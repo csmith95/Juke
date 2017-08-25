@@ -835,6 +835,7 @@ Hit the search tab to add new songs.</string>
                                     <outlet property="memberImage" destination="qYk-iK-OWM" id="fsD-r3-Y2O"/>
                                     <outlet property="memberName" destination="Au6-cf-I7P" id="loe-qS-mJd"/>
                                     <outlet property="presenceDot" destination="4zd-MG-7u5" id="UU8-9m-hVQ"/>
+                                    <segue destination="0tk-uQ-BnL" kind="show" identifier="userProfileSegue" id="tUG-Sn-MZ0"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -861,17 +862,17 @@ Hit the search tab to add new songs.</string>
         <!--User Profile View Controller-->
         <scene sceneID="sit-Nu-K5u">
             <objects>
-                <viewController id="0tk-uQ-BnL" userLabel="User Profile View Controller" sceneMemberID="viewController">
+                <viewController id="0tk-uQ-BnL" userLabel="User Profile View Controller" customClass="UserProfileViewController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="StQ-km-TCy"/>
                         <viewControllerLayoutGuide type="bottom" id="FzO-Br-7dl"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="aqF-po-6O4">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="vCd-RR-gCy">
-                                <rect key="frame" x="87.5" y="194" width="200" height="279.5"/>
+                                <rect key="frame" x="87.5" y="169.5" width="200" height="279.5"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="OAh-9A-apt" userLabel="User Image View">
                                         <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
@@ -897,13 +898,28 @@ Hit the search tab to add new songs.</string>
                                     <constraint firstItem="o6d-id-tAp" firstAttribute="centerX" secondItem="vCd-RR-gCy" secondAttribute="centerX" id="Wq8-4y-gJg"/>
                                 </constraints>
                             </stackView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bDv-At-kKW">
+                                <rect key="frame" x="257.5" y="339.5" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="4Qc-3w-j5u"/>
+                                    <constraint firstAttribute="width" constant="30" id="Wcs-wx-mx1"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="vCd-RR-gCy" firstAttribute="centerY" secondItem="aqF-po-6O4" secondAttribute="centerY" id="1MV-8W-AuY"/>
+                            <constraint firstItem="bDv-At-kKW" firstAttribute="bottom" secondItem="OAh-9A-apt" secondAttribute="bottom" id="VIV-yd-bFN"/>
+                            <constraint firstItem="bDv-At-kKW" firstAttribute="trailing" secondItem="OAh-9A-apt" secondAttribute="trailing" id="Wt0-Im-dUc"/>
                             <constraint firstItem="vCd-RR-gCy" firstAttribute="centerX" secondItem="aqF-po-6O4" secondAttribute="centerX" id="Zvr-lA-LJu"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="inviteToStreamBtn" destination="o6d-id-tAp" id="38A-pr-bkK"/>
+                        <outlet property="userImage" destination="OAh-9A-apt" id="WbY-f1-S6Y"/>
+                        <outlet property="userName" destination="hXu-OG-TNa" id="leK-Pv-S0D"/>
+                        <outlet property="userPresenceDot" destination="bDv-At-kKW" id="Yak-3G-Ias"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NKA-MQ-CEf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
