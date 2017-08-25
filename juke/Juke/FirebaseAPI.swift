@@ -30,6 +30,8 @@ class FirebaseAPI {
     private static var allStreamsDataSourceSet = false
     private static var streamMembersDataSourceSet = false
     
+    private static var observedPaths: [String] = []
+    
     // firebase ref
     private static let ref = Database.database().reference()
     
@@ -42,14 +44,15 @@ class FirebaseAPI {
         addPresenceListener()
         addTopSongChangedListener()
         addSongPlayStatusListener()
-        addStreamDeletedListener() // handles case when host leaves
+        addStreamDeletedListener() // observedPaths case when host leaves
     }
     
     private static func addStreamDeletedListener() {
         // listen for stream deleted
-        ref.child("/streams/\(Current.stream.streamID)").observe(.childRemoved, with:{ (snapshot) in
-            print("** snapshot: ", snapshot)
+        let path = "/streams/\(Current.stream.streamID)"
+        ref.child(path).observe(.childRemoved, with:{ (snapshot) in
         })
+        
         
         
         // sync UI
@@ -57,17 +60,20 @@ class FirebaseAPI {
     }
     
     private static func addSongPlayStatusListener() {
-        ref.child("streams/\(Current.stream.streamID)/isPlaying").observe(.value, with:{ (snapshot) in
+        let path = "streams/\(Current.stream.streamID)/isPlaying"
+        ref.child(path).observe(.value, with:{ (snapshot) in
             if snapshot.exists(), let isPlaying = snapshot.value as? Bool {
                 Current.stream.isPlaying = isPlaying
                 self.listenForSongProgress()    // fetch updated status
                 NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.ResyncStream)
             }
         }) { err in print(err.localizedDescription)}
+        observedPaths.append(path)
     }
     
     private static func addMemberJoinedListener() {
-        ref.child("/streams/\(Current.stream.streamID)/members").observe(.childAdded, with:{ (snapshot) in
+        let path = "/streams/\(Current.stream.streamID)/members"
+        ref.child(path).observe(.childAdded, with:{ (snapshot) in
             // update Current stream
             let member = Models.FirebaseUser(snapshot: snapshot)
             if Current.stream.members.contains(where: { (other) -> Bool in
@@ -90,7 +96,8 @@ class FirebaseAPI {
     }
     
     private static func addMemberLeftListener() {
-        ref.child("/streams/\(Current.stream.streamID)/members").observe(.childRemoved, with:{ (snapshot) in
+        let path = "/streams/\(Current.stream.streamID)/members"
+        ref.child(path).observe(.childRemoved, with:{ (snapshot) in
             
             // update Current stream
             let member = Models.FirebaseUser(snapshot: snapshot)
@@ -111,6 +118,7 @@ class FirebaseAPI {
             NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.MemberLeft)
             
         }) { error in print(error.localizedDescription) }
+        observedPaths.append(path)
     }
     
     static var navigationController: UINavigationController?  {
@@ -191,12 +199,14 @@ class FirebaseAPI {
     
     private static func addTopSongChangedListener() {
         // listen for top song changes -- includes song skips and song finishes
-        self.ref.child("/streams/\(Current.stream.streamID)/song").observe(.value, with:{ (snapshot) in
+        let path = "/streams/\(Current.stream.streamID)/song"
+        self.ref.child(path).observe(.value, with:{ (snapshot) in
             Current.stream.song = Models.FirebaseSong(snapshot: snapshot)
             jamsPlayer.position_ms = 0.0
             // post event telling controller to resync
             NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.ResyncStream)
         }) { error in print(error.localizedDescription) }
+        observedPaths.append(path)
     }
     
     public static func addSongQueueTableViewListener(songQueueTableView: UITableView?) -> FUITableViewDataSource? {
@@ -277,7 +287,7 @@ class FirebaseAPI {
                 if Current.isHost() || Current.stream.members.isEmpty {
                     self.deleteCurrentStream()  // remove observers and delete resources if host
                 } else {
-                    self.ref.removeAllObservers()   // simply remove observers if not host
+                    removeAllObservers()   // simply remove observers if not host
                 }
                 
                 // reset var allowing song queue table view data source to sync
@@ -324,7 +334,7 @@ class FirebaseAPI {
     private static func deleteCurrentStream() {
         // detach listeners to current stream -- new ones are added
         // at the end of this code chunk
-        self.ref.removeAllObservers()
+        removeAllObservers()
         
         // delete current stream and associated resources
         let currentStreamID = Current.stream.streamID
@@ -339,6 +349,9 @@ class FirebaseAPI {
     // this method can be used to go from no stream --> new stream or
     // current stream --> new stream. set bool to true for latter case
     public static func createNewStream(removeFromCurrentStream: Bool) {
+        
+        removeAllObservers()
+        
         let newStream = Models.FirebaseStream()
         let childUpdates: [String: Any] = ["streams/\(newStream.streamID)": newStream.firebaseDict,
                                            "users/\(Current.user.spotifyID)/tunedInto": newStream.streamID]
@@ -372,7 +385,15 @@ class FirebaseAPI {
         }
         return dataSource
     }
+    
+    // smh since firebase removeAllObservers() doesn't do what you think it does, need
+    // to iterate through list
+    // note that removeObserverWithpath is shit and doesn't work
+    private static func removeAllObservers() {
+        for path in self.observedPaths {
+            self.ref.child(path).removeAllObservers()
+        }
+        observedPaths.removeAll()
+    }
 
-    
-    
 }

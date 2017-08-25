@@ -318,14 +318,13 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             self.refreshSongPlayStatus()
             break
         case .SwitchedStreams:
-            self.loadTopSong()
-            self.refreshSongPlayStatus()
-            
             // update queue data source
             if let newDataSource = FirebaseAPI.addSongQueueTableViewListener(songQueueTableView: self.tableView) {
                 self.dataSource = newDataSource
-                tableView.reloadData()
+                tableView.reloadData()  // necessary
             }
+            self.viewWillAppear(true)
+            self.refreshSongPlayStatus()
             break
         case .SetProgress:
             self.progressSliderValue = jamsPlayer.position_ms
