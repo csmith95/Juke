@@ -110,7 +110,7 @@ class StreamCell: UITableViewCell {
     }
     
     public func clearMemberIcons() {
-        for (i, imageView) in imageViewDict {
+        for (_, imageView) in imageViewDict {
             imageView.image = nil
         }
         moreMembersLabel.text = ""

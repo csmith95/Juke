@@ -15,11 +15,10 @@ import SCLAlertView
 import Firebase
 import FirebaseDatabaseUI
 
-class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UITableViewDelegate {
+class StreamsTableViewController: UIViewController, UITableViewDelegate, UISearchBarDelegate {
     
     @IBOutlet var backgroundImage: UIImageView!
     @IBOutlet var tableView: UITableView!
-    @IBOutlet var friendsCollectionView: UICollectionView!
     let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
     let firebaseRef = Database.database().reference()
     var dataSource: FUITableViewDataSource!
@@ -28,45 +27,9 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Discover Streams"
-//        self.friendsCollectionView.delegate = self
-//        self.friendsCollectionView.dataSource = self
         tableView.delegate = self
-    }
-    
-    
-    
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return self.friends.count
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell",
-//                                                      for: indexPath) as! FriendCollectionViewCell
-//        let friend = friends[indexPath.row]
-//        let filter = AspectScaledToFillSizeCircleFilter(size: cell.friendImage.frame.size)
-//        if let urlString = friend.imageURL {
-//            cell.friendImage.af_setImage(withURL: URL(string: urlString)!, placeholderImage: defaultImage, filter: filter) { response in
-//                self.friends[indexPath.row].image = response.value
-//            }
-//        } else {
-//            cell.friendImage.image = defaultImage
-//        }
-//      
-//        return cell
-//    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let friend = self.friends[indexPath.row]
-//        let username = (friend.username == nil) ? "???" : friend.username!
-//        let appearance = SCLAlertView.SCLAppearance(
-//            kCircleHeight: 50, kCircleIconHeight: 50
-//        )
-//        let alertView = SCLAlertView(appearance: appearance)
-//        alertView.addButton("Join stream") {
-//            self.joinStream(streamID: friend.tunedInto!)
-//        }
-//        
-//        alertView.showSuccess(username, subTitle: "", circleIconImage: friend.image)
+//        searchBar.scopeButtonTitles = ["Streams", "Friends"]
+//        searchBar.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -76,37 +39,8 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
             self.dataSource = dataSource
         }
         tableView.reloadData()  // fixes music indicator bug in build 3
-//        fetchFriends()
     }
     
-//    private func fetchFriends() {
-//        Alamofire.request(ServerConstants.kJukeServerURL + ServerConstants.kFetchFriends, method: .get)
-//            .validate().responseJSON { response in
-//            switch response.result {
-//            case .success:
-//                if let unparsedFriends = response.result.value as? [UnboxableDictionary] {
-//                    self.friends = []
-//                    for unparsedStream in unparsedFriends {
-//                        do {
-//                            let friend: Models.User = try unbox(dictionary: unparsedStream)
-//                            if (friend.id != Current.user.id && friend.tunedInto != Current.user.tunedInto) {
-//                                self.friends.append(friend)  // if not tuned into this stream, display it
-//                            }
-//                        } catch {
-//                            print("Error trying to unbox friend: \(error)")
-//                        }
-//                    }
-//                    
-//                    DispatchQueue.main.async {
-//                        self.friendsCollectionView.reloadData()
-//                    }
-//                    
-//                }
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
-//    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
