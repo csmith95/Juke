@@ -82,31 +82,41 @@ class StreamMembersTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let user = Models.FirebaseUser(snapshot: self.dataSource.items[indexPath.row])
-        let destinationVC = segue.destinationViewController as UserProfileViewController
-        destinationVC.preloadedUser = user
-        destinationVC.performSegue(withIdentifier: "userProfileSegue", sender: self)
-        
-        
-        //UserProfileViewController.setUserProfile(user)
-        
-//        guard let stream = Models.FirebaseStream(snapshot: self.dataSource.items[indexPath.row]) else { return }
-//        if stream.streamID == Current.stream.streamID {
-//            tableView.cellForRow(at: indexPath)?.setSelected(false, animated: false)
-//            return  // do nothing if already tuned in
-//        }
-//        HUD.show(.progress)
-//        FirebaseAPI.joinStream(stream: stream) { success in
-//            if success {
-//                HUD.flash(.success, delay: 0.75) { success in
-//                    self.tabBarController?.selectedIndex = 1
-//                }
-//            } else {
-//                HUD.flash(.error, delay: 1.0)
-//            }
-//        }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if  segue.identifier == "userProfileSegue",
+            let destination = segue.destination as? UserProfileViewController,
+            let userIndex = tableView.indexPathForSelectedRow?.row
+        {
+            destination.preloadedUser = Models.FirebaseUser(snapshot: self.dataSource.items[userIndex])
+        }
     }
+    
+//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+////        let user = Models.FirebaseUser(snapshot: self.dataSource.items[indexPath.row])
+////        let destinationVC = UserProfileViewController()
+////        destinationVC.preloadedUser = user
+////        DispatchQueue.main.async {
+////            self.performSegue(withIdentifier: "userProfileSegue", sender: self)
+////        }
+//        
+//        //UserProfileViewController.setUserProfile(user)
+//        
+////        guard let stream = Models.FirebaseStream(snapshot: self.dataSource.items[indexPath.row]) else { return }
+////        if stream.streamID == Current.stream.streamID {
+////            tableView.cellForRow(at: indexPath)?.setSelected(false, animated: false)
+////            return  // do nothing if already tuned in
+////        }
+////        HUD.show(.progress)
+////        FirebaseAPI.joinStream(stream: stream) { success in
+////            if success {
+////                HUD.flash(.success, delay: 0.75) { success in
+////                    self.tabBarController?.selectedIndex = 1
+////                }
+////            } else {
+////                HUD.flash(.error, delay: 1.0)
+////            }
+////        }
+//    }
 
 
     /*
