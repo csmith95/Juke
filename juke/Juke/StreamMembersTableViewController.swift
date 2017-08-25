@@ -17,6 +17,9 @@ class StreamMembersTableViewController: UITableViewController {
     @IBOutlet var streamMembersTableView: UITableView!
     @IBOutlet weak var hostPresenceDot: UIImageView!
     @IBOutlet weak var hostName: UILabel!
+    @IBOutlet var hostTapped: UITapGestureRecognizer!
+    
+    
     var dataSource: FUITableViewDataSource!
     private let defaultIcon = CircleFilter().filter(UIImage(named: "juke_icon")!)
 
@@ -82,6 +85,11 @@ class StreamMembersTableViewController: UITableViewController {
         }
     }
     
+    @IBAction func hostCellTapped(_ sender: Any) {
+      
+    }
+    
+    
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if  segue.identifier == "userProfileSegue",
@@ -90,34 +98,13 @@ class StreamMembersTableViewController: UITableViewController {
         {
             destination.preloadedUser = Models.FirebaseUser(snapshot: self.dataSource.items[userIndex])
         }
+        
+        if  segue.identifier == "hostProfileSegue",
+            let destination = segue.destination as? UserProfileViewController
+        {
+            destination.preloadedUser = Current.stream.host
+        }
     }
-    
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-////        let user = Models.FirebaseUser(snapshot: self.dataSource.items[indexPath.row])
-////        let destinationVC = UserProfileViewController()
-////        destinationVC.preloadedUser = user
-////        DispatchQueue.main.async {
-////            self.performSegue(withIdentifier: "userProfileSegue", sender: self)
-////        }
-//        
-//        //UserProfileViewController.setUserProfile(user)
-//        
-////        guard let stream = Models.FirebaseStream(snapshot: self.dataSource.items[indexPath.row]) else { return }
-////        if stream.streamID == Current.stream.streamID {
-////            tableView.cellForRow(at: indexPath)?.setSelected(false, animated: false)
-////            return  // do nothing if already tuned in
-////        }
-////        HUD.show(.progress)
-////        FirebaseAPI.joinStream(stream: stream) { success in
-////            if success {
-////                HUD.flash(.success, delay: 0.75) { success in
-////                    self.tabBarController?.selectedIndex = 1
-////                }
-////            } else {
-////                HUD.flash(.error, delay: 1.0)
-////            }
-////        }
-//    }
 
 
     /*
