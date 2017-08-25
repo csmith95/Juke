@@ -75,6 +75,7 @@ class StreamsTableViewController: UIViewController, UICollectionViewDelegate, UI
         if let dataSource = FirebaseAPI.addDiscoverStreamsTableViewListener(allStreamsTableView: self.tableView) {
             self.dataSource = dataSource
         }
+        tableView.reloadData()  // fixes music indicator bug in build 3
 //        fetchFriends()
     }
     
