@@ -504,8 +504,8 @@ Hit the search tab to add new songs.</string>
                                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <stackView contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="VzB-Dy-jlV" userLabel="Controls Stack View">
-                                                                    <rect key="frame" x="61" y="114" width="253" height="48"/>
+                                                                <stackView contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="VzB-Dy-jlV" userLabel="Controls Stack View">
+                                                                    <rect key="frame" x="47" y="114" width="281" height="48"/>
                                                                     <subviews>
                                                                         <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BEA-4i-jB0">
                                                                             <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
@@ -516,14 +516,14 @@ Hit the search tab to add new songs.</string>
                                                                             </connections>
                                                                         </button>
                                                                         <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IwY-dS-tGg">
-                                                                            <rect key="frame" x="56" y="0.0" width="29" height="48"/>
+                                                                            <rect key="frame" x="63" y="0.0" width="29" height="48"/>
                                                                             <state key="normal" image="trash"/>
                                                                             <connections>
                                                                                 <action selector="clearStream:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="cRf-SQ-r5b"/>
                                                                             </connections>
                                                                         </button>
                                                                         <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="21b-0y-uN8">
-                                                                            <rect key="frame" x="93" y="0.0" width="48" height="48"/>
+                                                                            <rect key="frame" x="107" y="0.0" width="48" height="48"/>
                                                                             <state key="normal" image="ic_play_arrow_white_48pt"/>
                                                                             <state key="selected" image="ic_pause_white_48pt"/>
                                                                             <connections>
@@ -531,14 +531,14 @@ Hit the search tab to add new songs.</string>
                                                                             </connections>
                                                                         </button>
                                                                         <button hidden="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ejJ-SU-iib" userLabel="Skip Button">
-                                                                            <rect key="frame" x="149" y="0.0" width="48" height="48"/>
+                                                                            <rect key="frame" x="170" y="0.0" width="48" height="48"/>
                                                                             <state key="normal" image="ic_fast_forward_white_48pt"/>
                                                                             <connections>
                                                                                 <action selector="skipSong:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="Wd7-5i-aAN"/>
                                                                             </connections>
                                                                         </button>
                                                                         <button hidden="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ezo-F5-eLp" userLabel="Leave Button">
-                                                                            <rect key="frame" x="205" y="0.0" width="48" height="48"/>
+                                                                            <rect key="frame" x="233" y="0.0" width="48" height="48"/>
                                                                             <accessibility key="accessibilityConfiguration" hint="Leave stream" label="Leave stream">
                                                                                 <accessibilityTraits key="traits" button="YES"/>
                                                                             </accessibility>
