@@ -229,27 +229,27 @@ class FirebaseAPI {
     
     public static func addPresenceListener() {
         // update main user object
-        self.ref.child("/users/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
-        
-        // STREAM object updates
-        if Current.isHost() {
-            // you are the host so update stream/host
-            self.ref.child("/streams/\(Current.stream.streamID)/host/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
-        } else {
-            // you are not the host so update stream/members
-            self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
-        }
+//        self.ref.child("/users/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
+//        
+//        // STREAM object updates
+//        if Current.isHost() {
+//            // you are the host so update stream/host
+//            self.ref.child("/streams/\(Current.stream.streamID)/host/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
+//        } else {
+//            // you are not the host so update stream/members
+//            self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
+//        }
     }
     
     public static func setOnlineTrue() {
         // update main user object
-        self.ref.child("/users/\(Current.user.spotifyID)/online").setValue(true)
-        
-        // STREAM object update
-        // no need to do case where user is host because if user is host and goes offline they are no longer host
-        if !Current.isHost() {
-            self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").setValue(true)
-        }
+//        self.ref.child("/users/\(Current.user.spotifyID)/online").setValue(true)
+//        
+//        // STREAM object update
+//        // no need to do case where user is host because if user is host and goes offline they are no longer host
+//        if !Current.isHost() {
+//            self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").setValue(true)
+//        }
         
     }
     
