@@ -35,13 +35,13 @@
                                 </subviews>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="J U K E" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RgK-6X-B7t">
-                                <rect key="frame" x="139" y="60" width="98" height="36"/>
+                                <rect key="frame" x="139" y="60" width="98" height="35.5"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="30"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="For friends, family and music lovers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I6B-Rc-1mi">
-                                <rect key="frame" x="59" y="104" width="257" height="21"/>
+                                <rect key="frame" x="59" y="103.5" width="257" height="20.5"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -116,8 +116,8 @@
                                 </view>
                                 <blurEffect style="light"/>
                             </visualEffectView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" indicatorStyle="black" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="132" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="92D-Pw-sEn">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" indicatorStyle="black" dataMode="prototypes" style="plain" rowHeight="132" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="92D-Pw-sEn">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -131,18 +131,18 @@
                                     </scopeButtonTitles>
                                 </searchBar>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="StreamMemberCell" rowHeight="65" id="wuT-uc-e1B" customClass="StreamMemberCell" customModule="Juke" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="72" width="375" height="65"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FriendCell" rowHeight="100" id="wuT-uc-e1B" customClass="FriendCell" customModule="Juke" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="72" width="375" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wuT-uc-e1B" id="Gsb-Gu-jo8">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="65"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="99.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XG5-i5-1zf" userLabel="Stream Member Image View">
-                                                    <rect key="frame" x="8" y="0.0" width="65" height="65"/>
+                                                <imageView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XG5-i5-1zf" userLabel="Stream Member Image View">
+                                                    <rect key="frame" x="8" y="20" width="60" height="60"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="65" id="VBY-iW-5AE"/>
-                                                        <constraint firstAttribute="height" constant="65" id="pgG-q8-7sE"/>
+                                                        <constraint firstAttribute="width" constant="60" id="VBY-iW-5AE"/>
+                                                        <constraint firstAttribute="height" constant="60" id="pgG-q8-7sE"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -151,51 +151,71 @@
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cvL-mF-kC3" userLabel="Member Display Name Label">
-                                                    <rect key="frame" x="82" y="20" width="50" height="25"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cvL-mF-kC3" userLabel="Member Display Name Label">
+                                                    <rect key="frame" x="8" y="-8" width="50" height="25"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="21"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="teg-CY-mor">
-                                                    <rect key="frame" x="52" y="40" width="20" height="20"/>
+                                                    <rect key="frame" x="46" y="59" width="30" height="30"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="20" id="KLi-PT-y3L"/>
-                                                        <constraint firstAttribute="width" constant="20" id="ozY-sZ-lmp"/>
+                                                        <constraint firstAttribute="height" constant="30" id="KLi-PT-y3L"/>
+                                                        <constraint firstAttribute="width" constant="30" id="ozY-sZ-lmp"/>
                                                     </constraints>
                                                 </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kgk-fN-2rW">
-                                                    <rect key="frame" x="254" y="17" width="119" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kgk-fN-2rW">
+                                                    <rect key="frame" x="261" y="50" width="106" height="30"/>
                                                     <state key="normal" title="Invite to stream"/>
+                                                    <state key="selected" title="Invited!"/>
+                                                    <connections>
+                                                        <action selector="inviteToStreamPressed:" destination="wuT-uc-e1B" eventType="touchUpInside" id="Prn-HL-HVA"/>
+                                                    </connections>
                                                 </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="&lt;Tuned into&gt;" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zLZ-0R-0Y7">
-                                                    <rect key="frame" x="265" y="39" width="102" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Teddy's Stream" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zLZ-0R-0Y7">
+                                                    <rect key="frame" x="88" y="20" width="119" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Plg-az-XtL">
+                                                    <rect key="frame" x="88" y="49" width="80" height="30"/>
+                                                    <state key="normal" title="Join stream"/>
+                                                    <state key="selected" title="Joining..."/>
+                                                    <connections>
+                                                        <action selector="joinStreamPressed:" destination="wuT-uc-e1B" eventType="touchUpInside" id="oPf-nE-PjP"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <constraints>
-                                                <constraint firstItem="cvL-mF-kC3" firstAttribute="centerY" secondItem="Gsb-Gu-jo8" secondAttribute="centerY" id="8Nz-wL-mMA"/>
+                                                <constraint firstItem="XG5-i5-1zf" firstAttribute="top" secondItem="zLZ-0R-0Y7" secondAttribute="bottom" constant="-21" id="3sc-yA-tjP"/>
+                                                <constraint firstItem="Plg-az-XtL" firstAttribute="top" secondItem="XG5-i5-1zf" secondAttribute="bottom" constant="-31" id="EMp-pV-6ra"/>
+                                                <constraint firstItem="teg-CY-mor" firstAttribute="leading" secondItem="XG5-i5-1zf" secondAttribute="trailing" constant="-22" id="MJB-IX-irf"/>
+                                                <constraint firstItem="teg-CY-mor" firstAttribute="baseline" secondItem="XG5-i5-1zf" secondAttribute="baseline" constant="9" id="MaF-El-XuQ"/>
                                                 <constraint firstAttribute="leadingMargin" secondItem="XG5-i5-1zf" secondAttribute="leading" id="TpD-e2-wHl"/>
-                                                <constraint firstItem="cvL-mF-kC3" firstAttribute="leading" secondItem="XG5-i5-1zf" secondAttribute="trailing" constant="9" id="UFX-Vj-R2M"/>
-                                                <constraint firstItem="teg-CY-mor" firstAttribute="leading" secondItem="Gsb-Gu-jo8" secondAttribute="leadingMargin" constant="44" id="UcL-0V-EMT"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="teg-CY-mor" secondAttribute="bottom" constant="-2.5" id="fzN-O1-uWm"/>
+                                                <constraint firstItem="zLZ-0R-0Y7" firstAttribute="leading" secondItem="XG5-i5-1zf" secondAttribute="trailing" constant="20" id="ULd-6m-z1T"/>
+                                                <constraint firstItem="Plg-az-XtL" firstAttribute="leading" secondItem="XG5-i5-1zf" secondAttribute="trailing" constant="20" id="Uq6-jy-8VR"/>
+                                                <constraint firstItem="kgk-fN-2rW" firstAttribute="top" secondItem="XG5-i5-1zf" secondAttribute="bottom" constant="-30" id="djq-ZD-Ghf"/>
                                                 <constraint firstItem="XG5-i5-1zf" firstAttribute="centerY" secondItem="Gsb-Gu-jo8" secondAttribute="centerY" id="oQR-Pj-Qa5"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="kgk-fN-2rW" secondAttribute="trailing" id="w4e-s9-q9r"/>
+                                                <constraint firstAttribute="leadingMargin" secondItem="cvL-mF-kC3" secondAttribute="leading" id="yho-cC-CgZ"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <connections>
-                                            <outlet property="memberImage" destination="XG5-i5-1zf" id="rdN-A8-7kx"/>
-                                            <outlet property="memberName" destination="cvL-mF-kC3" id="s0k-Yo-bfu"/>
-                                            <outlet property="presenceDot" destination="teg-CY-mor" id="0kk-mO-Gcc"/>
+                                            <outlet property="friendImageView" destination="XG5-i5-1zf" id="emt-nN-eW2"/>
+                                            <outlet property="joinStreamButton" destination="Plg-az-XtL" id="0oy-W4-BuT"/>
+                                            <outlet property="memberNameLabel" destination="cvL-mF-kC3" id="4Dr-Xj-QLY"/>
+                                            <outlet property="presenceDot" destination="teg-CY-mor" id="CTb-8a-0XC"/>
+                                            <outlet property="streamNameLabel" destination="zLZ-0R-0Y7" id="yqh-PN-dKv"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StreamCell" rowHeight="132" id="zyp-1U-jUo" customClass="StreamCell" customModule="Juke" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="137" width="375" height="132"/>
+                                        <rect key="frame" x="0.0" y="172" width="375" height="132"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zyp-1U-jUo" id="gVb-Ra-gLQ">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="132"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="131.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5nB-OQ-3xx">
@@ -439,7 +459,7 @@
                                 <rect key="frame" x="0.0" y="72" width="375" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oae-Ar-DXl" id="QdY-VV-ach">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="59"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="80K-77-ogI">
@@ -543,7 +563,7 @@ Hit the search tab to add new songs.</string>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uai-2k-heq">
-                                                                    <rect key="frame" x="330" y="302" width="37" height="16"/>
+                                                                    <rect key="frame" x="330" y="302" width="36.5" height="16"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     <nil key="highlightedColor"/>
@@ -598,16 +618,16 @@ Hit the search tab to add new songs.</string>
                                                                     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                 </stackView>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="Wuc-bt-vVA" userLabel="Current Song Stack View">
-                                                                    <rect key="frame" x="131" y="179" width="114" height="41"/>
+                                                                    <rect key="frame" x="131.5" y="179" width="113.5" height="40.5"/>
                                                                     <subviews>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Song" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q6y-f2-E0O">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="114" height="23"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="113.5" height="23"/>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Artist" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2fl-wu-vGl">
-                                                                            <rect key="frame" x="0.0" y="26" width="114" height="15"/>
+                                                                            <rect key="frame" x="0.0" y="26" width="113.5" height="14.5"/>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                             <nil key="highlightedColor"/>
@@ -674,7 +694,7 @@ Hit the search tab to add new songs.</string>
                                                             <rect key="frame" x="0.0" y="28" width="375" height="46"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0kb-sf-i9H" id="guB-Fj-CpO">
-                                                                <rect key="frame" x="0.0" y="0.0" width="375" height="45"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="375" height="45.5"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="66x-Jw-w2Y">
@@ -841,7 +861,7 @@ Hit the search tab to add new songs.</string>
                                 <rect key="frame" x="0.0" y="108" width="375" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OuN-xA-Ji0" id="mAU-xD-MAp">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qYk-iK-OWM" userLabel="Stream Member Image View">
@@ -927,7 +947,7 @@ Hit the search tab to add new songs.</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="vCd-RR-gCy">
-                                <rect key="frame" x="88" y="165" width="200" height="288"/>
+                                <rect key="frame" x="88" y="165.5" width="200" height="287.5"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="OAh-9A-apt" userLabel="User Image View">
                                         <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
@@ -943,13 +963,13 @@ Hit the search tab to add new songs.</string>
                                         </userDefinedRuntimeAttributes>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hXu-OG-TNa" userLabel="User Name Label">
-                                        <rect key="frame" x="0.0" y="216" width="200" height="23"/>
+                                        <rect key="frame" x="0.0" y="216" width="200" height="22.5"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="19"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o6d-id-tAp" userLabel="Invite to stream Button">
-                                        <rect key="frame" x="0.0" y="255" width="200" height="33"/>
+                                        <rect key="frame" x="0.0" y="254.5" width="200" height="33"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
                                         <state key="normal" title="Invite to stream"/>
                                     </button>
@@ -960,7 +980,7 @@ Hit the search tab to add new songs.</string>
                                 </constraints>
                             </stackView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bDv-At-kKW">
-                                <rect key="frame" x="248" y="322" width="30" height="30"/>
+                                <rect key="frame" x="248" y="322.5" width="30" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="4Qc-3w-j5u"/>
                                     <constraint firstAttribute="width" constant="30" id="Wcs-wx-mx1"/>

@@ -431,12 +431,22 @@ class FirebaseAPI {
         guard let tableView = friendsTableView else { return nil }
         self.allStreamsDataSourceSet = false // so that it rebinds if user switches to discover streams scope
         let dataSource = tableView.bind(to: FirebaseAPI.ref.child("users")) { tableView, indexPath, snapshot in
-            let cell = tableView.dequeueReusableCell(withIdentifier: "StreamMemberCell", for: indexPath) as! StreamMemberCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FriendCell", for: indexPath) as! FriendCell
             let member = Models.FirebaseUser(snapshot: snapshot)
-            cell.populateMemberCell(member: member)
+            cell.populateCell(member: member)
             return cell
         }
         return dataSource
     }
-
+    
+    public static func fetchStream(streamID: String, callback: @escaping ((_: Models.FirebaseStream?) -> Void)) {
+        self.ref.child("/streams/\(streamID)").observeSingleEvent(of: .value, with:{ (snapshot) in
+            if let stream = Models.FirebaseStream(snapshot: snapshot) {
+                callback(stream)
+            } else {
+                callback(nil)
+            }
+        })
+        
+    }
 }
