@@ -398,5 +398,17 @@ class FirebaseAPI {
         }
         observedPaths.removeAll()
     }
+    
+    public static func addFriendsTableViewListener(friendsTableView: UITableView?) -> FUITableViewDataSource? {
+        guard let tableView = friendsTableView else { return nil }
+        self.allStreamsDataSourceSet = false // so that it rebinds if user switches to discover streams scope
+        let dataSource = tableView.bind(to: FirebaseAPI.ref.child("users")) { tableView, indexPath, snapshot in
+            let cell = tableView.dequeueReusableCell(withIdentifier: "StreamMemberCell", for: indexPath) as! StreamMemberCell
+            let member = Models.FirebaseUser(snapshot: snapshot)
+            cell.populateMemberCell(member: member)
+            return cell
+        }
+        return dataSource
+    }
 
 }

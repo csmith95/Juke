@@ -17,28 +17,74 @@ import FirebaseDatabaseUI
 
 class StreamsTableViewController: UIViewController, UITableViewDelegate, UISearchBarDelegate {
     
-    @IBOutlet var backgroundImage: UIImageView!
+    
     @IBOutlet var tableView: UITableView!
+    @IBOutlet var backgroundImage: UIImageView!
+    @IBOutlet var searchBar: UISearchBar!
     let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
     let firebaseRef = Database.database().reference()
     var dataSource: FUITableViewDataSource!
-
     
+    enum Scope: Int {
+        case Streams = 0, Friends   // struct to keep track of which scope is selected
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Discover Streams"
         tableView.delegate = self
-//        searchBar.scopeButtonTitles = ["Streams", "Friends"]
-//        searchBar.delegate = self
+        self.searchBar.delegate = self
+        self.searchBar.scopeButtonTitles = ["Streams", "Friends"]
+        self.searchBar.showsScopeBar = true  // this isn't working
+        tableView.tableHeaderView = searchBar
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        hideKeyboard()
+        print("did click")
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        hideKeyboard()
+        print("did scroll")
+    }
+    
+    func hideKeyboard() {
+        self.view.endEditing(true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         backgroundImage.image = #imageLiteral(resourceName: "jukedef")
         self.navigationController?.title = "Discover"
+        self.searchBar.selectedScopeButtonIndex = 0
+        print("scope set: ", searchBar.selectedScopeButtonIndex)
         if let dataSource = FirebaseAPI.addDiscoverStreamsTableViewListener(allStreamsTableView: self.tableView) {
             self.dataSource = dataSource
         }
+        
         tableView.reloadData()  // fixes music indicator bug in build 3
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        print("scope changed: ", selectedScope)
+        switch (selectedScope) {
+        case Scope.Streams.rawValue:
+            if let dataSource = FirebaseAPI.addDiscoverStreamsTableViewListener(allStreamsTableView: self.tableView) {
+                self.dataSource = dataSource
+            }
+            break
+        case Scope.Friends.rawValue:
+            if let dataSource = FirebaseAPI.addFriendsTableViewListener(friendsTableView: self.tableView) {
+                self.dataSource = dataSource
+            }
+            break
+        default:
+            print("unrecognized scope...")
+        }
+        
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
 

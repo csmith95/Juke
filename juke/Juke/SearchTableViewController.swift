@@ -62,12 +62,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     func showMyLibrary() {
         displayedResults = libraryResults
         tableView.reloadData()
-//        if libraryResults.count == 0 {
-//            loadSavedTracks()   // if not already cached, load and display in this method
-//        } else {
-//            displayedResults = libraryResults // otherwise show cached results
-//            tableView.reloadData()
-//        }
     }
     
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
@@ -93,6 +87,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.title = "Search"
         searchBar.scopeButtonTitles = ["My Library", "Spotify"]
         searchBar.delegate = self
         tableView.delegate = self
@@ -102,7 +97,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         // reset UI
-        self.navigationItem.title = "Search"
         self.searchBar.text = ""
         self.view.endEditing(true)
         self.searchBar.selectedScopeButtonIndex = 0
