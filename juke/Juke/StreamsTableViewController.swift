@@ -82,6 +82,7 @@ class StreamsTableViewController: UIViewController, UITableViewDelegate, UISearc
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let stream = Models.FirebaseStream(snapshot: self.dataSource.items[indexPath.row]) else { return }
