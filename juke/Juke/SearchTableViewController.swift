@@ -88,7 +88,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "Search"
-        searchBar.scopeButtonTitles = ["My Library", "Spotify"]
         searchBar.delegate = self
         tableView.delegate = self
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
