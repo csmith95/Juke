@@ -242,27 +242,39 @@ class FirebaseAPI {
     
     public static func addPresenceListener() {
         // update main user object
-//        self.ref.child("/users/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
-//        
-//        // STREAM object updates
+        self.ref.child("/users/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
+//
+        // STREAM object updates
+        if Current.isHost() {
+            // you are the host so update stream/host
+            self.ref.child("/streams/\(Current.stream.streamID)/host/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
+        } else {
+            // you are not the host so update stream/members
+            self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
+        }
+    }
+    
+    public static func cancelPresenceListeners() {
 //        if Current.isHost() {
 //            // you are the host so update stream/host
-//            self.ref.child("/streams/\(Current.stream.streamID)/host/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
+//            self.ref.child("/streams/\(Current.stream.streamID)/host/\(Current.user.spotifyID)/online").onDisconnec
 //        } else {
 //            // you are not the host so update stream/members
 //            self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
 //        }
+        
     }
     
     public static func setOnlineTrue() {
         // update main user object
-//        self.ref.child("/users/\(Current.user.spotifyID)/online").setValue(true)
-//        
-//        // STREAM object update
-//        // no need to do case where user is host because if user is host and goes offline they are no longer host
-//        if !Current.isHost() {
-//            self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").setValue(true)
-//        }
+        self.ref.child("/users/\(Current.user.spotifyID)/online").setValue(true)
+        Current.user.online = true
+
+        // STREAM object update
+        // no need to do case where user is host because if user is host and goes offline they are no longer host
+        if !Current.isHost() {
+            self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").setValue(true)
+        }
         
     }
     
@@ -307,8 +319,12 @@ class FirebaseAPI {
                 Current.stream = stream
                 Current.stream.members.append(Current.user)
                 
-                // add listeners back for new stream
-                self.addListeners()
+                self.ref.cancelDisconnectOperations { (err, dbref) in
+                    // re-add listeners
+                    print("cancelled earlier disconnect and adding new listeners")
+                    self.addListeners()
+                }
+                
                 
                 // callback provided by StreamsTableViewController to communicate success/failure
                 callback(true)
@@ -344,6 +360,13 @@ class FirebaseAPI {
         self.ref.child("/streams/\(currentStreamID)").removeValue()
         self.ref.child("/songs/\(currentStreamID)").removeValue()
         self.ref.child("/songProgressTable/\(currentStreamID)").removeValue()
+        
+        self.ref.cancelDisconnectOperations { (err, dbref) in
+            // re-add listeners
+            print("cancelled earlier disconnect and adding new listeners")
+            self.addListeners()
+        }
+        
     }
     
     // creates and joins empty stream with user
@@ -370,7 +393,12 @@ class FirebaseAPI {
         // tell view controllers to resync
         songQueueDataSourceSet = false
         allStreamsDataSourceSet = false
-        self.addListeners()
+        self.ref.cancelDisconnectOperations { (err, dbref) in
+            // re-add listeners
+            print("cancelled earlier disconnect and adding new listeners")
+            self.addListeners()
+        }
+        
         NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.SwitchedStreams)
     }
     
