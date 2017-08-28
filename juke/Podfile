@@ -16,6 +16,7 @@ target 'Juke' do
     pod 'Firebase/Database'
     pod 'Firebase/Auth'
     pod 'Firebase/Storage'
+    pod 'Firebase/Messaging'
     pod 'FirebaseUI/Database', '~> 4.0'
     pod 'Whisper'
     pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
