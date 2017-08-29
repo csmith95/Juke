@@ -246,24 +246,17 @@ class FirebaseAPI {
 //
         // STREAM object updates
         if Current.isHost() {
-            // you are the host so update stream/host
+            // you are the host so update path: stream/host
             self.ref.child("/streams/\(Current.stream.streamID)/host/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
+            
+            // you are the host so pause stream playing
+            self.ref.child("/streams/\(Current.stream.streamID)/isPlaying").onDisconnectSetValue(false)
         } else {
             // you are not the host so update stream/members
             self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
         }
     }
-    
-    public static func cancelPresenceListeners() {
-//        if Current.isHost() {
-//            // you are the host so update stream/host
-//            self.ref.child("/streams/\(Current.stream.streamID)/host/\(Current.user.spotifyID)/online").onDisconnec
-//        } else {
-//            // you are not the host so update stream/members
-//            self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
-//        }
-        
-    }
+
     
     public static func setOnlineTrue() {
         // update main user object
