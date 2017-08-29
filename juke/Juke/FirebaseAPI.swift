@@ -432,6 +432,19 @@ class FirebaseAPI {
         return dataSource
     }
     
+    func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
+        print("Firebase registration token updated: \(fcmToken)")
+        // update token when token is reset
+        Current.user.fcmToken = fcmToken
+        FirebaseAPI.ref.child("users/\(Current.user.spotifyID)/fcmToken").setValue(fcmToken)
+        if Current.isHost() {
+            FirebaseAPI.ref.child("streams/\(Current.stream.streamID)/host/fcmToken").setValue(fcmToken)
+        } else {
+            FirebaseAPI.ref.child("streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/fcmToken").setValue(fcmToken)
+        }
+        
+    }
+    
     public static func fetchStream(streamID: String, callback: @escaping ((_: Models.FirebaseStream?) -> Void)) {
         self.ref.child("/streams/\(streamID)").observeSingleEvent(of: .value, with:{ (snapshot) in
             if let stream = Models.FirebaseStream(snapshot: snapshot) {

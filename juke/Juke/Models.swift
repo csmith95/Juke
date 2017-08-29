@@ -153,6 +153,7 @@ class Models {
         var username: String
         var imageURL: String?
         var online: Bool
+        var fcmToken: String?
         
         // formatted to be written to /hosts/{streamID}/{spotifyID}/
         // or /users/{spotifyID}/
@@ -161,6 +162,7 @@ class Models {
                                         "online": online]
             if let tunedInto = tunedInto { dict["tunedInto"] = tunedInto }
             if let imageURL = imageURL { dict["imageURL"] = imageURL }
+            if let fcmToken = fcmToken {dict["fcmToken"] = fcmToken }
             return dict
         }
         
@@ -170,6 +172,7 @@ class Models {
             self.username = dict["username"] as! String
             self.imageURL = dict["imageURL"] as? String
             self.online = dict["online"] as! Bool
+            self.fcmToken = dict["fcmToken"] as? String
         }
         
         init(snapshot: DataSnapshot) {

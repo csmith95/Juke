@@ -152,6 +152,10 @@ class LoginViewController: UIViewController {
                 } else {
                     newUserDict["username"] = spotifyUser.spotifyID // use spotifyID if no spotify username
                 }
+                // set firebase messaging token
+                let token = Messaging.messaging().fcmToken
+                print("FCM token: \(token ?? "")")
+                newUserDict["fcmToken"] = token
                 // write to firebase DB
                 self.ref.child("users").child(spotifyUser.spotifyID).setValue(newUserDict)
                 newUserDict["spotifyID"] = spotifyUser.spotifyID
