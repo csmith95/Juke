@@ -36,6 +36,7 @@ class StreamsTableViewController: UIViewController, UISearchBarDelegate {
         tableView.dataSource = streamsDataSource
         tableView.delegate = streamsDataSource
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadCollection), name: Notification.Name("reloadCollection"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.newStreamJoined), name: Notification.Name("newStreamJoined"), object: nil)
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -54,8 +55,13 @@ class StreamsTableViewController: UIViewController, UISearchBarDelegate {
         reloadCollection()
     }
     
+    private func execSearchQuery() {
+        if let source = tableView.dataSource as? CustomDataSource, let query = searchBar.text {
+            source.searchBy(query: query)
+        }
+    }
+    
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        
         if selectedScope == Scope.Streams.rawValue {
             tableView.dataSource = streamsDataSource
             tableView.delegate = streamsDataSource
@@ -63,8 +69,16 @@ class StreamsTableViewController: UIViewController, UISearchBarDelegate {
           tableView.dataSource = friendsDataSource
           tableView.delegate = friendsDataSource
         }
-        
-       reloadCollection()
+        searchBar.text = ""
+        execSearchQuery()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        execSearchQuery()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        execSearchQuery()
     }
     
     // triggered from data source clas
@@ -79,6 +93,12 @@ class StreamsTableViewController: UIViewController, UISearchBarDelegate {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    // triggered by CustomDataSource posting a notification. The view controller
+    // should take user to the new stream screen
+    func newStreamJoined() {
+        self.tabBarController?.selectedIndex = 1
     }
     
     // idea: write a separate data source class that takes in 

@@ -28,6 +28,7 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     private var collection: [CollectionItem] = [] // all streams
     var filteredCollection: [CollectionItem] = [] // what is displayed to user
+    var query = ""
     private let ref = Database.database().reference()
     
     init(path: String) {
@@ -89,18 +90,6 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
         collection.sort(by: comparator)
     }
     
-    // for debugging
-    private func printCollections() {
-        print("\n** collection: ")
-        for item in collection {
-            print(item.stream)
-        }
-        print("\n** filtered: ")
-        for item in filteredCollection {
-            print(item.stream)
-        }
-    }
-    
     private func handleChildAdded(collectionItem: CollectionItem) {
         if getIndex(collectionItem: collectionItem) == nil {
             collection.append(collectionItem)
@@ -137,6 +126,11 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
             }
         }
         return IndexPath(row: collection.count-1, section: 0)
+    }
+    
+    public func searchBy(query: String) {
+        self.query = query
+        triggerTableViewRefresh()
     }
     
     // *** Methods below here must be implemented in subclasses ***
@@ -177,9 +171,8 @@ class StreamsDataSource: CustomDataSource {
         HUD.show(.progress)
         FirebaseAPI.joinStream(stream: stream) { success in
             if success {
-                HUD.flash(.success, delay: 0.75) //{ success in
-//                    self.tabBarController?.selectedIndex = 1
-                //}
+                NotificationCenter.default.post(name: Notification.Name("newStreamJoined"), object: nil)
+                HUD.flash(.success, delay: 1.0)
             } else {
                 HUD.flash(.error, delay: 1.0)
             }
@@ -204,7 +197,11 @@ class StreamsDataSource: CustomDataSource {
     }
     
     override func shouldInclude(item: CollectionItem) -> Bool {
-        return item.stream.streamID != Current.stream.streamID && item.stream.song != nil
+        let included = item.stream.streamID != Current.stream.streamID && item.stream.song != nil
+        if !included || query.isEmpty {
+            return included
+        }
+        return item.stream.host.username.contains(query)
     }
     
     override func populateCell(tableView: UITableView, indexPath: IndexPath, item: CollectionItem) -> UITableViewCell {
@@ -235,7 +232,11 @@ class FriendsDataSource: CustomDataSource {
     }
     
     override func shouldInclude(item: CollectionItem) -> Bool {
-        return item.friend.spotifyID != Current.user.spotifyID
+        let included = item.friend.spotifyID != Current.user.spotifyID
+        if !included || query.isEmpty {
+            return included
+        }
+        return item.friend.username.contains(query)
     }
     
     override func populateCell(tableView: UITableView, indexPath: IndexPath, item: CollectionItem) -> UITableViewCell {

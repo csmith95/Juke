@@ -83,7 +83,6 @@ class LoginViewController: UIViewController {
     //if you are logging in for the first time and don't have a session that is going to be renewed
     func updateAfterFirstLogin() {
         loginButton.isHidden = true
-        print("updateAfterFirstLogin")
         let userDefaults = UserDefaults.standard
         if let sessionObj = userDefaults.object(forKey: "SpotifySession") {
             let sessionDataObj = sessionObj as! Data
