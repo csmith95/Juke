@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import AlamofireImage
 import Unbox
+import Firebase
 
 class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
@@ -19,7 +20,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     var searchURL = String()
     typealias JSONStandard = [String: AnyObject]
-    let socketManager = SocketManager.sharedInstance
+    let firebaseRef = Database.database().reference()
     
     enum Scope: Int {
         case MyLibrary = 0, Spotify
@@ -61,12 +62,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     func showMyLibrary() {
         displayedResults = libraryResults
         tableView.reloadData()
-//        if libraryResults.count == 0 {
-//            loadSavedTracks()   // if not already cached, load and display in this method
-//        } else {
-//            displayedResults = libraryResults // otherwise show cached results
-//            tableView.reloadData()
-//        }
     }
     
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
@@ -92,7 +87,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchBar.scopeButtonTitles = ["My Library", "Spotify"]
+        self.navigationItem.title = "Search"
         searchBar.delegate = self
         tableView.delegate = self
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
@@ -101,7 +96,6 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         // reset UI
-        self.navigationItem.title = "Search"
         self.searchBar.text = ""
         self.view.endEditing(true)
         self.searchBar.selectedScopeButtonIndex = 0
@@ -145,7 +139,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         ]
         
         let headers = [
-            "Authorization": "Bearer " + CurrentUser.accessToken
+            "Authorization": "Bearer " + Current.accessToken
         ]
         
         Alamofire.request(ServerConstants.kSpotifySearchURL, method: .get, parameters: params, headers: headers)
@@ -191,12 +185,11 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell") as! SearchCell
         cell.addToStreamButton.isSelected = false
+        cell.isUserInteractionEnabled = true
         cell.tapAction = { (cell) in
-            // post to server
-            self.addSongToStream(song: self.displayedResults[indexPath.row], stream: CurrentUser.stream!)
-            
-            // animate button text change from "+" to "Added!"
+            FirebaseAPI.queueSong(spotifySong: self.displayedResults[indexPath.row])
             cell.addToStreamButton.isSelected = true
+            cell.isUserInteractionEnabled = false
         }
         
         
@@ -208,24 +201,12 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         
         return cell
     }
- 
-    func addSongToStream(song: Models.SpotifySong, stream: Models.Stream) {
-        var params: Parameters = ["streamID": stream.streamID, "spotifyID": song.spotifyID, "songName": song.songName, "artistName": song.artistName, "duration": song.duration, "coverArtURL": song.coverArtURL]
-        if let memberImageURL = CurrentUser.user.imageURL {
-            params["memberImageURL"] = memberImageURL
-        } else {
-            params["memberImageURL"] = nil
-        }
-        
-        // go through socketManager so that other members will be updated
-        socketManager.addSong(params: params);
-    }
     
     func loadSavedTracks() {
         self.libraryResults.removeAll()
         let url = "https://api.spotify.com/v1/me/tracks"
         let headers = [
-            "Authorization": "Bearer " + CurrentUser.accessToken
+            "Authorization": "Bearer " + Current.accessToken
         ]
         let params: Parameters = ["limit": 50, "offset": 0]
         Alamofire.request(url, parameters: params, headers: headers).responseJSON { response in

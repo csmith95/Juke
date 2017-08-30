@@ -11,17 +11,13 @@ import Alamofire
 import Unbox
 import AlamofireImage
 import PKHUD
+import Firebase
+import FirebaseDatabaseUI
 
-class MyStreamController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class MyStreamController: UIViewController, UITableViewDelegate {
     
-    var navBarTitle: String? {
-        get {
-            return self.navigationItem.title
-        }
-        set (newValue) {
-            self.navigationItem.title = newValue
-        }
-    }
+    // firebase vars
+    var dataSource: FUITableViewDataSource!
     
     @IBOutlet var numMembersLabel: UILabel!
     @IBOutlet var clearStreamButton: UIButton!
@@ -37,25 +33,58 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var skipButton: UIButton!
     @IBOutlet var tableView: UITableView!
     let jamsPlayer = JamsPlayer.shared
-    let socketManager = SocketManager.sharedInstance
     @IBOutlet public var listenButton: UIButton!
     var animationTimer = Timer()
-    let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
+    private var progressValue: Double = 0.0
+    private var progressSliderValue: Double {
+        get {
+            return progressValue
+        }
+        
+        set(newValue) {            
+            guard let song = Current.stream.song else {
+                self.progressValue = 0.0
+                self.currTimeLabel.text = timeIntervalToString(interval: 0.0/1000)
+                return
+            }
+            
+            if abs(newValue - song.duration) < 1000 {
+                self.songFinished()  // force pop song based on timer
+            } else if abs(newValue - self.progressValue) < 1000 {
+                return  // to avoid extra UI updates
+            }
+            else {
+                let normalizedProgress = newValue / song.duration
+                self.progressSlider.value = Float(normalizedProgress)
+                self.currTimeLabel.text = timeIntervalToString(interval: newValue/1000)
+                self.progressValue = newValue
+            }
+        }
+    }
+    
+    var navBarTitle: String? {
+        get {
+            return self.navigationItem.title
+        }
+        set (newValue) {
+            self.navigationItem.title = newValue
+        }
+    }
     
     @IBAction func addSongToLibPressed(_ sender: Any) {
-    
         let path = addSongButton.isSelected ? ServerConstants.kDeleteSongByIDPath : ServerConstants.kAddSongByIDPath
         let method: HTTPMethod = addSongButton.isSelected ? .delete : .put
-        let song = CurrentUser.stream.songs[0]
-        let headers = [
-            "Authorization": "Bearer " + CurrentUser.accessToken
-        ]
-        let url = URL(string: ServerConstants.kSpotifyBaseURL+path+song.spotifyID)!
-        let message = addSongButton.isSelected ? "Removed from your library" : "Saved to your library!"
-        self.addSongButton.isSelected = !self.addSongButton.isSelected
-        Alamofire.request(url, method: method, headers: headers).validate().response() { response in
-            self.delay(1.0) {
-                HUD.flash(.label(message), delay: 0.75)
+        if let song = Current.stream.song {
+            let headers = [
+                "Authorization": "Bearer " + Current.accessToken
+            ]
+            let url = URL(string: ServerConstants.kSpotifyBaseURL+path+song.spotifyID)!
+            let message = addSongButton.isSelected ? "Removed from your library" : "Saved to your library!"
+            self.addSongButton.isSelected = !self.addSongButton.isSelected
+            Alamofire.request(url, method: method, headers: headers).validate().response() { response in
+                self.delay(1.0) {
+                    HUD.flash(.label(message), delay: 0.75)
+                }
             }
         }
     }
@@ -66,107 +95,76 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     @IBAction func toggleListening(_ sender: AnyObject) {
-        if CurrentUser.stream.songs.count == 0 {
-            return
-        }
         let status = !listenButton.isSelected
         listenButton.isSelected = status
-        let song = CurrentUser.stream.songs[0]
-        if CurrentUser.isHost() {
-            socketManager.songPlayStatusChanged(streamID: CurrentUser.stream.streamID, songID: song.id, progress: song.progress, isPlaying: status)
-            CurrentUser.stream.isPlaying = status
+        Current.listenSelected = status
+        refreshSongPlayStatus() // for better responsiveness
+        FirebaseAPI.listenForSongProgress() // fetch real song progress to maintain sync
+        if Current.isHost() {
+            FirebaseAPI.setPlayStatus(status: status)
+            Current.stream.isPlaying = status
         }
-        setSong(play: status && CurrentUser.stream.isPlaying)
     }
     
     @IBAction func skipSong(_ sender: Any) {
-        //set song to next thing in stream
-        if CurrentUser.stream.songs.count == 0 {
-            return
-        }
         songFinished()
     }
     
     @IBAction func returnToPersonalStream(_ sender: Any) {
-        socketManager.splitFromStream(userID: CurrentUser.user.id);
+        FirebaseAPI.createNewStream(removeFromCurrentStream: true)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.delegate = self
-        self.tableView.dataSource = self
+        // first 2 respond to spotify events
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songPositionChanged), name: Notification.Name("songPositionChanged"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.syncPositionWithOwner), name: Notification.Name("syncPositionWithOwner"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.fetchMyStream), name: Notification.Name("refreshStream"), object: nil)
+        
+        // when audio streamer logs in, respond by trying to load top song
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.jamsPlayerReady), name: Notification.Name("jamsPlayerReady"), object: nil)
+        
+        // resyncing
+        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.firebaseEventHandler), name: Notification.Name("firebaseEvent"), object: nil)
+        
+        // set to online if not marked online
+        if !Current.user.online {
+            FirebaseAPI.setOnlineTrue()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Helvetica", size: 15)!]
-        if !CurrentUser.fetched {
-            setEmptyStreamUI()
+        if Current.isHost() {
+            navBarTitle = "Your Stream"
+        } else {
+            navBarTitle = Current.stream.host.username + "'s Stream"
         }
-        fetchMyStream()
+        FirebaseAPI.listenForSongProgress() // will update if progress difference > 3 seconds
+        if let dataSource = FirebaseAPI.addSongQueueTableViewListener(songQueueTableView: self.tableView) {
+            self.dataSource = dataSource
+        }
+        self.setUpControlButtons()
+        loadTopSong()
     }
     
+    
     private func setUpControlButtons() {
-        if CurrentUser.isHost() {
+        if Current.isHost() {
             // controls for the owner
             listenButton.setImage(UIImage(named: "ic_play_arrow_white_48pt.png"), for: .normal)
             listenButton.setImage(UIImage(named: "ic_pause_white_48pt.png"), for: .selected)
             skipButton.isHidden = false
             exitStreamButton.isHidden = true
-            listenButton.isSelected = CurrentUser.stream.isPlaying
+            listenButton.isSelected = Current.stream.isPlaying
         } else {
             listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
             listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
             skipButton.isHidden = true
             exitStreamButton.isHidden = false
         }
-    }
-    
-    func fetchMyStream() {
-        // fetch stream for user. if not tuned in or is returning to personal stream, creates and returns an offline stream by default
-        let url = ServerConstants.kJukeServerURL + ServerConstants.kFetchStream
-        let params: Parameters = ["ownerSpotifyID": CurrentUser.user.spotifyID]
-        Alamofire.request(url, method: .get, parameters: params).validate().responseJSON { response in
-            switch response.result {
-            case .success:
-                do {
-                    let unparsedStream = response.result.value as! UnboxableDictionary
-                    let stream: Models.Stream = try unbox(dictionary: unparsedStream)
-                    CurrentUser.stream = stream
-                    if let owner = stream.owner.username {
-                        self.navBarTitle = owner + "'s Stream"
-                    } else {
-                        self.navBarTitle = "Current Stream"
-                    }
-                    CurrentUser.user.tunedInto = stream.streamID
-                    CurrentUser.fetched = true
-                    SocketManager.sharedInstance.setSocketID()  // try to set after user has been fetched
-                    self.setUpControlButtons()
-                    self.tableView.reloadData()
-                    if stream.songs.count > 0 {
-                        self.noSongsLabel.isHidden = true
-                        if !JamsPlayer.shared.isPlaying(song: stream.songs[0]) {
-                            self.loadTopSong()  // otherwise sounds choppy if playback progress is adjusted every time page is loaded
-                        }
-                    } else {
-                        // no songs in stream so show noSongsLabel
-                        self.setEmptyStreamUI()
-                    }
-                    self.socketManager.joinSocketRoom(streamID: CurrentUser.stream.streamID)
-                    self.numMembersLabel.text = String(stream.members.count)
-                } catch {
-                    print("Error unboxing stream: ", error)
-                }
-                
-            case .failure(let error):
-                print("Error fetching stream: ", error)
-            }
-        }
+        numMembersLabel.text = String(Current.stream.members.count+1)
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -177,35 +175,6 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-//    // MARK: - Table view data source
-    func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        if (CurrentUser.fetched == false) {
-            return 0
-        }
-        return CurrentUser.stream.songs.count-1     // -1 because the first one is loaded up top
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let song = CurrentUser.stream.songs[indexPath.row+1]
-        let cell = self.tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
-        cell.songName.text = song.songName
-        cell.artist.text = song.artistName
-        let imageFilter = CircleFilter()
-        if let unwrappedUrl = song.memberImageURL {
-            cell.memberImageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultImage, filter: imageFilter)
-        } else {
-            cell.memberImageView.image = imageFilter.filter(defaultImage)
-        }
-        
-        return cell
-    }
     
     private func timeIntervalToString(interval: TimeInterval) -> String {
         let ti = NSInteger(interval)
@@ -214,148 +183,80 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         return NSString(format: "%0.2d:%0.2d", minutes, seconds) as String
     }
     
-    func syncPositionWithOwner(notification: NSNotification) {
-        if CurrentUser.stream.songs.count == 0 {
-            return
-        }
-        
-        if CurrentUser.isHost() {
-            return  // owner is already synced with device
-        }
-        
-        if let data = notification.object as? NSDictionary {
-            if let eventString = data["event"] as? String {
-                let songID = data["songID"] as? String
-                if songID != CurrentUser.stream.songs[0].id {
-                    return
-                }
-                
-                switch eventString {
-                case "playStatusChanged":
-                    let isPlaying = data["isPlaying"] as! Bool
-                    CurrentUser.stream.isPlaying = isPlaying
-                    let progress = data["progress"] as! Double
-                    CurrentUser.stream.songs[0].progress = progress
-                    updateSlider(song: CurrentUser.stream.songs[0])
-                    setSong(play: isPlaying && listenButton.isSelected)
-                default:
-                    print("Received unrecognized ownerSongStatusChanged event: ", eventString);
-                }
-            }
-        }
-    }
-    
     func songPositionChanged(notification: NSNotification) {
-        if CurrentUser.stream.songs.count == 0 {
-            return
-        }
-        
-        let songs = CurrentUser.stream.songs
-        let song = songs[0]
         if let data = notification.object as? NSDictionary {
-            let songID = data["songID"] as! String
-            if songID != song.id {
-                return
-            }
-            
             let progress = data["progress"] as! Double
-            CurrentUser.stream.songs[0].progress = progress
-            // update progress in db if current user is playlist owner
-            if CurrentUser.isHost() {
-                socketManager.songPositionChanged(songID: song.id, position: progress)
+            self.progressSliderValue = progress
+            if Current.isHost() {
+                FirebaseAPI.updateSongProgress(progress: progress)
             }
-            
-            // update slider
-            updateSlider(song: song)
         }
-    }
-    
-    private func updateSlider(song: Models.Song) {
-        let normalizedProgress = song.progress / song.duration
-        progressSlider.value = Float(normalizedProgress)
-        self.currTimeLabel.text = timeIntervalToString(interval: song.progress/1000)
     }
     
     func songFinished() {
-        CurrentUser.stream.songs.remove(at: 0)
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-            self.loadTopSong()
-        }
-        
-        if !CurrentUser.isHost() {
-            return; // if you are not the owner, don't post to DB. let owner's device manage DB
-        }
-        
-        socketManager.popSong(data: [CurrentUser.stream.streamID])
-    }
-    
-    public func setSong(play: Bool) {
-        if CurrentUser.fetched == false {
-            return;
-        }
-        
-        let song: Models.Song? = CurrentUser.stream.songs.count > 0 ? CurrentUser.stream.songs[0] : nil
-        jamsPlayer.setPlayStatus(shouldPlay: play, song: song)
-        if !CurrentUser.isHost() {
-            setTimer(run: !play && CurrentUser.stream.isPlaying)
-        }
-    }
-    
-    private func setTimer(run: Bool) {
-        
-        DispatchQueue.main.async {
-            if (CurrentUser.isHost() || CurrentUser.stream.songs.count == 0) {
-                return  // if owner, don't use timer at all
-            }
-            
-            if (run) {
-                if !self.animationTimer.isValid {
-                    CurrentUser.stream.songs[0].progress += 300 // trying to offset for the time transition between stopping timer and starting song
-                    self.animationTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.updateAnimationProgress), userInfo: nil, repeats: true)
-                }
-            } else {
-                if self.animationTimer.isValid {
-                    CurrentUser.stream.songs[0].progress += 300 // trying to offset for the time transition between stopping timer and starting song
-                    self.animationTimer.invalidate()
-                }
-            }
-        }
-    }
-    
-    func updateAnimationProgress() {
-        if CurrentUser.stream.songs.count == 0 {
-            progressSlider.value = Float(0)
+        if Current.stream.song == nil  {
             return
         }
-        let song = CurrentUser.stream.songs[0]
-        let newProgress = song.progress + 500
-        CurrentUser.stream.songs[0].progress = newProgress
-        updateSlider(song: CurrentUser.stream.songs[0])
-        if abs(newProgress - song.duration) < 1000 {
-            songFinished()  // force pop song based on timer
+        progressSliderValue = 0.0   // reset
+        if (Current.isHost()) {
+            FirebaseAPI.popTopSong(dataSource: dataSource) // this pops top song and loads next, if any
         }
     }
     
-    private func loadTopSong() {
-        let songs = CurrentUser.stream.songs
-        if songs.count > 0 {
-            let song = songs[0]
-            // place first song in the currentlyPlayingLabel
-            coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil)
-            bgblurimg.af_setImage(withURL: URL(string:song.coverArtURL)!, placeholderImage: nil)
-            currentSongLabel.text = song.songName
-            currentArtistLabel.text = song.artistName
-            addSongButton.isHidden = false
-            listenButton.isHidden = false
-            skipButton.isHidden = !CurrentUser.isHost()
-            clearStreamButton.isHidden = !CurrentUser.isHost()
-            checkIfUserLibContainsCurrentSong(song: song)
-            updateSlider(song: song)
-            setSong(play: listenButton.isSelected && CurrentUser.stream.isPlaying)
-        } else {
-            setEmptyStreamUI()
+    private func refreshSongPlayStatus() {
+        jamsPlayer.resync()
+        handleAutomaticProgressSlider()
+    }
+    
+    private func handleAutomaticProgressSlider() {
+        if Current.isHost() {
+            return  // if owner, don't use timer at all
         }
+        
+        if (!Current.listenSelected && Current.stream.isPlaying) {
+            if !self.animationTimer.isValid {
+                 // trying to offset for the time transition between stopping timer and starting song
+                self.progressSliderValue = self.progressSliderValue + 300
+                // set function to increment progress slider every 1 seconds
+                self.animationTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.updateAnimationProgress), userInfo: nil, repeats: true)
+            }
+        } else {
+            if self.animationTimer.isValid {
+                self.animationTimer.invalidate()
+            }
+        }
+    }
+    
+    @IBAction func clearStream(_ sender: Any) {
+        FirebaseAPI.clearStream()
+    }
+    
+    // fires every half second when timer is on
+    func updateAnimationProgress() {
+        self.progressSliderValue += 1000
+    }
+    
+    func loadTopSong() {
+        if let song = Current.stream.song {
+            self.coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil)
+            self.bgblurimg.af_setImage(withURL: URL(string:song.coverArtURL)!, placeholderImage: nil)
+            self.currentSongLabel.text = song.songName
+            self.currentArtistLabel.text = song.artistName
+            self.addSongButton.isHidden = false
+            self.listenButton.isHidden = false
+            if Current.isHost() {
+                self.listenButton.isSelected = Current.stream.isPlaying
+            }
+            self.skipButton.isHidden = !Current.isHost()
+            self.clearStreamButton.isHidden = !Current.isHost()
+            self.checkIfUserLibContainsCurrentSong(song: song)
+            self.noSongsLabel.isHidden = true
+            progressSlider.isHidden = false
+            currTimeLabel.isHidden = false
+        } else {
+            self.setEmptyStreamUI()
+        }
+        numMembersLabel.text = String(Current.stream.members.count+1) // +1 for host
     }
     
     private func setEmptyStreamUI() {
@@ -367,14 +268,18 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
         addSongButton.isHidden = true
         progressSlider.value = 0.0
         listenButton.isHidden = true
+        listenButton.isSelected = false
+        Current.listenSelected = false
         skipButton.isHidden = true
         clearStreamButton.isHidden = true
-        setSong(play: false)
+        progressSlider.isHidden = true
+        currTimeLabel.isHidden = true
+        refreshSongPlayStatus()
     }
     
-    func checkIfUserLibContainsCurrentSong(song: Models.Song) {
+    func checkIfUserLibContainsCurrentSong(song: Models.FirebaseSong) {
         let headers = [
-            "Authorization": "Bearer " + CurrentUser.accessToken
+            "Authorization": "Bearer " + Current.accessToken
         ]
         let url = URL(string: ServerConstants.kSpotifyBaseURL+ServerConstants.kContainsSongPath+song.spotifyID)!
         Alamofire.request(url, method: .get, headers: headers)
@@ -391,10 +296,32 @@ class MyStreamController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func jamsPlayerReady() {
-        setSong(play: listenButton.isSelected && CurrentUser.stream.isPlaying)
+        refreshSongPlayStatus()
     }
     
-    @IBAction func clearStreamButtonPressed(_ sender: Any) {
-        socketManager.clearStream()
+    func firebaseEventHandler(notification: NSNotification) {
+        guard let event = notification.object as? FirebaseAPI.FirebaseEvent else { print("erro"); return }
+        switch event {
+        case .MemberJoined, .MemberLeft:
+            self.numMembersLabel.text = String(Current.stream.members.count+1) // +1 for host
+            break
+        case .ResyncStream:
+            self.progressSliderValue = jamsPlayer.position_ms
+            self.loadTopSong()
+            self.refreshSongPlayStatus()
+            break
+        case .SwitchedStreams:
+            // update queue data source
+            if let newDataSource = FirebaseAPI.addSongQueueTableViewListener(songQueueTableView: self.tableView) {
+                self.dataSource = newDataSource
+                tableView.reloadData()  // necessary
+            }
+            self.viewWillAppear(true)
+            self.refreshSongPlayStatus()
+            break
+        case .SetProgress:
+            self.progressSliderValue = jamsPlayer.position_ms
+        }
     }
+
 }

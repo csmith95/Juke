@@ -23,7 +23,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="axo-dW-5ac">
-                                <rect key="frame" x="65.5" y="490" width="244" height="44"/>
+                                <rect key="frame" x="66" y="490" width="244" height="44"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cGf-is-wdM">
                                         <rect key="frame" x="0.0" y="0.0" width="244" height="44"/>
@@ -35,13 +35,13 @@
                                 </subviews>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="J U K E" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RgK-6X-B7t">
-                                <rect key="frame" x="138.5" y="60" width="98" height="35.5"/>
+                                <rect key="frame" x="139" y="60" width="98" height="35.5"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="30"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="For friends, family and music lovers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I6B-Rc-1mi">
-                                <rect key="frame" x="59" y="103" width="257" height="20.5"/>
+                                <rect key="frame" x="59" y="103.5" width="257" height="20.5"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -148,17 +148,110 @@
                                 </view>
                                 <blurEffect style="light"/>
                             </visualEffectView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" indicatorStyle="black" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="132" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="92D-Pw-sEn">
-                                <rect key="frame" x="0.0" y="146" width="375" height="521"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" indicatorStyle="black" dataMode="prototypes" style="plain" rowHeight="132" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="92D-Pw-sEn">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <searchBar key="tableHeaderView" contentMode="redraw" showsScopeBar="YES" id="w6p-px-r25">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="88"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                    <scopeButtonTitles>
+                                        <string>Streams</string>
+                                        <string>Friends</string>
+                                    </scopeButtonTitles>
+                                </searchBar>
                                 <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FriendCell" rowHeight="100" id="wuT-uc-e1B" customClass="FriendCell" customModule="Juke" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="72" width="375" height="100"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wuT-uc-e1B" id="Gsb-Gu-jo8">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="99.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XG5-i5-1zf" userLabel="Stream Member Image View">
+                                                    <rect key="frame" x="8" y="20" width="60" height="60"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="60" id="VBY-iW-5AE"/>
+                                                        <constraint firstAttribute="height" constant="60" id="pgG-q8-7sE"/>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                            <real key="value" value="32.5"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cvL-mF-kC3" userLabel="Member Display Name Label">
+                                                    <rect key="frame" x="8" y="-8" width="50" height="25"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="21"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="teg-CY-mor">
+                                                    <rect key="frame" x="46" y="59" width="30" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="30" id="KLi-PT-y3L"/>
+                                                        <constraint firstAttribute="width" constant="30" id="ozY-sZ-lmp"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kgk-fN-2rW">
+                                                    <rect key="frame" x="261" y="50" width="106" height="30"/>
+                                                    <state key="normal" title="Invite to stream">
+                                                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
+                                                    <state key="selected" title="Invited!"/>
+                                                    <connections>
+                                                        <action selector="inviteToStreamPressed:" destination="wuT-uc-e1B" eventType="touchUpInside" id="Prn-HL-HVA"/>
+                                                    </connections>
+                                                </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stream Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zLZ-0R-0Y7">
+                                                    <rect key="frame" x="88" y="20" width="105" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Plg-az-XtL">
+                                                    <rect key="frame" x="88" y="49" width="80" height="30"/>
+                                                    <state key="normal" title="Join stream">
+                                                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
+                                                    <state key="selected" title="Joining..."/>
+                                                    <connections>
+                                                        <action selector="joinStreamPressed:" destination="wuT-uc-e1B" eventType="touchUpInside" id="oPf-nE-PjP"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstItem="XG5-i5-1zf" firstAttribute="top" secondItem="zLZ-0R-0Y7" secondAttribute="bottom" constant="-21" id="3sc-yA-tjP"/>
+                                                <constraint firstItem="Plg-az-XtL" firstAttribute="top" secondItem="XG5-i5-1zf" secondAttribute="bottom" constant="-31" id="EMp-pV-6ra"/>
+                                                <constraint firstItem="teg-CY-mor" firstAttribute="leading" secondItem="XG5-i5-1zf" secondAttribute="trailing" constant="-22" id="MJB-IX-irf"/>
+                                                <constraint firstItem="teg-CY-mor" firstAttribute="baseline" secondItem="XG5-i5-1zf" secondAttribute="baseline" constant="9" id="MaF-El-XuQ"/>
+                                                <constraint firstAttribute="leadingMargin" secondItem="XG5-i5-1zf" secondAttribute="leading" id="TpD-e2-wHl"/>
+                                                <constraint firstItem="zLZ-0R-0Y7" firstAttribute="leading" secondItem="XG5-i5-1zf" secondAttribute="trailing" constant="20" id="ULd-6m-z1T"/>
+                                                <constraint firstItem="Plg-az-XtL" firstAttribute="leading" secondItem="XG5-i5-1zf" secondAttribute="trailing" constant="20" id="Uq6-jy-8VR"/>
+                                                <constraint firstItem="kgk-fN-2rW" firstAttribute="top" secondItem="XG5-i5-1zf" secondAttribute="bottom" constant="-30" id="djq-ZD-Ghf"/>
+                                                <constraint firstItem="XG5-i5-1zf" firstAttribute="centerY" secondItem="Gsb-Gu-jo8" secondAttribute="centerY" id="oQR-Pj-Qa5"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="kgk-fN-2rW" secondAttribute="trailing" id="w4e-s9-q9r"/>
+                                                <constraint firstAttribute="leadingMargin" secondItem="cvL-mF-kC3" secondAttribute="leading" id="yho-cC-CgZ"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="friendImageView" destination="XG5-i5-1zf" id="emt-nN-eW2"/>
+                                            <outlet property="joinStreamButton" destination="Plg-az-XtL" id="0oy-W4-BuT"/>
+                                            <outlet property="memberNameLabel" destination="cvL-mF-kC3" id="4Dr-Xj-QLY"/>
+                                            <outlet property="presenceDot" destination="teg-CY-mor" id="CTb-8a-0XC"/>
+                                            <outlet property="streamNameLabel" destination="zLZ-0R-0Y7" id="yqh-PN-dKv"/>
+                                        </connections>
+                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StreamCell" rowHeight="132" id="zyp-1U-jUo" customClass="StreamCell" customModule="Juke" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="132"/>
+                                        <rect key="frame" x="0.0" y="172" width="375" height="132"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zyp-1U-jUo" id="gVb-Ra-gLQ">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="132"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="131.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5nB-OQ-3xx">
@@ -201,13 +294,13 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Song" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H37-2U-rxa">
-                                                    <rect key="frame" x="129" y="41" width="59" height="29.5"/>
+                                                    <rect key="frame" x="129" y="41" width="59" height="30"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="25"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hqm-qn-moX">
-                                                    <rect key="frame" x="129" y="74.5" width="29" height="13.5"/>
+                                                    <rect key="frame" x="129" y="74" width="29" height="14"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -327,14 +420,14 @@
                     </view>
                     <navigationItem key="navigationItem" id="TJ8-4c-6Ac"/>
                     <connections>
-                        <outlet property="backgroundImage" destination="xK8-0P-X9M" id="Bcf-PT-gmr"/>
-                        <outlet property="friendsCollectionView" destination="Kvd-5E-z8k" id="vM5-yA-8yR"/>
-                        <outlet property="tableView" destination="92D-Pw-sEn" id="tmR-Lr-szb"/>
+                        <outlet property="backgroundImage" destination="xK8-0P-X9M" id="ZA7-1k-mhf"/>
+                        <outlet property="searchBar" destination="w6p-px-r25" id="ThT-Fy-ajJ"/>
+                        <outlet property="tableView" destination="92D-Pw-sEn" id="dxG-aN-dAT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Zh-KY-qYg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2324" y="-72.413793103448285"/>
+            <point key="canvasLocation" x="2285.5999999999999" y="-72.413793103448285"/>
         </scene>
         <!--Discover-->
         <scene sceneID="qev-iE-LNt">
@@ -348,10 +441,15 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="sKr-T1-iDy" kind="relationship" relationship="rootViewController" id="5tk-hP-u1F"/>
+                        <segue destination="sKr-T1-iDy" kind="relationship" relationship="rootViewController" id="7Bb-US-DfE"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wkY-6g-z1U" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchBar contentMode="redraw" id="VfY-UF-clD">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <textInputTraits key="textInputTraits"/>
+                </searchBar>
             </objects>
             <point key="canvasLocation" x="1286" y="-71"/>
         </scene>
@@ -388,8 +486,8 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <textInputTraits key="textInputTraits"/>
                             <scopeButtonTitles>
-                                <string>Title</string>
-                                <string>Title</string>
+                                <string>My Library</string>
+                                <string>Spotify</string>
                             </scopeButtonTitles>
                         </searchBar>
                         <prototypes>
@@ -409,11 +507,11 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tjh-8I-GdK">
-                                            <rect key="frame" x="337" y="8" width="30" height="34"/>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tjh-8I-GdK">
+                                            <rect key="frame" x="337" y="8" width="30" height="33"/>
                                             <accessibility key="accessibilityConfiguration" identifier="addToStreamButton"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="27"/>
-                                            <state key="normal" title="+"/>
+                                            <state key="normal" image="ic_playlist_add"/>
+                                            <state key="selected" image="ic_playlist_add_check"/>
                                             <connections>
                                                 <action selector="queueSongButtonTapped:" destination="oae-Ar-DXl" eventType="touchUpInside" id="mdE-wd-NM1"/>
                                             </connections>
@@ -501,13 +599,13 @@ Hit the search tab to add new songs.</string>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uai-2k-heq">
-                                                                    <rect key="frame" x="330" y="302.5" width="36.5" height="16"/>
+                                                                    <rect key="frame" x="330" y="302" width="36.5" height="16"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <stackView contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="VzB-Dy-jlV" userLabel="Controls Stack View">
-                                                                    <rect key="frame" x="61" y="114" width="253" height="48"/>
+                                                                <stackView contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="VzB-Dy-jlV" userLabel="Controls Stack View">
+                                                                    <rect key="frame" x="47" y="114" width="281" height="48"/>
                                                                     <subviews>
                                                                         <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BEA-4i-jB0">
                                                                             <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
@@ -518,28 +616,29 @@ Hit the search tab to add new songs.</string>
                                                                             </connections>
                                                                         </button>
                                                                         <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IwY-dS-tGg">
-                                                                            <rect key="frame" x="56" y="0.0" width="29" height="48"/>
+                                                                            <rect key="frame" x="63" y="0.0" width="29" height="48"/>
                                                                             <state key="normal" image="trash"/>
                                                                             <connections>
-                                                                                <action selector="clearStreamButtonPressed:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="SdG-ol-wN2"/>
+                                                                                <action selector="clearStream:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="cRf-SQ-r5b"/>
                                                                             </connections>
                                                                         </button>
                                                                         <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="21b-0y-uN8">
-                                                                            <rect key="frame" x="93" y="0.0" width="48" height="48"/>
+                                                                            <rect key="frame" x="107" y="0.0" width="48" height="48"/>
                                                                             <state key="normal" image="ic_play_arrow_white_48pt"/>
+                                                                            <state key="selected" image="ic_pause_white_48pt"/>
                                                                             <connections>
                                                                                 <action selector="toggleListening:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="1HC-Bg-hgv"/>
                                                                             </connections>
                                                                         </button>
                                                                         <button hidden="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ejJ-SU-iib" userLabel="Skip Button">
-                                                                            <rect key="frame" x="149" y="0.0" width="48" height="48"/>
+                                                                            <rect key="frame" x="170" y="0.0" width="48" height="48"/>
                                                                             <state key="normal" image="ic_fast_forward_white_48pt"/>
                                                                             <connections>
                                                                                 <action selector="skipSong:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="Wd7-5i-aAN"/>
                                                                             </connections>
                                                                         </button>
                                                                         <button hidden="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ezo-F5-eLp" userLabel="Leave Button">
-                                                                            <rect key="frame" x="205" y="0.0" width="48" height="48"/>
+                                                                            <rect key="frame" x="233" y="0.0" width="48" height="48"/>
                                                                             <accessibility key="accessibilityConfiguration" hint="Leave stream" label="Leave stream">
                                                                                 <accessibilityTraits key="traits" button="YES"/>
                                                                             </accessibility>
@@ -578,40 +677,31 @@ Hit the search tab to add new songs.</string>
                                                                     </constraints>
                                                                     <color key="thumbTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                 </slider>
-                                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_notifications_active_white" translatesAutoresizingMaskIntoConstraints="NO" id="7fd-Uv-Iy4">
-                                                                    <rect key="frame" x="8" y="72" width="24" height="24"/>
-                                                                </imageView>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Teddy just joined" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="MU9-8t-FBg">
-                                                                    <rect key="frame" x="36" y="76.5" width="93.5" height="15.5"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="btf-jU-fnV">
+                                                                    <rect key="frame" x="331.5" y="77" width="7.5" height="15.5"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
                                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_account_circle_white" translatesAutoresizingMaskIntoConstraints="NO" id="mOR-i4-KrY">
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LcZ-kx-edO">
                                                                     <rect key="frame" x="343" y="72" width="24" height="24"/>
-                                                                </imageView>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="btf-jU-fnV">
-                                                                    <rect key="frame" x="324.5" y="76.5" width="14.5" height="15.5"/>
-                                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
-                                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
+                                                                    <state key="normal" image="ic_account_circle_white"/>
+                                                                    <connections>
+                                                                        <segue destination="i5P-dU-G7f" kind="show" id="fGd-Hc-Qna"/>
+                                                                    </connections>
+                                                                </button>
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
                                                             <constraints>
                                                                 <constraint firstItem="tkt-ad-C7g" firstAttribute="centerX" secondItem="8fy-NS-tFB" secondAttribute="centerX" id="4kr-y3-eoH"/>
                                                                 <constraint firstItem="Wuc-bt-vVA" firstAttribute="top" secondItem="VzB-Dy-jlV" secondAttribute="bottom" constant="17" id="4yx-DM-x5N"/>
-                                                                <constraint firstAttribute="trailing" secondItem="mOR-i4-KrY" secondAttribute="trailing" constant="8" id="AC1-5h-szU"/>
-                                                                <constraint firstItem="MU9-8t-FBg" firstAttribute="leading" secondItem="7fd-Uv-Iy4" secondAttribute="trailing" constant="4" id="KJO-Vi-jY3"/>
-                                                                <constraint firstItem="MU9-8t-FBg" firstAttribute="centerY" secondItem="7fd-Uv-Iy4" secondAttribute="centerY" id="LQN-cG-86o"/>
                                                                 <constraint firstAttribute="bottom" secondItem="eR1-0n-Twz" secondAttribute="bottom" constant="8.5" id="OTe-YH-COl"/>
-                                                                <constraint firstItem="7fd-Uv-Iy4" firstAttribute="leading" secondItem="8fy-NS-tFB" secondAttribute="leading" constant="8" id="QFd-N6-1jY"/>
                                                                 <constraint firstAttribute="bottom" secondItem="tkt-ad-C7g" secondAttribute="bottom" constant="41" id="QJW-4l-obN"/>
                                                                 <constraint firstItem="Uai-2k-heq" firstAttribute="leading" secondItem="eR1-0n-Twz" secondAttribute="trailing" constant="8" symbolic="YES" id="SCZ-wD-vIH"/>
-                                                                <constraint firstItem="mOR-i4-KrY" firstAttribute="leading" secondItem="btf-jU-fnV" secondAttribute="trailing" constant="4" id="V7M-Gj-T5B"/>
                                                                 <constraint firstItem="VzB-Dy-jlV" firstAttribute="centerX" secondItem="8fy-NS-tFB" secondAttribute="centerX" id="X7B-iy-tiZ"/>
-                                                                <constraint firstItem="mOR-i4-KrY" firstAttribute="centerY" secondItem="btf-jU-fnV" secondAttribute="centerY" id="b8U-X8-H1D"/>
                                                                 <constraint firstItem="eR1-0n-Twz" firstAttribute="centerY" secondItem="Uai-2k-heq" secondAttribute="centerY" id="ens-Ss-LSC"/>
+                                                                <constraint firstAttribute="trailing" secondItem="LcZ-kx-edO" secondAttribute="trailing" constant="8" id="l17-q0-QlR"/>
                                                                 <constraint firstItem="Wuc-bt-vVA" firstAttribute="centerX" secondItem="8fy-NS-tFB" secondAttribute="centerX" id="sVy-4f-i8k"/>
                                                                 <constraint firstItem="eR1-0n-Twz" firstAttribute="leading" secondItem="8fy-NS-tFB" secondAttribute="leading" constant="8" id="uvi-l4-QDU"/>
                                                             </constraints>
@@ -662,32 +752,16 @@ Hit the search tab to add new songs.</string>
                                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KvG-n0-d1q" userLabel="NumVotes">
-                                                                        <rect key="frame" x="309" y="14" width="18" height="19"/>
-                                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
-                                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Una-Uf-Ig4" userLabel="UpvoteButton">
-                                                                        <rect key="frame" x="282" y="11" width="24" height="24"/>
-                                                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                                                        <color key="tintColor" red="0.22924725709999999" green="0.79605468749999997" blue="0.1238992755" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                        <state key="normal" image="ic_thumb_up_white"/>
-                                                                    </button>
                                                                 </subviews>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                 <constraints>
                                                                     <constraint firstItem="cIG-we-DoN" firstAttribute="leading" secondItem="guB-Fj-CpO" secondAttribute="leadingMargin" constant="3" id="60a-AF-T4h"/>
-                                                                    <constraint firstItem="nB6-JX-2QM" firstAttribute="centerY" secondItem="KvG-n0-d1q" secondAttribute="centerY" id="9x5-l8-eRF"/>
                                                                     <constraint firstAttribute="topMargin" secondItem="66x-Jw-w2Y" secondAttribute="top" id="KsA-ms-qor"/>
                                                                     <constraint firstAttribute="trailingMargin" secondItem="nB6-JX-2QM" secondAttribute="trailing" constant="2" id="U7B-t5-47a"/>
                                                                     <constraint firstItem="nB6-JX-2QM" firstAttribute="centerY" secondItem="guB-Fj-CpO" secondAttribute="centerY" id="a5i-gB-2Hn"/>
                                                                     <constraint firstAttribute="bottomMargin" secondItem="cIG-we-DoN" secondAttribute="bottom" constant="0.5" id="gCV-B0-dSD"/>
-                                                                    <constraint firstItem="KvG-n0-d1q" firstAttribute="centerY" secondItem="Una-Uf-Ig4" secondAttribute="centerY" id="lTs-8b-4F4"/>
                                                                     <constraint firstItem="66x-Jw-w2Y" firstAttribute="leading" secondItem="guB-Fj-CpO" secondAttribute="leadingMargin" constant="3" id="mOu-89-QgC"/>
                                                                     <constraint firstItem="cIG-we-DoN" firstAttribute="leading" secondItem="66x-Jw-w2Y" secondAttribute="leading" id="r3e-8d-VQL"/>
-                                                                    <constraint firstItem="KvG-n0-d1q" firstAttribute="leading" secondItem="Una-Uf-Ig4" secondAttribute="trailing" constant="3" id="rcQ-6y-4Gh"/>
-                                                                    <constraint firstItem="nB6-JX-2QM" firstAttribute="leading" secondItem="KvG-n0-d1q" secondAttribute="trailing" constant="8" id="wES-5h-I30"/>
                                                                 </constraints>
                                                             </tableViewCellContentView>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -726,10 +800,9 @@ Hit the search tab to add new songs.</string>
                             <constraint firstItem="FBD-Bc-P0S" firstAttribute="top" secondItem="Jo7-bX-PbC" secondAttribute="bottom" constant="-45" id="87v-2Z-A7h"/>
                             <constraint firstItem="6g6-Dn-cTu" firstAttribute="centerX" secondItem="anw-CE-bmV" secondAttribute="centerX" id="Cle-5R-HyU"/>
                             <constraint firstItem="6g6-Dn-cTu" firstAttribute="centerY" secondItem="anw-CE-bmV" secondAttribute="centerY" id="Gct-dQ-XzZ"/>
-                            <constraint firstItem="mOR-i4-KrY" firstAttribute="top" secondItem="juU-UA-GAC" secondAttribute="bottom" constant="8" id="IMq-es-6I1"/>
                             <constraint firstItem="HkN-cu-19h" firstAttribute="height" secondItem="anw-CE-bmV" secondAttribute="height" id="MwK-jB-8tz"/>
                             <constraint firstItem="VzB-Dy-jlV" firstAttribute="top" secondItem="juU-UA-GAC" secondAttribute="bottom" constant="50" id="R9g-O9-HX1"/>
-                            <constraint firstItem="7fd-Uv-Iy4" firstAttribute="top" secondItem="juU-UA-GAC" secondAttribute="bottom" constant="8" id="VZo-Wn-0XL"/>
+                            <constraint firstItem="LcZ-kx-edO" firstAttribute="top" secondItem="juU-UA-GAC" secondAttribute="bottom" constant="8" id="SAA-a0-MWa"/>
                             <constraint firstItem="HkN-cu-19h" firstAttribute="width" secondItem="anw-CE-bmV" secondAttribute="width" id="mhL-wN-WIR"/>
                             <constraint firstItem="6g6-Dn-cTu" firstAttribute="width" secondItem="anw-CE-bmV" secondAttribute="width" id="moH-oX-aMF"/>
                             <constraint firstItem="HkN-cu-19h" firstAttribute="centerX" secondItem="anw-CE-bmV" secondAttribute="centerX" id="zMk-0b-Zyf"/>
@@ -743,13 +816,14 @@ Hit the search tab to add new songs.</string>
                         <outlet property="bgblurimg" destination="6g6-Dn-cTu" id="nAy-5E-5Ac"/>
                         <outlet property="clearStreamButton" destination="IwY-dS-tGg" id="eoN-rJ-VaN"/>
                         <outlet property="coverArtImage" destination="uqG-GS-V2m" id="3LV-sy-g6l"/>
-                        <outlet property="currTimeLabel" destination="Uai-2k-heq" id="Dis-GJ-Uft"/>
+                        <outlet property="currTimeLabel" destinati
+                                on="Uai-2k-heq" id="Dis-GJ-Uft"/>
                         <outlet property="currentArtistLabel" destination="2fl-wu-vGl" id="dXu-2A-lBv"/>
                         <outlet property="currentSongLabel" destination="q6y-f2-E0O" id="eAL-pz-Zqn"/>
                         <outlet property="exitStreamButton" destination="ezo-F5-eLp" id="mFE-oS-pfQ"/>
                         <outlet property="listenButton" destination="21b-0y-uN8" id="cmB-EF-yGz"/>
                         <outlet property="noSongsLabel" destination="tkt-ad-C7g" id="aXU-RR-aK0"/>
-                        <outlet property="numMembersLabel" destination="btf-jU-fnV" id="tMz-Lj-7g4"/>
+                        <outlet property="numMembersLabel" destination="btf-jU-fnV" id="Y01-4S-pc7"/>
                         <outlet property="progressSlider" destination="eR1-0n-Twz" id="ezU-e0-roi"/>
                         <outlet property="skipButton" destination="ejJ-SU-iib" id="qde-uY-gEp"/>
                         <outlet property="tableView" destination="Jo7-bX-PbC" id="84I-x7-Ouc"/>
@@ -758,6 +832,216 @@ Hit the search tab to add new songs.</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CCt-Z1-8jc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2680.8000000000002" y="679.61019490254876"/>
+        </scene>
+        <!--Stream Members Table View Controller-->
+        <scene sceneID="IL1-OL-EOl">
+            <objects>
+                <tableViewController id="i5P-dU-G7f" userLabel="Stream Members Table View Controller" customClass="StreamMembersTableViewController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" sectionHeaderHeight="28" sectionFooterHeight="28" id="5on-VX-IKG">
+                        <rect key="frame" x="0.0" y="94" width="375" height="524"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="Khg-3a-nLV" userLabel="Host View">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="v2L-Fk-a5w" userLabel="Host Image View">
+                                    <rect key="frame" x="8" y="8" width="65" height="65"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="65" id="QEF-hy-fVd"/>
+                                        <constraint firstAttribute="width" constant="65" id="vLn-q2-kYR"/>
+                                    </constraints>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                            <real key="value" value="32.5"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Host" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fXH-dE-9cz">
+                                    <rect key="frame" x="81" y="8" width="42" height="21"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-ThinItalic" family="Helvetica Neue" pointSize="14"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ovx-TS-wzz" userLabel="Host name">
+                                    <rect key="frame" x="82" y="28" width="50" height="25"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="21"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="RaB-ze-BSj" userLabel="Host Presence Indicator">
+                                    <rect key="frame" x="52" y="54" width="20" height="20"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="20" id="6Wn-eb-e09"/>
+                                        <constraint firstAttribute="width" constant="20" id="w1v-WC-5ZD"/>
+                                    </constraints>
+                                </imageView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <gestureRecognizers/>
+                            <constraints>
+                                <constraint firstItem="RaB-ze-BSj" firstAttribute="leading" secondItem="Khg-3a-nLV" secondAttribute="leading" constant="52" id="HDd-ce-9FI"/>
+                                <constraint firstItem="v2L-Fk-a5w" firstAttribute="leading" secondItem="Khg-3a-nLV" secondAttribute="leading" constant="8" id="Qak-uz-Lao"/>
+                                <constraint firstItem="ovx-TS-wzz" firstAttribute="leading" secondItem="v2L-Fk-a5w" secondAttribute="trailing" constant="9" id="a6E-U0-1am"/>
+                                <constraint firstItem="v2L-Fk-a5w" firstAttribute="centerY" secondItem="Khg-3a-nLV" secondAttribute="centerY" id="c9l-FT-V1f"/>
+                                <constraint firstItem="ovx-TS-wzz" firstAttribute="centerY" secondItem="Khg-3a-nLV" secondAttribute="centerY" id="fmf-nl-vZk"/>
+                                <constraint firstAttribute="bottom" secondItem="RaB-ze-BSj" secondAttribute="bottom" constant="6" id="lWA-HT-AzP"/>
+                            </constraints>
+                            <connections>
+                                <outletCollection property="gestureRecognizers" destination="ELh-EO-1NI" appends="YES" id="caq-mB-JrS"/>
+                            </connections>
+                        </view>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="StreamMemberCell" rowHeight="80" id="OuN-xA-Ji0" customClass="StreamMemberCell" customModule="Juke" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="108" width="375" height="80"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OuN-xA-Ji0" id="mAU-xD-MAp">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qYk-iK-OWM" userLabel="Stream Member Image View">
+                                            <rect key="frame" x="8" y="7" width="65" height="65"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="65" id="0rd-wN-7YL"/>
+                                                <constraint firstAttribute="height" constant="65" id="UM8-f4-Yhd"/>
+                                            </constraints>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                    <real key="value" value="32.5"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Au6-cf-I7P" userLabel="Member Display Name Label">
+                                            <rect key="frame" x="82" y="27" width="50" height="25"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="21"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4zd-MG-7u5">
+                                            <rect key="frame" x="52" y="54" width="20" height="20"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="20" id="UQJ-eq-ems"/>
+                                                <constraint firstAttribute="width" constant="20" id="pqg-jJ-mvm"/>
+                                            </constraints>
+                                        </imageView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="Au6-cf-I7P" firstAttribute="centerY" secondItem="mAU-xD-MAp" secondAttribute="centerY" id="3Bh-5h-7Du"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="4zd-MG-7u5" secondAttribute="bottom" constant="-2.5" id="BJ4-Hu-2m8"/>
+                                        <constraint firstItem="Au6-cf-I7P" firstAttribute="leading" secondItem="qYk-iK-OWM" secondAttribute="trailing" constant="9" id="OAv-Cp-JSx"/>
+                                        <constraint firstItem="qYk-iK-OWM" firstAttribute="centerY" secondItem="mAU-xD-MAp" secondAttribute="centerY" id="PNR-eT-LkM"/>
+                                        <constraint firstItem="4zd-MG-7u5" firstAttribute="leading" secondItem="mAU-xD-MAp" secondAttribute="leadingMargin" constant="44" id="UBe-R0-zTo"/>
+                                        <constraint firstAttribute="leadingMargin" secondItem="qYk-iK-OWM" secondAttribute="leading" id="lZs-BI-TKj"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="memberImage" destination="qYk-iK-OWM" id="fsD-r3-Y2O"/>
+                                    <outlet property="memberName" destination="Au6-cf-I7P" id="loe-qS-mJd"/>
+                                    <outlet property="presenceDot" destination="4zd-MG-7u5" id="UU8-9m-hVQ"/>
+                                    <segue destination="0tk-uQ-BnL" kind="show" identifier="userProfileSegue" id="Rax-g2-H4s"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="i5P-dU-G7f" id="nll-uH-g92"/>
+                            <outlet property="delegate" destination="i5P-dU-G7f" id="IWD-2R-d7l"/>
+                        </connections>
+                    </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics" barStyle="black" translucent="NO"/>
+                    <connections>
+                        <outlet property="hostImage" destination="v2L-Fk-a5w" id="PXq-OS-w76"/>
+                        <outlet property="hostName" destination="ovx-TS-wzz" id="FtI-vp-aSf"/>
+                        <outlet property="hostPresenceDot" destination="RaB-ze-BSj" id="szw-Sc-CUF"/>
+                        <outlet property="hostTapped" destination="ELh-EO-1NI" id="Q3p-za-ATP"/>
+                        <outlet property="streamMembersTableView" destination="5on-VX-IKG" id="sco-4q-0Ko"/>
+                        <outlet property="tableView" destination="5on-VX-IKG" id="g6R-9V-1WT"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Dh4-ct-6hD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="ELh-EO-1NI" userLabel="Host Cell Tap Gesture Recognizer">
+                    <connections>
+                        <action selector="hostCellTapped:" destination="i5P-dU-G7f" id="hDo-p3-zaD"/>
+                        <segue destination="0tk-uQ-BnL" kind="show" identifier="hostProfileSegue" id="wzn-k3-GC2"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="3473" y="680"/>
+        </scene>
+        <!--User Profile View Controller-->
+        <scene sceneID="sit-Nu-K5u">
+            <objects>
+                <viewController id="0tk-uQ-BnL" userLabel="User Profile View Controller" customClass="UserProfileViewController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="StQ-km-TCy"/>
+                        <viewControllerLayoutGuide type="bottom" id="FzO-Br-7dl"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="aqF-po-6O4">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="vCd-RR-gCy">
+                                <rect key="frame" x="88" y="190" width="200" height="287.5"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="OAh-9A-apt" userLabel="User Image View">
+                                        <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="200" id="0ER-ps-Ixw"/>
+                                            <constraint firstAttribute="height" constant="200" id="ksk-1A-uiC"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="100"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hXu-OG-TNa" userLabel="User Name Label">
+                                        <rect key="frame" x="0.0" y="216" width="200" height="22.5"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="19"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o6d-id-tAp" userLabel="Invite to stream Button">
+                                        <rect key="frame" x="0.0" y="254.5" width="200" height="33"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                                        <state key="normal" title="Invite to stream"/>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="hXu-OG-TNa" firstAttribute="centerX" secondItem="vCd-RR-gCy" secondAttribute="centerX" id="UkA-VR-aUi"/>
+                                    <constraint firstItem="o6d-id-tAp" firstAttribute="centerX" secondItem="vCd-RR-gCy" secondAttribute="centerX" id="Wq8-4y-gJg"/>
+                                </constraints>
+                            </stackView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bDv-At-kKW">
+                                <rect key="frame" x="248" y="347" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="4Qc-3w-j5u"/>
+                                    <constraint firstAttribute="width" constant="30" id="Wcs-wx-mx1"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="vCd-RR-gCy" firstAttribute="centerY" secondItem="aqF-po-6O4" secondAttribute="centerY" id="1MV-8W-AuY"/>
+                            <constraint firstItem="bDv-At-kKW" firstAttribute="leading" secondItem="OAh-9A-apt" secondAttribute="trailing" constant="-40.5" id="9Ch-jn-8kb"/>
+                            <constraint firstItem="vCd-RR-gCy" firstAttribute="centerX" secondItem="aqF-po-6O4" secondAttribute="centerX" id="Zvr-lA-LJu"/>
+                            <constraint firstItem="bDv-At-kKW" firstAttribute="top" secondItem="OAh-9A-apt" secondAttribute="bottom" constant="-43" id="ySv-YO-LCu"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="inviteToStreamBtn" destination="o6d-id-tAp" id="38A-pr-bkK"/>
+                        <outlet property="userImage" destination="OAh-9A-apt" id="WbY-f1-S6Y"/>
+                        <outlet property="userName" destination="hXu-OG-TNa" id="leK-Pv-S0D"/>
+                        <outlet property="userPresenceDot" destination="bDv-At-kKW" id="Yak-3G-Ias"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NKA-MQ-CEf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4274.3999999999996" y="689.5052473763119"/>
         </scene>
         <!--Stream-->
         <scene sceneID="1v4-e5-TKD">
@@ -778,6 +1062,78 @@ Hit the search tab to add new songs.</string>
             </objects>
             <point key="canvasLocation" x="1784.8" y="689.5052473763119"/>
         </scene>
+        <!--User Profile View Controller-->
+        <scene sceneID="kds-EF-NWa">
+            <objects>
+                <viewController id="vQ4-32-OZA" userLabel="User Profile View Controller" customClass="UserProfileViewController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="6Lh-Rh-0ts"/>
+                        <viewControllerLayoutGuide type="bottom" id="7TL-Fl-NMw"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="dyS-OP-byE">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="7xx-VS-c8n">
+                                <rect key="frame" x="88" y="190" width="200" height="287.5"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="id4-p3-J45" userLabel="User Image View">
+                                        <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="200" id="SBN-MC-0aO"/>
+                                            <constraint firstAttribute="height" constant="200" id="nGi-Bx-LRH"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="100"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TZV-Lq-4zQ" userLabel="User Name Label">
+                                        <rect key="frame" x="0.0" y="216" width="200" height="22.5"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="19"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Lr-2A-cjU" userLabel="Invite to stream Button">
+                                        <rect key="frame" x="0.0" y="254.5" width="200" height="33"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                                        <state key="normal" title="Invite to stream"/>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="1Lr-2A-cjU" firstAttribute="centerX" secondItem="7xx-VS-c8n" secondAttribute="centerX" id="ZHh-Dw-IQN"/>
+                                    <constraint firstItem="TZV-Lq-4zQ" firstAttribute="centerX" secondItem="7xx-VS-c8n" secondAttribute="centerX" id="aAY-9p-Grr"/>
+                                </constraints>
+                            </stackView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9CJ-Yb-UO4">
+                                <rect key="frame" x="248" y="347" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="C7b-h6-MBb"/>
+                                    <constraint firstAttribute="width" constant="30" id="f0A-JP-ujV"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="7xx-VS-c8n" firstAttribute="centerX" secondItem="dyS-OP-byE" secondAttribute="centerX" id="8Ej-ba-dwt"/>
+                            <constraint firstItem="9CJ-Yb-UO4" firstAttribute="top" secondItem="id4-p3-J45" secondAttribute="bottom" constant="-43" id="dUc-pD-P8s"/>
+                            <constraint firstItem="9CJ-Yb-UO4" firstAttribute="leading" secondItem="id4-p3-J45" secondAttribute="trailing" constant="-40.5" id="h1o-5t-OSM"/>
+                            <constraint firstItem="7xx-VS-c8n" firstAttribute="centerY" secondItem="dyS-OP-byE" secondAttribute="centerY" id="zLf-YC-BxX"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="inviteToStreamBtn" destination="1Lr-2A-cjU" id="esB-68-gY6"/>
+                        <outlet property="userImage" destination="id4-p3-J45" id="M2w-Uf-dcc"/>
+                        <outlet property="userName" destination="TZV-Lq-4zQ" id="Oaz-fX-tJZ"/>
+                        <outlet property="userPresenceDot" destination="9CJ-Yb-UO4" id="Wcg-T4-Nbc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uuY-hS-h8N" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3182" y="-72"/>
+        </scene>
     </scenes>
     <resources>
         <image name="checkmark" width="50" height="50"/>
@@ -785,13 +1141,17 @@ Hit the search tab to add new songs.</string>
         <image name="ic_account_circle_white" width="24" height="24"/>
         <image name="ic_exit_to_app_white_48pt" width="48" height="48"/>
         <image name="ic_fast_forward_white_48pt" width="48" height="48"/>
-        <image name="ic_notifications_active_white" width="24" height="24"/>
+        <image name="ic_pause_white_48pt" width="48" height="48"/>
         <image name="ic_play_arrow_white_48pt" width="48" height="48"/>
-        <image name="ic_thumb_up_white" width="24" height="24"/>
+        <image name="ic_playlist_add" width="24" height="24"/>
+        <image name="ic_playlist_add_check" width="24" height="24"/>
         <image name="jukedef" width="486" height="486"/>
         <image name="loginButton" width="244" height="44"/>
         <image name="music" width="29" height="29"/>
         <image name="plus" width="48" height="48"/>
         <image name="trash" width="29" height="29"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="wzn-k3-GC2"/>
+    </inferredMetricsTieBreakers>
 </document>

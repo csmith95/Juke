@@ -8,6 +8,7 @@
 
 import UIKit
 import ESTMusicIndicator
+import AlamofireImage
 
 class StreamCell: UITableViewCell {
 
@@ -24,35 +25,92 @@ class StreamCell: UITableViewCell {
     @IBOutlet var song: UILabel!
     @IBOutlet var username: UILabel!
     private var imageViewDict:[Int:UIImageView] = [:]
-    var indicator:ESTMusicIndicatorView!
+    private var indicator:ESTMusicIndicatorView!
+    private let defaultIcon = CircleFilter().filter(UIImage(named: "juke_icon")!)
+    private var coverArtFilter: ImageFilter!
+    private var defaultCoverArtImage: UIImage!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        imageViewDict[0] = ownerIcon
-        imageViewDict[1] = member1ImageView
-        imageViewDict[2] = member2ImageView
-        imageViewDict[3] = member3ImageView
-        imageViewDict[4] = member4ImageView
+        coverArtFilter = AspectScaledToFillSizeWithRoundedCornersFilter(
+            size: coverArt.frame.size,
+            radius: 20.0
+        )
+        defaultCoverArtImage = coverArtFilter.filter(#imageLiteral(resourceName: "jukedef"))
+        imageViewDict[0] = member1ImageView
+        imageViewDict[1] = member2ImageView
+        imageViewDict[2] = member3ImageView
+        imageViewDict[3] = member4ImageView
         indicator = ESTMusicIndicatorView.init(frame: musicIndicatorView.bounds)
         indicator.tintColor = .red
         indicator.sizeToFit()
         musicIndicatorView.addSubview(indicator)
     }
     
-    public func getImageViewForMember(index: Int) -> UIImageView {
-        return imageViewDict[index]!
+    public func populateCell(stream: Models.FirebaseStream) {
+        loadCellImages(stream: stream)
+        var titleString = stream.host.username.components(separatedBy: " ").first! + "'s stream"
+        if Current.stream.streamID == stream.streamID {
+            titleString = "Your Stream"
+        }
+        self.username.text = titleString
+        self.isUserInteractionEnabled = (Current.stream.streamID != stream.streamID)
+        if let song = stream.song {
+            self.artist.text = song.artistName
+            self.song.text = song.songName
+            self.blurredBgImage.af_setImage(withURL: URL(string: song.coverArtURL)!)
+        } else {
+            self.artist.text = ""
+            self.song.text = ""
+            self.blurredBgImage.image = #imageLiteral(resourceName: "jukedef")
+        }
+        indicator.state = (stream.isPlaying) ? .playing : .stopped
     }
     
-    public func setMusicIndicator(play: Bool) {
-        indicator.state = (play) ? .playing : .stopped
+    // set user icons
+    private func loadUserIcon(url: String?, imageView: UIImageView) {
+        if let unwrappedUrl = url {
+            imageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultIcon)
+        } else {
+            imageView.image = defaultIcon
+        }
+    }
+    
+    private func loadCoverArt(stream: Models.FirebaseStream) {
+        if let song = stream.song {
+            self.coverArt.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: defaultCoverArtImage, filter: coverArtFilter)
+        } else {
+            self.coverArt.image = defaultCoverArtImage
+        }
+    }
+    
+    private func loadCellImages(stream: Models.FirebaseStream) {
+        clearMemberIcons()  // start fresh
+        loadCoverArt(stream: stream)
+        // load owner icon
+        loadUserIcon(url: stream.host.imageURL, imageView: self.ownerIcon)
+        let numMemberIcons = stream.members.count
+        if numMemberIcons > 0 {
+            let numMemberIconsToDisplay = min(numMemberIcons, self.imageViewDict.count)
+            for i in 0..<numMemberIconsToDisplay {
+                loadUserIcon(url: stream.members[i].imageURL, imageView: self.imageViewDict[i]!)
+            }
+        } else {
+            self.clearMemberIcons()
+        }
+        // if there are more members than we're displaying, show a label
+        let remainder = stream.members.count - 5;
+        if remainder > 0 {
+            self.moreMembersLabel.text = "+ \(remainder) more member" + ((remainder > 1) ? "s" : "")
+            self.moreMembersLabel.isHidden = false
+        } else {
+            self.moreMembersLabel.isHidden = true
+        }
     }
     
     public func clearMemberIcons() {
-        for (i, imageView) in imageViewDict {
-            if i == 0 {
-                continue    // don't clear owner icon
-            }
+        for (_, imageView) in imageViewDict {
             imageView.image = nil
         }
         moreMembersLabel.text = ""

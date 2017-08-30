@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import Unbox
 import AVFoundation
+import Firebase
 
 class LoginViewController: UIViewController {
 
@@ -19,8 +20,15 @@ class LoginViewController: UIViewController {
     var session:SPTSession!
     var player:AVPlayer?
     
+    // firebase vars
+    var ref: DatabaseReference!    
+    fileprivate var _refHandle: DatabaseHandle!
+    var users: [DataSnapshot]! = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // setup intro background vid
         let path = Bundle.main.path(forResource: "entrybkgnd", ofType: "mp4")
         player = AVPlayer(url: URL(fileURLWithPath: path!))
         let playerLayer = AVPlayerLayer(player: player)
@@ -33,6 +41,9 @@ class LoginViewController: UIViewController {
         loginButton.isHidden = true
         NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.updateAfterFirstLogin), name: NSNotification.Name("loginSuccessful"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.playerItemDidReachEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
+        
+        // setup firebase db ref
+        ref = Database.database().reference()
 
         
         let userDefaults = UserDefaults.standard
@@ -101,7 +112,8 @@ class LoginViewController: UIViewController {
     func fetchSpotifyUser(accessToken: String) {
         // first retrieve user object from spotify server using access token
         print("Fetching user")
-        CurrentUser.accessToken = accessToken
+        
+        Current.accessToken = accessToken
         let headers: HTTPHeaders = ["Authorization": "Bearer " + accessToken]
         let url = ServerConstants.kSpotifyBaseURL + ServerConstants.kCurrentUserPath
         Alamofire.request(url, method: .get, parameters: nil, encoding: URLEncoding.default, headers: headers).validate().responseJSON {
@@ -111,7 +123,7 @@ class LoginViewController: UIViewController {
                 do {
                     let dictionary = response.result.value as! UnboxableDictionary
                     let spotifyUser: Models.SpotifyUser = try unbox(dictionary: dictionary)
-                    self.addUserToJukeServer(spotifyUser: spotifyUser)
+                    self.fetchFirebaseUser(spotifyUser: spotifyUser)
                     print("Fetched user")
                 } catch {
                     print("error unboxing spotify user: ", error)
@@ -122,33 +134,77 @@ class LoginViewController: UIViewController {
         };
     }
     
-    func addUserToJukeServer(spotifyUser: Models.SpotifyUser) {
-        // create new user object in DB. if already exists with spotifyID, returns user object
-        let url = ServerConstants.kJukeServerURL + ServerConstants.kAddUser
-        let params: Parameters = [
-            "spotifyID": spotifyUser.spotifyID,
-            "username": (spotifyUser.username != nil) ? spotifyUser.username! : "",
-            "imageURL": (spotifyUser.imageURL != nil) ? spotifyUser.imageURL! : ""
-        ]
-        
-        Alamofire.request(url, method: .post, parameters: params).validate().responseJSON { response in
-            switch response.result {
-            case .success:
-                do {
-                    let unparsedJukeUser = response.result.value as! UnboxableDictionary
-                    let user: Models.User = try unbox(dictionary: unparsedJukeUser)
-                    CurrentUser.user = user
-                    DispatchQueue.main.async {
-                        print("loginSegue")
-                        self.performSegue(withIdentifier: "loginSegue", sender: nil)
-                    }
-                } catch {
-                    print("Error unboxing user: ", error)
+    func fetchFirebaseUser(spotifyUser: Models.SpotifyUser) {
+        ref.child("users/\(spotifyUser.spotifyID)").observeSingleEvent(of: .value, with: { (snapshot) in
+            if snapshot.exists() {
+                if var userDict = snapshot.value as? [String: Any?] {
+                    userDict["spotifyID"] = spotifyUser.spotifyID
+                    Current.user = Models.FirebaseUser(dict: userDict)
+                    self.ref.child("users/\(spotifyUser.spotifyID)/online").setValue(true)
                 }
-            case .failure(let error):
-                print("Error adding user to database: ", error)
+            } else {
+                // add user if user does not exist
+                var newUserDict: [String: Any?] = ["imageURL": spotifyUser.imageURL,
+                                                   "tunedInto": nil,
+                                                   "online": true]
+                if let username = spotifyUser.username {
+                    newUserDict["username"] = username
+                } else {
+                    newUserDict["username"] = spotifyUser.spotifyID // use spotifyID if no spotify username
+                }
+                // set firebase messaging token
+                let token = Messaging.messaging().fcmToken
+                print("FCM token: \(token ?? "")")
+                newUserDict["fcmToken"] = token
+                // write to firebase DB
+                self.ref.child("users").child(spotifyUser.spotifyID).setValue(newUserDict)
+                newUserDict["spotifyID"] = spotifyUser.spotifyID
+                Current.user = Models.FirebaseUser(dict: newUserDict)
             }
-        };
+            
+            // now that current user is set, fetch the user's stream object
+            self.fetchFirebaseStream()
+            
+        }) {(error) in
+            print(error.localizedDescription)
+        }
+    }
+    
+    private func fetchFirebaseStream() {
+        guard let tunedInto = Current.user.tunedInto else {
+            createNewStream()
+            return
+        }
+        
+        self.ref.child("streams/\(tunedInto)").observeSingleEvent(of: .value, with : { (snapshot) in
+            if let stream = Models.FirebaseStream(snapshot: snapshot) {
+                Current.stream = stream
+
+                // after stream assigned, addFirebaseHandlers
+                // MARK - why are you adding listeners here instead of elsewhere?
+                FirebaseAPI.addListeners()
+                
+                // login transition
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "loginSegue", sender: nil)
+                }
+            } else {
+                self.createNewStream()
+            }
+        }) {error in print(error.localizedDescription)}
+    }
+    
+    func createNewStream() {
+        // if no stream exists, create empty one for user
+        FirebaseAPI.createNewStream(removeFromCurrentStream: false) // no current stream to leave
+        
+        // after stream assigned, addFirebaseHandlers
+        FirebaseAPI.addListeners()
+        
+        // login transition
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "loginSegue", sender: nil)
+        }
     }
 
     override func didReceiveMemoryWarning() {

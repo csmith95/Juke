@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4A4F167F5B62F339520F3BEB /* Pods_Juke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9D54D33C710A946C6515520 /* Pods_Juke.framework */; };
 		4B0490E91E734614003F49DF /* SongTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0490E81E734614003F49DF /* SongTableViewCell.swift */; };
+		4B04E4591F55682C001605E2 /* CustomDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B04E4581F55682C001605E2 /* CustomDataSource.swift */; };
 		4B0FB5801E59A12C008D34FD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B0FB57F1E59A12C008D34FD /* CoreLocation.framework */; };
 		4B13DE4C1E8AFA970060D29A /* StreamCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B13DE4B1E8AFA970060D29A /* StreamCell.swift */; };
 		4B13DE4E1E8AFB850060D29A /* StreamsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B13DE4D1E8AFB850060D29A /* StreamsTableViewController.swift */; };
@@ -19,18 +20,21 @@
 		4B3A34E51E581F1300C314A0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E41E581F1300C314A0 /* AVFoundation.framework */; };
 		4B3A34E71E581F8F00C314A0 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */; };
 		4B3F95181F143BCA00CBEF79 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B3F95171F143BCA00CBEF79 /* Assets.xcassets */; };
-		4B425D6B1E79FADF0040BC3D /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B425D6A1E79FADF0040BC3D /* LocationManager.swift */; };
-		4B467E7E1F043E19000EA03C /* FriendCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B467E7D1F043E19000EA03C /* FriendCollectionViewCell.swift */; };
-		4B99E0511E790D150086394A /* SocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B99E0501E790D150086394A /* SocketManager.swift */; };
+		4B7C1EA11F484DF00064F1C3 /* FirebaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */; };
+		4B8CD0F81F51FF47005C61D1 /* FriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8CD0F71F51FF47005C61D1 /* FriendCell.swift */; };
 		4BA7CB701E8ED007003E3DC8 /* MyStreamController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */; };
-		4BA9B3F51E91B043003D352E /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA9B3F41E91B043003D352E /* CurrentUser.swift */; };
+		4BA9B3F51E91B043003D352E /* Current.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA9B3F41E91B043003D352E /* Current.swift */; };
 		4BDCEBA81E709F7F00D9D3EE /* JamsPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */; };
 		4BDCEC061E720D0B00D9D3EE /* ServerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEC051E720D0B00D9D3EE /* ServerConstants.swift */; };
 		4BF307B11E7797B9002CAE9E /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF307B01E7797B9002CAE9E /* CardTableViewCell.swift */; };
 		F2317CB41EB78FA8003ACBE7 /* entrybkgnd.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F2317CB31EB78FA8003ACBE7 /* entrybkgnd.mp4 */; };
+		F250A6D51F4181A600816AAC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F250A6D41F4181A600816AAC /* GoogleService-Info.plist */; };
 		F26A65301EB194F100ADB14E /* SpotifyAudioPlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26A652D1EB194F100ADB14E /* SpotifyAudioPlayback.framework */; };
 		F26A65311EB194F100ADB14E /* SpotifyAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26A652E1EB194F100ADB14E /* SpotifyAuthentication.framework */; };
 		F26A65321EB194F100ADB14E /* SpotifyMetadata.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26A652F1EB194F100ADB14E /* SpotifyMetadata.framework */; };
+		F27E0E911F4FF05400C4AE37 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F27E0E901F4FF05400C4AE37 /* UserProfileViewController.swift */; };
+		F2B49C501F4E710A007B55DA /* StreamMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B49C4F1F4E710A007B55DA /* StreamMemberCell.swift */; };
+		F2B49C521F4E9DC8007B55DA /* StreamMembersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B49C511F4E9DC8007B55DA /* StreamMembersTableViewController.swift */; };
 		F2DB0B331EA1145A00A13E30 /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DB0B321EA1145A00A13E30 /* SearchTableViewController.swift */; };
 		F2DB0B371EA14BA200A13E30 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DB0B361EA14BA200A13E30 /* SearchCell.swift */; };
 		F2E815581E90BBBC00404DDF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E815571E90BBBC00404DDF /* LoginViewController.swift */; };
@@ -39,6 +43,7 @@
 
 /* Begin PBXFileReference section */
 		4B0490E81E734614003F49DF /* SongTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongTableViewCell.swift; sourceTree = "<group>"; };
+		4B04E4581F55682C001605E2 /* CustomDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomDataSource.swift; sourceTree = "<group>"; };
 		4B0FB57F1E59A12C008D34FD /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		4B13DE4B1E8AFA970060D29A /* StreamCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamCell.swift; sourceTree = "<group>"; };
 		4B13DE4D1E8AFB850060D29A /* StreamsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamsTableViewController.swift; sourceTree = "<group>"; };
@@ -51,11 +56,10 @@
 		4B3A34E41E581F1300C314A0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4B3F95171F143BCA00CBEF79 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		4B425D6A1E79FADF0040BC3D /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
-		4B467E7D1F043E19000EA03C /* FriendCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendCollectionViewCell.swift; sourceTree = "<group>"; };
-		4B99E0501E790D150086394A /* SocketManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketManager.swift; sourceTree = "<group>"; };
+		4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseAPI.swift; sourceTree = "<group>"; };
+		4B8CD0F71F51FF47005C61D1 /* FriendCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendCell.swift; sourceTree = "<group>"; };
 		4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyStreamController.swift; sourceTree = "<group>"; };
-		4BA9B3F41E91B043003D352E /* CurrentUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
+		4BA9B3F41E91B043003D352E /* Current.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Current.swift; sourceTree = "<group>"; };
 		4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Juke-Bridging-Header.h"; sourceTree = "<group>"; };
 		4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JamsPlayer.swift; sourceTree = "<group>"; };
 		4BDCEC051E720D0B00D9D3EE /* ServerConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerConstants.swift; sourceTree = "<group>"; };
@@ -64,9 +68,13 @@
 		D9D54D33C710A946C6515520 /* Pods_Juke.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Juke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECDA8CAF8FCA9C3B7EFCAFF4 /* Pods-Juke.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Juke/Pods-Juke.debug.xcconfig"; sourceTree = "<group>"; };
 		F2317CB31EB78FA8003ACBE7 /* entrybkgnd.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = entrybkgnd.mp4; sourceTree = "<group>"; };
+		F250A6D41F4181A600816AAC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F26A652D1EB194F100ADB14E /* SpotifyAudioPlayback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAudioPlayback.framework; sourceTree = "<group>"; };
 		F26A652E1EB194F100ADB14E /* SpotifyAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAuthentication.framework; sourceTree = "<group>"; };
 		F26A652F1EB194F100ADB14E /* SpotifyMetadata.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyMetadata.framework; sourceTree = "<group>"; };
+		F27E0E901F4FF05400C4AE37 /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
+		F2B49C4F1F4E710A007B55DA /* StreamMemberCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamMemberCell.swift; sourceTree = "<group>"; };
+		F2B49C511F4E9DC8007B55DA /* StreamMembersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamMembersTableViewController.swift; sourceTree = "<group>"; };
 		F2DB0B321EA1145A00A13E30 /* SearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
 		F2DB0B361EA14BA200A13E30 /* SearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		F2E815571E90BBBC00404DDF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -113,29 +121,33 @@
 		4B3A34CB1E58120F00C314A0 /* Juke */ = {
 			isa = PBXGroup;
 			children = (
-				F2317CB31EB78FA8003ACBE7 /* entrybkgnd.mp4 */,
-				4B3F95171F143BCA00CBEF79 /* Assets.xcassets */,
-				F2317CB51EB7D3A5003ACBE7 /* Videos */,
-				F2E815571E90BBBC00404DDF /* LoginViewController.swift */,
-				4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */,
-				4BF307B01E7797B9002CAE9E /* CardTableViewCell.swift */,
 				4B3A34CC1E58120F00C314A0 /* AppDelegate.swift */,
-				4B3A34D51E58120F00C314A0 /* Main.storyboard */,
+				4B3F95171F143BCA00CBEF79 /* Assets.xcassets */,
+				4BF307B01E7797B9002CAE9E /* CardTableViewCell.swift */,
+				4BA9B3F41E91B043003D352E /* Current.swift */,
+				F2317CB31EB78FA8003ACBE7 /* entrybkgnd.mp4 */,
+				4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */,
+				4B8CD0F71F51FF47005C61D1 /* FriendCell.swift */,
+				F250A6D41F4181A600816AAC /* GoogleService-Info.plist */,
 				4B3A34DD1E58120F00C314A0 /* Info.plist */,
-				4B3A34CE1E58120F00C314A0 /* Juke.xcdatamodeld */,
-				4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */,
 				4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */,
+				4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */,
+				4B3A34CE1E58120F00C314A0 /* Juke.xcdatamodeld */,
+				F2E815571E90BBBC00404DDF /* LoginViewController.swift */,
+				4B3A34D51E58120F00C314A0 /* Main.storyboard */,
+				4B336A661E8B54A0003CEDBB /* Models.swift */,
+				4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */,
+				F2DB0B361EA14BA200A13E30 /* SearchCell.swift */,
+				F2DB0B321EA1145A00A13E30 /* SearchTableViewController.swift */,
 				4BDCEC051E720D0B00D9D3EE /* ServerConstants.swift */,
 				4B0490E81E734614003F49DF /* SongTableViewCell.swift */,
-				4B99E0501E790D150086394A /* SocketManager.swift */,
-				4B425D6A1E79FADF0040BC3D /* LocationManager.swift */,
 				4B13DE4B1E8AFA970060D29A /* StreamCell.swift */,
+				F2B49C4F1F4E710A007B55DA /* StreamMemberCell.swift */,
+				F2B49C511F4E9DC8007B55DA /* StreamMembersTableViewController.swift */,
 				4B13DE4D1E8AFB850060D29A /* StreamsTableViewController.swift */,
-				4B336A661E8B54A0003CEDBB /* Models.swift */,
-				4BA9B3F41E91B043003D352E /* CurrentUser.swift */,
-				F2DB0B321EA1145A00A13E30 /* SearchTableViewController.swift */,
-				F2DB0B361EA14BA200A13E30 /* SearchCell.swift */,
-				4B467E7D1F043E19000EA03C /* FriendCollectionViewCell.swift */,
+				F27E0E901F4FF05400C4AE37 /* UserProfileViewController.swift */,
+				F2317CB51EB7D3A5003ACBE7 /* Videos */,
+				4B04E4581F55682C001605E2 /* CustomDataSource.swift */,
 			);
 			path = Juke;
 			sourceTree = "<group>";
@@ -236,6 +248,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F2317CB41EB78FA8003ACBE7 /* entrybkgnd.mp4 in Resources */,
+				F250A6D51F4181A600816AAC /* GoogleService-Info.plist in Resources */,
 				4B3F95181F143BCA00CBEF79 /* Assets.xcassets in Resources */,
 				4B3A34D71E58120F00C314A0 /* Main.storyboard in Resources */,
 			);
@@ -297,22 +310,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B13DE4C1E8AFA970060D29A /* StreamCell.swift in Sources */,
+				4B8CD0F81F51FF47005C61D1 /* FriendCell.swift in Sources */,
 				4B336A671E8B54A0003CEDBB /* Models.swift in Sources */,
+				F27E0E911F4FF05400C4AE37 /* UserProfileViewController.swift in Sources */,
 				4BDCEC061E720D0B00D9D3EE /* ServerConstants.swift in Sources */,
 				4B3A34D01E58120F00C314A0 /* Juke.xcdatamodeld in Sources */,
 				4B0490E91E734614003F49DF /* SongTableViewCell.swift in Sources */,
 				4B13DE4E1E8AFB850060D29A /* StreamsTableViewController.swift in Sources */,
 				F2DB0B331EA1145A00A13E30 /* SearchTableViewController.swift in Sources */,
-				4B99E0511E790D150086394A /* SocketManager.swift in Sources */,
-				4B467E7E1F043E19000EA03C /* FriendCollectionViewCell.swift in Sources */,
 				4BA7CB701E8ED007003E3DC8 /* MyStreamController.swift in Sources */,
 				4BF307B11E7797B9002CAE9E /* CardTableViewCell.swift in Sources */,
-				4B425D6B1E79FADF0040BC3D /* LocationManager.swift in Sources */,
+				4B7C1EA11F484DF00064F1C3 /* FirebaseAPI.swift in Sources */,
 				F2E815581E90BBBC00404DDF /* LoginViewController.swift in Sources */,
+				4B04E4591F55682C001605E2 /* CustomDataSource.swift in Sources */,
+				F2B49C501F4E710A007B55DA /* StreamMemberCell.swift in Sources */,
+				F2B49C521F4E9DC8007B55DA /* StreamMembersTableViewController.swift in Sources */,
 				4B3A34CD1E58120F00C314A0 /* AppDelegate.swift in Sources */,
 				4BDCEBA81E709F7F00D9D3EE /* JamsPlayer.swift in Sources */,
 				F2DB0B371EA14BA200A13E30 /* SearchCell.swift in Sources */,
-				4BA9B3F51E91B043003D352E /* CurrentUser.swift in Sources */,
+				4BA9B3F51E91B043003D352E /* Current.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

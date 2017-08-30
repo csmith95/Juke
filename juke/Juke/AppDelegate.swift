@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import Alamofire
 import UserNotifications
+import Firebase
 
 
 @UIApplicationMain
@@ -19,11 +20,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     let kCallbackURL = "juke1231://callback"
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
-            // Enable or disable features based on authorization.
+        FirebaseApp.configure()
+        Database.database().isPersistenceEnabled = true // allow offline
+        let ref = Database.database().reference()
+        ref.keepSynced(true)
+        
+        // Auth firebase user and add to firebase db
+        Auth.auth().signInAnonymously(completion: { (user, error) in
+            print("user auth completed", user!.uid)
+        })
+        
+        // set up FCM
+        if #available(iOS 10.0, *) {
+            // For iOS 10 display notification (sent via APNS)
+            UNUserNotificationCenter.current().delegate = self
+            
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(
+                options: authOptions,
+                completionHandler: {_, _ in })
+        } else {
+            let settings: UIUserNotificationSettings =
+                UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            application.registerUserNotificationSettings(settings)
         }
+        
         application.registerForRemoteNotifications()
         return true
     }
@@ -83,20 +104,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        // for some reason the viewWillAppear isn't firing when app reopens, so this is
-        // necessary to trigger a stream refresh
-        NotificationCenter.default.post(name: Notification.Name("refreshStream"), object: nil);
-        SocketManager.sharedInstance.openConnection();
-        
-        // refresh spotify token
         
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
+        
+        print("app about to terminate, about to switch user to offline")
         self.saveContext()
-        SocketManager.sharedInstance.closeConnection()
     }
     
     // MARK: - Core Data stack
