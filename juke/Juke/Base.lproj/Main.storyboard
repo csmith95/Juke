@@ -816,8 +816,7 @@ Hit the search tab to add new songs.</string>
                         <outlet property="bgblurimg" destination="6g6-Dn-cTu" id="nAy-5E-5Ac"/>
                         <outlet property="clearStreamButton" destination="IwY-dS-tGg" id="eoN-rJ-VaN"/>
                         <outlet property="coverArtImage" destination="uqG-GS-V2m" id="3LV-sy-g6l"/>
-                        <outlet property="currTimeLabel" destinati
-                                on="Uai-2k-heq" id="Dis-GJ-Uft"/>
+                        <outlet property="currTimeLabel" destination="Uai-2k-heq" id="Dis-GJ-Uft"/>
                         <outlet property="currentArtistLabel" destination="2fl-wu-vGl" id="dXu-2A-lBv"/>
                         <outlet property="currentSongLabel" destination="q6y-f2-E0O" id="eAL-pz-Zqn"/>
                         <outlet property="exitStreamButton" destination="ezo-F5-eLp" id="mFE-oS-pfQ"/>
