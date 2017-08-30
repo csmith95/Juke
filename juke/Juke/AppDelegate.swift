@@ -17,7 +17,6 @@ import Firebase
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     var window: UIWindow?
-    let kCallbackURL = "juke1231://callback"
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
@@ -63,10 +62,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     @objc func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
         if SPTAuth.defaultInstance().canHandle(url) {
-            print("called appdelegate authenticator")
             SPTAuth.defaultInstance().handleAuthCallback(withTriggeredAuthURL: url as URL, callback: { (error, session) in
-                if error != nil {
-                    print("AUTHENTICATION ERROR")
+                if let err = error {
+                    print("AUTHENTICATION ERROR: \(err.localizedDescription)")
                     return
                 }
                 if let session = session {
@@ -74,10 +72,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     let userDefaults = UserDefaults.standard
                     let sessionData = NSKeyedArchiver.archivedData(withRootObject: session)
                     userDefaults.set(sessionData, forKey: "SpotifySession")
-                    print("userdefaults after authentication is", userDefaults)
-                    
-                    // notify ViewController to initiate loginSegue
-                    NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: session.accessToken)
+                    Current.accessToken = session.accessToken
+                    // notify views to dismiss webview and initiate loginSegue
+                    NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: nil)
                 }
             })
         } else {
