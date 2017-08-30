@@ -232,24 +232,17 @@ class FirebaseAPI {
 //
         // STREAM object updates
         if Current.isHost() {
-            // you are the host so update stream/host
+            // you are the host so update path: stream/host
             self.ref.child("/streams/\(Current.stream.streamID)/host/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
+            
+            // you are the host so pause stream playing
+            self.ref.child("/streams/\(Current.stream.streamID)/isPlaying").onDisconnectSetValue(false)
         } else {
             // you are not the host so update stream/members
             self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
         }
     }
-    
-    public static func cancelPresenceListeners() {
-//        if Current.isHost() {
-//            // you are the host so update stream/host
-//            self.ref.child("/streams/\(Current.stream.streamID)/host/\(Current.user.spotifyID)/online").onDisconnec
-//        } else {
-//            // you are not the host so update stream/members
-//            self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
-//        }
-        
-    }
+
     
     public static func setOnlineTrue() {
         // update main user object
@@ -412,6 +405,19 @@ class FirebaseAPI {
         observedPaths.removeAll()
     }
     
+    func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
+        print("Firebase registration token updated: \(fcmToken)")
+        // update token when token is reset
+        Current.user.fcmToken = fcmToken
+        FirebaseAPI.ref.child("users/\(Current.user.spotifyID)/fcmToken").setValue(fcmToken)
+        if Current.isHost() {
+            FirebaseAPI.ref.child("streams/\(Current.stream.streamID)/host/fcmToken").setValue(fcmToken)
+        } else {
+            FirebaseAPI.ref.child("streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/fcmToken").setValue(fcmToken)
+        }
+        
+    }
+
     public static func fetchStream(streamID: String, callback: @escaping ((_: Models.FirebaseStream?) -> Void)) {
         self.ref.child("/streams/\(streamID)").observeSingleEvent(of: .value, with:{ (snapshot) in
             if let stream = Models.FirebaseStream(snapshot: snapshot) {

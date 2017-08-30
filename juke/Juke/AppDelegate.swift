@@ -30,13 +30,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             print("user auth completed", user!.uid)
         })
         
-        // Override point for customization after application launch.
-//        let center = UNUserNotificationCenter.current()
-//        center.requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
-//            // Enable or disable features based on authorization.
-//        }
-//        application.registerForRemoteNotifications()
+        // set up FCM
+        if #available(iOS 10.0, *) {
+            // For iOS 10 display notification (sent via APNS)
+            UNUserNotificationCenter.current().delegate = self
+            
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(
+                options: authOptions,
+                completionHandler: {_, _ in })
+        } else {
+            let settings: UIUserNotificationSettings =
+                UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            application.registerUserNotificationSettings(settings)
+        }
         
+        application.registerForRemoteNotifications()
         return true
     }
     
