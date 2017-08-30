@@ -22,40 +22,27 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="axo-dW-5ac">
-                                <rect key="frame" x="66" y="490" width="244" height="44"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cGf-is-wdM">
-                                        <rect key="frame" x="0.0" y="0.0" width="244" height="44"/>
-                                        <state key="normal" image="loginButton"/>
-                                        <connections>
-                                            <action selector="loginWithSpotify:" destination="rXL-Ez-cdK" eventType="touchUpInside" id="SYl-Y3-4BS"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                            </stackView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="J U K E" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RgK-6X-B7t">
-                                <rect key="frame" x="139" y="60" width="98" height="35.5"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="30"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="For friends, family and music lovers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I6B-Rc-1mi">
-                                <rect key="frame" x="59" y="103.5" width="257" height="20.5"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cGf-is-wdM">
+                                <rect key="frame" x="65" y="484" width="244" height="44"/>
+                                <state key="normal" image="loginButton"/>
+                                <connections>
+                                    <action selector="loginWithSpotify:" destination="rXL-Ez-cdK" eventType="touchUpInside" id="SYl-Y3-4BS"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="juke_icon" translatesAutoresizingMaskIntoConstraints="NO" id="NU3-fV-f7r">
+                                <rect key="frame" x="87" y="209" width="200" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="Hmc-At-vyI"/>
+                                    <constraint firstAttribute="height" constant="200" id="dKI-tt-21R"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="I6B-Rc-1mi" firstAttribute="centerX" secondItem="5lq-Oi-Vmc" secondAttribute="centerX" id="39M-za-J5R"/>
-                            <constraint firstItem="axo-dW-5ac" firstAttribute="centerX" secondItem="5lq-Oi-Vmc" secondAttribute="centerX" id="5bQ-bx-4ho"/>
-                            <constraint firstItem="I6B-Rc-1mi" firstAttribute="top" secondItem="RgK-6X-B7t" secondAttribute="bottom" constant="7.5" id="Rq5-II-kID"/>
-                            <constraint firstItem="RgK-6X-B7t" firstAttribute="centerX" secondItem="5lq-Oi-Vmc" secondAttribute="centerX" id="ihO-zd-Wkd"/>
-                            <constraint firstItem="8Ce-6K-1JG" firstAttribute="top" secondItem="axo-dW-5ac" secondAttribute="bottom" constant="133" id="kYl-bA-pvi"/>
-                            <constraint firstItem="cGf-is-wdM" firstAttribute="centerX" secondItem="5lq-Oi-Vmc" secondAttribute="centerX" id="ng7-hd-Qi8"/>
-                            <constraint firstItem="RgK-6X-B7t" firstAttribute="top" secondItem="OZP-MI-sfN" secondAttribute="bottom" constant="40" id="tVJ-RW-a2E"/>
+                            <constraint firstItem="8Ce-6K-1JG" firstAttribute="top" secondItem="cGf-is-wdM" secondAttribute="bottom" constant="139" id="3Jn-Ey-gE9"/>
+                            <constraint firstItem="cGf-is-wdM" firstAttribute="top" secondItem="NU3-fV-f7r" secondAttribute="bottom" constant="75" id="898-WG-iMa"/>
+                            <constraint firstItem="NU3-fV-f7r" firstAttribute="centerX" secondItem="5lq-Oi-Vmc" secondAttribute="centerX" id="HKn-Kj-NSe"/>
+                            <constraint firstItem="cGf-is-wdM" firstAttribute="centerX" secondItem="5lq-Oi-Vmc" secondAttribute="centerX" id="tyg-y3-MEO"/>
                         </constraints>
                     </view>
                     <connections>
@@ -495,7 +482,7 @@
                                 <rect key="frame" x="0.0" y="72" width="375" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oae-Ar-DXl" id="QdY-VV-ach">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="80K-77-ogI">
@@ -730,7 +717,7 @@ Hit the search tab to add new songs.</string>
                                                             <rect key="frame" x="0.0" y="28" width="375" height="46"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0kb-sf-i9H" id="guB-Fj-CpO">
-                                                                <rect key="frame" x="0.0" y="0.0" width="375" height="46"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="375" height="45.5"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="66x-Jw-w2Y">
@@ -1144,6 +1131,7 @@ Hit the search tab to add new songs.</string>
         <image name="ic_play_arrow_white_48pt" width="48" height="48"/>
         <image name="ic_playlist_add" width="24" height="24"/>
         <image name="ic_playlist_add_check" width="24" height="24"/>
+        <image name="juke_icon" width="1041" height="1051"/>
         <image name="jukedef" width="486" height="486"/>
         <image name="loginButton" width="244" height="44"/>
         <image name="music" width="29" height="29"/>

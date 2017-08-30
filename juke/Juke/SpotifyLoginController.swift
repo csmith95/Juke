@@ -11,9 +11,10 @@ import UIKit
 class SpotifyLoginController: UIViewController, UIWebViewDelegate {
     
     let webView: UIWebView = UIWebView(frame: CGRect.zero)
-    let kClientId = "77d4489425fe464483f0934f99847c8b"
-    let kCallbackURL = "juke1231://callback"
-    var completion: (_ session: SPTSession)->Void = { (session: SPTSession) in }
+    let kClientID = "77d4489425fe464483f0934f99847c8b"
+    let kCallbackURL = URL(string:"juke1231://callback")!
+    let kTokenSwapURL = URL(string: "https://juketokenrefresh.herokuapp.com/swap")!
+    var completion: ()->Void = { }
     
     override func loadView() {
         super.loadView()
@@ -25,31 +26,26 @@ class SpotifyLoginController: UIViewController, UIWebViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.webView.delegate = self
+        NotificationCenter.default.addObserver(self, selector: #selector(loginSuccessful), name: NSNotification.Name("loginSuccessful"), object: nil)
     }
     
-    func login(completion: @escaping((_ session: SPTSession)->Void)) {
+    func login(completion: @escaping(()->Void)) {
         self.completion = completion
-        var loginURL: NSURL = SPTAuth.defaultInstance().loginURLForClientId(kClientId,
-                                                                            declaredRedirectURL: NSURL(string: kCallbackURL),
-                                                                            scopes: [SPTAuthStreamingScope, SPTAuthPlaylistReadPrivateScope, SPTAuthUserReadPrivateScope])
-        let request: NSURLRequest = NSURLRequest(URL: loginURL, cachePolicy: NSURLRequest.CachePolicy.ReloadIgnoringLocalCacheData, timeoutInterval: 10)
-        self.webView.loadRequest(request as URLRequest)
+        let auth = SPTAuth.defaultInstance()!
+        auth.clientID = kClientID
+        auth.redirectURL = kCallbackURL
+        auth.tokenSwapURL = kTokenSwapURL
+        auth.tokenRefreshURL = URL(string: "https://juketokenrefresh.herokuapp.com/refresh")
+        auth.requestedScopes = [SPTAuthStreamingScope, SPTAuthUserLibraryReadScope, SPTAuthUserReadPrivateScope, SPTAuthUserLibraryModifyScope]
+        let loginURL = SPTAuth.defaultInstance().spotifyWebAuthenticationURL()!
+        let request = URLRequest(url: loginURL, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10)
+        self.webView.loadRequest(request)
     }
     
-    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-        let url: NSURL = request.URL
-        if (SPTAuth.defaultInstance().canHandleURL(url, withDeclaredRedirectURL: NSURL(string:kCallbackURL))) {
-            SPTAuth.defaultInstance().handleAuthCallbackWithTriggeredAuthURL(url, tokenSwapServiceEndpointAtURL: NSURL(string: kTokenSwapServiceURL)) { (error, session) -> Void in
-                if (error != nil) {
-                    println("Auth error: \(error.localizedDescription)")
-                    return
-                }
-                self.dismissViewControllerAnimated(true) {
-                    self.completion(session: session)
-                }
-            }
+    func loginSuccessful() {
+        self.dismiss(animated: true) {
+            self.completion()
         }
-        return true
     }
     
 }
