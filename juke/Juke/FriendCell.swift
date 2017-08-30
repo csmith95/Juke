@@ -8,6 +8,7 @@
 
 import UIKit
 import AlamofireImage
+import PKHUD
 
 class FriendCell: UITableViewCell {
 
@@ -35,10 +36,25 @@ class FriendCell: UITableViewCell {
     
     
     @IBAction func joinStreamPressed(_ sender: Any) {
+        
+        guard let stream = self.stream else {
+            HUD.show(.progress)
+            HUD.flash(.error, delay: 1.0)
+            return
+        }
+        
         // join this stream
-        print("join stream")
         let button = sender as! UIButton
         button.isSelected = !button.isSelected
+        
+        HUD.show(.progress)
+        FirebaseAPI.joinStream(stream: stream) { success in
+            if success {
+                HUD.flash(.success, delay: 0.75)
+            } else {
+                HUD.flash(.error, delay: 1.0)
+            }
+        }
     }
     
     public func populateCell(member: Models.FirebaseUser) {

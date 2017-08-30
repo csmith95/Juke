@@ -27,7 +27,6 @@ class FirebaseAPI {
     // addDiscoverStreamsDataListener, these are set to true
     // if user joins new stream, these are reset to false
     private static var songQueueDataSourceSet = false
-    private static var allStreamsDataSourceSet = false
     private static var streamMembersDataSourceSet = false
     private static var streamDeletedListenerSet = false
     
@@ -78,7 +77,7 @@ class FirebaseAPI {
         let path = "/streams/\(Current.stream.streamID)/members"
         ref.child(path).observe(.childAdded, with:{ (snapshot) in
             // update Current stream
-            let member = Models.FirebaseUser(snapshot: snapshot)
+            guard let member = Models.FirebaseUser(snapshot: snapshot) else { return }
             if Current.stream.members.contains(where: { (other) -> Bool in
                 return member.spotifyID == other.spotifyID
             }) || Current.user.spotifyID == member.spotifyID {
@@ -103,7 +102,7 @@ class FirebaseAPI {
         ref.child(path).observe(.childRemoved, with:{ (snapshot) in
             
             // update Current stream
-            let member = Models.FirebaseUser(snapshot: snapshot)
+            guard let member = Models.FirebaseUser(snapshot: snapshot) else { return }
             guard let index = Current.stream.members.index(where: { (other) -> Bool in
                 return member.spotifyID == other.spotifyID
             }) else {
@@ -222,19 +221,6 @@ class FirebaseAPI {
             let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
             guard let song = Models.FirebaseSong(snapshot: snapshot) else { return cell }
             cell.populateCell(song: song)
-            return cell
-        }
-        return dataSource
-    }
-    
-    public static func addDiscoverStreamsTableViewListener(allStreamsTableView: UITableView?) -> FUITableViewDataSource? {
-        guard let tableView = allStreamsTableView else { return nil }
-        if allStreamsDataSourceSet { return nil }
-        allStreamsDataSourceSet = true
-        let dataSource = tableView.bind(to: FirebaseAPI.ref.child("streams")) { tableView, indexPath, snapshot in
-            let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell", for: indexPath) as! StreamCell
-            guard let stream = Models.FirebaseStream(snapshot: snapshot) else { return cell }
-            cell.populateCell(stream: stream)
             return cell
         }
         return dataSource
@@ -392,7 +378,6 @@ class FirebaseAPI {
         
         // tell view controllers to resync
         songQueueDataSourceSet = false
-        allStreamsDataSourceSet = false
         self.ref.cancelDisconnectOperations { (err, dbref) in
             // re-add listeners
             print("cancelled earlier disconnect and adding new listeners")
@@ -410,7 +395,7 @@ class FirebaseAPI {
         guard let tableView = streamMembersTableView else { return nil }
         let dataSource = tableView.bind(to: FirebaseAPI.ref.child("streams/\(Current.stream.streamID)/members")) { tableView, indexPath, snapshot in
             let cell = tableView.dequeueReusableCell(withIdentifier: "StreamMemberCell", for: indexPath) as! StreamMemberCell
-            let member = Models.FirebaseUser(snapshot: snapshot)
+            guard let member = Models.FirebaseUser(snapshot: snapshot) else { return cell }
             cell.populateMemberCell(member: member)
             return cell
         }
@@ -427,18 +412,6 @@ class FirebaseAPI {
         observedPaths.removeAll()
     }
     
-    public static func addFriendsTableViewListener(friendsTableView: UITableView?) -> FUITableViewDataSource? {
-        guard let tableView = friendsTableView else { return nil }
-        self.allStreamsDataSourceSet = false // so that it rebinds if user switches to discover streams scope
-        let dataSource = tableView.bind(to: FirebaseAPI.ref.child("users")) { tableView, indexPath, snapshot in
-            let cell = tableView.dequeueReusableCell(withIdentifier: "FriendCell", for: indexPath) as! FriendCell
-            let member = Models.FirebaseUser(snapshot: snapshot)
-            cell.populateCell(member: member)
-            return cell
-        }
-        return dataSource
-    }
-    
     public static func fetchStream(streamID: String, callback: @escaping ((_: Models.FirebaseStream?) -> Void)) {
         self.ref.child("/streams/\(streamID)").observeSingleEvent(of: .value, with:{ (snapshot) in
             if let stream = Models.FirebaseStream(snapshot: snapshot) {
@@ -447,6 +420,5 @@ class FirebaseAPI {
                 callback(nil)
             }
         })
-        
     }
 }

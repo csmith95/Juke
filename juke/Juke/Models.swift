@@ -122,7 +122,8 @@ class Models {
                 for member in membersDict {
                     var memberDict = member.value as! [String: Any?]
                     memberDict["spotifyID"] = member.key
-                    self.members.append(FirebaseUser(dict: memberDict))
+                    guard let parsedMember = FirebaseUser(dict: memberDict) else { return }
+                    self.members.append(parsedMember)
                 }
             }
             
@@ -164,15 +165,19 @@ class Models {
             return dict
         }
         
-        init(dict: [String: Any?]) {
-            self.spotifyID = dict["spotifyID"] as! String
+        init?(dict: [String: Any?]) {
+            guard let spotifyID = dict["spotifyID"] as? String else { return nil }
+            guard let username = dict["username"] as? String else { return nil }
+            guard let online = dict["online"] as? Bool else { return nil }
+            
+            self.spotifyID = spotifyID
             self.tunedInto = dict["tunedInto"] as? String
-            self.username = dict["username"] as! String
+            self.username = username
             self.imageURL = dict["imageURL"] as? String
-            self.online = dict["online"] as! Bool
+            self.online = online
         }
         
-        init(snapshot: DataSnapshot) {
+        init?(snapshot: DataSnapshot) {
             var dict = snapshot.value as! [String: Any?]
             dict["spotifyID"] = snapshot.key
             self.init(dict: dict)
