@@ -194,9 +194,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     }
     
     func songFinished() {
-        if Current.stream.song == nil  {
-            return
-        }
         progressSliderValue = 0.0   // reset
         if (Current.isHost()) {
             FirebaseAPI.popTopSong(dataSource: dataSource) // this pops top song and loads next, if any

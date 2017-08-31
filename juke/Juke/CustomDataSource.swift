@@ -52,6 +52,7 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     // and signal changes to view controller using post notifications
     private func updateCollection(type: DataEventType, snapshot: DataSnapshot) {
         let collectionItem = CollectionItem(snapshot: snapshot)
+        print(snapshot)
         objc_sync_enter(self)
         switch (type) {
         case .childAdded:
