@@ -274,44 +274,48 @@ class FirebaseAPI {
     public static func joinStream(stream: Models.FirebaseStream, callback: @escaping ((_: Bool) -> Void)) {
         let streamID = stream.streamID
         let currentStreamID = Current.stream.streamID
-        if currentStreamID != streamID {
-            ref.child("/streams/\(streamID)").observeSingleEvent(of: .value, with: { (snapshot) in
-                if !snapshot.exists() { callback(false); return; }    // do nothing if this new stream doesn't exist anymore (concurrency)
-                
-                if Current.isHost() || Current.stream.members.isEmpty {
-                    self.deleteCurrentStream()  // remove observers and delete resources if host
-                } else {
-                    removeAllObservers()   // simply remove observers if not host
-                }
-                
-                // reset var allowing song queue table view data source to sync
-                self.songQueueDataSourceSet = false
-                
-                // resync to new stream
-                let childUpdates: [String: Any] = ["/streams/\(streamID)/members/\(Current.user.spotifyID)": Current.user.firebaseDict,
-                                                    "/streams/\(currentStreamID)/members/\(Current.user.spotifyID)": NSNull(),
-                                                    "/users/\(Current.user.spotifyID)/tunedInto": streamID]
-                self.ref.updateChildValues(childUpdates)
-                
-                // sync local stream/user info with what was just written to the db above
-                Current.user.tunedInto = streamID
-                Current.stream = stream
-                Current.stream.members.append(Current.user)
-                
-                self.ref.cancelDisconnectOperations { (err, dbref) in
-                    // re-add listeners
-                    print("cancelled earlier disconnect and adding new listeners")
-                    self.addListeners()
-                }
-                
-                
-                // callback provided by StreamsTableViewController to communicate success/failure
-                callback(true)
-                
-                // post event telling controller to resync
-                NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.SwitchedStreams)
-            }) {error in print(error.localizedDescription)}
+        
+        if currentStreamID == streamID {
+            callback(false)
+            return
         }
+        
+        ref.child("/streams/\(streamID)").observeSingleEvent(of: .value, with: { (snapshot) in
+            if !snapshot.exists() { callback(false); return; }    // do nothing if this new stream doesn't exist anymore (concurrency)
+            
+            if Current.isHost() || Current.stream.members.isEmpty {
+                self.deleteCurrentStream()  // remove observers and delete resources if host
+            } else {
+                removeAllObservers()   // simply remove observers if not host
+            }
+            
+            // reset var allowing song queue table view data source to sync
+            self.songQueueDataSourceSet = false
+            
+            // resync to new stream
+            let childUpdates: [String: Any] = ["/streams/\(streamID)/members/\(Current.user.spotifyID)": Current.user.firebaseDict,
+                                                "/streams/\(currentStreamID)/members/\(Current.user.spotifyID)": NSNull(),
+                                                "/users/\(Current.user.spotifyID)/tunedInto": streamID]
+            self.ref.updateChildValues(childUpdates)
+            
+            // sync local stream/user info with what was just written to the db above
+            Current.user.tunedInto = streamID
+            Current.stream = stream
+            Current.stream.members.append(Current.user)
+            
+            self.ref.cancelDisconnectOperations { (err, dbref) in
+                // re-add listeners
+                print("cancelled earlier disconnect and adding new listeners")
+                self.addListeners()
+            }
+            
+            
+            // callback provided by StreamsTableViewController to communicate success/failure
+            callback(true)
+            
+            // post event telling controller to resync
+            NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.SwitchedStreams)
+        }) {error in print(error.localizedDescription)}
     }
     
     public static func setPlayStatus(status: Bool) {

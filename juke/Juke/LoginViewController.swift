@@ -55,18 +55,6 @@ class LoginViewController: UIViewController {
             loginButton.isHidden = false
         }
     }
-    
-    //if you are logging in for the first time and don't have a session that is going to be renewed
-//    func updateAfterFirstLogin() {
-//        loginButton.isHidden = true
-//        let userDefaults = UserDefaults.standard
-//        if let sessionObj = userDefaults.object(forKey: "SpotifySession") {
-//            let sessionDataObj = sessionObj as! Data
-//            let firstTimeSession = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
-//            Current.accessToken = firstTimeSession.accessToken
-//            fetchSpotifyUser()
-//        }
-//    }
 
     @IBAction func loginWithSpotify(_ sender: Any) {
         self.present(loginController, animated: true) {
@@ -145,7 +133,6 @@ class LoginViewController: UIViewController {
         }
         
         self.ref.child("streams/\(tunedInto)").observeSingleEvent(of: .value, with : { (snapshot) in
-            print("here")
             if let stream = Models.FirebaseStream(snapshot: snapshot) {
                 Current.stream = stream
 
@@ -155,7 +142,6 @@ class LoginViewController: UIViewController {
                 
                 // login transition
                 DispatchQueue.main.async {
-                    print("segue1")
                     self.performSegue(withIdentifier: "loginSegue", sender: nil)
                 }
             } else {

@@ -15,7 +15,7 @@ import SCLAlertView
 import Firebase
 import FirebaseDatabaseUI
 
-class StreamsTableViewController: UIViewController, UISearchBarDelegate {
+class StreamsTableViewController: UIViewController, UISearchBarDelegate, UIScrollViewDelegate {
     
     @IBOutlet var tableView: UITableView!
     @IBOutlet var backgroundImage: UIImageView!
@@ -37,22 +37,11 @@ class StreamsTableViewController: UIViewController, UISearchBarDelegate {
         tableView.delegate = streamsDataSource
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadCollection), name: Notification.Name("reloadCollection"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.newStreamJoined), name: Notification.Name("newStreamJoined"), object: nil)
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        hideKeyboard()
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        hideKeyboard()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
     }
     
     func hideKeyboard() {
         self.view.endEditing(true)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        reloadCollection()
     }
     
     private func execSearchQuery() {
@@ -75,13 +64,12 @@ class StreamsTableViewController: UIViewController, UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         execSearchQuery()
+        if searchText.isEmpty {
+            hideKeyboard()
+        }
     }
     
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        execSearchQuery()
-    }
-    
-    // triggered from data source clas
+    // triggered from data source class
     func reloadCollection() {
         DispatchQueue.main.async {
             objc_sync_enter(self.tableView.dataSource)

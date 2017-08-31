@@ -90,6 +90,11 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
         collection.sort(by: comparator)
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        NotificationCenter.default.post(name: Notification.Name("hideKeyboard"), object: nil)
+    }
+    
+    
     private func handleChildAdded(collectionItem: CollectionItem) {
         if getIndex(collectionItem: collectionItem) == nil {
             collection.append(collectionItem)
