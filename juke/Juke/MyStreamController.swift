@@ -128,9 +128,10 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.firebaseEventHandler), name: Notification.Name("firebaseEvent"), object: nil)
         
         // set to online if not marked online
-        if !Current.user.online {
-            FirebaseAPI.setOnlineTrue()
-        }
+        
+//        if !Current.user.online {
+//            
+//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -146,7 +147,10 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             self.dataSource = dataSource
         }
         self.setUpControlButtons()
+        FirebaseAPI.setOnlineTrue()
+        print("USER ONLINE", Current.user.online)
         loadTopSong()
+        
     }
     
     

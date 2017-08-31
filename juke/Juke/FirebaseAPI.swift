@@ -253,6 +253,8 @@ class FirebaseAPI {
         // no need to do case where user is host because if user is host and goes offline they are no longer host
         if !Current.isHost() {
             self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").setValue(true)
+        } else {
+            self.ref.child("/streams/\(Current.stream.streamID)/host/\(Current.user.spotifyID)/online").setValue(true)
         }
         
     }
