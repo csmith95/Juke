@@ -148,6 +148,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         }
         self.setUpControlButtons()
         FirebaseAPI.setOnlineTrue()
+        FirebaseAPI.setfcmtoken()
         print("USER ONLINE", Current.user.online)
         loadTopSong()
         
