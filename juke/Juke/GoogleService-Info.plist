@@ -36,5 +36,7 @@
 	<string>1:632180830466:ios:bea95c655fb31c5e</string>
 	<key>DATABASE_URL</key>
 	<string>https://juke-9fbd6.firebaseio.com</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<string>NO</string>
 </dict>
 </plist>
