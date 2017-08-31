@@ -18,5 +18,6 @@ public class ServerConstants {
     static let kAddSongByIDPath = "me/tracks?ids="
     static let kDeleteSongByIDPath = "me/tracks?ids="
     static let kContainsSongPath = "me/tracks/contains?ids="
+    static let kSendNotificationsURL = "https://us-central1-juke-9fbd6.cloudfunctions.net/sendNotification"
     
 }

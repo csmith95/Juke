@@ -996,6 +996,9 @@ Hit the search tab to add new songs.</string>
                                         <rect key="frame" x="0.0" y="254.5" width="200" height="33"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
                                         <state key="normal" title="Invite to stream"/>
+                                        <connections>
+                                            <action selector="notifyInviteToStream:" destination="0tk-uQ-BnL" eventType="touchUpInside" id="ytd-qC-QGc"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <constraints>

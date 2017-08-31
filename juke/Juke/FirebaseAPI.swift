@@ -11,6 +11,7 @@ import Firebase
 import FirebaseDatabaseUI
 import Whisper
 import ChameleonFramework
+import Alamofire
 
 class FirebaseAPI {
     
@@ -432,5 +433,20 @@ class FirebaseAPI {
                 callback(nil)
             }
         })
+    }
+    
+    // Function URL: https://us-central1-juke-9fbd6.cloudfunctions.net/sendNotification
+    public static func sendNotification(receiver: Models.FirebaseUser) {
+        let params: Parameters = [
+            "sender": Current.user.firebaseDict,
+            "receiver": receiver.firebaseDict
+        ]
+        
+        print("called sendNotification")
+        Alamofire.request(ServerConstants.kSendNotificationsURL, method: .post, parameters: params, encoding: JSONEncoding.default).responseJSON{response in
+            
+            print("response came back", response)
+    }
+    
     }
 }
