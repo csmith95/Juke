@@ -113,6 +113,38 @@
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="byF-rY-c59">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceHorizontal="YES" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Kvd-5E-z8k">
+                                            <rect key="frame" x="0.0" y="64" width="375" height="74"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="wAj-Q7-v3A">
+                                                <size key="itemSize" width="64" height="83"/>
+                                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            </collectionViewFlowLayout>
+                                            <cells>
+                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="yVD-1V-Xmy" customClass="FriendCollectionViewCell" customModule="Juke" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="-4.5" width="64" height="83"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                                        <rect key="frame" x="0.0" y="0.0" width="64" height="83"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <subviews>
+                                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UCB-dm-Trs">
+                                                                <rect key="frame" x="7" y="16" width="50" height="50"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            </imageView>
+                                                        </subviews>
+                                                    </view>
+                                                    <connections>
+                                                        <outlet property="friendImage" destination="UCB-dm-Trs" id="uaM-1a-5x1"/>
+                                                    </connections>
+                                                </collectionViewCell>
+                                            </cells>
+                                        </collectionView>
+                                    </subviews>
                                 </view>
                                 <blurEffect style="light"/>
                             </visualEffectView>
@@ -166,21 +198,25 @@
                                                 </imageView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kgk-fN-2rW">
                                                     <rect key="frame" x="261" y="50" width="106" height="30"/>
-                                                    <state key="normal" title="Invite to stream"/>
+                                                    <state key="normal" title="Invite to stream">
+                                                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
                                                     <state key="selected" title="Invited!"/>
                                                     <connections>
                                                         <action selector="inviteToStreamPressed:" destination="wuT-uc-e1B" eventType="touchUpInside" id="Prn-HL-HVA"/>
                                                     </connections>
                                                 </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Teddy's Stream" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zLZ-0R-0Y7">
-                                                    <rect key="frame" x="88" y="20" width="119" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stream Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zLZ-0R-0Y7">
+                                                    <rect key="frame" x="88" y="20" width="105" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Plg-az-XtL">
                                                     <rect key="frame" x="88" y="49" width="80" height="30"/>
-                                                    <state key="normal" title="Join stream"/>
+                                                    <state key="normal" title="Join stream">
+                                                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
                                                     <state key="selected" title="Joining..."/>
                                                     <connections>
                                                         <action selector="joinStreamPressed:" destination="wuT-uc-e1B" eventType="touchUpInside" id="oPf-nE-PjP"/>
@@ -459,7 +495,7 @@
                                 <rect key="frame" x="0.0" y="72" width="375" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oae-Ar-DXl" id="QdY-VV-ach">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="80K-77-ogI">
@@ -694,7 +730,7 @@ Hit the search tab to add new songs.</string>
                                                             <rect key="frame" x="0.0" y="28" width="375" height="46"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0kb-sf-i9H" id="guB-Fj-CpO">
-                                                                <rect key="frame" x="0.0" y="0.0" width="375" height="45.5"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="375" height="46"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="66x-Jw-w2Y">
@@ -780,7 +816,8 @@ Hit the search tab to add new songs.</string>
                         <outlet property="bgblurimg" destination="6g6-Dn-cTu" id="nAy-5E-5Ac"/>
                         <outlet property="clearStreamButton" destination="IwY-dS-tGg" id="eoN-rJ-VaN"/>
                         <outlet property="coverArtImage" destination="uqG-GS-V2m" id="3LV-sy-g6l"/>
-                        <outlet property="currTimeLabel" destination="Uai-2k-heq" id="Dis-GJ-Uft"/>
+                        <outlet property="currTimeLabel" destinati
+                                on="Uai-2k-heq" id="Dis-GJ-Uft"/>
                         <outlet property="currentArtistLabel" destination="2fl-wu-vGl" id="dXu-2A-lBv"/>
                         <outlet property="currentSongLabel" destination="q6y-f2-E0O" id="eAL-pz-Zqn"/>
                         <outlet property="exitStreamButton" destination="ezo-F5-eLp" id="mFE-oS-pfQ"/>
@@ -947,7 +984,7 @@ Hit the search tab to add new songs.</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="vCd-RR-gCy">
-                                <rect key="frame" x="88" y="165.5" width="200" height="287.5"/>
+                                <rect key="frame" x="88" y="190" width="200" height="287.5"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="OAh-9A-apt" userLabel="User Image View">
                                         <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
@@ -980,7 +1017,7 @@ Hit the search tab to add new songs.</string>
                                 </constraints>
                             </stackView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bDv-At-kKW">
-                                <rect key="frame" x="248" y="322.5" width="30" height="30"/>
+                                <rect key="frame" x="248" y="347" width="30" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="4Qc-3w-j5u"/>
                                     <constraint firstAttribute="width" constant="30" id="Wcs-wx-mx1"/>
@@ -1024,6 +1061,78 @@ Hit the search tab to add new songs.</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="STL-W6-I7U" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1784.8" y="689.5052473763119"/>
+        </scene>
+        <!--User Profile View Controller-->
+        <scene sceneID="kds-EF-NWa">
+            <objects>
+                <viewController id="vQ4-32-OZA" userLabel="User Profile View Controller" customClass="UserProfileViewController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="6Lh-Rh-0ts"/>
+                        <viewControllerLayoutGuide type="bottom" id="7TL-Fl-NMw"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="dyS-OP-byE">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="7xx-VS-c8n">
+                                <rect key="frame" x="88" y="190" width="200" height="287.5"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="id4-p3-J45" userLabel="User Image View">
+                                        <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="200" id="SBN-MC-0aO"/>
+                                            <constraint firstAttribute="height" constant="200" id="nGi-Bx-LRH"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="100"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TZV-Lq-4zQ" userLabel="User Name Label">
+                                        <rect key="frame" x="0.0" y="216" width="200" height="22.5"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="19"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Lr-2A-cjU" userLabel="Invite to stream Button">
+                                        <rect key="frame" x="0.0" y="254.5" width="200" height="33"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                                        <state key="normal" title="Invite to stream"/>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="1Lr-2A-cjU" firstAttribute="centerX" secondItem="7xx-VS-c8n" secondAttribute="centerX" id="ZHh-Dw-IQN"/>
+                                    <constraint firstItem="TZV-Lq-4zQ" firstAttribute="centerX" secondItem="7xx-VS-c8n" secondAttribute="centerX" id="aAY-9p-Grr"/>
+                                </constraints>
+                            </stackView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9CJ-Yb-UO4">
+                                <rect key="frame" x="248" y="347" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="C7b-h6-MBb"/>
+                                    <constraint firstAttribute="width" constant="30" id="f0A-JP-ujV"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="7xx-VS-c8n" firstAttribute="centerX" secondItem="dyS-OP-byE" secondAttribute="centerX" id="8Ej-ba-dwt"/>
+                            <constraint firstItem="9CJ-Yb-UO4" firstAttribute="top" secondItem="id4-p3-J45" secondAttribute="bottom" constant="-43" id="dUc-pD-P8s"/>
+                            <constraint firstItem="9CJ-Yb-UO4" firstAttribute="leading" secondItem="id4-p3-J45" secondAttribute="trailing" constant="-40.5" id="h1o-5t-OSM"/>
+                            <constraint firstItem="7xx-VS-c8n" firstAttribute="centerY" secondItem="dyS-OP-byE" secondAttribute="centerY" id="zLf-YC-BxX"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="inviteToStreamBtn" destination="1Lr-2A-cjU" id="esB-68-gY6"/>
+                        <outlet property="userImage" destination="id4-p3-J45" id="M2w-Uf-dcc"/>
+                        <outlet property="userName" destination="TZV-Lq-4zQ" id="Oaz-fX-tJZ"/>
+                        <outlet property="userPresenceDot" destination="9CJ-Yb-UO4" id="Wcg-T4-Nbc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uuY-hS-h8N" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3182" y="-72"/>
         </scene>
     </scenes>
     <resources>

@@ -18,12 +18,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     var window: UIWindow?
     let kCallbackURL = "juke1231://callback"
-    var ref: DatabaseReference!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
-        ref = Database.database().reference()
+
         Messaging.messaging().delegate = self
+        Database.database().isPersistenceEnabled = true // allow offline
+        let ref = Database.database().reference()
+        ref.keepSynced(true)
         
         // Auth firebase user 
         // TODO: add to firebase db

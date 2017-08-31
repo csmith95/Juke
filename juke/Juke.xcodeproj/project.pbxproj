@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4A4F167F5B62F339520F3BEB /* Pods_Juke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9D54D33C710A946C6515520 /* Pods_Juke.framework */; };
 		4B0490E91E734614003F49DF /* SongTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0490E81E734614003F49DF /* SongTableViewCell.swift */; };
+		4B04E4591F55682C001605E2 /* CustomDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B04E4581F55682C001605E2 /* CustomDataSource.swift */; };
 		4B0FB5801E59A12C008D34FD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B0FB57F1E59A12C008D34FD /* CoreLocation.framework */; };
 		4B13DE4C1E8AFA970060D29A /* StreamCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B13DE4B1E8AFA970060D29A /* StreamCell.swift */; };
 		4B13DE4E1E8AFB850060D29A /* StreamsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B13DE4D1E8AFB850060D29A /* StreamsTableViewController.swift */; };
@@ -42,6 +43,7 @@
 
 /* Begin PBXFileReference section */
 		4B0490E81E734614003F49DF /* SongTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongTableViewCell.swift; sourceTree = "<group>"; };
+		4B04E4581F55682C001605E2 /* CustomDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomDataSource.swift; sourceTree = "<group>"; };
 		4B0FB57F1E59A12C008D34FD /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		4B13DE4B1E8AFA970060D29A /* StreamCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamCell.swift; sourceTree = "<group>"; };
 		4B13DE4D1E8AFB850060D29A /* StreamsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamsTableViewController.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 				4B13DE4D1E8AFB850060D29A /* StreamsTableViewController.swift */,
 				F27E0E901F4FF05400C4AE37 /* UserProfileViewController.swift */,
 				F2317CB51EB7D3A5003ACBE7 /* Videos */,
+				4B04E4581F55682C001605E2 /* CustomDataSource.swift */,
 			);
 			path = Juke;
 			sourceTree = "<group>";
@@ -217,7 +220,7 @@
 				TargetAttributes = {
 					4B3A34C81E58120F00C314A0 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 2746PGXGF5;
+						DevelopmentTeam = UL2WBS3TV4;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -326,6 +329,7 @@
 				4BF307B11E7797B9002CAE9E /* CardTableViewCell.swift in Sources */,
 				4B7C1EA11F484DF00064F1C3 /* FirebaseAPI.swift in Sources */,
 				F2E815581E90BBBC00404DDF /* LoginViewController.swift in Sources */,
+				4B04E4591F55682C001605E2 /* CustomDataSource.swift in Sources */,
 				F2B49C501F4E710A007B55DA /* StreamMemberCell.swift in Sources */,
 				F2B49C521F4E9DC8007B55DA /* StreamMembersTableViewController.swift in Sources */,
 				4B3A34CD1E58120F00C314A0 /* AppDelegate.swift in Sources */,
@@ -453,7 +457,7 @@
 				CODE_SIGN_ENTITLEMENTS = Juke/Juke.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 2746PGXGF5;
+				DEVELOPMENT_TEAM = UL2WBS3TV4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -482,7 +486,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Juke/Juke.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 2746PGXGF5;
+				DEVELOPMENT_TEAM = UL2WBS3TV4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

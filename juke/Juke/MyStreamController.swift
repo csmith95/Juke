@@ -19,7 +19,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     // firebase vars
     var dataSource: FUITableViewDataSource!
     
-    // app vars
     @IBOutlet var numMembersLabel: UILabel!
     @IBOutlet var clearStreamButton: UIButton!
     @IBOutlet var addSongButton: UIButton!
