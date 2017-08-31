@@ -413,6 +413,7 @@ class FirebaseAPI {
 
     public static func setfcmtoken() {
         let fcmToken = Messaging.messaging().fcmToken
+        print("FCMToken", fcmToken!)
         Current.user.fcmToken = fcmToken
         self.ref.child("users/\(Current.user.spotifyID)/fcmToken").setValue(fcmToken)
         if Current.isHost() {
