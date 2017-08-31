@@ -71,6 +71,7 @@
 		F26A652E1EB194F100ADB14E /* SpotifyAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAuthentication.framework; sourceTree = "<group>"; };
 		F26A652F1EB194F100ADB14E /* SpotifyMetadata.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyMetadata.framework; sourceTree = "<group>"; };
 		F27E0E901F4FF05400C4AE37 /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
+		F2A24EE71F57879400E0FE2F /* Juke.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Juke.entitlements; sourceTree = "<group>"; };
 		F2B49C4F1F4E710A007B55DA /* StreamMemberCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamMemberCell.swift; sourceTree = "<group>"; };
 		F2B49C511F4E9DC8007B55DA /* StreamMembersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamMembersTableViewController.swift; sourceTree = "<group>"; };
 		F2DB0B321EA1145A00A13E30 /* SearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
@@ -119,6 +120,7 @@
 		4B3A34CB1E58120F00C314A0 /* Juke */ = {
 			isa = PBXGroup;
 			children = (
+				F2A24EE71F57879400E0FE2F /* Juke.entitlements */,
 				4B3A34CC1E58120F00C314A0 /* AppDelegate.swift */,
 				4B3F95171F143BCA00CBEF79 /* Assets.xcassets */,
 				4BF307B01E7797B9002CAE9E /* CardTableViewCell.swift */,
@@ -218,6 +220,11 @@
 						DevelopmentTeam = 2746PGXGF5;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -443,6 +450,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Juke/Juke.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 2746PGXGF5;
@@ -472,6 +480,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Juke/Juke.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = 2746PGXGF5;
 				FRAMEWORK_SEARCH_PATHS = (
