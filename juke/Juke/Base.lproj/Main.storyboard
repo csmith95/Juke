@@ -57,7 +57,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="zsD-Os-w13">
             <objects>
-                <tabBarController id="Wsq-F5-h4X" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="mainTabCtrl" id="Wsq-F5-h4X" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="xjB-LA-3Pt">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -81,7 +81,7 @@
         <!--Streams Table View Controller-->
         <scene sceneID="GTr-Va-TZ0">
             <objects>
-                <viewController id="sKr-T1-iDy" customClass="StreamsTableViewController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="streamsTable" useStoryboardIdentifierAsRestorationIdentifier="YES" id="sKr-T1-iDy" customClass="StreamsTableViewController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="xBV-f0-Jld"/>
                         <viewControllerLayoutGuide type="bottom" id="L5C-sk-WF5"/>
@@ -420,7 +420,7 @@
         <!--Discover-->
         <scene sceneID="qev-iE-LNt">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="aNa-bh-xnM" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="discoverNavCtrl" automaticallyAdjustsScrollViewInsets="NO" id="aNa-bh-xnM" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Discover" image="earth" id="te7-SS-y4N"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="KoR-Mg-UzL">

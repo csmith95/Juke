@@ -20,13 +20,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
-
+        
         Messaging.messaging().delegate = self
         Database.database().isPersistenceEnabled = true // allow offline
         let ref = Database.database().reference()
         ref.keepSynced(true)
         
-        // Auth firebase user 
+        // Auth firebase user
         // TODO: add to firebase db
         Auth.auth().signInAnonymously(completion: { (user, error) in
             print("user auth completed", user!.uid)
@@ -48,6 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         
         application.registerForRemoteNotifications()
+        configureUserNotificationsCenter()
         
         // [END register_for_notifications]
         
@@ -67,7 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // If you are receiving a notification message while your app is in the background,
         // this callback will not be fired till the user taps on the notification launching the application.
         // TODO: Handle data of notification
-
+        
         
         // Print full message.
         print(userInfo)
@@ -83,9 +84,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Messaging.messaging().appDidReceiveMessage(userInfo)
         
         // Print message ID.
-//        if let messageID = userInfo[gcmMessageIDKey] {
-//            print("Message ID: \(messageID)")
-//        }
+        //        if let messageID = userInfo[gcmMessageIDKey] {
+        //            print("Message ID: \(messageID)")
+        //        }
         
         // Print full message.
         print(userInfo)
@@ -145,6 +146,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         self.saveContext()
     }
     
+    func configureUserNotificationsCenter() {
+        let actionShowStream = UNNotificationAction(identifier: "showStream", title: "Show Stream", options: [.foreground])
+        let showStreamCategory = UNNotificationCategory(identifier: "showStreamCategory", actions: [actionShowStream], intentIdentifiers: [], options: [])
+        UNUserNotificationCenter.current().setNotificationCategories([showStreamCategory])
+    }
+    
     // MARK: - Core Data stack
     
     lazy var persistentContainer: NSPersistentContainer = {
@@ -201,15 +208,18 @@ extension AppDelegate {
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let userInfo = notification.request.content.userInfo
         
+        print("CATEGORY", notification.request.content.categoryIdentifier)
+        
         // With swizzling disabled you must let Messaging know about the message, for Analytics
         // Messaging.messaging().appDidReceiveMessage(userInfo)
         // Print message ID.
-//        if let messageID = userInfo[gcmMessageIDKey] {
-//            print("Message ID: \(messageID)")
-//        }
-        
+        //        if let messageID = userInfo[gcmMessageIDKey] {
+        //            print("Message ID: \(messageID)")
+        //        }
+        //notification.request.content.categoryIdentifier = "showStreamCategory"
         // Print full message.
-        print(userInfo)
+        print("NOTIFICATION", notification)
+        print("userinfo", userInfo)
         
         // Change this to your preferred presentation option
         completionHandler([.alert, .badge, .sound])
@@ -219,13 +229,29 @@ extension AppDelegate {
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
+        
         // Print message ID.
-//        if let messageID = userInfo[gcmMessageIDKey] {
-//            print("Message ID: \(messageID)")
-//        }
+        //        if let messageID = userInfo[gcmMessageIDKey] {
+        //            print("Message ID: \(messageID)")
+        //        }
         
         // Print full message.
+        print("response", response)
         print(userInfo)
+        switch response.actionIdentifier {
+        // CASE: showStream
+        case "showStream":
+            print("Called show streams")
+            let rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "mainTabCtrl") as! UITabBarController
+            rootVC.selectedIndex = 0
+            rootVC.view.frame = UIScreen.main.bounds
+            UIView.transition(with: self.window!, duration: 0.3, options: .layoutSubviews, animations: {
+                self.window!.rootViewController = rootVC
+            }, completion: nil)
+        // CASE: default
+        default:
+            print("called default")
+        }
         
         completionHandler()
     }
