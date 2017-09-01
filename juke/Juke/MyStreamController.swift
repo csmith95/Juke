@@ -149,6 +149,28 @@ class MyStreamController: UIViewController, UITableViewDelegate {
 //        }
     }
     
+//    var oldContentOffset = CGPoint.zero
+//    let topConstraintRange = (CGFloat(120)..<CGFloat(300))
+//    
+//    func scrollViewDidScroll(scrollView: UIScrollView) {
+//        
+//        let delta =  scrollView.contentOffset.y - oldContentOffset.y
+//        
+//        //we compress the top view
+//        if delta > 0 && topConstraint.constant > topConstraintRange.start && scrollView.contentOffset.y > 0 {
+//            topConstraint.constant -= delta
+//            scrollView.contentOffset.y -= delta
+//        }
+//        
+//        //we expand the top view
+//        if delta < 0 && topConstraint.constant < topConstraintRange.end && scrollView.contentOffset.y < 0{
+//            topConstraint.constant -= delta
+//            scrollView.contentOffset.y -= delta
+//        }
+//        
+//        oldContentOffset = scrollView.contentOffset
+//    }
+    
     func reloadSongs() {
         DispatchQueue.main.async {
             objc_sync_enter(self.tableView.dataSource)
@@ -172,7 +194,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         FirebaseAPI.setfcmtoken()
         print("USER ONLINE", Current.user.online)
         loadTopSong()
-        
+        reloadSongs()
     }
     
     
