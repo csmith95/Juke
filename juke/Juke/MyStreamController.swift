@@ -143,9 +143,10 @@ class MyStreamController: UIViewController, UITableViewDelegate {
 
         
         // set to online if not marked online
-        if !Current.user.online {
-            FirebaseAPI.setOnlineTrue()
-        }
+        
+//        if !Current.user.online {
+//            
+//        }
     }
     
     func reloadSongs() {
@@ -167,7 +168,11 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         FirebaseAPI.listenForSongProgress() // will update if progress difference > 3 seconds
         songsDataSource.setObservedStream()
         self.setUpControlButtons()
+        FirebaseAPI.setOnlineTrue()
+        FirebaseAPI.setfcmtoken()
+        print("USER ONLINE", Current.user.online)
         loadTopSong()
+        
     }
     
     

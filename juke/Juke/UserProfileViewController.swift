@@ -58,5 +58,9 @@ class UserProfileViewController: UIViewController {
             imageView.image = defaultIcon
         }
     }
+    @IBAction func notifyInviteToStream(_ sender: Any) {
+        print("called invite to stream")
+        FirebaseAPI.sendNotification(receiver: preloadedUser!)
+    }
 
 }

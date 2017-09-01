@@ -11,6 +11,7 @@ import Firebase
 import FirebaseDatabaseUI
 import Whisper
 import ChameleonFramework
+import Alamofire
 
 class FirebaseAPI {
     
@@ -230,6 +231,8 @@ class FirebaseAPI {
         // no need to do case where user is host because if user is host and goes offline they are no longer host
         if !Current.isHost() {
             self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").setValue(true)
+        } else {
+            self.ref.child("/streams/\(Current.stream.streamID)/host/\(Current.user.spotifyID)/online").setValue(true)
         }
         
     }
@@ -381,18 +384,18 @@ class FirebaseAPI {
         }
         observedPaths.removeAll()
     }
-    
-    func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
-        print("Firebase registration token updated: \(fcmToken)")
-        // update token when token is reset
+
+    public static func setfcmtoken() {
+        let fcmToken = Messaging.messaging().fcmToken
+        print("FCMToken", fcmToken!)
         Current.user.fcmToken = fcmToken
-        FirebaseAPI.ref.child("users/\(Current.user.spotifyID)/fcmToken").setValue(fcmToken)
+        self.ref.child("users/\(Current.user.spotifyID)/fcmToken").setValue(fcmToken)
         if Current.isHost() {
-            FirebaseAPI.ref.child("streams/\(Current.stream.streamID)/host/fcmToken").setValue(fcmToken)
+            self.ref.child("streams/\(Current.stream.streamID)/host/\(Current.user.spotifyID)/fcmToken").setValue(fcmToken)
         } else {
-            FirebaseAPI.ref.child("streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/fcmToken").setValue(fcmToken)
+            self.ref.child("streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/fcmToken").setValue(fcmToken)
         }
-        
+
     }
 
     public static func fetchStream(streamID: String, callback: @escaping ((_: Models.FirebaseStream?) -> Void)) {
@@ -422,5 +425,18 @@ class FirebaseAPI {
                 print(error.localizedDescription)
             }
         }
+    }
+    
+    // Function URL: https://us-central1-juke-9fbd6.cloudfunctions.net/sendNotification
+    public static func sendNotification(receiver: Models.FirebaseUser) {
+        let params: Parameters = [
+            "sender": Current.user.firebaseDict,
+            "receiver": receiver.firebaseDict
+        ]
+        
+        print("called sendNotification")
+        Alamofire.request(ServerConstants.kSendNotificationsURL, method: .post, parameters: params, encoding: JSONEncoding.default).responseJSON{response in
+            
+            print("response came back", response)
     }
 }
