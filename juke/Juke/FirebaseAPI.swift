@@ -435,8 +435,9 @@ class FirebaseAPI {
         ]
         
         print("called sendNotification")
-        Alamofire.request(ServerConstants.kSendNotificationsURL, method: .post, parameters: params, encoding: JSONEncoding.default).responseJSON{response in
+        Alamofire.request(ServerConstants.kSendNotificationsURL, method: .post, parameters: params, encoding: JSONEncoding.default).responseJSON { response in
             
             print("response came back", response)
+        }
     }
 }

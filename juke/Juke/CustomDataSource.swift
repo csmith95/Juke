@@ -92,7 +92,6 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
             return self.shouldInclude(item: collectionItem)
         })
 
-        print("posting: ", reloadEventName)
         NotificationCenter.default.post(name: Notification.Name(reloadEventName), object: nil)
     }
     
