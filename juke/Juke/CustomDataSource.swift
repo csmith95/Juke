@@ -22,17 +22,25 @@ class CollectionItem {
         self.song = Models.FirebaseSong(snapshot: snapshot)
     }
     
+    // sanity check
+    func isValid() -> Bool {
+        return friend != nil || stream != nil || song != nil
+    }
+    
 }
 
 class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     
-    private var collection: [CollectionItem] = [] // all streams
+    var collection: [CollectionItem] = [] // all streams
     var filteredCollection: [CollectionItem] = [] // what is displayed to user
     var query = ""
-    private let ref = Database.database().reference()
+    let ref = Database.database().reference()
+    var reloadEventName = ""    // set in subclass because different events should trigger different tables to reload
     
     init(path: String) {
         super.init()
+        
+        if path.isEmpty { return } // for the SongQueueDataSource
         
         // add listeners to detect db changes
         ref.child(path).observe(.childChanged, with: { (snapshot) in
@@ -50,9 +58,9 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     // thread safe, delegates work to helpers to modify collection property
     // and signal changes to view controller using post notifications
-    private func updateCollection(type: DataEventType, snapshot: DataSnapshot) {
+    func updateCollection(type: DataEventType, snapshot: DataSnapshot) {
         let collectionItem = CollectionItem(snapshot: snapshot)
-        print(snapshot)
+        if !collectionItem.isValid() { return } // no fields were extracted from snapshot -- do nothing
         objc_sync_enter(self)
         switch (type) {
         case .childAdded:
@@ -84,7 +92,8 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
             return self.shouldInclude(item: collectionItem)
         })
 
-        NotificationCenter.default.post(name: Notification.Name("reloadCollection"), object: nil)
+        print("posting: ", reloadEventName)
+        NotificationCenter.default.post(name: Notification.Name(reloadEventName), object: nil)
     }
     
     private func sort() {
@@ -94,7 +103,6 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         NotificationCenter.default.post(name: Notification.Name("hideKeyboard"), object: nil)
     }
-    
     
     private func handleChildAdded(collectionItem: CollectionItem) {
         if getIndex(collectionItem: collectionItem) == nil {
@@ -170,6 +178,7 @@ class StreamsDataSource: CustomDataSource {
     
     init() {
        super.init(path: "streams")
+        reloadEventName = "reloadCollection"
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -207,7 +216,7 @@ class StreamsDataSource: CustomDataSource {
         if !included || query.isEmpty {
             return included
         }
-        return item.stream.host.username.contains(query)
+        return item.stream.host.username.lowercased().contains(query.lowercased())
     }
     
     override func populateCell(tableView: UITableView, indexPath: IndexPath, item: CollectionItem) -> UITableViewCell {
@@ -221,6 +230,7 @@ class StreamsDataSource: CustomDataSource {
 class FriendsDataSource: CustomDataSource {
     init() {
         super.init(path: "users")
+        reloadEventName = "reloadCollection"
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -242,7 +252,7 @@ class FriendsDataSource: CustomDataSource {
         if !included || query.isEmpty {
             return included
         }
-        return item.friend.username.contains(query)
+        return item.friend.username.lowercased().contains(query.lowercased())
     }
     
     override func populateCell(tableView: UITableView, indexPath: IndexPath, item: CollectionItem) -> UITableViewCell {
@@ -250,4 +260,76 @@ class FriendsDataSource: CustomDataSource {
         cell.populateCell(member: self.filteredCollection[indexPath.row].friend)
         return cell
     }
+}
+
+class SongQueueDataSource: CustomDataSource {
+    
+    private var observedStreamID = ""
+    
+    init() {
+        super.init(path: "")
+        reloadEventName = "reloadSongs"
+    }
+    
+    // this should be called whenever user changes streams 
+    // or just whenever the MyStreamController view will appear
+    public func setObservedStream() {
+        if Current.stream.streamID == observedStreamID { return } // don't set observer for same stream twice
+        
+        // remove old observer
+        ref.child("/songs/\(observedStreamID)").removeAllObservers()
+        observedStreamID = Current.stream.streamID
+        filteredCollection.removeAll()
+        collection.removeAll()
+
+        let path = "/songs/\(observedStreamID)"
+        // add listeners to detect song queue changes
+        ref.child(path).observe(.childChanged, with: { (snapshot) in
+            super.updateCollection(type: .childChanged, snapshot: snapshot)
+        })
+        
+        ref.child(path).observe(.childAdded, with: { (snapshot) in
+            super.updateCollection(type: .childAdded, snapshot: snapshot)
+        })
+        
+        ref.child(path).observe(.childRemoved, with: { (snapshot) in
+            super.updateCollection(type: .childRemoved, snapshot: snapshot)
+        })
+        print("added observers: ", path)
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // TODO
+        print("nothing")
+    }
+    
+    override func isEqual(current: CollectionItem, other: CollectionItem) -> Bool {
+        return other.song.key == current.song.key
+    }
+    
+    // comparator function used for sorting in super class
+    override func comparator(first: CollectionItem, second: CollectionItem) -> Bool {
+        return first.song.votes > second.song.votes
+    }
+    
+    override func shouldInclude(item: CollectionItem) -> Bool {
+        return true // don't filter out any queued songs
+    }
+    
+    override func populateCell(tableView: UITableView, indexPath: IndexPath, item: CollectionItem) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
+        cell.populateCell(song: self.filteredCollection[indexPath.row].song)
+        return cell
+    }
+    
+    public func getNextSong() -> Models.FirebaseSong? {
+        objc_sync_enter(self)
+        if let topSong = filteredCollection.first?.song {
+            objc_sync_exit(self)
+            return topSong
+        }
+        objc_sync_exit(self)
+        return nil
+    }
+    
 }

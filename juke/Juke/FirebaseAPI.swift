@@ -26,7 +26,6 @@ class FirebaseAPI {
     // when a view controller calls addSongQueueDataListener or 
     // addDiscoverStreamsDataListener, these are set to true
     // if user joins new stream, these are reset to false
-    private static var songQueueDataSourceSet = false
     private static var streamMembersDataSourceSet = false
     private static var streamDeletedListenerSet = false
     
@@ -174,21 +173,14 @@ class FirebaseAPI {
     // deletes top song in current stream -- should only be called by host when spotify signals
     // that song ended or when host presses skip
     // then this method loads top song from list of queued songs, if any exists
-    public static func popTopSong(dataSource: FUITableViewDataSource!) {
+    public static func popTopSong(dataSource: SongQueueDataSource) {
         
         // reset progress in any case
         self.ref.child("/songProgressTable/\(Current.stream.streamID)").setValue(0.0)
         jamsPlayer.position_ms = 0.0
         
-        guard let snapshot = dataSource.items.first else {
+        guard let nextSong = dataSource.getNextSong() else {
             // no songs queued
-            self.ref.child("/streams/\(Current.stream.streamID)/song").removeValue()
-            ref.child("streams/\(Current.stream.streamID)/isPlaying").setValue(false)
-            return
-        }
-        
-        guard let nextSong = Models.FirebaseSong(snapshot: snapshot) else {
-            // error parsing next song
             self.ref.child("/streams/\(Current.stream.streamID)/song").removeValue()
             ref.child("streams/\(Current.stream.streamID)/isPlaying").setValue(false)
             return
@@ -196,7 +188,7 @@ class FirebaseAPI {
         
         // set next song
         self.ref.child("/streams/\(Current.stream.streamID)/song").setValue(nextSong.firebaseDict)
-        self.ref.child("/songs/\(Current.stream.streamID)/\(snapshot.key)").removeValue()
+        self.ref.child("/songs/\(Current.stream.streamID)/\(nextSong.key)").removeValue()
     }
     
     private static func addTopSongChangedListener() {
@@ -211,25 +203,10 @@ class FirebaseAPI {
         observedPaths.append(path)
     }
     
-    public static func addSongQueueTableViewListener(songQueueTableView: UITableView?) -> FUITableViewDataSource? {
-        guard let tableView = songQueueTableView else { return nil }
-        if songQueueDataSourceSet { return nil }
-        songQueueDataSourceSet = true
-        // set tableview to listen to current stream
-        let dataSource = tableView.bind(to: self.ref.child("/songs/\(Current.stream.streamID)"))
-        { tableView, indexPath, snapshot in
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
-            guard let song = Models.FirebaseSong(snapshot: snapshot) else { return cell }
-            cell.populateCell(song: song)
-            return cell
-        }
-        return dataSource
-    }
-    
     public static func addPresenceListener() {
         // update main user object
         self.ref.child("/users/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
-//
+        
         // STREAM object updates
         if Current.isHost() {
             // you are the host so update path: stream/host
@@ -288,9 +265,6 @@ class FirebaseAPI {
             } else {
                 removeAllObservers()   // simply remove observers if not host
             }
-            
-            // reset var allowing song queue table view data source to sync
-            self.songQueueDataSourceSet = false
             
             // resync to new stream
             let childUpdates: [String: Any] = ["/streams/\(streamID)/members/\(Current.user.spotifyID)": Current.user.firebaseDict,
@@ -374,7 +348,6 @@ class FirebaseAPI {
         jamsPlayer.position_ms = 0.0
         
         // tell view controllers to resync
-        songQueueDataSourceSet = false
         self.ref.cancelDisconnectOperations { (err, dbref) in
             // re-add listeners
             print("cancelled earlier disconnect and adding new listeners")
@@ -430,5 +403,24 @@ class FirebaseAPI {
                 callback(nil)
             }
         })
+    }
+    
+    
+    public static func updateVotes(song: Models.FirebaseSong, upvoted: Bool) {
+        if upvoted {
+            self.ref.child("/songs/\(Current.stream.streamID)/\(song.key)/upvoters/\(Current.user.spotifyID)").setValue(true)
+        } else {
+            self.ref.child("/songs/\(Current.stream.streamID)/\(song.key)/upvoters/\(Current.user.spotifyID)").removeValue()
+        }
+        self.ref.child("/songs/\(Current.stream.streamID)/\(song.key)/votes").runTransactionBlock({ (data) -> TransactionResult in
+            if let numVotes = data.value as? Int {
+                data.value = upvoted ? numVotes+1 : numVotes-1
+            }
+            return TransactionResult.success(withValue: data)
+        }) { (error, committed, snapshot) in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+        }
     }
 }

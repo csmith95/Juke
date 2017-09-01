@@ -45,7 +45,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func filterLibrary(keywords: String) {
-        if keywords.characters.count == 0 {
+        if keywords.isEmpty {
             showMyLibrary()
         } else {
             displayedResults = libraryResults.filter({ (song) -> Bool in
@@ -92,6 +92,27 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         tableView.delegate = self
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         self.tableView.addGestureRecognizer(tapRecognizer)
+        loadSavedTracks()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.libraryChanged), name: Notification.Name("libraryChanged"), object: nil)
+    }
+    
+    func libraryChanged(notification: Notification) {
+        guard let song = notification.object as? Models.FirebaseSong else { return }
+        guard let firstSong = libraryResults.first else { return }
+        if firstSong.spotifyID == song.spotifyID {
+            libraryResults.remove(at: 0)    // song was already in lib -- remove it
+        } else {
+            // song wasn't in lib -- insert at first index
+            let spotifySong = Models.SpotifySong(songName: song.songName,
+                                                 artistName: song.artistName,
+                                                 spotifyID: song.spotifyID,
+                                                 duration: song.duration,
+                                                 coverArtURL: song.coverArtURL)
+            libraryResults.insert(spotifySong, at: 0)
+        }
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -99,11 +120,11 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         self.searchBar.text = ""
         self.view.endEditing(true)
         self.searchBar.selectedScopeButtonIndex = 0
-        loadSavedTracks()
+        filterLibrary(keywords: "") // remove filter
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        self.tableView.reloadData() // to clear the "Added!" markers before user navigates back
+        self.tableView.reloadData() // to reset the song added indicators
     }
     
     func hideKeyboard() {
@@ -232,7 +253,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
                     }
                     self.recursiveLoadTracks(urlString: serializedJSON["next"] as? String, headers: headers)
                 }
-            }catch {
+            } catch {
                 print("error unboxing JSON")
             }
         }
@@ -244,6 +265,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
                 do {
                     var serializedJSON = try JSONSerialization.jsonObject(with: response.data!, options: .mutableContainers) as! JSONStandard
                     if let items = serializedJSON["items"] as? [JSONStandard] {
+                        objc_sync_enter(self.libraryResults)
                         for item in items {
                             let curr = item["track"] as! UnboxableDictionary
                             do {
@@ -253,7 +275,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
                                 print("error unboxing spotify song: ", error)
                             }
                         }
-                        
+                        objc_sync_exit(self.libraryResults)
                         self.recursiveLoadTracks(urlString: serializedJSON["next"] as? String, headers: headers)
                     }
                 } catch {
@@ -268,6 +290,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             }
         }
     }
+
 
     /*
     // Override to support conditional editing of the table view.

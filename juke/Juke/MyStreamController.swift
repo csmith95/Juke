@@ -17,7 +17,7 @@ import FirebaseDatabaseUI
 class MyStreamController: UIViewController, UITableViewDelegate {
     
     // firebase vars
-    var dataSource: FUITableViewDataSource!
+    let songsDataSource = SongQueueDataSource()
     
     @IBOutlet var numMembersLabel: UILabel!
     @IBOutlet var clearStreamButton: UIButton!
@@ -81,9 +81,20 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             let url = URL(string: ServerConstants.kSpotifyBaseURL+path+song.spotifyID)!
             let message = addSongButton.isSelected ? "Removed from your library" : "Saved to your library!"
             self.addSongButton.isSelected = !self.addSongButton.isSelected
-            Alamofire.request(url, method: method, headers: headers).validate().response() { response in
-                self.delay(1.0) {
-                    HUD.flash(.label(message), delay: 0.75)
+            Alamofire.request(url, method: method, headers: headers).validate().responseData() { response in
+                switch response.result {
+                case .success:
+                    // tell search table view controller to update lib
+                    NotificationCenter.default.post(name: Notification.Name("libraryChanged"), object: song)
+                    self.delay(0.5) {
+                        HUD.flash(.label(message), delay: 0.75)
+                    }
+                    break
+                case .failure(let error):
+                    print("Error saving to spotify lib: ", error)
+                    self.delay(0.5) {
+                        HUD.flash(.label("Failed to save to your library"), delay: 0.75)
+                    }
                 }
             }
         }
@@ -116,7 +127,8 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.delegate = self
+        tableView.delegate = songsDataSource
+        tableView.dataSource = songsDataSource
         // first 2 respond to spotify events
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songPositionChanged), name: Notification.Name("songPositionChanged"), object: nil)
@@ -127,9 +139,20 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         // resyncing
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.firebaseEventHandler), name: Notification.Name("firebaseEvent"), object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.reloadSongs), name: Notification.Name("reloadSongs"), object: nil)
+
+        
         // set to online if not marked online
         if !Current.user.online {
             FirebaseAPI.setOnlineTrue()
+        }
+    }
+    
+    func reloadSongs() {
+        DispatchQueue.main.async {
+            objc_sync_enter(self.tableView.dataSource)
+            self.tableView.reloadData()
+            objc_sync_exit(self.tableView.dataSource)
         }
     }
     
@@ -142,9 +165,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             navBarTitle = Current.stream.host.username + "'s Stream"
         }
         FirebaseAPI.listenForSongProgress() // will update if progress difference > 3 seconds
-        if let dataSource = FirebaseAPI.addSongQueueTableViewListener(songQueueTableView: self.tableView) {
-            self.dataSource = dataSource
-        }
+        songsDataSource.setObservedStream()
         self.setUpControlButtons()
         loadTopSong()
     }
@@ -196,7 +217,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     func songFinished() {
         progressSliderValue = 0.0   // reset
         if (Current.isHost()) {
-            FirebaseAPI.popTopSong(dataSource: dataSource) // this pops top song and loads next, if any
+            FirebaseAPI.popTopSong(dataSource: songsDataSource) // this pops top song and loads next, if any
         }
     }
     
@@ -308,11 +329,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             self.refreshSongPlayStatus()
             break
         case .SwitchedStreams:
-            // update queue data source
-            if let newDataSource = FirebaseAPI.addSongQueueTableViewListener(songQueueTableView: self.tableView) {
-                self.dataSource = newDataSource
-                tableView.reloadData()  // necessary
-            }
             self.viewWillAppear(true)
             self.refreshSongPlayStatus()
             break

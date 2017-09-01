@@ -730,6 +730,8 @@ Hit the search tab to add new songs.</string>
                                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nB6-JX-2QM">
                                                                         <rect key="frame" x="335" y="8" width="30" height="30"/>
                                                                         <constraints>
+                                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="914-8v-K4N"/>
+                                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="30" id="GJp-in-5Px"/>
                                                                             <constraint firstAttribute="width" constant="30" id="SxS-gG-qhL"/>
                                                                             <constraint firstAttribute="height" constant="30" id="qzd-Jn-q0g"/>
                                                                         </constraints>
@@ -740,23 +742,51 @@ Hit the search tab to add new songs.</string>
                                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3vp-Py-Aex">
+                                                                        <rect key="frame" x="279" y="8" width="30" height="30"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="30" id="RAv-2L-s1I"/>
+                                                                            <constraint firstAttribute="width" constant="30" id="ZO2-uS-geh"/>
+                                                                        </constraints>
+                                                                        <state key="normal" image="empty_fire"/>
+                                                                        <state key="selected" image="filled_fire"/>
+                                                                        <connections>
+                                                                            <action selector="upvotePressed:" destination="0kb-sf-i9H" eventType="touchUpInside" id="MwT-cl-rCt"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZsX-Bj-aVJ">
+                                                                        <rect key="frame" x="241" y="8" width="30" height="30"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="30" id="BrS-Of-T1l"/>
+                                                                            <constraint firstAttribute="height" constant="30" id="n2b-Jy-PG4"/>
+                                                                        </constraints>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
                                                                 </subviews>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                 <constraints>
+                                                                    <constraint firstItem="ZsX-Bj-aVJ" firstAttribute="centerY" secondItem="guB-Fj-CpO" secondAttribute="centerY" id="5tC-cZ-Uto"/>
                                                                     <constraint firstItem="cIG-we-DoN" firstAttribute="leading" secondItem="guB-Fj-CpO" secondAttribute="leadingMargin" constant="3" id="60a-AF-T4h"/>
                                                                     <constraint firstAttribute="topMargin" secondItem="66x-Jw-w2Y" secondAttribute="top" id="KsA-ms-qor"/>
                                                                     <constraint firstAttribute="trailingMargin" secondItem="nB6-JX-2QM" secondAttribute="trailing" constant="2" id="U7B-t5-47a"/>
                                                                     <constraint firstItem="nB6-JX-2QM" firstAttribute="centerY" secondItem="guB-Fj-CpO" secondAttribute="centerY" id="a5i-gB-2Hn"/>
                                                                     <constraint firstAttribute="bottomMargin" secondItem="cIG-we-DoN" secondAttribute="bottom" constant="0.5" id="gCV-B0-dSD"/>
+                                                                    <constraint firstItem="3vp-Py-Aex" firstAttribute="leading" secondItem="ZsX-Bj-aVJ" secondAttribute="trailing" constant="8" id="lAQ-vs-ctu"/>
                                                                     <constraint firstItem="66x-Jw-w2Y" firstAttribute="leading" secondItem="guB-Fj-CpO" secondAttribute="leadingMargin" constant="3" id="mOu-89-QgC"/>
                                                                     <constraint firstItem="cIG-we-DoN" firstAttribute="leading" secondItem="66x-Jw-w2Y" secondAttribute="leading" id="r3e-8d-VQL"/>
+                                                                    <constraint firstItem="nB6-JX-2QM" firstAttribute="leading" secondItem="3vp-Py-Aex" secondAttribute="trailing" constant="26" id="wXB-6j-Pj1"/>
+                                                                    <constraint firstItem="3vp-Py-Aex" firstAttribute="centerY" secondItem="guB-Fj-CpO" secondAttribute="centerY" id="x72-ji-xv3"/>
                                                                 </constraints>
                                                             </tableViewCellContentView>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <connections>
                                                                 <outlet property="artist" destination="cIG-we-DoN" id="GdW-yF-QAg"/>
                                                                 <outlet property="memberImageView" destination="nB6-JX-2QM" id="iHE-nm-0Rs"/>
+                                                                <outlet property="numVotesLabel" destination="ZsX-Bj-aVJ" id="KdW-G9-azQ"/>
                                                                 <outlet property="songName" destination="66x-Jw-w2Y" id="JL1-C8-weW"/>
+                                                                <outlet property="upvoteButton" destination="3vp-Py-Aex" id="0bM-AW-a3X"/>
                                                             </connections>
                                                         </tableViewCell>
                                                     </prototypes>
@@ -1125,6 +1155,8 @@ Hit the search tab to add new songs.</string>
     <resources>
         <image name="checkmark" width="50" height="50"/>
         <image name="earth" width="29" height="29"/>
+        <image name="empty_fire" width="376" height="419"/>
+        <image name="filled_fire" width="320" height="320"/>
         <image name="ic_account_circle_white" width="24" height="24"/>
         <image name="ic_exit_to_app_white_48pt" width="48" height="48"/>
         <image name="ic_fast_forward_white_48pt" width="48" height="48"/>

@@ -470,7 +470,7 @@
 					"-ObjC",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = jukedev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.csmith95.juke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Juke/Juke-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -499,7 +499,7 @@
 					"-ObjC",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = jukedev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.csmith95.juke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Juke/Juke-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;

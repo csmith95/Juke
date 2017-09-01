@@ -29,13 +29,15 @@ class Models {
         var votes: Int
         var coverArtURL: String
         var memberImageURL: String?
+        var upvoters: [String: Bool] = [:]
         
         // formatted to be written directly to /streams/{streamID}/song/ or /songs/{streamID}/{key}/
         var firebaseDict: [String: Any] {
             var dict: [String: Any] = ["spotifyID": self.spotifyID, "songName":self.songName,
                     "artistName": self.artistName, "coverArtURL": self.coverArtURL,
                     "votes": self.votes,
-                    "duration": self.duration
+                    "duration": self.duration,
+                    "upvoters": upvoters
                     ]
             if let memberImageURL = self.memberImageURL {
                 dict["memberImageURL"] = memberImageURL
@@ -60,6 +62,7 @@ class Models {
             self.duration = duration
             self.memberImageURL = dict["memberImageURL"] as? String
             self.key = key
+            self.upvoters = dict["upvoters"] as? [String: Bool] ?? [:]
         }
         
         init?(snapshot: DataSnapshot) {
