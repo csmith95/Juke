@@ -16,6 +16,7 @@ import FirebaseDatabaseUI
 
 class MyStreamController: UIViewController, UITableViewDelegate {
     
+    @IBOutlet var currentlyPlayingView: UIView!
     // firebase vars
     let songsDataSource = SongQueueDataSource()
     
@@ -124,6 +125,28 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     @IBAction func returnToPersonalStream(_ sender: Any) {
         FirebaseAPI.createNewStream(removeFromCurrentStream: true)
     }
+    
+//    var oldContentOffset = CGPoint.zero
+//    let topConstraintRange = (CGFloat(120)..<CGFloat(300))
+    
+//    func scrollViewDidScroll(scrollView: UIScrollView) {
+//        
+//        let delta =  scrollView.contentOffset.y - oldContentOffset.y
+//        
+//        //we compress the top view
+//        if delta > 0 && topConstraint.constant > topConstraintRange.start && scrollView.contentOffset.y > 0 {
+//            topConstraint.constant -= delta
+//            scrollView.contentOffset.y -= delta
+//        }
+//        
+//        //we expand the top view
+//        if delta < 0 && topConstraint.constant < topConstraintRange.end && scrollView.contentOffset.y < 0{
+//            topConstraint.constant -= delta
+//            scrollView.contentOffset.y -= delta
+//        }
+//        
+//        oldContentOffset = scrollView.contentOffset
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
