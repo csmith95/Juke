@@ -153,23 +153,24 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     // returns true iff first comes before second
     func comparator(first: CollectionItem, second: CollectionItem) -> Bool {
-         assert(false, "This method must be overridden")
+         //assert(false, "This method must be overridden")
+        fatalError("This method must be overriden")
     }
     
     func isEqual(current: CollectionItem, other: CollectionItem) -> Bool {
-        assert(false, "This method must be overridden")
+        fatalError("This method must be overriden")
     }
     
     func shouldInclude(item: CollectionItem) -> Bool {
-        assert(false, "This method must be overridden")
+        fatalError("This method must be overriden")
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        assert(false, "This method must be overridden")
+        fatalError("This method must be overriden")
     }
     
     func populateCell(tableView: UITableView, indexPath: IndexPath, item: CollectionItem) -> UITableViewCell {
-        assert(false, "This method must be overridden")
+        fatalError("This method must be overriden")
     }
 }
 

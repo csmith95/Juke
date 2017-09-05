@@ -29,6 +29,7 @@ class FriendCell: UITableViewCell {
     
     @IBAction func inviteToStreamPressed(_ sender: Any) {
         // need to send invite to this user when pressed
+        FirebaseAPI.sendNotification(receiver: member)
         print("invite to stream")
         let button = sender as! UIButton
         button.isSelected = !button.isSelected
@@ -60,6 +61,14 @@ class FriendCell: UITableViewCell {
     }
     
     public func populateCell(member: Models.FirebaseUser) {
+        inviteToStreamButton.layer.cornerRadius = 10
+        inviteToStreamButton.layer.borderWidth = 1
+        inviteToStreamButton.layer.borderColor = UIColor.white.cgColor
+        
+        joinStreamButton.layer.cornerRadius = 10
+        joinStreamButton.layer.borderWidth = 1
+        joinStreamButton.layer.borderColor = UIColor.white.cgColor
+        
         // to reset elements
         self.joinStreamButton.isSelected = false
         self.joinStreamButton.isHidden = false
