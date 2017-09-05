@@ -36,7 +36,6 @@ class SongTableViewCell: UITableViewCell {
     }
     
     public func populateCell(song: Models.FirebaseSong) {
-        print("\n song: ", song)
         self.song = song
         songName.text = song.songName
         artist.text = song.artistName

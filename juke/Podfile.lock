@@ -71,6 +71,9 @@ PODS:
   - SCLAlertView (0.7.0)
   - Unbox (2.4.0)
   - Whisper (5.0.0)
+  - XLActionController (3.0.1):
+    - XLActionController/Core (= 3.0.1)
+  - XLActionController/Core (3.0.1)
 
 DEPENDENCIES:
   - Alamofire (~> 4.4)
@@ -87,6 +90,7 @@ DEPENDENCIES:
   - SCLAlertView
   - Unbox
   - Whisper
+  - XLActionController
 
 EXTERNAL SOURCES:
   ChameleonFramework:
@@ -119,7 +123,8 @@ SPEC CHECKSUMS:
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
   Unbox: c8b2ab69d3337597b4a3f47a0538807dc12db670
   Whisper: 051f25e704bf8992641ffd28b20d5682ddc5f5d3
+  XLActionController: 57fe0ce1642e2eed971b188b490762345fdbf963
 
-PODFILE CHECKSUM: 103f701cfa6ae26bed4c365b9cd5d22979dda418
+PODFILE CHECKSUM: a142f4062a4158416621d5f812d579d32c080b5a
 
 COCOAPODS: 1.2.0

@@ -13,22 +13,20 @@ import AlamofireImage
 import PKHUD
 import Firebase
 import FirebaseDatabaseUI
+import XLActionController
 
 class MyStreamController: UIViewController, UITableViewDelegate {
     
-    @IBOutlet var currentlyPlayingView: UIView!
     // firebase vars
     let songsDataSource = SongQueueDataSource()
     
     @IBOutlet var numMembersLabel: UILabel!
-    @IBOutlet var clearStreamButton: UIButton!
     @IBOutlet var addSongButton: UIButton!
     @IBOutlet var currentArtistLabel: UILabel!
     @IBOutlet var currentSongLabel: UILabel!
     @IBOutlet weak var bgblurimg: UIImageView!
     @IBOutlet var coverArtImage: UIImageView!
     @IBOutlet weak var noSongsLabel: UILabel!
-    @IBOutlet weak var exitStreamButton: UIButton!
     @IBOutlet weak var progressSlider: UISlider!
     @IBOutlet weak var currTimeLabel: UILabel!
     @IBOutlet weak var skipButton: UIButton!
@@ -126,31 +124,10 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         FirebaseAPI.createNewStream(removeFromCurrentStream: true)
     }
     
-//    var oldContentOffset = CGPoint.zero
-//    let topConstraintRange = (CGFloat(120)..<CGFloat(300))
-    
-//    func scrollViewDidScroll(scrollView: UIScrollView) {
-//        
-//        let delta =  scrollView.contentOffset.y - oldContentOffset.y
-//        
-//        //we compress the top view
-//        if delta > 0 && topConstraint.constant > topConstraintRange.start && scrollView.contentOffset.y > 0 {
-//            topConstraint.constant -= delta
-//            scrollView.contentOffset.y -= delta
-//        }
-//        
-//        //we expand the top view
-//        if delta < 0 && topConstraint.constant < topConstraintRange.end && scrollView.contentOffset.y < 0{
-//            topConstraint.constant -= delta
-//            scrollView.contentOffset.y -= delta
-//        }
-//        
-//        oldContentOffset = scrollView.contentOffset
-//    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = songsDataSource
+        tableView.delegate = self
         tableView.dataSource = songsDataSource
         // first 2 respond to spotify events
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
@@ -171,28 +148,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
 //            
 //        }
     }
-    
-//    var oldContentOffset = CGPoint.zero
-//    let topConstraintRange = (CGFloat(120)..<CGFloat(300))
-//    
-//    func scrollViewDidScroll(scrollView: UIScrollView) {
-//        
-//        let delta =  scrollView.contentOffset.y - oldContentOffset.y
-//        
-//        //we compress the top view
-//        if delta > 0 && topConstraint.constant > topConstraintRange.start && scrollView.contentOffset.y > 0 {
-//            topConstraint.constant -= delta
-//            scrollView.contentOffset.y -= delta
-//        }
-//        
-//        //we expand the top view
-//        if delta < 0 && topConstraint.constant < topConstraintRange.end && scrollView.contentOffset.y < 0{
-//            topConstraint.constant -= delta
-//            scrollView.contentOffset.y -= delta
-//        }
-//        
-//        oldContentOffset = scrollView.contentOffset
-//    }
     
     func reloadSongs() {
         DispatchQueue.main.async {
@@ -227,13 +182,11 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             listenButton.setImage(UIImage(named: "ic_play_arrow_white_48pt.png"), for: .normal)
             listenButton.setImage(UIImage(named: "ic_pause_white_48pt.png"), for: .selected)
             skipButton.isHidden = false
-            exitStreamButton.isHidden = true
             listenButton.isSelected = Current.stream.isPlaying
         } else {
             listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
             listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
             skipButton.isHidden = true
-            exitStreamButton.isHidden = false
         }
         numMembersLabel.text = String(Current.stream.members.count+1)
     }
@@ -307,6 +260,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     func loadTopSong() {
         if let song = Current.stream.song {
             self.coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil)
+            self.coverArtImage.isHidden = false
             self.bgblurimg.af_setImage(withURL: URL(string:song.coverArtURL)!, placeholderImage: nil)
             self.currentSongLabel.text = song.songName
             self.currentArtistLabel.text = song.artistName
@@ -316,7 +270,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
                 self.listenButton.isSelected = Current.stream.isPlaying
             }
             self.skipButton.isHidden = !Current.isHost()
-            self.clearStreamButton.isHidden = !Current.isHost()
             self.checkIfUserLibContainsCurrentSong(song: song)
             self.noSongsLabel.isHidden = true
             progressSlider.isHidden = false
@@ -329,7 +282,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     
     private func setEmptyStreamUI() {
         self.noSongsLabel.isHidden = false
-        coverArtImage.image = #imageLiteral(resourceName: "jukedef")
+        coverArtImage.isHidden = true
         bgblurimg.image = #imageLiteral(resourceName: "jukedef")
         currentSongLabel.text = ""
         currentArtistLabel.text = ""
@@ -339,7 +292,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         listenButton.isSelected = false
         Current.listenSelected = false
         skipButton.isHidden = true
-        clearStreamButton.isHidden = true
         progressSlider.isHidden = true
         currTimeLabel.isHidden = true
         refreshSongPlayStatus()
@@ -387,4 +339,14 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         }
     }
 
+    @IBAction func showMenuButtonPressed(_ sender: Any) {
+        let actionController = MenuActionController()
+        actionController.addAction(Action("View Details", style: .default, handler: { action in }))
+        actionController.addAction(Action("View Retweets", style: .default, handler: { action in }))
+        actionController.addAction(Action("View in Favstar", style: .default, handler: { action in }))
+        actionController.addSection(Section())
+        actionController.addAction(Action("Cancel", style: .cancel, handler:nil))
+    
+        present(actionController, animated: true, completion: nil)
+    }
 }

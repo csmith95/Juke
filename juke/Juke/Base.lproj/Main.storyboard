@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -555,7 +556,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6g6-Dn-cTu" userLabel="backgroundblur image">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="jukedef" translatesAutoresizingMaskIntoConstraints="NO" id="6g6-Dn-cTu" userLabel="backgroundblur image">
                                 <rect key="frame" x="0.0" y="64" width="375" height="559"/>
                             </imageView>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HkN-cu-19h">
@@ -570,66 +571,68 @@
                                                 <view contentMode="scaleAspectFill" placeholderIntrinsicWidth="375" placeholderIntrinsicHeight="355.5" translatesAutoresizingMaskIntoConstraints="NO" id="oH1-Vg-VTU" userLabel="CurrPlayingView">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="279.5"/>
                                                     <subviews>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uqG-GS-V2m">
-                                                            <rect key="frame" x="0.0" y="0.0" width="375" height="279.5"/>
-                                                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                                        </imageView>
-                                                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tkt-ad-C7g">
-                                                            <rect key="frame" x="100" y="160" width="227" height="29"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tkt-ad-C7g">
+                                                            <rect key="frame" x="74" y="125" width="227" height="29"/>
                                                             <string key="text">There are no songs in this stream.
 Hit the search tab to add new songs.</string>
                                                             <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="12"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uai-2k-heq">
-                                                            <rect key="frame" x="330" y="248" width="36.5" height="16"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uai-2k-heq">
+                                                            <rect key="frame" x="330" y="258" width="36.5" height="16"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <button contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IwY-dS-tGg">
-                                                            <rect key="frame" x="8" y="8" width="29" height="48"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <state key="normal" image="trash"/>
-                                                            <connections>
-                                                                <action selector="clearStream:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="cRf-SQ-r5b"/>
-                                                            </connections>
-                                                        </button>
-                                                        <button contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="21b-0y-uN8">
-                                                            <rect key="frame" x="163" y="176" width="48" height="48"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="21b-0y-uN8">
+                                                            <rect key="frame" x="161" y="211" width="40" height="40"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" secondItem="21b-0y-uN8" secondAttribute="height" multiplier="1:1" id="i6g-bH-XKu"/>
+                                                            </constraints>
                                                             <state key="normal" image="ic_play_arrow_white_48pt"/>
                                                             <state key="selected" image="ic_pause_white_48pt"/>
                                                             <connections>
                                                                 <action selector="toggleListening:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="1HC-Bg-hgv"/>
                                                             </connections>
                                                         </button>
-                                                        <button hidden="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ejJ-SU-iib" userLabel="Skip Button">
-                                                            <rect key="frame" x="120" y="8" width="48" height="48"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <state key="normal" image="ic_fast_forward_white_48pt"/>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LcZ-kx-edO">
+                                                            <rect key="frame" x="343" y="8" width="24" height="24"/>
+                                                            <state key="normal" image="ic_account_circle_white"/>
                                                             <connections>
-                                                                <action selector="skipSong:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="Wd7-5i-aAN"/>
+                                                                <segue destination="i5P-dU-G7f" kind="show" id="fGd-Hc-Qna"/>
                                                             </connections>
                                                         </button>
-                                                        <button hidden="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ezo-F5-eLp" userLabel="Leave Button">
-                                                            <rect key="frame" x="56" y="8" width="48" height="48"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <accessibility key="accessibilityConfiguration" hint="Leave stream" label="Leave stream">
-                                                                <accessibilityTraits key="traits" button="YES"/>
-                                                            </accessibility>
-                                                            <state key="normal" image="ic_exit_to_app_white_48pt">
-                                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                            </state>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="btf-jU-fnV">
+                                                            <rect key="frame" x="327" y="13" width="7.5" height="15.5"/>
+                                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <slider opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="eR1-0n-Twz">
+                                                            <rect key="frame" x="38" y="255" width="286" height="23"/>
+                                                            <color key="thumbTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        </slider>
+                                                        <button contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BEA-4i-jB0">
+                                                            <rect key="frame" x="8" y="254" width="25" height="25"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="25" id="GUK-At-1w3"/>
+                                                                <constraint firstAttribute="height" constant="25" id="eCz-Si-jBd"/>
+                                                            </constraints>
+                                                            <state key="normal" image="plus"/>
+                                                            <state key="selected" image="checkmark"/>
                                                             <connections>
-                                                                <action selector="returnToPersonalStream:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="qrM-9F-xFZ"/>
+                                                                <action selector="addSongToLibPressed:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="cYk-2X-EpY"/>
                                                             </connections>
                                                         </button>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="N6C-Cr-y7l">
+                                                            <rect key="frame" x="119" y="78" width="125" height="125"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" secondItem="N6C-Cr-y7l" secondAttribute="height" multiplier="1:1" id="aZr-uj-Ur8"/>
+                                                            </constraints>
+                                                        </imageView>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="Wuc-bt-vVA" userLabel="Current Song Stack View">
-                                                            <rect key="frame" x="131" y="119" width="113.5" height="40.5"/>
+                                                            <rect key="frame" x="125" y="19" width="113.5" height="40.5"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Song" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q6y-f2-E0O">
                                                                     <rect key="frame" x="0.0" y="0.0" width="113.5" height="23"/>
@@ -645,56 +648,57 @@ Hit the search tab to add new songs.</string>
                                                                 </label>
                                                             </subviews>
                                                         </stackView>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LcZ-kx-edO">
-                                                            <rect key="frame" x="343" y="8" width="24" height="24"/>
-                                                            <state key="normal" image="ic_account_circle_white"/>
+                                                        <button hidden="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ejJ-SU-iib" userLabel="Skip Button">
+                                                            <rect key="frame" x="252" y="120" width="40" height="40"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" secondItem="ejJ-SU-iib" secondAttribute="height" multiplier="1:1" id="WyP-BR-PQV"/>
+                                                            </constraints>
+                                                            <state key="normal" image="ic_fast_forward_white_48pt"/>
                                                             <connections>
-                                                                <segue destination="i5P-dU-G7f" kind="show" id="fGd-Hc-Qna"/>
+                                                                <action selector="skipSong:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="Wd7-5i-aAN"/>
                                                             </connections>
                                                         </button>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="btf-jU-fnV">
-                                                            <rect key="frame" x="327" y="13" width="7.5" height="15.5"/>
-                                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
-                                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="eR1-0n-Twz">
-                                                            <rect key="frame" x="38" y="241" width="286" height="31"/>
-                                                            <color key="thumbTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        </slider>
-                                                        <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BEA-4i-jB0">
-                                                            <rect key="frame" x="8" y="244" width="25" height="25"/>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yhS-n1-v5r">
+                                                            <rect key="frame" x="342" y="226" width="25" height="25"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="width" constant="25" id="GUK-At-1w3"/>
-                                                                <constraint firstAttribute="height" constant="25" id="eCz-Si-jBd"/>
+                                                                <constraint firstAttribute="height" constant="25" id="1FF-Xw-DAY"/>
+                                                                <constraint firstAttribute="width" constant="25" id="GFX-I3-OIb"/>
                                                             </constraints>
-                                                            <state key="normal" image="plus"/>
-                                                            <state key="selected" image="checkmark"/>
+                                                            <state key="normal" image="ellipsis"/>
                                                             <connections>
-                                                                <action selector="addSongToLibPressed:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="cYk-2X-EpY"/>
+                                                                <action selector="showMenuButtonPressed:" destination="MDf-xd-Wgi" eventType="touchUpInside" id="OP9-uB-FLd"/>
                                                             </connections>
                                                         </button>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="bottom" secondItem="eR1-0n-Twz" secondAttribute="bottom" constant="8.5" id="7Hx-3d-TDX"/>
+                                                        <constraint firstItem="yhS-n1-v5r" firstAttribute="trailing" secondItem="LcZ-kx-edO" secondAttribute="trailing" id="42e-HH-Uqr"/>
+                                                        <constraint firstItem="ejJ-SU-iib" firstAttribute="leading" secondItem="N6C-Cr-y7l" secondAttribute="trailing" constant="8" id="5gQ-Na-aae"/>
+                                                        <constraint firstItem="N6C-Cr-y7l" firstAttribute="top" secondItem="Wuc-bt-vVA" secondAttribute="bottom" constant="18.5" id="6hP-aU-5lU"/>
+                                                        <constraint firstItem="yhS-n1-v5r" firstAttribute="bottom" secondItem="21b-0y-uN8" secondAttribute="bottom" id="72X-Bs-fLS"/>
+                                                        <constraint firstAttribute="bottom" secondItem="eR1-0n-Twz" secondAttribute="bottom" constant="2.5" id="7Hx-3d-TDX"/>
+                                                        <constraint firstItem="tkt-ad-C7g" firstAttribute="centerX" secondItem="oH1-Vg-VTU" secondAttribute="centerX" id="8KC-P4-CnQ"/>
                                                         <constraint firstItem="LcZ-kx-edO" firstAttribute="top" secondItem="oH1-Vg-VTU" secondAttribute="top" constant="8" id="9eQ-R8-x1y"/>
                                                         <constraint firstItem="Uai-2k-heq" firstAttribute="leading" secondItem="eR1-0n-Twz" secondAttribute="trailing" constant="8" id="CZc-gK-Hkl"/>
+                                                        <constraint firstItem="N6C-Cr-y7l" firstAttribute="centerY" secondItem="oH1-Vg-VTU" secondAttribute="centerY" id="DbT-uK-8Sy"/>
                                                         <constraint firstItem="btf-jU-fnV" firstAttribute="centerY" secondItem="LcZ-kx-edO" secondAttribute="centerY" id="Dfg-FV-l0t"/>
                                                         <constraint firstAttribute="trailing" secondItem="LcZ-kx-edO" secondAttribute="trailing" constant="8" id="ELS-ic-gwF"/>
                                                         <constraint firstItem="Uai-2k-heq" firstAttribute="centerY" secondItem="eR1-0n-Twz" secondAttribute="centerY" id="Ey8-eb-glt"/>
+                                                        <constraint firstItem="N6C-Cr-y7l" firstAttribute="centerX" secondItem="oH1-Vg-VTU" secondAttribute="centerX" constant="-6" id="H5D-Tu-JPH"/>
                                                         <constraint firstAttribute="trailing" secondItem="Uai-2k-heq" secondAttribute="trailing" constant="8.5" id="Mdf-Pv-UAl"/>
-                                                        <constraint firstAttribute="trailing" secondItem="uqG-GS-V2m" secondAttribute="trailing" id="NgG-9V-9Gq"/>
-                                                        <constraint firstItem="uqG-GS-V2m" firstAttribute="top" secondItem="oH1-Vg-VTU" secondAttribute="top" id="Tja-z2-4wx"/>
+                                                        <constraint firstItem="ejJ-SU-iib" firstAttribute="centerY" secondItem="N6C-Cr-y7l" secondAttribute="centerY" id="Q5w-XZ-Adw"/>
+                                                        <constraint firstItem="21b-0y-uN8" firstAttribute="centerX" secondItem="N6C-Cr-y7l" secondAttribute="centerX" id="T0k-vS-8va"/>
                                                         <constraint firstItem="BEA-4i-jB0" firstAttribute="leading" secondItem="oH1-Vg-VTU" secondAttribute="leading" constant="8" id="ToU-Rs-n2X"/>
-                                                        <constraint firstItem="Wuc-bt-vVA" firstAttribute="centerX" secondItem="oH1-Vg-VTU" secondAttribute="centerX" id="ZlI-EE-HEI"/>
+                                                        <constraint firstItem="N6C-Cr-y7l" firstAttribute="width" secondItem="oH1-Vg-VTU" secondAttribute="height" multiplier="125:279" id="aKv-vm-9wA"/>
                                                         <constraint firstItem="Uai-2k-heq" firstAttribute="leading" secondItem="eR1-0n-Twz" secondAttribute="trailing" constant="8" id="aeS-EZ-Iff"/>
-                                                        <constraint firstItem="Wuc-bt-vVA" firstAttribute="centerY" secondItem="oH1-Vg-VTU" secondAttribute="centerY" id="aic-Kl-gsB"/>
+                                                        <constraint firstItem="Wuc-bt-vVA" firstAttribute="centerX" secondItem="N6C-Cr-y7l" secondAttribute="centerX" id="cpb-Iz-F64"/>
+                                                        <constraint firstItem="21b-0y-uN8" firstAttribute="width" secondItem="N6C-Cr-y7l" secondAttribute="height" multiplier="8:25" id="dp6-gr-BVP"/>
+                                                        <constraint firstItem="tkt-ad-C7g" firstAttribute="centerY" secondItem="oH1-Vg-VTU" secondAttribute="centerY" id="jBE-4L-eMB"/>
+                                                        <constraint firstItem="ejJ-SU-iib" firstAttribute="width" secondItem="N6C-Cr-y7l" secondAttribute="height" multiplier="8:25" id="mfp-pF-1eD"/>
                                                         <constraint firstItem="eR1-0n-Twz" firstAttribute="leading" secondItem="oH1-Vg-VTU" secondAttribute="leading" constant="40" id="rSU-Jo-Pw2"/>
-                                                        <constraint firstItem="eR1-0n-Twz" firstAttribute="top" secondItem="BEA-4i-jB0" secondAttribute="bottom" constant="-28" id="v9B-uT-jsr"/>
+                                                        <constraint firstItem="eR1-0n-Twz" firstAttribute="top" secondItem="BEA-4i-jB0" secondAttribute="bottom" constant="-24" id="v9B-uT-jsr"/>
                                                         <constraint firstItem="LcZ-kx-edO" firstAttribute="leading" secondItem="btf-jU-fnV" secondAttribute="trailing" constant="8.5" id="vWt-hR-Jq0"/>
-                                                        <constraint firstItem="uqG-GS-V2m" firstAttribute="leading" secondItem="oH1-Vg-VTU" secondAttribute="leading" id="x7O-d8-rAh"/>
-                                                        <constraint firstAttribute="bottom" secondItem="uqG-GS-V2m" secondAttribute="bottom" id="zQH-Ng-P8F"/>
+                                                        <constraint firstItem="21b-0y-uN8" firstAttribute="top" secondItem="N6C-Cr-y7l" secondAttribute="bottom" constant="8" id="xgK-YC-iGq"/>
                                                     </constraints>
                                                 </view>
                                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="375" placeholderIntrinsicHeight="400" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="46" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Jo7-bX-PbC">
@@ -770,7 +774,7 @@ Hit the search tab to add new songs.</string>
                                         <constraint firstItem="Zed-ko-ItF" firstAttribute="top" secondItem="BwB-Po-Crr" secondAttribute="top" id="kbx-yK-c9k"/>
                                     </constraints>
                                 </view>
-                                <blurEffect style="light"/>
+                                <blurEffect style="dark"/>
                             </visualEffectView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -791,13 +795,10 @@ Hit the search tab to add new songs.</string>
                     <connections>
                         <outlet property="addSongButton" destination="BEA-4i-jB0" id="0Ai-kh-EhS"/>
                         <outlet property="bgblurimg" destination="6g6-Dn-cTu" id="nAy-5E-5Ac"/>
-                        <outlet property="clearStreamButton" destination="IwY-dS-tGg" id="eoN-rJ-VaN"/>
-                        <outlet property="coverArtImage" destination="uqG-GS-V2m" id="3LV-sy-g6l"/>
+                        <outlet property="coverArtImage" destination="N6C-Cr-y7l" id="nN5-sy-83e"/>
                         <outlet property="currTimeLabel" destination="Uai-2k-heq" id="Dis-GJ-Uft"/>
                         <outlet property="currentArtistLabel" destination="2fl-wu-vGl" id="dXu-2A-lBv"/>
                         <outlet property="currentSongLabel" destination="q6y-f2-E0O" id="eAL-pz-Zqn"/>
-                        <outlet property="currentlyPlayingView" destination="oH1-Vg-VTU" id="Cpf-BS-ejn"/>
-                        <outlet property="exitStreamButton" destination="ezo-F5-eLp" id="mFE-oS-pfQ"/>
                         <outlet property="listenButton" destination="21b-0y-uN8" id="cmB-EF-yGz"/>
                         <outlet property="noSongsLabel" destination="tkt-ad-C7g" id="aXU-RR-aK0"/>
                         <outlet property="numMembersLabel" destination="btf-jU-fnV" id="Y01-4S-pc7"/>
@@ -1118,10 +1119,10 @@ Hit the search tab to add new songs.</string>
     <resources>
         <image name="checkmark" width="50" height="50"/>
         <image name="earth" width="29" height="29"/>
-        <image name="empty_fire" width="376" height="419"/>
+        <image name="ellipsis" width="50" height="50"/>
+        <image name="empty_fire" width="366" height="424"/>
         <image name="filled_fire" width="320" height="320"/>
         <image name="ic_account_circle_white" width="24" height="24"/>
-        <image name="ic_exit_to_app_white_48pt" width="48" height="48"/>
         <image name="ic_fast_forward_white_48pt" width="48" height="48"/>
         <image name="ic_pause_white_48pt" width="48" height="48"/>
         <image name="ic_play_arrow_white_48pt" width="48" height="48"/>
@@ -1132,7 +1133,6 @@ Hit the search tab to add new songs.</string>
         <image name="loginButton" width="244" height="44"/>
         <image name="music" width="29" height="29"/>
         <image name="plus" width="48" height="48"/>
-        <image name="trash" width="29" height="29"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="wzn-k3-GC2"/>

@@ -36,7 +36,7 @@ class SpotifyLoginController: UIViewController, UIWebViewDelegate {
         auth.redirectURL = kCallbackURL
         auth.tokenSwapURL = kTokenSwapURL
         auth.tokenRefreshURL = URL(string: "https://juketokenrefresh.herokuapp.com/refresh")
-        auth.requestedScopes = [SPTAuthStreamingScope, SPTAuthUserLibraryReadScope, SPTAuthUserReadPrivateScope, SPTAuthUserLibraryModifyScope]
+        auth.requestedScopes = [SPTAuthStreamingScope, SPTAuthUserLibraryReadScope, SPTAuthUserLibraryModifyScope, SPTAuthPlaylistReadPrivateScope]
         let loginURL = SPTAuth.defaultInstance().spotifyWebAuthenticationURL()!
         let request = URLRequest(url: loginURL, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10)
         self.webView.loadRequest(request)
