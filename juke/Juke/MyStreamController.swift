@@ -340,13 +340,13 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     }
 
     @IBAction func showMenuButtonPressed(_ sender: Any) {
-        let actionController = MenuActionController()
-        actionController.addAction(Action("View Details", style: .default, handler: { action in }))
-        actionController.addAction(Action("View Retweets", style: .default, handler: { action in }))
-        actionController.addAction(Action("View in Favstar", style: .default, handler: { action in }))
-        actionController.addSection(Section())
-        actionController.addAction(Action("Cancel", style: .cancel, handler:nil))
-    
-        present(actionController, animated: true, completion: nil)
+//        let actionController = MenuActionController()
+//        actionController.addAction(Action("View Details", style: .default, handler: { action in }))
+//        actionController.addAction(Action("View Retweets", style: .default, handler: { action in }))
+//        actionController.addAction(Action("View in Favstar", style: .default, handler: { action in }))
+//        actionController.addSection(Section())
+//        actionController.addAction(Action("Cancel", style: .cancel, handler:nil))
+//    
+//        present(actionController, animated: true, completion: nil)
     }
 }
