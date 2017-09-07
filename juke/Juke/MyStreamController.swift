@@ -118,10 +118,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         songFinished()
     }
     
-    @IBAction func returnToPersonalStream(_ sender: Any) {
-        FirebaseAPI.createNewStream(removeFromCurrentStream: true)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = songsDataSource
@@ -327,10 +323,19 @@ class MyStreamController: UIViewController, UITableViewDelegate {
 
     @IBAction func showMenuButtonPressed(_ sender: Any) {
         let actionController = MenuActionController()
+        actionController.addAction(Action("Add to Spotify Library", style: .default, handler: { action in
+            
+        }))
+        actionController.addAction(Action("Leave Stream", style: .default, handler: { action in
+            FirebaseAPI.createNewStream(removeFromCurrentStream: true)
+        }))
         
-        actionController.addAction(Action("Leave Stream", style: .default, handler: { action in }))
-        actionController.addAction(Action("Add to Spotify Library", style: .default, handler: { action in }))
-        actionController.addAction(Action("Skip Song", style: .default, handler: { action in }))
+        if Current.isHost() {
+            actionController.addAction(Action("Skip Song", style: .default, handler: { action in
+                
+            }))
+        }
+        
         actionController.addAction(Action("Close", style: .cancel, handler: nil))
         
         present(actionController, animated: true, completion: nil)
