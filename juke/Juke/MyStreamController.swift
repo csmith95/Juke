@@ -20,16 +20,14 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     // firebase vars
     let songsDataSource = SongQueueDataSource()
     
-    @IBOutlet var numMembersLabel: UILabel!
-    @IBOutlet var addSongButton: UIButton!
+    @IBOutlet var streamNameLabel: UILabel!
+    @IBOutlet var hostLabel: UILabel!
     @IBOutlet var currentArtistLabel: UILabel!
     @IBOutlet var currentSongLabel: UILabel!
     @IBOutlet weak var bgblurimg: UIImageView!
     @IBOutlet var coverArtImage: UIImageView!
-    @IBOutlet weak var noSongsLabel: UILabel!
     @IBOutlet weak var progressSlider: UISlider!
     @IBOutlet weak var currTimeLabel: UILabel!
-    @IBOutlet weak var skipButton: UIButton!
     @IBOutlet var tableView: UITableView!
     let jamsPlayer = JamsPlayer.shared
     @IBOutlet public var listenButton: UIButton!
@@ -71,32 +69,32 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     }
     
     @IBAction func addSongToLibPressed(_ sender: Any) {
-        let path = addSongButton.isSelected ? ServerConstants.kDeleteSongByIDPath : ServerConstants.kAddSongByIDPath
-        let method: HTTPMethod = addSongButton.isSelected ? .delete : .put
-        if let song = Current.stream.song {
-            let headers = [
-                "Authorization": "Bearer " + Current.accessToken
-            ]
-            let url = URL(string: ServerConstants.kSpotifyBaseURL+path+song.spotifyID)!
-            let message = addSongButton.isSelected ? "Removed from your library" : "Saved to your library!"
-            self.addSongButton.isSelected = !self.addSongButton.isSelected
-            Alamofire.request(url, method: method, headers: headers).validate().responseData() { response in
-                switch response.result {
-                case .success:
-                    // tell search table view controller to update lib
-                    NotificationCenter.default.post(name: Notification.Name("libraryChanged"), object: song)
-                    self.delay(0.5) {
-                        HUD.flash(.label(message), delay: 0.75)
-                    }
-                    break
-                case .failure(let error):
-                    print("Error saving to spotify lib: ", error)
-                    self.delay(0.5) {
-                        HUD.flash(.label("Failed to save to your library"), delay: 0.75)
-                    }
-                }
-            }
-        }
+//        let path = addSongButton.isSelected ? ServerConstants.kDeleteSongByIDPath : ServerConstants.kAddSongByIDPath
+//        let method: HTTPMethod = addSongButton.isSelected ? .delete : .put
+//        if let song = Current.stream.song {
+//            let headers = [
+//                "Authorization": "Bearer " + Current.accessToken
+//            ]
+//            let url = URL(string: ServerConstants.kSpotifyBaseURL+path+song.spotifyID)!
+//            let message = addSongButton.isSelected ? "Removed from your library" : "Saved to your library!"
+//            self.addSongButton.isSelected = !self.addSongButton.isSelected
+//            Alamofire.request(url, method: method, headers: headers).validate().responseData() { response in
+//                switch response.result {
+//                case .success:
+//                    // tell search table view controller to update lib
+//                    NotificationCenter.default.post(name: Notification.Name("libraryChanged"), object: song)
+//                    self.delay(0.5) {
+//                        HUD.flash(.label(message), delay: 0.75)
+//                    }
+//                    break
+//                case .failure(let error):
+//                    print("Error saving to spotify lib: ", error)
+//                    self.delay(0.5) {
+//                        HUD.flash(.label("Failed to save to your library"), delay: 0.75)
+//                    }
+//                }
+//            }
+//        }
     }
     
     func delay(_ delay: Double, closure:@escaping () -> Void) {
@@ -127,7 +125,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = songsDataSource
-        tableView.delegate = self
         tableView.dataSource = songsDataSource
         // first 2 respond to spotify events
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
@@ -140,6 +137,8 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.firebaseEventHandler), name: Notification.Name("firebaseEvent"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.reloadSongs), name: Notification.Name("reloadSongs"), object: nil)
+        
+        progressSlider.setThumbImage(UIImage(named: "slider_thumb.png"), for: .normal)
 
         
         // set to online if not marked online
@@ -181,18 +180,11 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             // controls for the owner
             listenButton.setImage(UIImage(named: "ic_play_arrow_white_48pt.png"), for: .normal)
             listenButton.setImage(UIImage(named: "ic_pause_white_48pt.png"), for: .selected)
-            skipButton.isHidden = false
             listenButton.isSelected = Current.stream.isPlaying
         } else {
             listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
             listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
-            skipButton.isHidden = true
         }
-        numMembersLabel.text = String(Current.stream.members.count+1)
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
     }
 
     override func didReceiveMemoryWarning() {
@@ -264,55 +256,50 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             self.bgblurimg.af_setImage(withURL: URL(string:song.coverArtURL)!, placeholderImage: nil)
             self.currentSongLabel.text = song.songName
             self.currentArtistLabel.text = song.artistName
-            self.addSongButton.isHidden = false
             self.listenButton.isHidden = false
             if Current.isHost() {
                 self.listenButton.isSelected = Current.stream.isPlaying
             }
-            self.skipButton.isHidden = !Current.isHost()
             self.checkIfUserLibContainsCurrentSong(song: song)
-            self.noSongsLabel.isHidden = true
+//            self.noSongsLabel.isHidden = true
             progressSlider.isHidden = false
             currTimeLabel.isHidden = false
         } else {
             self.setEmptyStreamUI()
         }
-        numMembersLabel.text = String(Current.stream.members.count+1) // +1 for host
     }
     
     private func setEmptyStreamUI() {
-        self.noSongsLabel.isHidden = false
+//        self.noSongsLabel.isHidden = false
         coverArtImage.isHidden = true
         bgblurimg.image = #imageLiteral(resourceName: "jukedef")
         currentSongLabel.text = ""
         currentArtistLabel.text = ""
-        addSongButton.isHidden = true
         progressSlider.value = 0.0
         listenButton.isHidden = true
         listenButton.isSelected = false
         Current.listenSelected = false
-        skipButton.isHidden = true
         progressSlider.isHidden = true
         currTimeLabel.isHidden = true
         refreshSongPlayStatus()
     }
     
     func checkIfUserLibContainsCurrentSong(song: Models.FirebaseSong) {
-        let headers = [
-            "Authorization": "Bearer " + Current.accessToken
-        ]
-        let url = URL(string: ServerConstants.kSpotifyBaseURL+ServerConstants.kContainsSongPath+song.spotifyID)!
-        Alamofire.request(url, method: .get, headers: headers)
-            .validate().responseJSON { response in
-                switch response.result {
-                    case .success:
-                        let array = response.value as! [Bool]
-                        let containsSong = array[0]
-                        self.addSongButton.isSelected = containsSong
-                    case .failure(let error):
-                        print("error checking if song is already in lib: ", error)
-                }
-        }
+//        let headers = [
+//            "Authorization": "Bearer " + Current.accessToken
+//        ]
+//        let url = URL(string: ServerConstants.kSpotifyBaseURL+ServerConstants.kContainsSongPath+song.spotifyID)!
+//        Alamofire.request(url, method: .get, headers: headers)
+//            .validate().responseJSON { response in
+//                switch response.result {
+//                    case .success:
+//                        let array = response.value as! [Bool]
+//                        let containsSong = array[0]
+//                        self.addSongButton.isSelected = containsSong
+//                    case .failure(let error):
+//                        print("error checking if song is already in lib: ", error)
+//                }
+//        }
     }
     
     func jamsPlayerReady() {
@@ -323,7 +310,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         guard let event = notification.object as? FirebaseAPI.FirebaseEvent else { print("erro"); return }
         switch event {
         case .MemberJoined, .MemberLeft:
-            self.numMembersLabel.text = String(Current.stream.members.count+1) // +1 for host
             break
         case .ResyncStream:
             self.progressSliderValue = jamsPlayer.position_ms
