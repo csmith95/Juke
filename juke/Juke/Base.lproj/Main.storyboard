@@ -11,6 +11,11 @@
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Login View Controller-->
         <scene sceneID="viY-uY-OtI">
@@ -605,9 +610,15 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yTz-q4-EFt">
+                                                    <rect key="frame" x="346" y="21" width="21" height="20"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <state key="normal" image="Invite button"/>
+                                                </button>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <constraints>
+                                                <constraint firstItem="yTz-q4-EFt" firstAttribute="top" secondItem="r3S-pE-PHI" secondAttribute="top" constant="21" id="2qI-9C-XVg"/>
                                                 <constraint firstItem="zfz-uL-tae" firstAttribute="top" secondItem="7yu-NX-TDQ" secondAttribute="bottom" constant="4" id="8lz-zP-ayl"/>
                                                 <constraint firstAttribute="trailing" secondItem="g7F-kJ-0YA" secondAttribute="trailing" constant="8" id="9tS-DA-9GG"/>
                                                 <constraint firstAttribute="trailing" secondItem="zfz-uL-tae" secondAttribute="trailing" constant="8" id="BJK-EG-ync"/>
@@ -617,6 +628,7 @@
                                                 <constraint firstItem="7yu-NX-TDQ" firstAttribute="top" secondItem="g7F-kJ-0YA" secondAttribute="bottom" constant="15" id="Rmc-Qc-4vc"/>
                                                 <constraint firstAttribute="trailing" secondItem="7yu-NX-TDQ" secondAttribute="trailing" constant="8" id="UpB-Y2-zKO"/>
                                                 <constraint firstAttribute="bottom" secondItem="zfz-uL-tae" secondAttribute="bottom" constant="20" id="Vug-09-XWF"/>
+                                                <constraint firstAttribute="trailing" secondItem="yTz-q4-EFt" secondAttribute="trailing" constant="8" id="Y4d-da-eFX"/>
                                                 <constraint firstAttribute="bottom" secondItem="8b3-NJ-hjm" secondAttribute="bottom" id="aSt-aq-jd9"/>
                                                 <constraint firstItem="8b3-NJ-hjm" firstAttribute="leading" secondItem="r3S-pE-PHI" secondAttribute="leading" id="qqN-1f-hee"/>
                                                 <constraint firstItem="8b3-NJ-hjm" firstAttribute="top" secondItem="r3S-pE-PHI" secondAttribute="top" id="vV0-YY-COk"/>
@@ -662,15 +674,18 @@
                                             </connections>
                                         </button>
                                         <slider opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="1U3-jg-bL9">
-                                            <rect key="frame" x="42" y="315" width="291" height="31"/>
+                                            <rect key="frame" x="42" y="323" width="291" height="4"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="3" id="WSg-GB-3x4"/>
+                                            </constraints>
                                         </slider>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6jw-vE-gSP">
-                                            <rect key="frame" x="163" y="339" width="48" height="48"/>
+                                            <rect key="frame" x="163" y="338" width="48" height="48"/>
                                             <state key="normal" image="ic_play_arrow_white_48pt"/>
                                             <state key="selected" image="ic_pause_white_48pt"/>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FAD-H2-98b">
-                                            <rect key="frame" x="335" y="323" width="32" height="14"/>
+                                            <rect key="frame" x="335" y="317.5" width="32" height="14"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
@@ -686,10 +701,10 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="r3S-pE-PHI" firstAttribute="top" secondItem="zna-iU-OPZ" secondAttribute="top" id="4DG-Jj-J9i"/>
-                                        <constraint firstItem="1U3-jg-bL9" firstAttribute="top" secondItem="4ee-Gc-gbi" secondAttribute="bottom" constant="0.5" id="5HZ-7n-80F"/>
+                                        <constraint firstItem="1U3-jg-bL9" firstAttribute="top" secondItem="4ee-Gc-gbi" secondAttribute="bottom" constant="8" id="5HZ-7n-80F"/>
                                         <constraint firstItem="kX7-Rt-hYm" firstAttribute="leading" secondItem="ei8-ca-kQg" secondAttribute="trailing" constant="4" id="95C-Oc-RWP"/>
                                         <constraint firstItem="oDN-Up-zgj" firstAttribute="top" secondItem="k37-Ei-AUc" secondAttribute="bottom" constant="8" id="Bmg-Gn-m4d"/>
-                                        <constraint firstItem="6jw-vE-gSP" firstAttribute="top" secondItem="1U3-jg-bL9" secondAttribute="bottom" constant="-6" id="CHo-9I-qkg"/>
+                                        <constraint firstItem="6jw-vE-gSP" firstAttribute="top" secondItem="1U3-jg-bL9" secondAttribute="bottom" constant="12" id="CHo-9I-qkg"/>
                                         <constraint firstItem="oDN-Up-zgj" firstAttribute="leading" secondItem="zna-iU-OPZ" secondAttribute="leading" constant="8" id="DMs-kp-LUK"/>
                                         <constraint firstItem="ei8-ca-kQg" firstAttribute="leading" secondItem="zna-iU-OPZ" secondAttribute="leading" constant="8" id="GYT-Pd-fY6"/>
                                         <constraint firstAttribute="trailing" secondItem="1U3-jg-bL9" secondAttribute="trailing" constant="44" id="IBN-7i-QTA"/>
@@ -1360,6 +1375,7 @@ Hit the search tab to add new songs.</string>
     </scenes>
     <resources>
         <image name="Add song button" width="19" height="19"/>
+        <image name="Invite button" width="21" height="20"/>
         <image name="checkmark" width="50" height="50"/>
         <image name="earth" width="29" height="29"/>
         <image name="ellipsis" width="50" height="50"/>
