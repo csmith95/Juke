@@ -318,6 +318,8 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             break
         case .SetProgress:
             self.progressSliderValue = jamsPlayer.position_ms
+        default:
+            break
         }
     }
 
@@ -327,7 +329,8 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             
         }))
         actionController.addAction(Action("Leave Stream", style: .default, handler: { action in
-            FirebaseAPI.createNewStream(removeFromCurrentStream: true)
+//            FirebaseAPI.createNewStream(removeFromCurrentStream: true)
+            FirebaseAPI.leaveStream()
         }))
         
         if Current.isHost() {
@@ -337,7 +340,39 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         }
         
         actionController.addAction(Action("Close", style: .cancel, handler: nil))
-        
         present(actionController, animated: true, completion: nil)
     }
 }
+
+// basic extension to make border radius on button from storyboard
+extension UIView {
+    
+    @IBInspectable var cornerRadius: CGFloat {
+        get {
+            return layer.cornerRadius
+        }
+        set {
+            layer.cornerRadius = newValue
+            layer.masksToBounds = newValue > 0
+        }
+    }
+    
+    @IBInspectable var borderWidth: CGFloat {
+        get {
+            return layer.borderWidth
+        }
+        set {
+            layer.borderWidth = newValue
+        }
+    }
+    
+    @IBInspectable var borderColor: UIColor? {
+        get {
+            return UIColor(cgColor: layer.borderColor!)
+        }
+        set {
+            layer.borderColor = newValue?.cgColor
+        }
+    }
+}
+
