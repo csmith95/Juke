@@ -128,7 +128,7 @@
 		4B3A34CB1E58120F00C314A0 /* Juke */ = {
 			isa = PBXGroup;
 			children = (
-				F2A24EE71F57879400E0FE2F /* Juke.entitlements */,
+				4B48FDE21F5DCF7900E87507 /* ActionData.swift */,
 				4B3A34CC1E58120F00C314A0 /* AppDelegate.swift */,
 				4B3F95171F143BCA00CBEF79 /* Assets.xcassets */,
 				4BA9B3F41E91B043003D352E /* Current.swift */,
@@ -136,14 +136,17 @@
 				4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */,
 				4B8CD0F71F51FF47005C61D1 /* FriendCell.swift */,
 				F250A6D41F4181A600816AAC /* GoogleService-Info.plist */,
+				4B48FDE61F6108E700E87507 /* GradientView.swift */,
 				4B3A34DD1E58120F00C314A0 /* Info.plist */,
 				4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */,
 				4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */,
+				F2A24EE71F57879400E0FE2F /* Juke.entitlements */,
 				4B3A34CE1E58120F00C314A0 /* Juke.xcdatamodeld */,
 				F2E815571E90BBBC00404DDF /* LoginViewController.swift */,
 				4B3A34D51E58120F00C314A0 /* Main.storyboard */,
+				4B48FDDC1F5DCCE400E87507 /* MenuActionController.swift */,
+				4B48FDE01F5DCEC700E87507 /* MenuCell.xib */,
 				4B336A661E8B54A0003CEDBB /* Models.swift */,
-				4B48FDE21F5DCF7900E87507 /* ActionData.swift */,
 				4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */,
 				F2DB0B361EA14BA200A13E30 /* SearchCell.swift */,
 				F2DB0B321EA1145A00A13E30 /* SearchTableViewController.swift */,
@@ -156,9 +159,6 @@
 				4B13DE4D1E8AFB850060D29A /* StreamsTableViewController.swift */,
 				F27E0E901F4FF05400C4AE37 /* UserProfileViewController.swift */,
 				F2317CB51EB7D3A5003ACBE7 /* Videos */,
-				4B48FDDC1F5DCCE400E87507 /* MenuActionController.swift */,
-				4B48FDE01F5DCEC700E87507 /* MenuCell.xib */,
-				4B48FDE61F6108E700E87507 /* GradientView.swift */,
 			);
 			path = Juke;
 			sourceTree = "<group>";
@@ -279,13 +279,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Juke-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		34A7314F190E8126F182500E /* [CP] Copy Pods Resources */ = {
@@ -309,9 +312,38 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Juke/Pods-Juke-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/AlamofireImage/AlamofireImage.framework",
+				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
+				"${BUILT_PRODUCTS_DIR}/ESTMusicIndicator/ESTMusicIndicator.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/PKHUD/PKHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
+				"${BUILT_PRODUCTS_DIR}/SCLAlertView/SCLAlertView.framework",
+				"${BUILT_PRODUCTS_DIR}/SkyFloatingLabelTextField/SkyFloatingLabelTextField.framework",
+				"${BUILT_PRODUCTS_DIR}/Unbox/Unbox.framework",
+				"${BUILT_PRODUCTS_DIR}/Whisper/Whisper.framework",
+				"${BUILT_PRODUCTS_DIR}/XLActionController/XLActionController.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChameleonFramework.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ESTMusicIndicator.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PKHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SCLAlertView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SkyFloatingLabelTextField.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Unbox.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Whisper.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XLActionController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -484,6 +516,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.csmith95.juke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Juke/Juke-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -498,6 +531,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Juke/Juke.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = UL2WBS3TV4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -513,6 +547,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.csmith95.juke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Juke/Juke-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
