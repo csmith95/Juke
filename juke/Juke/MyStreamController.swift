@@ -20,6 +20,8 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     // firebase vars
     let songsDataSource = SongQueueDataSource()
     
+    @IBOutlet var numContributorsButton: UIButton!
+    var streamName = ""
     @IBOutlet var streamNameLabel: UILabel!
     @IBOutlet var hostLabel: UILabel!
     @IBOutlet var currentArtistLabel: UILabel!
@@ -155,17 +157,14 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Helvetica", size: 15)!]
-        if Current.isHost() {
-            navBarTitle = "Your Stream"
-        } else {
-            navBarTitle = Current.stream.host.username + "'s Stream"
-        }
+        streamNameLabel.text = streamName
         FirebaseAPI.listenForSongProgress() // will update if progress difference > 3 seconds
         songsDataSource.setObservedStream()
         self.setUpControlButtons()
         FirebaseAPI.setOnlineTrue()
         FirebaseAPI.setfcmtoken()
         print("USER ONLINE", Current.user.online)
+        numContributorsButton.setTitle("\(Current.stream.members.count+1) contributors", for: .normal)
         loadTopSong()
         reloadSongs()
     }
@@ -329,8 +328,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             
         }))
         actionController.addAction(Action("Leave Stream", style: .default, handler: { action in
-//            FirebaseAPI.createNewStream(removeFromCurrentStream: true)
-            FirebaseAPI.leaveStream()
+            self.performSegue(withIdentifier: "leaveStream", sender: nil)
         }))
         
         if Current.isHost() {
