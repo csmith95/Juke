@@ -11,6 +11,7 @@ import CoreData
 import Alamofire
 import UserNotifications
 import Firebase
+import PKHUD
 
 
 @UIApplicationMain
@@ -50,6 +51,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         application.registerForRemoteNotifications()
         
         // [END register_for_notifications]
+        
+        // a global setting for HUD pop-ups
+        PKHUD.sharedHUD.userInteractionOnUnderlyingViewsEnabled = true
         
         return true
     }

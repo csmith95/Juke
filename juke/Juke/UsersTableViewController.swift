@@ -23,6 +23,8 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
         usersTableView.delegate = friendsDataSource
         searchBar.delegate = self
         // setup notifications
+        // MARK: do we need all of these with new swipe for more feature?
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadCollection), name: Notification.Name("reloadCollection"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
         
 

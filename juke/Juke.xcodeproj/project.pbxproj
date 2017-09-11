@@ -159,7 +159,6 @@
 				F2B49C511F4E9DC8007B55DA /* StreamMembersTableViewController.swift */,
 				4B13DE4D1E8AFB850060D29A /* StreamsTableViewController.swift */,
 				F27E0E901F4FF05400C4AE37 /* UserProfileViewController.swift */,
-				F2317CB51EB7D3A5003ACBE7 /* Videos */,
 				4B48FDDC1F5DCCE400E87507 /* MenuActionController.swift */,
 				4B48FDE01F5DCEC700E87507 /* MenuCell.xib */,
 				4B48FDE61F6108E700E87507 /* GradientView.swift */,
@@ -191,13 +190,6 @@
 				72A8139088E7F63BECA297C9 /* Pods-Juke.release.xcconfig */,
 			);
 			name = Pods;
-			sourceTree = "<group>";
-		};
-		F2317CB51EB7D3A5003ACBE7 /* Videos */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Videos;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
