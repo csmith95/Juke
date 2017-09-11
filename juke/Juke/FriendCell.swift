@@ -12,12 +12,12 @@ import PKHUD
 
 class FriendCell: UITableViewCell {
 
-    @IBOutlet var inviteToStreamButton: UIButton!
-    @IBOutlet var joinStreamButton: UIButton!
-    @IBOutlet var memberNameLabel: UILabel!
-    @IBOutlet var friendImageView: UIImageView!
-    @IBOutlet var presenceDot: UIImageView!
-    @IBOutlet var streamNameLabel: UILabel!
+    //@IBOutlet var inviteToStreamButton: UIButton!
+    //@IBOutlet var joinStreamButton: UIButton!
+    @IBOutlet var userNameLabel: UILabel!
+    @IBOutlet var userImageView: UIImageView!
+    @IBOutlet var presenceDot: UIImageView! 
+    //@IBOutlet var streamNameLabel: UILabel!
     private let defaultIcon = CircleFilter().filter(UIImage(named: "juke_icon")!)
     private var member: Models.FirebaseUser!
     private var stream: Models.FirebaseStream?
@@ -61,14 +61,14 @@ class FriendCell: UITableViewCell {
     
     public func populateCell(member: Models.FirebaseUser) {
         // to reset elements
-        self.joinStreamButton.isSelected = false
-        self.joinStreamButton.isHidden = false
-        self.inviteToStreamButton.isSelected = false
-        self.inviteToStreamButton.isHidden = false
+//        self.joinStreamButton.isSelected = false
+//        self.joinStreamButton.isHidden = false
+//        self.inviteToStreamButton.isSelected = false
+//        self.inviteToStreamButton.isHidden = false
         
         // set elements
         self.member = member
-        self.memberNameLabel.text = member.username
+        self.userNameLabel.text = member.username
         loadUserIcon(url: member.imageURL)
         if member.online {
             presenceDot.image = #imageLiteral(resourceName: "green dot")
@@ -76,50 +76,50 @@ class FriendCell: UITableViewCell {
             presenceDot.image = #imageLiteral(resourceName: "red dot")
         }
         
-        guard let streamID = member.tunedInto else {
-            streamNameLabel.text = "No stream"
-            joinStreamButton.isHidden = true
-            return
-        }
+//        guard let streamID = member.tunedInto else {
+//            streamNameLabel.text = "No stream"
+//            joinStreamButton.isHidden = true
+//            return
+//        }
         
-        fetchStream(streamID: streamID)
+        //fetchStream(streamID: streamID)
     }
     
     private func loadUserIcon(url: String?) {
         if let unwrappedUrl = url {
-            friendImageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultIcon)
+            userImageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultIcon)
         } else {
-            friendImageView.image = defaultIcon
+            userImageView.image = defaultIcon
         }
     }
     
-    private func fetchStream(streamID: String) {
-        FirebaseAPI.fetchStream(streamID: streamID) { (optionalStream)  in
-            guard let stream = optionalStream else {
-                self.streamNameLabel.text = "No stream"
-                self.joinStreamButton.isHidden = true
-                return
-            }
-            
-            self.stream = stream
-            
-            // determine whether join stream/ invite to stream should show
-            if (Current.stream.streamID == stream.streamID) {
-                self.joinStreamButton.isHidden = true
-                self.inviteToStreamButton.isHidden = true
-            }
-            
-            // set stream title
-            if (Current.stream.streamID == stream.streamID) {
-                self.streamNameLabel.text = "Streaming with you"
-            } else if (self.member.spotifyID == stream.host
-                .spotifyID){
-                self.streamNameLabel.text = "Hosting a stream"
-            } else {
-                self.streamNameLabel.text = stream.host.username + "'s Stream"
-            }
-        }
-        
-    }
+//    private func fetchStream(streamID: String) {
+//        FirebaseAPI.fetchStream(streamID: streamID) { (optionalStream)  in
+//            guard let stream = optionalStream else {
+//                self.streamNameLabel.text = "No stream"
+//                self.joinStreamButton.isHidden = true
+//                return
+//            }
+//            
+//            self.stream = stream
+//            
+//            // determine whether join stream/ invite to stream should show
+//            if (Current.stream.streamID == stream.streamID) {
+//                self.joinStreamButton.isHidden = true
+//                self.inviteToStreamButton.isHidden = true
+//            }
+//            
+//            // set stream title
+//            if (Current.stream.streamID == stream.streamID) {
+//                self.streamNameLabel.text = "Streaming with you"
+//            } else if (self.member.spotifyID == stream.host
+//                .spotifyID){
+//                self.streamNameLabel.text = "Hosting a stream"
+//            } else {
+//                self.streamNameLabel.text = stream.host.username + "'s Stream"
+//            }
+//        }
+//        
+//    }
     
 }

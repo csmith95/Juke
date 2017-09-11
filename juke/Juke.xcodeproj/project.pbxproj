@@ -41,6 +41,7 @@
 		F2B49C521F4E9DC8007B55DA /* StreamMembersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B49C511F4E9DC8007B55DA /* StreamMembersTableViewController.swift */; };
 		F2DB0B331EA1145A00A13E30 /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DB0B321EA1145A00A13E30 /* SearchTableViewController.swift */; };
 		F2DB0B371EA14BA200A13E30 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DB0B361EA14BA200A13E30 /* SearchCell.swift */; };
+		F2E10C131F64EFE900E6723F /* UsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E10C121F64EFE900E6723F /* UsersTableViewController.swift */; };
 		F2E815581E90BBBC00404DDF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E815571E90BBBC00404DDF /* LoginViewController.swift */; };
 		F2F8B7E41EB18B0B000A438B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2F8B7E31EB18B0B000A438B /* CoreGraphics.framework */; };
 /* End PBXBuildFile section */
@@ -86,6 +87,7 @@
 		F2B49C511F4E9DC8007B55DA /* StreamMembersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamMembersTableViewController.swift; sourceTree = "<group>"; };
 		F2DB0B321EA1145A00A13E30 /* SearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
 		F2DB0B361EA14BA200A13E30 /* SearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
+		F2E10C121F64EFE900E6723F /* UsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersTableViewController.swift; sourceTree = "<group>"; };
 		F2E815571E90BBBC00404DDF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		F2F8B7E31EB18B0B000A438B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -162,6 +164,7 @@
 				4B48FDE01F5DCEC700E87507 /* MenuCell.xib */,
 				4B48FDE61F6108E700E87507 /* GradientView.swift */,
 				4B48FDE81F6337C800E87507 /* MakeStreamViewController.swift */,
+				F2E10C121F64EFE900E6723F /* UsersTableViewController.swift */,
 			);
 			path = Juke;
 			sourceTree = "<group>";
@@ -351,6 +354,7 @@
 				4B3A34CD1E58120F00C314A0 /* AppDelegate.swift in Sources */,
 				4BDCEBA81E709F7F00D9D3EE /* JamsPlayer.swift in Sources */,
 				F2DB0B371EA14BA200A13E30 /* SearchCell.swift in Sources */,
+				F2E10C131F64EFE900E6723F /* UsersTableViewController.swift in Sources */,
 				4BA9B3F51E91B043003D352E /* Current.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
