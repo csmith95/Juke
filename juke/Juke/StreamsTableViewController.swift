@@ -81,6 +81,9 @@ class StreamsTableViewController: UIViewController, UISearchBarDelegate, UIScrol
         self.tabBarController?.selectedIndex = 1
     }
     
+    // set status bar content to white text
+    override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
+    
     // idea: write a separate data source class that takes in 
     // an equals function and a sort function and maintains 
     // a list of a new data type that includes both Models.User and Models.Stream
