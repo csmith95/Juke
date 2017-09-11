@@ -76,9 +76,9 @@
                     </userDefinedRuntimeAttributes>
                     <connections>
                         <segue destination="aNa-bh-xnM" kind="relationship" relationship="viewControllers" id="0Wi-aB-6lV"/>
+                        <segue destination="BOk-OX-nkH" kind="relationship" relationship="viewControllers" id="2dK-4f-LgI"/>
                         <segue destination="nxr-Ui-A1n" kind="relationship" relationship="viewControllers" id="T2o-gZ-Xmc"/>
                         <segue destination="jvE-nl-hbR" kind="relationship" relationship="viewControllers" id="6fu-lK-COz"/>
-                        <segue destination="BOk-OX-nkH" kind="relationship" relationship="viewControllers" id="2dK-4f-LgI"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zhc-f6-5s6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -627,11 +627,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="81i-Mi-4mS">
-                                <rect key="frame" x="67" y="269" width="240" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="jukedef" translatesAutoresizingMaskIntoConstraints="NO" id="gX5-mE-BhH">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="375"/>
                             </imageView>
@@ -1086,7 +1081,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kn4-zk-1AN">
-                                <rect key="frame" x="121" y="401.5" width="132" height="35"/>
+                                <rect key="frame" x="121" y="412.5" width="132" height="35"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <state key="normal" title="Start streaming">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1096,7 +1091,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="s1H-ZZ-Ady" customClass="SkyFloatingLabelTextField" customModule="SkyFloatingLabelTextField">
-                                <rect key="frame" x="16" y="323" width="343" height="21"/>
+                                <rect key="frame" x="16" y="312" width="343" height="43"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>

@@ -23,9 +23,6 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
         usersTableView.delegate = friendsDataSource
         searchBar.delegate = self
         // setup notifications
-        // MARK: do we need all of these with new swipe for more feature?
-        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadCollection), name: Notification.Name("reloadCollection"), object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(self.newStreamJoined), name: Notification.Name("newStreamJoined"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
         
 
@@ -65,24 +62,6 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
             self.tableView.reloadData()
             objc_sync_exit(self.tableView.dataSource)
         }
-    }
-
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
