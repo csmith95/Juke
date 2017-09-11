@@ -84,6 +84,8 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
         // #warning Incomplete implementation, return the number of rows
         return 0
     }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
 
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
