@@ -12,19 +12,19 @@ import FirebaseDatabaseUI
 import PKHUD
 
 class CollectionItem {
-    var friend: Models.FirebaseUser!
+    var user: Models.FirebaseUser!
     var stream: Models.FirebaseStream!
     var song: Models.FirebaseSong!
     
     init(snapshot: DataSnapshot) {
-        self.friend = Models.FirebaseUser(snapshot: snapshot)
+        self.user = Models.FirebaseUser(snapshot: snapshot)
         self.stream = Models.FirebaseStream(snapshot: snapshot)
         self.song = Models.FirebaseSong(snapshot: snapshot)
     }
     
     // sanity check
     func isValid() -> Bool {
-        return friend != nil || stream != nil || song != nil
+        return user != nil || stream != nil || song != nil
     }
     
 }
@@ -223,32 +223,32 @@ class StreamsDataSource: CustomDataSource {
 }
 
 
-class FriendsDataSource: CustomDataSource {
+class UsersDataSource: CustomDataSource {
     init() {
         super.init(path: "users")
         reloadEventName = "reloadCollection"
     }
     
     override func isEqual(current: CollectionItem, other: CollectionItem) -> Bool {
-        return other.friend.spotifyID == current.friend.spotifyID
+        return other.user.spotifyID == current.user.spotifyID
     }
     
     // comparator function used for sorting in super class
     override func comparator(first: CollectionItem, second: CollectionItem) -> Bool {
-        return first.friend.username < second.friend.username
+        return first.user.username < second.user.username
     }
     
     override func shouldInclude(item: CollectionItem) -> Bool {
-        let included = item.friend.spotifyID != Current.user.spotifyID
+        let included = item.user.spotifyID != Current.user.spotifyID
         if !included || query.isEmpty {
             return included
         }
-        return item.friend.username.lowercased().contains(query.lowercased())
+        return item.user.username.lowercased().contains(query.lowercased())
     }
     
     override func populateCell(tableView: UITableView, indexPath: IndexPath, item: CollectionItem) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "FriendCell", for: indexPath) as! FriendCell
-        cell.populateCell(member: self.filteredCollection[indexPath.row].friend)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath) as! UserCell
+        cell.populateCell(member: self.filteredCollection[indexPath.row].user)
         return cell
     }
 }

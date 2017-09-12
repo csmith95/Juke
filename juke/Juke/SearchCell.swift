@@ -9,21 +9,33 @@
 import UIKit
 
 class SearchCell: UITableViewCell {
-    @IBOutlet weak var addToStreamButton: UIButton!
-    var tapAction: ((SearchCell) -> Void)?
+    
+    @IBOutlet var artistLabel: UILabel!
+    @IBOutlet var songLabel: UILabel!
+    @IBOutlet var addButton: UIButton!
+    var song: Models.SpotifySong!
 
     override func awakeFromNib() {
         super.awakeFromNib()
     }
-
-    @IBAction func queueSongButtonTapped(_ sender: Any) {
-        tapAction?(self)
+    
+    func populateCell(song: Models.SpotifySong) {
+        self.song = song
+        artistLabel.text = song.artistName
+        songLabel.text = song.songName
+        
+        // reset button
+        addButton.isSelected = false
+        addButton.isUserInteractionEnabled = true
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    @IBAction func addButtonPressed(_ sender: Any) {
+        handleAddButtonPressed()
+        addButton.isSelected = true
+        addButton.isUserInteractionEnabled = false
     }
-
+    
+    func handleAddButtonPressed() {
+        fatalError("This method must be overridden by subclass")
+    }
 }

@@ -10,7 +10,7 @@ import UIKit
 import AlamofireImage
 import PKHUD
 
-class FriendCell: UITableViewCell {
+class UserCell: UITableViewCell {
 
     @IBOutlet var inviteToStreamButton: UIButton!
     @IBOutlet var userNameLabel: UILabel!
@@ -29,7 +29,8 @@ class FriendCell: UITableViewCell {
         let button = sender as! UIButton
         button.isSelected = !button.isSelected
         FirebaseAPI.sendNotification(receiver: self.member)
-        HUD.flash(.labeledSuccess(title: nil, subtitle: "\(self.member.username) invited!"), delay: 0.85)
+        HUD.flash(.labeledSuccess(title: nil, subtitle: "Invited \(self.member.username) to your stream"), delay: 1.00)
+        self.inviteToStreamButton.isUserInteractionEnabled = false
     }
     
     public func populateCell(member: Models.FirebaseUser) {
@@ -37,9 +38,10 @@ class FriendCell: UITableViewCell {
         inviteToStreamButton.layer.borderWidth = 1
         inviteToStreamButton.layer.borderColor = UIColor.white.cgColor
         
-        // to reset elements
+        // reset elements
         self.inviteToStreamButton.isSelected = false
         self.inviteToStreamButton.isHidden = false
+        self.inviteToStreamButton.isUserInteractionEnabled = true
         
         // set elements
         self.member = member

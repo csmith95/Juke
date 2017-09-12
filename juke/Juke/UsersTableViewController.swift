@@ -14,13 +14,13 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
 
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet var usersTableView: UITableView!
-    var friendsDataSource = FriendsDataSource()
+    var usersDataSource = UsersDataSource()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        usersTableView.dataSource = friendsDataSource
-        usersTableView.delegate = friendsDataSource
+        usersTableView.dataSource = usersDataSource
+        usersTableView.delegate = usersDataSource
         searchBar.delegate = self
         // setup notifications
         // MARK: do we need all of these with new swipe for more feature?
@@ -66,6 +66,7 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
         }
     }
     
+    // set status bar text to white
     override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
 
     /*
