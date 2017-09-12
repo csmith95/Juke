@@ -69,8 +69,12 @@ PODS:
   - PKHUD (4.2.0)
   - Protobuf (3.3.0)
   - SCLAlertView (0.7.0)
+  - SkyFloatingLabelTextField (3.2.0)
   - Unbox (2.4.0)
   - Whisper (5.0.0)
+  - XLActionController (3.0.1):
+    - XLActionController/Core (= 3.0.1)
+  - XLActionController/Core (3.0.1)
 
 DEPENDENCIES:
   - Alamofire (~> 4.4)
@@ -85,8 +89,10 @@ DEPENDENCIES:
   - FirebaseUI/Database (~> 4.0)
   - PKHUD (~> 4.0)
   - SCLAlertView
+  - SkyFloatingLabelTextField (~> 3.0)
   - Unbox
   - Whisper
+  - XLActionController
 
 EXTERNAL SOURCES:
   ChameleonFramework:
@@ -117,9 +123,11 @@ SPEC CHECKSUMS:
   PKHUD: 48af884cf00c2213b0313b739d914e6cab1c0f5e
   Protobuf: d582fecf68201eac3d79ed61369ef45734394b9c
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
+  SkyFloatingLabelTextField: 4e2d2f7160af660ed1da6bb9d0027b5c474b4b79
   Unbox: c8b2ab69d3337597b4a3f47a0538807dc12db670
   Whisper: 051f25e704bf8992641ffd28b20d5682ddc5f5d3
+  XLActionController: 57fe0ce1642e2eed971b188b490762345fdbf963
 
-PODFILE CHECKSUM: d48a8d1e5041ab9f577d7a6263b6f27968ec4d45
+PODFILE CHECKSUM: 5d0a253dd644e975fbb342a5ef9a49d4e360d3f9
 
 COCOAPODS: 1.2.0

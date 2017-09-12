@@ -13,11 +13,10 @@ class SongTableViewCell: UITableViewCell {
 
     @IBOutlet var upvoteButton: UIButton!
     @IBOutlet var numVotesLabel: UILabel!
-    @IBOutlet var memberImageView: UIImageView!
     @IBOutlet var songName: UILabel!
     @IBOutlet var artist: UILabel!
-    let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
-    let imageFilter = CircleFilter()
+//    let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
+//    let imageFilter = CircleFilter()
     var song: Models.FirebaseSong!
     
     override func awakeFromNib() {
@@ -36,7 +35,6 @@ class SongTableViewCell: UITableViewCell {
     }
     
     public func populateCell(song: Models.FirebaseSong) {
-        print("\n song: ", song)
         self.song = song
         songName.text = song.songName
         artist.text = song.artistName
@@ -44,11 +42,11 @@ class SongTableViewCell: UITableViewCell {
             return userSpotifyID == Current.user.spotifyID
         })
         numVotesLabel.text = String(song.votes)
-        if let unwrappedUrl = song.memberImageURL {
-            memberImageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultImage, filter: imageFilter)
-        } else {
-            memberImageView.image = imageFilter.filter(defaultImage)
-        }
+//        if let unwrappedUrl = song.memberImageURL {
+//            memberImageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultImage, filter: imageFilter)
+//        } else {
+//            memberImageView.image = imageFilter.filter(defaultImage)
+//        }
     }
 
 }

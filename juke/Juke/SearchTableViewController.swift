@@ -32,8 +32,8 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
         case Scope.MyLibrary.rawValue:
             filterLibrary(keywords: keywords)
         case Scope.Spotify.rawValue:
+            displayedResults.removeAll()
             if keywords.characters.count == 0 {
-                displayedResults.removeAll()
                 tableView.reloadData()
                 return
             }
@@ -78,8 +78,7 @@ class SearchTableViewController: UITableViewController, UISearchBarDelegate {
             showMyLibrary()
         case Scope.Spotify.rawValue:
             spotifyResults.removeAll()
-            displayedResults.removeAll()
-            tableView.reloadData()
+            execSearch()
         default:
             print("idk")
         }

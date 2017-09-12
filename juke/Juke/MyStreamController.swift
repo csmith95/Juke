@@ -13,25 +13,23 @@ import AlamofireImage
 import PKHUD
 import Firebase
 import FirebaseDatabaseUI
+import XLActionController
 
-class MyStreamController: UIViewController, UITableViewDelegate {
+class MyStreamController: UITableViewController {
     
     // firebase vars
     let songsDataSource = SongQueueDataSource()
     
-    @IBOutlet var numMembersLabel: UILabel!
-    @IBOutlet var clearStreamButton: UIButton!
-    @IBOutlet var addSongButton: UIButton!
+    @IBOutlet var numContributorsButton: UIButton!
+    var streamName = ""
+    @IBOutlet var streamNameLabel: UILabel!
+    @IBOutlet var hostLabel: UILabel!
     @IBOutlet var currentArtistLabel: UILabel!
     @IBOutlet var currentSongLabel: UILabel!
     @IBOutlet weak var bgblurimg: UIImageView!
     @IBOutlet var coverArtImage: UIImageView!
-    @IBOutlet weak var noSongsLabel: UILabel!
-    @IBOutlet weak var exitStreamButton: UIButton!
     @IBOutlet weak var progressSlider: UISlider!
     @IBOutlet weak var currTimeLabel: UILabel!
-    @IBOutlet weak var skipButton: UIButton!
-    @IBOutlet var tableView: UITableView!
     let jamsPlayer = JamsPlayer.shared
     @IBOutlet public var listenButton: UIButton!
     var animationTimer = Timer()
@@ -72,32 +70,32 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     }
     
     @IBAction func addSongToLibPressed(_ sender: Any) {
-        let path = addSongButton.isSelected ? ServerConstants.kDeleteSongByIDPath : ServerConstants.kAddSongByIDPath
-        let method: HTTPMethod = addSongButton.isSelected ? .delete : .put
-        if let song = Current.stream.song {
-            let headers = [
-                "Authorization": "Bearer " + Current.accessToken
-            ]
-            let url = URL(string: ServerConstants.kSpotifyBaseURL+path+song.spotifyID)!
-            let message = addSongButton.isSelected ? "Removed from your library" : "Saved to your library!"
-            self.addSongButton.isSelected = !self.addSongButton.isSelected
-            Alamofire.request(url, method: method, headers: headers).validate().responseData() { response in
-                switch response.result {
-                case .success:
-                    // tell search table view controller to update lib
-                    NotificationCenter.default.post(name: Notification.Name("libraryChanged"), object: song)
-                    self.delay(0.5) {
-                        HUD.flash(.label(message), delay: 0.75)
-                    }
-                    break
-                case .failure(let error):
-                    print("Error saving to spotify lib: ", error)
-                    self.delay(0.5) {
-                        HUD.flash(.label("Failed to save to your library"), delay: 0.75)
-                    }
-                }
-            }
-        }
+//        let path = addSongButton.isSelected ? ServerConstants.kDeleteSongByIDPath : ServerConstants.kAddSongByIDPath
+//        let method: HTTPMethod = addSongButton.isSelected ? .delete : .put
+//        if let song = Current.stream.song {
+//            let headers = [
+//                "Authorization": "Bearer " + Current.accessToken
+//            ]
+//            let url = URL(string: ServerConstants.kSpotifyBaseURL+path+song.spotifyID)!
+//            let message = addSongButton.isSelected ? "Removed from your library" : "Saved to your library!"
+//            self.addSongButton.isSelected = !self.addSongButton.isSelected
+//            Alamofire.request(url, method: method, headers: headers).validate().responseData() { response in
+//                switch response.result {
+//                case .success:
+//                    // tell search table view controller to update lib
+//                    NotificationCenter.default.post(name: Notification.Name("libraryChanged"), object: song)
+//                    self.delay(0.5) {
+//                        HUD.flash(.label(message), delay: 0.75)
+//                    }
+//                    break
+//                case .failure(let error):
+//                    print("Error saving to spotify lib: ", error)
+//                    self.delay(0.5) {
+//                        HUD.flash(.label("Failed to save to your library"), delay: 0.75)
+//                    }
+//                }
+//            }
+//        }
     }
     
     func delay(_ delay: Double, closure:@escaping () -> Void) {
@@ -121,10 +119,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         songFinished()
     }
     
-    @IBAction func returnToPersonalStream(_ sender: Any) {
-        FirebaseAPI.createNewStream(removeFromCurrentStream: true)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = songsDataSource
@@ -140,6 +134,8 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.firebaseEventHandler), name: Notification.Name("firebaseEvent"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.reloadSongs), name: Notification.Name("reloadSongs"), object: nil)
+        
+        progressSlider.setThumbImage(UIImage(named: "slider_thumb.png"), for: .normal)
 
         
         // set to online if not marked online
@@ -148,28 +144,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
 //            
 //        }
     }
-    
-//    var oldContentOffset = CGPoint.zero
-//    let topConstraintRange = (CGFloat(120)..<CGFloat(300))
-//    
-//    func scrollViewDidScroll(scrollView: UIScrollView) {
-//        
-//        let delta =  scrollView.contentOffset.y - oldContentOffset.y
-//        
-//        //we compress the top view
-//        if delta > 0 && topConstraint.constant > topConstraintRange.start && scrollView.contentOffset.y > 0 {
-//            topConstraint.constant -= delta
-//            scrollView.contentOffset.y -= delta
-//        }
-//        
-//        //we expand the top view
-//        if delta < 0 && topConstraint.constant < topConstraintRange.end && scrollView.contentOffset.y < 0{
-//            topConstraint.constant -= delta
-//            scrollView.contentOffset.y -= delta
-//        }
-//        
-//        oldContentOffset = scrollView.contentOffset
-//    }
     
     func reloadSongs() {
         DispatchQueue.main.async {
@@ -182,17 +156,14 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Helvetica", size: 15)!]
-        if Current.isHost() {
-            navBarTitle = "Your Stream"
-        } else {
-            navBarTitle = Current.stream.host.username + "'s Stream"
-        }
+        streamNameLabel.text = streamName
         FirebaseAPI.listenForSongProgress() // will update if progress difference > 3 seconds
         songsDataSource.setObservedStream()
         self.setUpControlButtons()
         FirebaseAPI.setOnlineTrue()
         FirebaseAPI.setfcmtoken()
         print("USER ONLINE", Current.user.online)
+        numContributorsButton.setTitle("\(Current.stream.members.count+1) contributors", for: .normal)
         loadTopSong()
         reloadSongs()
     }
@@ -203,20 +174,11 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             // controls for the owner
             listenButton.setImage(UIImage(named: "ic_play_arrow_white_48pt.png"), for: .normal)
             listenButton.setImage(UIImage(named: "ic_pause_white_48pt.png"), for: .selected)
-            skipButton.isHidden = false
-            exitStreamButton.isHidden = true
             listenButton.isSelected = Current.stream.isPlaying
         } else {
             listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
             listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
-            skipButton.isHidden = true
-            exitStreamButton.isHidden = false
         }
-        numMembersLabel.text = String(Current.stream.members.count+1)
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
     }
 
     override func didReceiveMemoryWarning() {
@@ -284,60 +246,54 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     func loadTopSong() {
         if let song = Current.stream.song {
             self.coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil)
+            self.coverArtImage.isHidden = false
             self.bgblurimg.af_setImage(withURL: URL(string:song.coverArtURL)!, placeholderImage: nil)
             self.currentSongLabel.text = song.songName
             self.currentArtistLabel.text = song.artistName
-            self.addSongButton.isHidden = false
             self.listenButton.isHidden = false
             if Current.isHost() {
                 self.listenButton.isSelected = Current.stream.isPlaying
             }
-            self.skipButton.isHidden = !Current.isHost()
-            self.clearStreamButton.isHidden = !Current.isHost()
             self.checkIfUserLibContainsCurrentSong(song: song)
-            self.noSongsLabel.isHidden = true
+//            self.noSongsLabel.isHidden = true
             progressSlider.isHidden = false
             currTimeLabel.isHidden = false
         } else {
             self.setEmptyStreamUI()
         }
-        numMembersLabel.text = String(Current.stream.members.count+1) // +1 for host
     }
     
     private func setEmptyStreamUI() {
-        self.noSongsLabel.isHidden = false
-        coverArtImage.image = #imageLiteral(resourceName: "jukedef")
+//        self.noSongsLabel.isHidden = false
+        coverArtImage.isHidden = true
         bgblurimg.image = #imageLiteral(resourceName: "jukedef")
         currentSongLabel.text = ""
         currentArtistLabel.text = ""
-        addSongButton.isHidden = true
         progressSlider.value = 0.0
         listenButton.isHidden = true
         listenButton.isSelected = false
         Current.listenSelected = false
-        skipButton.isHidden = true
-        clearStreamButton.isHidden = true
         progressSlider.isHidden = true
         currTimeLabel.isHidden = true
         refreshSongPlayStatus()
     }
     
     func checkIfUserLibContainsCurrentSong(song: Models.FirebaseSong) {
-        let headers = [
-            "Authorization": "Bearer " + Current.accessToken
-        ]
-        let url = URL(string: ServerConstants.kSpotifyBaseURL+ServerConstants.kContainsSongPath+song.spotifyID)!
-        Alamofire.request(url, method: .get, headers: headers)
-            .validate().responseJSON { response in
-                switch response.result {
-                    case .success:
-                        let array = response.value as! [Bool]
-                        let containsSong = array[0]
-                        self.addSongButton.isSelected = containsSong
-                    case .failure(let error):
-                        print("error checking if song is already in lib: ", error)
-                }
-        }
+//        let headers = [
+//            "Authorization": "Bearer " + Current.accessToken
+//        ]
+//        let url = URL(string: ServerConstants.kSpotifyBaseURL+ServerConstants.kContainsSongPath+song.spotifyID)!
+//        Alamofire.request(url, method: .get, headers: headers)
+//            .validate().responseJSON { response in
+//                switch response.result {
+//                    case .success:
+//                        let array = response.value as! [Bool]
+//                        let containsSong = array[0]
+//                        self.addSongButton.isSelected = containsSong
+//                    case .failure(let error):
+//                        print("error checking if song is already in lib: ", error)
+//                }
+//        }
     }
     
     func jamsPlayerReady() {
@@ -348,7 +304,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         guard let event = notification.object as? FirebaseAPI.FirebaseEvent else { print("erro"); return }
         switch event {
         case .MemberJoined, .MemberLeft:
-            self.numMembersLabel.text = String(Current.stream.members.count+1) // +1 for host
             break
         case .ResyncStream:
             self.progressSliderValue = jamsPlayer.position_ms
@@ -361,7 +316,60 @@ class MyStreamController: UIViewController, UITableViewDelegate {
             break
         case .SetProgress:
             self.progressSliderValue = jamsPlayer.position_ms
+        default:
+            break
         }
     }
 
+    @IBAction func showMenuButtonPressed(_ sender: Any) {
+        let actionController = MenuActionController()
+        actionController.addAction(Action("Add to Spotify Library", style: .default, handler: { action in
+            
+        }))
+        actionController.addAction(Action("Leave Stream", style: .default, handler: { action in
+            self.performSegue(withIdentifier: "leaveStream", sender: nil)
+        }))
+        
+        if Current.isHost() {
+            actionController.addAction(Action("Skip Song", style: .default, handler: { action in
+                
+            }))
+        }
+        
+        actionController.addAction(Action("Close", style: .cancel, handler: nil))
+        present(actionController, animated: true, completion: nil)
+    }
 }
+
+// basic extension to make border radius on button from storyboard
+extension UIView {
+    
+    @IBInspectable var cornerRadius: CGFloat {
+        get {
+            return layer.cornerRadius
+        }
+        set {
+            layer.cornerRadius = newValue
+            layer.masksToBounds = newValue > 0
+        }
+    }
+    
+    @IBInspectable var borderWidth: CGFloat {
+        get {
+            return layer.borderWidth
+        }
+        set {
+            layer.borderWidth = newValue
+        }
+    }
+    
+    @IBInspectable var borderColor: UIColor? {
+        get {
+            return UIColor(cgColor: layer.borderColor!)
+        }
+        set {
+            layer.borderColor = newValue?.cgColor
+        }
+    }
+}
+

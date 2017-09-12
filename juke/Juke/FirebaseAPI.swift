@@ -21,6 +21,7 @@ class FirebaseAPI {
         case ResyncStream
         case SwitchedStreams
         case SetProgress
+        case LeftStream
     }
     
     // to avoid adding listeners multiple times
@@ -358,6 +359,18 @@ class FirebaseAPI {
         }
         
         NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.SwitchedStreams)
+    }
+    
+    public static func leaveStream() {
+        removeAllObservers()
+        ref.child("streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)").removeValue()
+        jamsPlayer.position_ms = 0.0
+        self.ref.cancelDisconnectOperations { (err, dbref) in
+            // reattach listener
+            self.ref.child("/users/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
+        }
+        
+        NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.LeftStream)
     }
     
     public static func updateSongProgress(progress: Double) {

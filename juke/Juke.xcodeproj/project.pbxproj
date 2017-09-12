@@ -20,6 +20,11 @@
 		4B3A34E51E581F1300C314A0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E41E581F1300C314A0 /* AVFoundation.framework */; };
 		4B3A34E71E581F8F00C314A0 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */; };
 		4B3F95181F143BCA00CBEF79 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B3F95171F143BCA00CBEF79 /* Assets.xcassets */; };
+		4B48FDDD1F5DCCE400E87507 /* MenuActionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B48FDDC1F5DCCE400E87507 /* MenuActionController.swift */; };
+		4B48FDE11F5DCEC700E87507 /* MenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B48FDE01F5DCEC700E87507 /* MenuCell.xib */; };
+		4B48FDE31F5DCF7900E87507 /* ActionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B48FDE21F5DCF7900E87507 /* ActionData.swift */; };
+		4B48FDE71F6108E700E87507 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B48FDE61F6108E700E87507 /* GradientView.swift */; };
+		4B48FDE91F6337C800E87507 /* MakeStreamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B48FDE81F6337C800E87507 /* MakeStreamViewController.swift */; };
 		4B4920C01F5722440089C61F /* SpotifyLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4920BF1F5722440089C61F /* SpotifyLoginController.swift */; };
 		4B7C1EA11F484DF00064F1C3 /* FirebaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */; };
 		4B8CD0F81F51FF47005C61D1 /* FriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8CD0F71F51FF47005C61D1 /* FriendCell.swift */; };
@@ -27,8 +32,7 @@
 		4BA9B3F51E91B043003D352E /* Current.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA9B3F41E91B043003D352E /* Current.swift */; };
 		4BDCEBA81E709F7F00D9D3EE /* JamsPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */; };
 		4BDCEC061E720D0B00D9D3EE /* ServerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEC051E720D0B00D9D3EE /* ServerConstants.swift */; };
-		4BF307B11E7797B9002CAE9E /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF307B01E7797B9002CAE9E /* CardTableViewCell.swift */; };
-		F22F44581F5D12D1008D664E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F22F44571F5D12D1008D664E /* GoogleService-Info.plist */; };
+		F250A6D51F4181A600816AAC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F250A6D41F4181A600816AAC /* GoogleService-Info.plist */; };
 		F26A65301EB194F100ADB14E /* SpotifyAudioPlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26A652D1EB194F100ADB14E /* SpotifyAudioPlayback.framework */; };
 		F26A65311EB194F100ADB14E /* SpotifyAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26A652E1EB194F100ADB14E /* SpotifyAuthentication.framework */; };
 		F26A65321EB194F100ADB14E /* SpotifyMetadata.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26A652F1EB194F100ADB14E /* SpotifyMetadata.framework */; };
@@ -37,6 +41,7 @@
 		F2B49C521F4E9DC8007B55DA /* StreamMembersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B49C511F4E9DC8007B55DA /* StreamMembersTableViewController.swift */; };
 		F2DB0B331EA1145A00A13E30 /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DB0B321EA1145A00A13E30 /* SearchTableViewController.swift */; };
 		F2DB0B371EA14BA200A13E30 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DB0B361EA14BA200A13E30 /* SearchCell.swift */; };
+		F2E10C131F64EFE900E6723F /* UsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E10C121F64EFE900E6723F /* UsersTableViewController.swift */; };
 		F2E815581E90BBBC00404DDF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E815571E90BBBC00404DDF /* LoginViewController.swift */; };
 		F2F8B7E41EB18B0B000A438B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2F8B7E31EB18B0B000A438B /* CoreGraphics.framework */; };
 /* End PBXBuildFile section */
@@ -56,6 +61,11 @@
 		4B3A34E41E581F1300C314A0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4B3F95171F143BCA00CBEF79 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4B48FDDC1F5DCCE400E87507 /* MenuActionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuActionController.swift; sourceTree = "<group>"; };
+		4B48FDE01F5DCEC700E87507 /* MenuCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MenuCell.xib; sourceTree = "<group>"; };
+		4B48FDE21F5DCF7900E87507 /* ActionData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionData.swift; sourceTree = "<group>"; };
+		4B48FDE61F6108E700E87507 /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
+		4B48FDE81F6337C800E87507 /* MakeStreamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakeStreamViewController.swift; sourceTree = "<group>"; };
 		4B4920BF1F5722440089C61F /* SpotifyLoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyLoginController.swift; sourceTree = "<group>"; };
 		4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseAPI.swift; sourceTree = "<group>"; };
 		4B8CD0F71F51FF47005C61D1 /* FriendCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendCell.swift; sourceTree = "<group>"; };
@@ -64,7 +74,6 @@
 		4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Juke-Bridging-Header.h"; sourceTree = "<group>"; };
 		4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JamsPlayer.swift; sourceTree = "<group>"; };
 		4BDCEC051E720D0B00D9D3EE /* ServerConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerConstants.swift; sourceTree = "<group>"; };
-		4BF307B01E7797B9002CAE9E /* CardTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardTableViewCell.swift; sourceTree = "<group>"; };
 		72A8139088E7F63BECA297C9 /* Pods-Juke.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke.release.xcconfig"; path = "Pods/Target Support Files/Pods-Juke/Pods-Juke.release.xcconfig"; sourceTree = "<group>"; };
 		D9D54D33C710A946C6515520 /* Pods_Juke.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Juke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECDA8CAF8FCA9C3B7EFCAFF4 /* Pods-Juke.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Juke/Pods-Juke.debug.xcconfig"; sourceTree = "<group>"; };
@@ -78,6 +87,7 @@
 		F2B49C511F4E9DC8007B55DA /* StreamMembersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamMembersTableViewController.swift; sourceTree = "<group>"; };
 		F2DB0B321EA1145A00A13E30 /* SearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
 		F2DB0B361EA14BA200A13E30 /* SearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
+		F2E10C121F64EFE900E6723F /* UsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersTableViewController.swift; sourceTree = "<group>"; };
 		F2E815571E90BBBC00404DDF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		F2F8B7E31EB18B0B000A438B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -122,20 +132,25 @@
 		4B3A34CB1E58120F00C314A0 /* Juke */ = {
 			isa = PBXGroup;
 			children = (
-				F2A24EE71F57879400E0FE2F /* Juke.entitlements */,
+				4B48FDE21F5DCF7900E87507 /* ActionData.swift */,
 				4B3A34CC1E58120F00C314A0 /* AppDelegate.swift */,
 				4B3F95171F143BCA00CBEF79 /* Assets.xcassets */,
-				4BF307B01E7797B9002CAE9E /* CardTableViewCell.swift */,
 				4BA9B3F41E91B043003D352E /* Current.swift */,
 				4B04E4581F55682C001605E2 /* CustomDataSource.swift */,
 				4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */,
 				4B8CD0F71F51FF47005C61D1 /* FriendCell.swift */,
+				F250A6D41F4181A600816AAC /* GoogleService-Info.plist */,
+				4B48FDE61F6108E700E87507 /* GradientView.swift */,
 				4B3A34DD1E58120F00C314A0 /* Info.plist */,
 				4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */,
 				4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */,
+				F2A24EE71F57879400E0FE2F /* Juke.entitlements */,
 				4B3A34CE1E58120F00C314A0 /* Juke.xcdatamodeld */,
 				F2E815571E90BBBC00404DDF /* LoginViewController.swift */,
 				4B3A34D51E58120F00C314A0 /* Main.storyboard */,
+				4B48FDE81F6337C800E87507 /* MakeStreamViewController.swift */,
+				4B48FDDC1F5DCCE400E87507 /* MenuActionController.swift */,
+				4B48FDE01F5DCEC700E87507 /* MenuCell.xib */,
 				4B336A661E8B54A0003CEDBB /* Models.swift */,
 				4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */,
 				F22F44571F5D12D1008D664E /* GoogleService-Info.plist */,
@@ -149,7 +164,7 @@
 				F2B49C511F4E9DC8007B55DA /* StreamMembersTableViewController.swift */,
 				4B13DE4D1E8AFB850060D29A /* StreamsTableViewController.swift */,
 				F27E0E901F4FF05400C4AE37 /* UserProfileViewController.swift */,
-				F2317CB51EB7D3A5003ACBE7 /* Videos */,
+				F2E10C121F64EFE900E6723F /* UsersTableViewController.swift */,
 			);
 			path = Juke;
 			sourceTree = "<group>";
@@ -176,13 +191,6 @@
 				72A8139088E7F63BECA297C9 /* Pods-Juke.release.xcconfig */,
 			);
 			name = Pods;
-			sourceTree = "<group>";
-		};
-		F2317CB51EB7D3A5003ACBE7 /* Videos */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Videos;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -255,6 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B3F95181F143BCA00CBEF79 /* Assets.xcassets in Resources */,
+				4B48FDE11F5DCEC700E87507 /* MenuCell.xib in Resources */,
 				4B3A34D71E58120F00C314A0 /* Main.storyboard in Resources */,
 				F22F44581F5D12D1008D664E /* GoogleService-Info.plist in Resources */,
 			);
@@ -322,19 +331,23 @@
 				4BDCEC061E720D0B00D9D3EE /* ServerConstants.swift in Sources */,
 				4B3A34D01E58120F00C314A0 /* Juke.xcdatamodeld in Sources */,
 				4B0490E91E734614003F49DF /* SongTableViewCell.swift in Sources */,
+				4B48FDE31F5DCF7900E87507 /* ActionData.swift in Sources */,
 				4B4920C01F5722440089C61F /* SpotifyLoginController.swift in Sources */,
 				4B13DE4E1E8AFB850060D29A /* StreamsTableViewController.swift in Sources */,
+				4B48FDE91F6337C800E87507 /* MakeStreamViewController.swift in Sources */,
 				F2DB0B331EA1145A00A13E30 /* SearchTableViewController.swift in Sources */,
 				4BA7CB701E8ED007003E3DC8 /* MyStreamController.swift in Sources */,
-				4BF307B11E7797B9002CAE9E /* CardTableViewCell.swift in Sources */,
+				4B48FDDD1F5DCCE400E87507 /* MenuActionController.swift in Sources */,
 				4B7C1EA11F484DF00064F1C3 /* FirebaseAPI.swift in Sources */,
 				F2E815581E90BBBC00404DDF /* LoginViewController.swift in Sources */,
 				4B04E4591F55682C001605E2 /* CustomDataSource.swift in Sources */,
+				4B48FDE71F6108E700E87507 /* GradientView.swift in Sources */,
 				F2B49C501F4E710A007B55DA /* StreamMemberCell.swift in Sources */,
 				F2B49C521F4E9DC8007B55DA /* StreamMembersTableViewController.swift in Sources */,
 				4B3A34CD1E58120F00C314A0 /* AppDelegate.swift in Sources */,
 				4BDCEBA81E709F7F00D9D3EE /* JamsPlayer.swift in Sources */,
 				F2DB0B371EA14BA200A13E30 /* SearchCell.swift in Sources */,
+				F2E10C131F64EFE900E6723F /* UsersTableViewController.swift in Sources */,
 				4BA9B3F51E91B043003D352E /* Current.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

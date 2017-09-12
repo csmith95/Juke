@@ -22,15 +22,14 @@ class StreamsTableViewController: UIViewController, UISearchBarDelegate, UIScrol
     @IBOutlet var searchBar: UISearchBar!
     let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
     var streamsDataSource = StreamsDataSource()
-    var friendsDataSource = FriendsDataSource()
+//    var friendsDataSource = FriendsDataSource()
     
-    enum Scope: Int {
-        case Streams = 0, Friends   // struct to keep track of which scope is selected
-    }
+//    enum Scope: Int {
+//        case Streams = 0, Friends   // struct to keep track of which scope is selected
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Discover"
         backgroundImage.image = #imageLiteral(resourceName: "jukedef")
         searchBar.delegate = self
         tableView.dataSource = streamsDataSource
@@ -50,17 +49,10 @@ class StreamsTableViewController: UIViewController, UISearchBarDelegate, UIScrol
         }
     }
     
-    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        if selectedScope == Scope.Streams.rawValue {
-            tableView.dataSource = streamsDataSource
-            tableView.delegate = streamsDataSource
-        } else {
-          tableView.dataSource = friendsDataSource
-          tableView.delegate = friendsDataSource
-        }
-        searchBar.text = ""
-        execSearchQuery()
-    }
+//    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+//        searchBar.text = ""
+//        execSearchQuery()
+//    }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         execSearchQuery()
@@ -88,6 +80,9 @@ class StreamsTableViewController: UIViewController, UISearchBarDelegate, UIScrol
     func newStreamJoined() {
         self.tabBarController?.selectedIndex = 1
     }
+    
+    // set status bar content to white text
+    override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
     
     // idea: write a separate data source class that takes in 
     // an equals function and a sort function and maintains 
