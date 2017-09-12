@@ -132,7 +132,7 @@
 		4B3A34CB1E58120F00C314A0 /* Juke */ = {
 			isa = PBXGroup;
 			children = (
-				F2A24EE71F57879400E0FE2F /* Juke.entitlements */,
+				4B48FDE21F5DCF7900E87507 /* ActionData.swift */,
 				4B3A34CC1E58120F00C314A0 /* AppDelegate.swift */,
 				4B3F95171F143BCA00CBEF79 /* Assets.xcassets */,
 				4BA9B3F41E91B043003D352E /* Current.swift */,
@@ -140,14 +140,18 @@
 				4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */,
 				4B8CD0F71F51FF47005C61D1 /* FriendCell.swift */,
 				F250A6D41F4181A600816AAC /* GoogleService-Info.plist */,
+				4B48FDE61F6108E700E87507 /* GradientView.swift */,
 				4B3A34DD1E58120F00C314A0 /* Info.plist */,
 				4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */,
 				4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */,
+				F2A24EE71F57879400E0FE2F /* Juke.entitlements */,
 				4B3A34CE1E58120F00C314A0 /* Juke.xcdatamodeld */,
 				F2E815571E90BBBC00404DDF /* LoginViewController.swift */,
 				4B3A34D51E58120F00C314A0 /* Main.storyboard */,
+				4B48FDE81F6337C800E87507 /* MakeStreamViewController.swift */,
+				4B48FDDC1F5DCCE400E87507 /* MenuActionController.swift */,
+				4B48FDE01F5DCEC700E87507 /* MenuCell.xib */,
 				4B336A661E8B54A0003CEDBB /* Models.swift */,
-				4B48FDE21F5DCF7900E87507 /* ActionData.swift */,
 				4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */,
 				F2DB0B361EA14BA200A13E30 /* SearchCell.swift */,
 				F2DB0B321EA1145A00A13E30 /* SearchTableViewController.swift */,
@@ -159,10 +163,6 @@
 				F2B49C511F4E9DC8007B55DA /* StreamMembersTableViewController.swift */,
 				4B13DE4D1E8AFB850060D29A /* StreamsTableViewController.swift */,
 				F27E0E901F4FF05400C4AE37 /* UserProfileViewController.swift */,
-				4B48FDDC1F5DCCE400E87507 /* MenuActionController.swift */,
-				4B48FDE01F5DCEC700E87507 /* MenuCell.xib */,
-				4B48FDE61F6108E700E87507 /* GradientView.swift */,
-				4B48FDE81F6337C800E87507 /* MakeStreamViewController.swift */,
 				F2E10C121F64EFE900E6723F /* UsersTableViewController.swift */,
 			);
 			path = Juke;

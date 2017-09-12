@@ -15,7 +15,7 @@ import Firebase
 import FirebaseDatabaseUI
 import XLActionController
 
-class MyStreamController: UIViewController, UITableViewDelegate {
+class MyStreamController: UITableViewController {
     
     // firebase vars
     let songsDataSource = SongQueueDataSource()
@@ -30,7 +30,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     @IBOutlet var coverArtImage: UIImageView!
     @IBOutlet weak var progressSlider: UISlider!
     @IBOutlet weak var currTimeLabel: UILabel!
-    @IBOutlet var tableView: UITableView!
     let jamsPlayer = JamsPlayer.shared
     @IBOutlet public var listenButton: UIButton!
     var animationTimer = Timer()

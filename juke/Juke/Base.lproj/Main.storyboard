@@ -638,56 +638,11 @@
             <point key="canvasLocation" x="1607.2" y="1661.9190404797603"/>
         </scene>
         <!--My Stream Controller-->
-        <scene sceneID="L4Y-6H-OTN">
-            <objects>
-                <viewController id="iYr-hr-uZM" customClass="MyStreamController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ukN-k5-OPP"/>
-                        <viewControllerLayoutGuide type="bottom" id="uaA-GI-YGm"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="hKn-1w-4mv">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="65" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Jfh-mr-7KL">
-                                <rect key="frame" x="0.0" y="420" width="414" height="198"/>
-                                <color key="backgroundColor" red="0.33663956760000002" green="1" blue="0.24507149049999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="separatorColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            </tableView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="Jfh-mr-7KL" secondAttribute="trailing" id="14L-eB-NfE"/>
-                            <constraint firstItem="Jfh-mr-7KL" firstAttribute="leading" secondItem="hKn-1w-4mv" secondAttribute="leading" id="SE0-Ya-Clc"/>
-                            <constraint firstItem="uaA-GI-YGm" firstAttribute="top" secondItem="Jfh-mr-7KL" secondAttribute="bottom" id="ixq-D6-Ned"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="Yqd-Y3-7pA"/>
-                    <connections>
-                        <outlet property="bgblurimg" destination="gX5-mE-BhH" id="Xk3-sI-VPs"/>
-                        <outlet property="coverArtImage" destination="k37-Ei-AUc" id="jDV-fd-tjl"/>
-                        <outlet property="currTimeLabel" destination="FAD-H2-98b" id="3pP-Ym-aHE"/>
-                        <outlet property="currentArtistLabel" destination="4ee-Gc-gbi" id="C8n-aa-1Eu"/>
-                        <outlet property="currentSongLabel" destination="oDN-Up-zgj" id="NOL-Zl-LAH"/>
-                        <outlet property="listenButton" destination="6jw-vE-gSP" id="cRb-ee-aT5"/>
-                        <outlet property="numContributorsButton" destination="cWv-Zj-TDf" id="wLJ-XD-JSR"/>
-                        <outlet property="progressSlider" destination="1U3-jg-bL9" id="Vx0-cr-GfN"/>
-                        <outlet property="streamNameLabel" destination="g7F-kJ-0YA" id="CG8-d6-u5C"/>
-                        <outlet property="tableView" destination="Jfh-mr-7KL" id="wOX-LJ-3nn"/>
-                        <segue destination="Uqg-8N-dQp" kind="show" identifier="leaveStream" id="edf-CX-8h8"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hPP-xc-rlK" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3250" y="1726"/>
-        </scene>
-        <!--Table View Controller-->
         <scene sceneID="pLI-YZ-uUK">
             <objects>
-                <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="jrN-KO-RtA" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="LWa-N4-anR">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
+                <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="jrN-KO-RtA" customClass="MyStreamController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="55" sectionHeaderHeight="28" sectionFooterHeight="28" id="LWa-N4-anR">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="B8I-GM-8XQ" userLabel="Header View">
@@ -800,7 +755,7 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="9"/>
                                                 <state key="normal" image="ellipsis"/>
                                                 <connections>
-                                                    <action selector="showMenuButtonPressed:" destination="iYr-hr-uZM" eventType="touchUpInside" id="WFZ-6x-UZi"/>
+                                                    <action selector="showMenuButtonPressed:" destination="jrN-KO-RtA" eventType="touchUpInside" id="w7a-Th-1Aa"/>
                                                 </connections>
                                             </button>
                                             <slider opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="1U3-jg-bL9">
@@ -871,14 +826,14 @@
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SongCell" id="0kb-sf-i9H" customClass="SongTableViewCell" customModule="Juke" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="428" width="414" height="44"/>
+                                <rect key="frame" x="0.0" y="428" width="414" height="55"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0kb-sf-i9H" id="guB-Fj-CpO">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="54.666666666666664"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vQR-Zw-cwe" customClass="GradientView" customModule="Juke" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.666666666666664"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="54.666666666666664"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="boolean" keyPath="diagonalMode" value="YES"/>
@@ -897,7 +852,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </view>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Nel-x0-Ab5">
-                                            <rect key="frame" x="11" y="5.6666666666666679" width="77.333333333333329" height="32.333333333333329"/>
+                                            <rect key="frame" x="11" y="11.333333333333336" width="77.333333333333329" height="32.333333333333329"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="66x-Jw-w2Y">
                                                     <rect key="frame" x="0.0" y="0.0" width="77.333333333333329" height="18"/>
@@ -914,7 +869,7 @@
                                             </subviews>
                                         </stackView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3vp-Py-Aex">
-                                            <rect key="frame" x="395" y="11" width="11" height="22"/>
+                                            <rect key="frame" x="395" y="16.333333333333336" width="11" height="22.000000000000007"/>
                                             <state key="normal" image="upvote-carat-grey"/>
                                             <state key="selected" image="upvote-carat-green"/>
                                             <connections>
@@ -922,7 +877,7 @@
                                             </connections>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZsX-Bj-aVJ">
-                                            <rect key="frame" x="374.33333333333326" y="10" width="12.666666666666686" height="24"/>
+                                            <rect key="frame" x="374.33333333333326" y="15.333333333333336" width="12.666666666666686" height="24"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
@@ -958,10 +913,22 @@
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <navigationItem key="navigationItem" id="J3g-tn-xCs"/>
+                    <connections>
+                        <outlet property="bgblurimg" destination="gX5-mE-BhH" id="kYj-UH-AGl"/>
+                        <outlet property="coverArtImage" destination="k37-Ei-AUc" id="dLB-Sk-rB3"/>
+                        <outlet property="currTimeLabel" destination="FAD-H2-98b" id="oMW-vU-XzH"/>
+                        <outlet property="currentArtistLabel" destination="4ee-Gc-gbi" id="UTN-FD-q3F"/>
+                        <outlet property="currentSongLabel" destination="oDN-Up-zgj" id="teR-NJ-nZu"/>
+                        <outlet property="listenButton" destination="6jw-vE-gSP" id="uTg-ko-h31"/>
+                        <outlet property="numContributorsButton" destination="cWv-Zj-TDf" id="JeL-YU-Wps"/>
+                        <outlet property="progressSlider" destination="1U3-jg-bL9" id="veI-fb-X2T"/>
+                        <outlet property="streamNameLabel" destination="g7F-kJ-0YA" id="ESK-Uy-JJo"/>
+                        <segue destination="Uqg-8N-dQp" kind="show" id="yI8-aP-hrP"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7dZ-hc-aso" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4142" y="1662"/>
+            <point key="canvasLocation" x="2900" y="1524"/>
         </scene>
         <!--User Profile View Controller-->
         <scene sceneID="sit-Nu-K5u">
@@ -1051,7 +1018,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="jrN-KO-RtA" kind="relationship" relationship="rootViewController" id="Olv-dt-4K5"/>
+                        <segue destination="Uqg-8N-dQp" kind="relationship" relationship="rootViewController" id="dFr-Ki-3lk"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="STL-W6-I7U" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1132,7 +1099,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="iYr-hr-uZM" kind="show" id="D7w-Ya-UhR"/>
+                                    <segue destination="jrN-KO-RtA" kind="show" id="wMo-pk-U27"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="s1H-ZZ-Ady" customClass="SkyFloatingLabelTextField" customModule="SkyFloatingLabelTextField">
@@ -1300,4 +1267,7 @@
         <image name="upvote-carat-green" width="11" height="7"/>
         <image name="upvote-carat-grey" width="11" height="7"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="yI8-aP-hrP"/>
+    </inferredMetricsTieBreakers>
 </document>
