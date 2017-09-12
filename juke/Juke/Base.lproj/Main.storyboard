@@ -416,11 +416,11 @@
                             </userDefinedRuntimeAttributes>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FriendCell" id="dK4-Ge-qtA" customClass="FriendCell" customModule="Juke" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="FriendCell" id="dK4-Ge-qtA" customClass="FriendCell" customModule="Juke" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="178" width="414" height="53"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dK4-Ge-qtA" id="yV7-hP-hvl">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="52.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="52.666666666666664"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AIn-81-5oX" userLabel="User Image View">
@@ -701,14 +701,14 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yTz-q4-EFt">
-                                                        <rect key="frame" x="385" y="21" width="21" height="20"/>
+                                                        <rect key="frame" x="385" y="25" width="21" height="20"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <state key="normal" image="Invite button"/>
                                                     </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
-                                                    <constraint firstItem="yTz-q4-EFt" firstAttribute="top" secondItem="r3S-pE-PHI" secondAttribute="top" constant="21" id="2qI-9C-XVg"/>
+                                                    <constraint firstItem="yTz-q4-EFt" firstAttribute="top" secondItem="r3S-pE-PHI" secondAttribute="top" constant="25" id="2qI-9C-XVg"/>
                                                     <constraint firstAttribute="trailing" secondItem="g7F-kJ-0YA" secondAttribute="trailing" constant="8" id="9tS-DA-9GG"/>
                                                     <constraint firstItem="g7F-kJ-0YA" firstAttribute="leading" secondItem="r3S-pE-PHI" secondAttribute="leading" constant="8" id="NDB-Zk-L4j"/>
                                                     <constraint firstAttribute="trailing" secondItem="yTz-q4-EFt" secondAttribute="trailing" constant="8" id="Y4d-da-eFX"/>
@@ -769,7 +769,7 @@
                                                 <state key="normal" image="ic_play_arrow_white_48pt"/>
                                                 <state key="selected" image="ic_pause_white_48pt"/>
                                                 <connections>
-                                                    <action selector="toggleListening:" destination="jrN-KO-RtA" eventType="touchUpInside" id="b6t-Jz-9jj"/>
+                                                    <action selector="toggleListening:" destination="jrN-KO-RtA" eventType="touchUpInside" id="G7s-ct-vcl"/>
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FAD-H2-98b">
@@ -922,7 +922,7 @@
                         <outlet property="currTimeLabel" destination="FAD-H2-98b" id="oMW-vU-XzH"/>
                         <outlet property="currentArtistLabel" destination="4ee-Gc-gbi" id="UTN-FD-q3F"/>
                         <outlet property="currentSongLabel" destination="oDN-Up-zgj" id="teR-NJ-nZu"/>
-                        <outlet property="listenButton" destination="6jw-vE-gSP" id="uTg-ko-h31"/>
+                        <outlet property="listenButton" destination="6jw-vE-gSP" id="eWa-4u-cAp"/>
                         <outlet property="numContributorsButton" destination="cWv-Zj-TDf" id="JeL-YU-Wps"/>
                         <outlet property="progressSlider" destination="1U3-jg-bL9" id="veI-fb-X2T"/>
                         <outlet property="streamNameLabel" destination="g7F-kJ-0YA" id="ESK-Uy-JJo"/>
@@ -1097,7 +1097,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kn4-zk-1AN">
-                                <rect key="frame" x="141" y="436" width="132" height="35"/>
+                                <rect key="frame" x="141" y="447" width="132" height="35"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <state key="normal" title="Start streaming">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1107,7 +1107,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="s1H-ZZ-Ady" customClass="SkyFloatingLabelTextField" customModule="SkyFloatingLabelTextField">
-                                <rect key="frame" x="20" y="357.66666666666669" width="374" height="21"/>
+                                <rect key="frame" x="20" y="346.66666666666669" width="374" height="43"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>

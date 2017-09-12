@@ -151,6 +151,7 @@ class MyStreamController: UITableViewController {
         streamNameLabel.text = streamName
         FirebaseAPI.listenForSongProgress() // will update if progress difference > 3 seconds
         songsDataSource.setObservedStream()
+        print("view will appear")
         self.setUpControlButtons()
         FirebaseAPI.setOnlineTrue()
         FirebaseAPI.setfcmtoken()

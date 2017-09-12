@@ -165,10 +165,6 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
         fatalError("This method must be overriden")
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        fatalError("This method must be overriden")
-    }
-    
     func populateCell(tableView: UITableView, indexPath: IndexPath, item: CollectionItem) -> UITableViewCell {
         fatalError("This method must be overriden")
     }
@@ -181,7 +177,7 @@ class StreamsDataSource: CustomDataSource {
         reloadEventName = "reloadCollection"
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let stream = filteredCollection[indexPath.row].stream!
         HUD.show(.progress)
         FirebaseAPI.joinStream(stream: stream) { success in
@@ -231,11 +227,6 @@ class FriendsDataSource: CustomDataSource {
     init() {
         super.init(path: "users")
         reloadEventName = "reloadCollection"
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // TODO
-        print("nothing")
     }
     
     override func isEqual(current: CollectionItem, other: CollectionItem) -> Bool {
@@ -296,11 +287,6 @@ class SongQueueDataSource: CustomDataSource {
             super.updateCollection(type: .childRemoved, snapshot: snapshot)
         })
         print("added observers: ", path)
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // TODO
-        print("nothing")
     }
     
     override func isEqual(current: CollectionItem, other: CollectionItem) -> Bool {
