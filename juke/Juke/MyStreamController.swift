@@ -15,7 +15,7 @@ import Firebase
 import FirebaseDatabaseUI
 import XLActionController
 
-class MyStreamController: UIViewController, UITableViewDelegate {
+class MyStreamController: UITableViewController {
     
     // firebase vars
     let songsDataSource = SongQueueDataSource()
@@ -30,7 +30,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     @IBOutlet var coverArtImage: UIImageView!
     @IBOutlet weak var progressSlider: UISlider!
     @IBOutlet weak var currTimeLabel: UILabel!
-    @IBOutlet var tableView: UITableView!
     let jamsPlayer = JamsPlayer.shared
     @IBOutlet public var listenButton: UIButton!
     var animationTimer = Timer()
@@ -58,15 +57,6 @@ class MyStreamController: UIViewController, UITableViewDelegate {
                 self.currTimeLabel.text = timeIntervalToString(interval: newValue/1000)
                 self.progressValue = newValue
             }
-        }
-    }
-    
-    var navBarTitle: String? {
-        get {
-            return self.navigationItem.title
-        }
-        set (newValue) {
-            self.navigationItem.title = newValue
         }
     }
     
@@ -105,6 +95,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
     }
     
     @IBAction func toggleListening(_ sender: AnyObject) {
+        print("toggle hit")
         let status = !listenButton.isSelected
         listenButton.isSelected = status
         Current.listenSelected = status
@@ -160,6 +151,7 @@ class MyStreamController: UIViewController, UITableViewDelegate {
         streamNameLabel.text = streamName
         FirebaseAPI.listenForSongProgress() // will update if progress difference > 3 seconds
         songsDataSource.setObservedStream()
+        print("view will appear")
         self.setUpControlButtons()
         FirebaseAPI.setOnlineTrue()
         FirebaseAPI.setfcmtoken()

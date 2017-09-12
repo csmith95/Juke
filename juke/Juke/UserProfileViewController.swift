@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ChameleonFramework
 
 class UserProfileViewController: UIViewController {
     
@@ -61,6 +62,7 @@ class UserProfileViewController: UIViewController {
     @IBAction func notifyInviteToStream(_ sender: Any) {
         print("called invite to stream")
         FirebaseAPI.sendNotification(receiver: preloadedUser!)
+        inviteToStreamBtn.isSelected = !inviteToStreamBtn.isSelected
     }
 
 }
