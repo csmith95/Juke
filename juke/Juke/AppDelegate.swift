@@ -28,7 +28,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         ref.keepSynced(true)
         
         // Auth firebase user
-        // TODO: add to firebase db
         Auth.auth().signInAnonymously(completion: { (user, error) in
             print("user auth completed", user!.uid)
         })

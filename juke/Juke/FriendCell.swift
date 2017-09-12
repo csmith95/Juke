@@ -37,10 +37,6 @@ class FriendCell: UITableViewCell {
         inviteToStreamButton.layer.borderWidth = 1
         inviteToStreamButton.layer.borderColor = UIColor.white.cgColor
         
-        joinStreamButton.layer.cornerRadius = 10
-        joinStreamButton.layer.borderWidth = 1
-        joinStreamButton.layer.borderColor = UIColor.white.cgColor
-        
         // to reset elements
         self.inviteToStreamButton.isSelected = false
         self.inviteToStreamButton.isHidden = false

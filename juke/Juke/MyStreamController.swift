@@ -60,15 +60,6 @@ class MyStreamController: UITableViewController {
         }
     }
     
-    var navBarTitle: String? {
-        get {
-            return self.navigationItem.title
-        }
-        set (newValue) {
-            self.navigationItem.title = newValue
-        }
-    }
-    
     @IBAction func addSongToLibPressed(_ sender: Any) {
 //        let path = addSongButton.isSelected ? ServerConstants.kDeleteSongByIDPath : ServerConstants.kAddSongByIDPath
 //        let method: HTTPMethod = addSongButton.isSelected ? .delete : .put
@@ -104,6 +95,7 @@ class MyStreamController: UITableViewController {
     }
     
     @IBAction func toggleListening(_ sender: AnyObject) {
+        print("toggle hit")
         let status = !listenButton.isSelected
         listenButton.isSelected = status
         Current.listenSelected = status
