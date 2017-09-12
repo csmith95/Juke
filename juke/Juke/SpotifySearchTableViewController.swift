@@ -16,7 +16,6 @@ class SpotifySearchTableViewController: JukeSearchTableViewController {
         super.viewDidLoad()
     }
     
-    
     override func execSearch(keywords: String) {
         displayedResults.removeAll()
         if keywords.isEmpty {

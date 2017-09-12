@@ -15,23 +15,14 @@ import SCLAlertView
 import Firebase
 import FirebaseDatabaseUI
 
-class StreamsTableViewController: UIViewController, UISearchBarDelegate, UIScrollViewDelegate {
+class StreamsTableViewController: UITableViewController, UISearchBarDelegate {
     
-    @IBOutlet var tableView: UITableView!
-    @IBOutlet var backgroundImage: UIImageView!
     @IBOutlet var searchBar: UISearchBar!
     let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
     var streamsDataSource = StreamsDataSource()
-//    var friendsDataSource = FriendsDataSource()
-    
-//    enum Scope: Int {
-//        case Streams = 0, Friends   // struct to keep track of which scope is selected
-//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        backgroundImage.image = #imageLiteral(resourceName: "jukedef")
-        searchBar.delegate = self
         tableView.dataSource = streamsDataSource
         tableView.delegate = streamsDataSource
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadCollection), name: Notification.Name("reloadCollection"), object: nil)
@@ -41,6 +32,7 @@ class StreamsTableViewController: UIViewController, UISearchBarDelegate, UIScrol
     
     func hideKeyboard() {
         self.view.endEditing(true)
+        searchBar.setShowsCancelButton(false, animated: true)
     }
     
     private func execSearchQuery() {
@@ -49,16 +41,18 @@ class StreamsTableViewController: UIViewController, UISearchBarDelegate, UIScrol
         }
     }
     
-//    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-//        searchBar.text = ""
-//        execSearchQuery()
-//    }
-    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         execSearchQuery()
-        if searchText.isEmpty {
-            hideKeyboard()
-        }
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        execSearchQuery()
+        hideKeyboard()
     }
     
     // triggered from data source class
@@ -78,20 +72,10 @@ class StreamsTableViewController: UIViewController, UISearchBarDelegate, UIScrol
     // triggered by CustomDataSource posting a notification. The view controller
     // should take user to the new stream screen
     func newStreamJoined() {
-        self.tabBarController?.selectedIndex = 1
+        self.tabBarController?.selectedIndex = 2
     }
     
     // set status bar content to white text
     override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
-    
-    // idea: write a separate data source class that takes in 
-    // an equals function and a sort function and maintains 
-    // a list of a new data type that includes both Models.User and Models.Stream
-    // all methods threadsafe
-    // maintains filtered list and total list
-    // only allows access to filtered list
-    // this class simply changes pointer to data list
-    // use the enum/class stored value property to convey whether Friend or Stream
-
 
 }

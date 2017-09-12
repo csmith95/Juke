@@ -29,6 +29,10 @@ class JukeSearchTableViewController: UITableViewController, UISearchBarDelegate 
         execSearch(keywords: searchText.lowercased())
     }
     
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+    }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let searchText = searchBar.text {
             execSearch(keywords: searchText.lowercased())
@@ -39,6 +43,7 @@ class JukeSearchTableViewController: UITableViewController, UISearchBarDelegate 
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         execSearch(keywords: "")
+        hideKeyboard()
     }
     
     func threadSafeReloadView() {
@@ -62,6 +67,7 @@ class JukeSearchTableViewController: UITableViewController, UISearchBarDelegate 
     
     func hideKeyboard() {
         self.view.endEditing(true)
+        searchBar.setShowsCancelButton(false, animated: true)
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {

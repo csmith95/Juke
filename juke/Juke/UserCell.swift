@@ -1,5 +1,5 @@
 //
-//  FriendCell.swift
+//  UserCell.swift
 //  Juke
 //
 //  Created by Conner Smith on 8/26/17.

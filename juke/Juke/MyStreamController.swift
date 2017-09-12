@@ -332,6 +332,9 @@ class MyStreamController: UITableViewController {
         actionController.addAction(Action("Close", style: .cancel, handler: nil))
         present(actionController, animated: true, completion: nil)
     }
+    
+    // set status bar text to white
+    override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
 }
 
 // basic extension to make border radius on button from storyboard

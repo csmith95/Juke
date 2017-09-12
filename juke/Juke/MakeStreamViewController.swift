@@ -45,4 +45,7 @@ class MakeStreamViewController: UIViewController, UITextFieldDelegate {
             destination.streamName = streamTitleField.text!
         }
     }
+    
+    // set status bar text to white
+    override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
 }
