@@ -377,17 +377,6 @@ class FirebaseAPI {
         ref.child("/songProgressTable/\(Current.stream.streamID)").setValue(progress)
     }
     
-    public static func addStreamMembersTableViewListener(streamMembersTableView: UITableView?) -> FUITableViewDataSource? {
-        guard let tableView = streamMembersTableView else { return nil }
-        let dataSource = tableView.bind(to: FirebaseAPI.ref.child("streams/\(Current.stream.streamID)/members")) { tableView, indexPath, snapshot in
-            let cell = tableView.dequeueReusableCell(withIdentifier: "StreamMemberCell", for: indexPath) as! StreamMemberCell
-            guard let member = Models.FirebaseUser(snapshot: snapshot) else { return cell }
-            cell.populateMemberCell(member: member)
-            return cell
-        }
-        return dataSource
-    }
-    
     // smh since firebase removeAllObservers() doesn't do what you think it does, need
     // to iterate through list
     // note that removeObserverWithpath is shit and doesn't work
