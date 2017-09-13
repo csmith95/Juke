@@ -280,6 +280,7 @@
 				4B3A34C71E58120F00C314A0 /* Resources */,
 				CC88373AA3F209863ABDC536 /* [CP] Embed Pods Frameworks */,
 				34A7314F190E8126F182500E /* [CP] Copy Pods Resources */,
+				F26D78C91F69115200805B33 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -422,6 +423,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Juke/Pods-Juke-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		F26D78C91F69115200805B33 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 39e3dc0e29d04626dd144ab01da9be3f217ce19c fa888c4c3b08ec79605550be0052a8f23f8a7c0a05751fdb4f35aa0b65ef75ab";
 		};
 /* End PBXShellScriptBuildPhase section */
 
