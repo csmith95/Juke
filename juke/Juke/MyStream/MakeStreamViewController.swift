@@ -26,23 +26,33 @@ class MakeStreamViewController: UIViewController, UITextFieldDelegate {
         streamTitleField.errorMessage = ""
         return true
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        streamTitleField.endEditing(true)
+        return true
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+    
+    @IBAction func startStreamingButtonPressed(_ sender: Any) {
+        streamTitleField.endEditing(true)
         if streamTitleField.text!.isEmpty {
             streamTitleField.errorMessage = "Enter a title for your stream"
-            return false
+            return
         }
-        return true
+        
+        FirebaseAPI.createNewStream(title: streamTitleField.text!) {
+            self.performSegue(withIdentifier: "showStream", sender: self)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destination = segue.destination as? MyStreamController {
-            destination.streamName = streamTitleField.text!
+        if let dest = segue.destination as? MyStreamController {
+            dest.streamName = streamTitleField.text!
         }
     }
     

@@ -12,7 +12,7 @@ import Firebase
 class Current {
     private static let ref = Database.database().reference()
     public static var user: Models.FirebaseUser!
-    public static var stream: Models.FirebaseStream! = Models.FirebaseStream()
+    public static var stream: Models.FirebaseStream?
     public static func isHost() -> Bool {
         guard let stream = Current.stream else { return false }
         return stream.host.spotifyID == Current.user.spotifyID

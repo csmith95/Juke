@@ -27,7 +27,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cGf-is-wdM">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cGf-is-wdM">
                                 <rect key="frame" x="126" y="568" width="162" height="29"/>
                                 <state key="normal" image="loginButton"/>
                                 <connections>
@@ -1183,7 +1183,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="jrN-KO-RtA" kind="show" id="wMo-pk-U27"/>
+                                    <action selector="startStreamingButtonPressed:" destination="olv-tK-TYn" eventType="touchUpInside" id="obH-di-im8"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="s1H-ZZ-Ady" customClass="SkyFloatingLabelTextField" customModule="SkyFloatingLabelTextField">
@@ -1254,6 +1254,7 @@
                     </view>
                     <connections>
                         <outlet property="streamTitleField" destination="s1H-ZZ-Ady" id="YH2-3s-hrp"/>
+                        <segue destination="jrN-KO-RtA" kind="show" identifier="showStream" id="Qky-T6-Chd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="id2-8x-WhG" userLabel="First Responder" sceneMemberID="firstResponder"/>

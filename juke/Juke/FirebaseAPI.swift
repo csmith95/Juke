@@ -19,17 +19,9 @@ class FirebaseAPI {
         case MemberJoined
         case MemberLeft
         case ResyncStream
-        case SwitchedStreams
+        case LeaveStream
         case SetProgress
-        case LeftStream
     }
-    
-    // to avoid adding listeners multiple times
-    // when a view controller calls addSongQueueDataListener or 
-    // addDiscoverStreamsDataListener, these are set to true
-    // if user joins new stream, these are reset to false
-    private static var streamMembersDataSourceSet = false
-    private static var streamDeletedListenerSet = false
     
     private static var observedPaths: [String] = []
     
@@ -40,33 +32,34 @@ class FirebaseAPI {
     private static let jamsPlayer = JamsPlayer.shared
     
     public static func addListeners() {
-        addMemberJoinedListener()
-        addMemberLeftListener()
         addPresenceListener()
+        guard Current.stream != nil else { return }
+        addMemberLeftListener()
+        addMemberJoinedListener()
         addTopSongChangedListener()
         addSongPlayStatusListener()
         addStreamDeletedListener()
     }
     
-    // if user stream deleted because host leaves, create a new one
     private static func addStreamDeletedListener() {
-        // don't add handle to list of handles for this method
-        // because it will disable the tableview binding
-        // for discover streams table (shit firebase cmon)
-        if (streamDeletedListenerSet) { return }
-        streamDeletedListenerSet = true
+        let path = "/streams"
         ref.child("/streams").observe(.childRemoved, with:{ (snapshot) in
-            if snapshot.key == Current.stream.streamID {
-                self.createNewStream(removeFromCurrentStream: false)
+            guard let stream = Current.stream else { return }
+            if snapshot.key == stream.streamID {    // if deleted stream is my stream
+                removeAllObservers()
+                NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.LeaveStream)
+                // display Whisper notification
+                whisper(title: "\(stream.host.username) deleted \(stream.title) stream)" , backgroundColor: FlatPink())
             }
         })
+        observedPaths.append(path)
     }
     
     private static func addSongPlayStatusListener() {
-        let path = "streams/\(Current.stream.streamID)/isPlaying"
+        let path = "streams/\(Current.stream!.streamID)/isPlaying"
         ref.child(path).observe(.value, with:{ (snapshot) in
             if snapshot.exists(), let isPlaying = snapshot.value as? Bool {
-                Current.stream.isPlaying = isPlaying
+                Current.stream!.isPlaying = isPlaying
                 self.listenForSongProgress()    // fetch updated status
                 NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.ResyncStream)
             }
@@ -75,22 +68,23 @@ class FirebaseAPI {
     }
     
     private static func addMemberJoinedListener() {
-        let path = "/streams/\(Current.stream.streamID)/members"
+        let path = "/streams/\(Current.stream!.streamID)/members"
         ref.child(path).observe(.childAdded, with:{ (snapshot) in
             // update Current stream
+            guard var stream = Current.stream else { return }
             guard let member = Models.FirebaseUser(snapshot: snapshot) else { return }
-            if Current.stream.members.contains(where: { (other) -> Bool in
+            if stream.members.contains(where: { (other) -> Bool in
                 return member.spotifyID == other.spotifyID
             }) || Current.user.spotifyID == member.spotifyID {
                 // member already in client member list -- ignore this event -- triggered when observer
                 // first registered
                 return
             } else {
-                Current.stream.members.append(member)
+                stream.members.append(member)
             }
             
             // display Whisper notification
-            whisper(title: "\(member.username) joined your stream!" , backgroundColor: RandomFlatColorWithShade(.light))
+            whisper(title: "\(member.username) joined your stream!" , backgroundColor: FlatPink())
             
             // post event telling controller to resync
             NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.MemberJoined)
@@ -99,12 +93,12 @@ class FirebaseAPI {
     }
     
     private static func addMemberLeftListener() {
-        let path = "/streams/\(Current.stream.streamID)/members"
+        let path = "/streams/\(Current.stream!.streamID)/members"
         ref.child(path).observe(.childRemoved, with:{ (snapshot) in
             
             // update Current stream
             guard let member = Models.FirebaseUser(snapshot: snapshot) else { return }
-            guard let index = Current.stream.members.index(where: { (other) -> Bool in
+            guard let index = Current.stream!.members.index(where: { (other) -> Bool in
                 return member.spotifyID == other.spotifyID
             }) else {
                 return
@@ -112,10 +106,10 @@ class FirebaseAPI {
             if Current.user.spotifyID == member.spotifyID {
                 return
             }
-            Current.stream.members.remove(at: index)
+            Current.stream!.members.remove(at: index)
             
             // display Whisper notification
-            whisper(title: "\(member.username) left your stream" , backgroundColor: RandomFlatColorWithShade(.light))
+            whisper(title: "\(member.username) left your stream" , backgroundColor: FlatPink())
             
             // post event telling controller to resync
             NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.MemberLeft)
@@ -124,43 +118,17 @@ class FirebaseAPI {
         observedPaths.append(path)
     }
     
-    static var navigationController: UINavigationController?  {
-        get {
-            return FirebaseAPI.getNavigationController(viewController: FirebaseAPI.root)
-        }
-    }
-    
-    static var root: UIViewController? {
-        get {
-            return UIApplication.shared.delegate?.window??.rootViewController
-        }
-    }
-    
-    static func getNavigationController(viewController: UIViewController?) -> UINavigationController? {
-        if let navigationController = viewController as? UINavigationController {
-            return navigationController
-        }
-        
-        if let tabBarViewController = viewController as? UITabBarController {
-            return getNavigationController(viewController: tabBarViewController.selectedViewController)
-        } else if let presentedViewController = viewController?.presentedViewController {
-            return getNavigationController(viewController: presentedViewController)
-        } else {
-            return nil
-        }
-    }
-    
     public static func whisper(title: String, backgroundColor: UIColor) {
-        let message = Message(title: title, backgroundColor: backgroundColor)
-        guard let navController = navigationController else { return }
-        Whisper.show(whisper: message, to: navController, action: .show)
+        let murmur = Murmur(title: title, backgroundColor: backgroundColor, titleColor: FlatWhite(), font: UIFont.boldSystemFont(ofSize: 14))
+        Whisper.show(whistle: murmur, action: .show(1.5))
     }
     
     // listens once to song progress and triggers update if necessary (out of sync by > 3 seconds)
     // this is called by other classes to trigger a progress resync or get progress initially after
     // joining a new stream
     public static func listenForSongProgress() {
-        self.ref.child("/songProgressTable/\(Current.stream.streamID)").observeSingleEvent(of: .value, with: { (snapshot) in
+        guard let stream = Current.stream else { return }
+        self.ref.child("/songProgressTable/\(stream.streamID)").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists(), let updatedProgress = snapshot.value as? Double {
                 jamsPlayer.position_ms = updatedProgress
             } else {
@@ -176,28 +144,29 @@ class FirebaseAPI {
     // that song ended or when host presses skip
     // then this method loads top song from list of queued songs, if any exists
     public static func popTopSong(dataSource: SongQueueDataSource) {
-        
+        guard let stream = Current.stream else { return }
         // reset progress in any case
-        self.ref.child("/songProgressTable/\(Current.stream.streamID)").setValue(0.0)
+        self.ref.child("/songProgressTable/\(stream.streamID)").setValue(0.0)
         jamsPlayer.position_ms = 0.0
         
         guard let nextSong = dataSource.getNextSong() else {
             // no songs queued
-            self.ref.child("/streams/\(Current.stream.streamID)/song").removeValue()
-            ref.child("streams/\(Current.stream.streamID)/isPlaying").setValue(false)
+            self.ref.child("/streams/\(stream.streamID)/song").removeValue()
+            ref.child("streams/\(stream.streamID)/isPlaying").setValue(false)
             return
         }
         
         // set next song
-        self.ref.child("/streams/\(Current.stream.streamID)/song").setValue(nextSong.firebaseDict)
-        self.ref.child("/songs/\(Current.stream.streamID)/\(nextSong.key)").removeValue()
+        self.ref.child("/streams/\(stream.streamID)/song").setValue(nextSong.firebaseDict)
+        self.ref.child("/songs/\(stream.streamID)/\(nextSong.key)").removeValue()
     }
     
     private static func addTopSongChangedListener() {
+        guard var stream = Current.stream else { return }
         // listen for top song changes -- includes song skips and song finishes
-        let path = "/streams/\(Current.stream.streamID)/song"
+        let path = "/streams/\(stream.streamID)/song"
         self.ref.child(path).observe(.value, with:{ (snapshot) in
-            Current.stream.song = Models.FirebaseSong(snapshot: snapshot)
+            stream.song = Models.FirebaseSong(snapshot: snapshot)
             jamsPlayer.position_ms = 0.0
             // post event telling controller to resync
             NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.ResyncStream)
@@ -210,15 +179,16 @@ class FirebaseAPI {
         self.ref.child("/users/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
         
         // STREAM object updates
+        guard let stream = Current.stream else { return }
         if Current.isHost() {
             // you are the host so update path: stream/host
-            self.ref.child("/streams/\(Current.stream.streamID)/host/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
+            self.ref.child("/streams/\(stream.streamID)/host/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
             
             // you are the host so pause stream playing
-            self.ref.child("/streams/\(Current.stream.streamID)/isPlaying").onDisconnectSetValue(false)
+            self.ref.child("/streams/\(stream.streamID)/isPlaying").onDisconnectSetValue(false)
         } else {
             // you are not the host so update stream/members
-            self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
+            self.ref.child("/streams/\(stream.streamID)/members/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
         }
     }
 
@@ -229,24 +199,24 @@ class FirebaseAPI {
         Current.user.online = true
 
         // STREAM object update
-        // no need to do case where user is host because if user is host and goes offline they are no longer host
+        guard let stream = Current.stream else { return }
         if !Current.isHost() {
-            self.ref.child("/streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/online").setValue(true)
+            self.ref.child("/streams/\(stream.streamID)/members/\(Current.user.spotifyID)/online").setValue(true)
         } else {
-            self.ref.child("/streams/\(Current.stream.streamID)/host/\(Current.user.spotifyID)/online").setValue(true)
+            self.ref.child("/streams/\(stream.streamID)/host/\(Current.user.spotifyID)/online").setValue(true)
         }
         
     }
     
     public static func queueSong(spotifySong: Models.SpotifySong) {
-        let song = Models.FirebaseSong(song: spotifySong)
-        self.ref.child("/streams/\(Current.stream.streamID)/song").observeSingleEvent(of: .value, with: { (snapshot) in
+        guard let stream = Current.stream, let song = Models.FirebaseSong(song: spotifySong) else { return }
+        self.ref.child("/streams/\(stream.streamID)/song").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
                 // if there is already a top song right now (queue not empty), write it to the song queue
-                self.ref.child("/songs/\(Current.stream.streamID)/\(song.key)").setValue(song.firebaseDict)
+                self.ref.child("/songs/\(stream.streamID)/\(song.key)").setValue(song.firebaseDict)
             } else {
                 // no current song - set current song
-                self.ref.child("/streams/\(Current.stream.streamID)/song").setValue(song.firebaseDict)
+                self.ref.child("/streams/\(stream.streamID)/song").setValue(song.firebaseDict)
             }
         }) {error in print(error.localizedDescription)}
     }
@@ -254,32 +224,29 @@ class FirebaseAPI {
     // called from StreamsTableViewController when user selects a new stream to join
     public static func joinStream(stream: Models.FirebaseStream, callback: @escaping ((_: Bool) -> Void)) {
         let streamID = stream.streamID
-        let currentStreamID = Current.stream.streamID
         
-        if currentStreamID == streamID {
-            callback(false)
-            return
+        if let currentStreamID = Current.stream?.streamID {
+            if currentStreamID == streamID {    // just to be sure user can never join same stream twice
+                callback(false)
+                return
+            }
         }
         
         ref.child("/streams/\(streamID)").observeSingleEvent(of: .value, with: { (snapshot) in
             if !snapshot.exists() { callback(false); return; }    // do nothing if this new stream doesn't exist anymore (concurrency)
             
-            if Current.isHost() || Current.stream.members.isEmpty {
-                self.deleteCurrentStream()  // remove observers and delete resources if host
-            } else {
-                removeAllObservers()   // simply remove observers if not host
-            }
+            leaveCurrentStream()
             
             // resync to new stream
             let childUpdates: [String: Any] = ["/streams/\(streamID)/members/\(Current.user.spotifyID)": Current.user.firebaseDict,
-                                                "/streams/\(currentStreamID)/members/\(Current.user.spotifyID)": NSNull(),
                                                 "/users/\(Current.user.spotifyID)/tunedInto": streamID]
             self.ref.updateChildValues(childUpdates)
             
             // sync local stream/user info with what was just written to the db above
             Current.user.tunedInto = streamID
             Current.stream = stream
-            Current.stream.members.append(Current.user)
+            Current.stream!.members.append(Current.user)
+            jamsPlayer.position_ms = 0.0
             
             self.ref.cancelDisconnectOperations { (err, dbref) in
                 // re-add listeners
@@ -290,65 +257,54 @@ class FirebaseAPI {
             
             // callback provided by StreamsTableViewController to communicate success/failure
             callback(true)
-            
-            // post event telling controller to resync
-            NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.SwitchedStreams)
         }) {error in print(error.localizedDescription)}
     }
     
     public static func setPlayStatus(status: Bool) {
-        ref.child("/streams/\(Current.stream.streamID)/isPlaying").setValue(status)
+        guard let stream = Current.stream else { return }
+        ref.child("/streams/\(stream.streamID)/isPlaying").setValue(status)
     }
     
     // clears current song queue
     public static func clearStream() {
-        let childUpdates: [String: Any] = ["songs/\(Current.stream.streamID)": NSNull(),
-                            "streams/\(Current.stream.streamID)/song": NSNull(),
-                            "streams/\(Current.stream.streamID)/isPlaying": false,
-                            "songProgressTable/\(Current.stream.streamID)": 0.0]
-        jamsPlayer.position_ms = 0.0
-        self.ref.updateChildValues(childUpdates)
-        NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.ResyncStream)
+        guard let stream = Current.stream else { return }
+        ref.child("songs/\(stream.streamID)").removeValue()
+    }
+    
+    
+    private static func leaveCurrentStream() {
+        removeAllObservers()
+        if let currentStreamID = Current.stream?.streamID {
+            if Current.isHost() {
+                deleteCurrentStream()  // delete resources if host
+            } else {
+                ref.child("/streams/\(currentStreamID)/members/\(Current.user.spotifyID)").removeValue()    // remove self from members list
+            }
+        }
     }
     
     private static func deleteCurrentStream() {
-        // detach listeners to current stream -- new ones are added
-        // at the end of this code chunk
-        removeAllObservers()
-        
         // delete current stream and associated resources
-        let currentStreamID = Current.stream.streamID
+        guard let currentStreamID = Current.stream?.streamID else { return }
         self.ref.child("/streams/\(currentStreamID)").removeValue()
         self.ref.child("/songs/\(currentStreamID)").removeValue()
         self.ref.child("/songProgressTable/\(currentStreamID)").removeValue()
-        
-        self.ref.cancelDisconnectOperations { (err, dbref) in
-            // re-add listeners
-            print("cancelled earlier disconnect and adding new listeners")
-            self.addListeners()
-        }
-        
     }
     
-    // creates and joins empty stream with user
-    // this boolean is false in login view controller because we don't want to try to remove
-    // user from a stream that doesn't exist -- it will crash (Current.stream is a FirebaseStream!)
-    // this method can be used to go from no stream --> new stream or
-    // current stream --> new stream. set bool to true for latter case
-    public static func createNewStream(removeFromCurrentStream: Bool) {
+    // creates and joins empty stream with user as host. leaves current stream if any
+    public static func createNewStream(title: String, callback: @escaping ((Void) -> Void)) {
+        leaveCurrentStream()
         
-        removeAllObservers()
+        let newStream = Models.FirebaseStream(title: title)
         
-        let newStream = Models.FirebaseStream()
+        // update firebase
         let childUpdates: [String: Any] = ["streams/\(newStream.streamID)": newStream.firebaseDict,
                                            "users/\(Current.user.spotifyID)/tunedInto": newStream.streamID]
-        if removeFromCurrentStream {
-            ref.child("streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)").removeValue()
-        }
+        ref.updateChildValues(childUpdates)
+        
+        // update global vars on device
         Current.stream = newStream
         Current.user.tunedInto = newStream.streamID
-        
-        ref.updateChildValues(childUpdates)
         jamsPlayer.position_ms = 0.0
         
         // tell view controllers to resync
@@ -357,24 +313,12 @@ class FirebaseAPI {
             print("cancelled earlier disconnect and adding new listeners")
             self.addListeners()
         }
-        
-        NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.SwitchedStreams)
-    }
-    
-    public static func leaveStream() {
-        removeAllObservers()
-        ref.child("streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)").removeValue()
-        jamsPlayer.position_ms = 0.0
-        self.ref.cancelDisconnectOperations { (err, dbref) in
-            // reattach listener
-            self.ref.child("/users/\(Current.user.spotifyID)/online").onDisconnectSetValue(false)
-        }
-        
-        NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.LeftStream)
+        callback()
     }
     
     public static func updateSongProgress(progress: Double) {
-        ref.child("/songProgressTable/\(Current.stream.streamID)").setValue(progress)
+        guard let stream = Current.stream else { return }
+        ref.child("/songProgressTable/\(stream.streamID)").setValue(progress)
     }
     
     // smh since firebase removeAllObservers() doesn't do what you think it does, need
@@ -392,10 +336,11 @@ class FirebaseAPI {
         print("FCMToken", fcmToken!)
         Current.user.fcmToken = fcmToken
         self.ref.child("users/\(Current.user.spotifyID)/fcmToken").setValue(fcmToken)
+        guard let stream = Current.stream else { return }
         if Current.isHost() {
-            self.ref.child("streams/\(Current.stream.streamID)/host/\(Current.user.spotifyID)/fcmToken").setValue(fcmToken)
+            self.ref.child("streams/\(stream.streamID)/host/\(Current.user.spotifyID)/fcmToken").setValue(fcmToken)
         } else {
-            self.ref.child("streams/\(Current.stream.streamID)/members/\(Current.user.spotifyID)/fcmToken").setValue(fcmToken)
+            self.ref.child("streams/\(stream.streamID)/members/\(Current.user.spotifyID)/fcmToken").setValue(fcmToken)
         }
 
     }
@@ -410,14 +355,62 @@ class FirebaseAPI {
         })
     }
     
+    public static func loginUser(spotifyUser: Models.SpotifyUser, callback: @escaping ((_: Bool) -> Void)) {
+        ref.child("users/\(spotifyUser.spotifyID)").observeSingleEvent(of: .value, with: { (snapshot) in
+            if snapshot.exists() {
+                if var userDict = snapshot.value as? [String: Any?] {
+                    userDict["spotifyID"] = spotifyUser.spotifyID
+                    Current.user = Models.FirebaseUser(dict: userDict)
+                    self.ref.child("users/\(spotifyUser.spotifyID)/online").setValue(true)
+                }
+            } else {
+                // add user if user does not exist
+                var newUserDict: [String: Any?] = ["imageURL": spotifyUser.imageURL,
+                                                   "tunedInto": nil,
+                                                   "online": true]
+                if let username = spotifyUser.username {
+                    newUserDict["username"] = username
+                } else {
+                    newUserDict["username"] = spotifyUser.spotifyID // use spotifyID if no spotify username
+                }
+                // set firebase messaging token
+                let token = Messaging.messaging().fcmToken
+                print("FCM token: \(token ?? "")")
+                newUserDict["fcmToken"] = token
+                // write to firebase DB
+                self.ref.child("users/\(spotifyUser.spotifyID)").setValue(newUserDict)
+                newUserDict["spotifyID"] = spotifyUser.spotifyID
+                Current.user = Models.FirebaseUser(dict: newUserDict)
+            }
+            
+            // now that current user is set, try to fetch stream
+            if let tunedInto = Current.user.tunedInto {
+                self.ref.child("streams/\(tunedInto)").observeSingleEvent(of: .value, with : { (snapshot) in
+                    if let stream = Models.FirebaseStream(snapshot: snapshot) {
+                        Current.stream = stream
+                        FirebaseAPI.addListeners()
+                    }
+                    callback(true)
+                }) {error in
+                    print(error.localizedDescription)
+                    callback(false)
+                }
+            }
+            
+        }) {(error) in
+            print(error.localizedDescription)
+            callback(false)
+        }
+    }
     
     public static func updateVotes(song: Models.FirebaseSong, upvoted: Bool) {
+        guard let stream = Current.stream else { return }
         if upvoted {
-            self.ref.child("/songs/\(Current.stream.streamID)/\(song.key)/upvoters/\(Current.user.spotifyID)").setValue(true)
+            self.ref.child("/songs/\(stream.streamID)/\(song.key)/upvoters/\(Current.user.spotifyID)").setValue(true)
         } else {
-            self.ref.child("/songs/\(Current.stream.streamID)/\(song.key)/upvoters/\(Current.user.spotifyID)").removeValue()
+            self.ref.child("/songs/\(stream.streamID)/\(song.key)/upvoters/\(Current.user.spotifyID)").removeValue()
         }
-        self.ref.child("/songs/\(Current.stream.streamID)/\(song.key)/votes").runTransactionBlock({ (data) -> TransactionResult in
+        self.ref.child("/songs/\(stream.streamID)/\(song.key)/votes").runTransactionBlock({ (data) -> TransactionResult in
             if let numVotes = data.value as? Int {
                 data.value = upvoted ? numVotes+1 : numVotes-1
             }
@@ -437,7 +430,7 @@ class FirebaseAPI {
         ]
         
         print("called sendNotification")
-        Alamofire.request(ServerConstants.kSendNotificationsURL, method: .post, parameters: params, encoding: JSONEncoding.default).responseJSON { response in
+        Alamofire.request(Constants.kSendNotificationsURL, method: .post, parameters: params, encoding: JSONEncoding.default).responseJSON { response in
             
             print("response came back", response)
         }

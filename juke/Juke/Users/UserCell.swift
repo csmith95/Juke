@@ -18,7 +18,6 @@ class UserCell: UITableViewCell {
     @IBOutlet var presenceDot: UIImageView!
     private let defaultIcon = CircleFilter().filter(UIImage(named: "juke_icon")!)
     private var member: Models.FirebaseUser!
-    private var stream: Models.FirebaseStream?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -53,11 +52,6 @@ class UserCell: UITableViewCell {
             presenceDot.image = #imageLiteral(resourceName: "red dot")
         }
         
-        guard let streamID = member.tunedInto else {
-            return
-        }
-        
-        fetchStream(streamID: streamID)
     }
     
     private func loadUserIcon(url: String?) {
@@ -67,21 +61,4 @@ class UserCell: UITableViewCell {
             userImageView.image = defaultIcon
         }
     }
-    
-    private func fetchStream(streamID: String) {
-        FirebaseAPI.fetchStream(streamID: streamID) { (optionalStream)  in
-            guard let stream = optionalStream else {
-                return
-            }
-            
-            self.stream = stream
-            
-            // hide invite button if user is in your stream
-            if (Current.stream.streamID == stream.streamID) {
-                self.inviteToStreamButton.isHidden = true
-            }
-        }
-        
-    }
-    
 }

@@ -39,8 +39,9 @@ class MyStreamController: UITableViewController {
             return progressValue
         }
         
-        set(newValue) {            
-            guard let song = Current.stream.song else {
+        set(newValue) {
+            guard let stream = Current.stream else { return }
+            guard let song = stream.song else {
                 self.progressValue = 0.0
                 self.currTimeLabel.text = timeIntervalToString(interval: 0.0/1000)
                 return
@@ -61,13 +62,13 @@ class MyStreamController: UITableViewController {
     }
     
     @IBAction func addSongToLibPressed(_ sender: Any) {
-//        let path = addSongButton.isSelected ? ServerConstants.kDeleteSongByIDPath : ServerConstants.kAddSongByIDPath
+//        let path = addSongButton.isSelected ? Constants.kDeleteSongByIDPath : Constants.kAddSongByIDPath
 //        let method: HTTPMethod = addSongButton.isSelected ? .delete : .put
 //        if let song = Current.stream.song {
 //            let headers = [
 //                "Authorization": "Bearer " + Current.accessToken
 //            ]
-//            let url = URL(string: ServerConstants.kSpotifyBaseURL+path+song.spotifyID)!
+//            let url = URL(string: Constants.kSpotifyBaseURL+path+song.spotifyID)!
 //            let message = addSongButton.isSelected ? "Removed from your library" : "Saved to your library!"
 //            self.addSongButton.isSelected = !self.addSongButton.isSelected
 //            Alamofire.request(url, method: method, headers: headers).validate().responseData() { response in
@@ -95,7 +96,7 @@ class MyStreamController: UITableViewController {
     }
     
     @IBAction func toggleListening(_ sender: AnyObject) {
-        print("toggle hit")
+        guard var stream = Current.stream else { return }
         let status = !listenButton.isSelected
         listenButton.isSelected = status
         Current.listenSelected = status
@@ -103,7 +104,7 @@ class MyStreamController: UITableViewController {
         FirebaseAPI.listenForSongProgress() // fetch real song progress to maintain sync
         if Current.isHost() {
             FirebaseAPI.setPlayStatus(status: status)
-            Current.stream.isPlaying = status
+            stream.isPlaying = status
         }
     }
     
@@ -147,27 +148,26 @@ class MyStreamController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Helvetica", size: 15)!]
+        guard var stream = Current.stream else { return }
         streamNameLabel.text = streamName
         FirebaseAPI.listenForSongProgress() // will update if progress difference > 3 seconds
         songsDataSource.setObservedStream()
-        print("view will appear")
         self.setUpControlButtons()
         FirebaseAPI.setOnlineTrue()
         FirebaseAPI.setfcmtoken()
-        print("USER ONLINE", Current.user.online)
-        numContributorsButton.setTitle("\(Current.stream.members.count+1) contributors", for: .normal)
+        numContributorsButton.setTitle("\(stream.members.count+1) contributors", for: .normal)
         loadTopSong()
         reloadSongs()
     }
     
     
     private func setUpControlButtons() {
+        guard var stream = Current.stream else { return }
         if Current.isHost() {
             // controls for the owner
             listenButton.setImage(UIImage(named: "ic_play_arrow_white_48pt.png"), for: .normal)
             listenButton.setImage(UIImage(named: "ic_pause_white_48pt.png"), for: .selected)
-            listenButton.isSelected = Current.stream.isPlaying
+            listenButton.isSelected = stream.isPlaying
         } else {
             listenButton.setImage(UIImage(named: "listening.png"), for: .normal)
             listenButton.setImage(UIImage(named: "mute.png"), for: .selected)
@@ -209,11 +209,12 @@ class MyStreamController: UITableViewController {
     }
     
     private func handleAutomaticProgressSlider() {
+        guard var stream = Current.stream else { return }
         if Current.isHost() {
             return  // if owner, don't use timer at all
         }
         
-        if (!Current.listenSelected && Current.stream.isPlaying) {
+        if (!Current.listenSelected && stream.isPlaying) {
             if !self.animationTimer.isValid {
                  // trying to offset for the time transition between stopping timer and starting song
                 self.progressSliderValue = self.progressSliderValue + 300
@@ -237,7 +238,8 @@ class MyStreamController: UITableViewController {
     }
     
     func loadTopSong() {
-        if let song = Current.stream.song {
+        guard let stream = Current.stream else { return }
+        if let song = stream.song {
             self.coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil)
             self.coverArtImage.isHidden = false
             self.bgblurimg.af_setImage(withURL: URL(string:song.coverArtURL)!, placeholderImage: nil)
@@ -245,10 +247,9 @@ class MyStreamController: UITableViewController {
             self.currentArtistLabel.text = song.artistName
             self.listenButton.isHidden = false
             if Current.isHost() {
-                self.listenButton.isSelected = Current.stream.isPlaying
+                self.listenButton.isSelected = stream.isPlaying
             }
             self.checkIfUserLibContainsCurrentSong(song: song)
-//            self.noSongsLabel.isHidden = true
             progressSlider.isHidden = false
             currTimeLabel.isHidden = false
         } else {
@@ -275,7 +276,7 @@ class MyStreamController: UITableViewController {
 //        let headers = [
 //            "Authorization": "Bearer " + Current.accessToken
 //        ]
-//        let url = URL(string: ServerConstants.kSpotifyBaseURL+ServerConstants.kContainsSongPath+song.spotifyID)!
+//        let url = URL(string: Constants.kSpotifyBaseURL+Constants.kContainsSongPath+song.spotifyID)!
 //        Alamofire.request(url, method: .get, headers: headers)
 //            .validate().responseJSON { response in
 //                switch response.result {
@@ -303,12 +304,12 @@ class MyStreamController: UITableViewController {
             self.loadTopSong()
             self.refreshSongPlayStatus()
             break
-        case .SwitchedStreams:
-            self.viewWillAppear(true)
-            self.refreshSongPlayStatus()
-            break
         case .SetProgress:
             self.progressSliderValue = jamsPlayer.position_ms
+        case .LeaveStream:
+            jamsPlayer.position_ms = 0.0
+            jamsPlayer.resync()
+            performSegue(withIdentifier: "leaveStream", sender: self)
         default:
             break
         }

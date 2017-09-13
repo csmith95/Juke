@@ -108,9 +108,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     // archive spotify session
                     let userDefaults = UserDefaults.standard
                     let sessionData = NSKeyedArchiver.archivedData(withRootObject: session)
-                    userDefaults.set(sessionData, forKey: "SpotifySession")
+                    userDefaults.set(sessionData, forKey: Constants.kSpotifySessionKey)
                     Current.accessToken = session.accessToken
-                    // notify views to dismiss webview and initiate loginSegue
+                    // notify spotify login controller to dismiss webview and initiate loginSegue
                     NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: nil)
                 }
             })

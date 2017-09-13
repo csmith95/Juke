@@ -74,8 +74,9 @@ class Models {
             }
         }
         
-        init(song: Models.SpotifySong) {
-            self.key = ref.child("/songs/\(Current.stream.streamID)/").childByAutoId().key
+        init?(song: Models.SpotifySong) {
+            guard let stream = Current.stream else { return nil }
+            self.key = ref.child("/songs/\(stream.streamID)/").childByAutoId().key
             self.spotifyID = song.spotifyID
             self.artistName = song.artistName
             self.duration = song.duration
@@ -92,11 +93,13 @@ class Models {
         var song: FirebaseSong? = nil
         var host: FirebaseUser! = Current.user
         var members: [FirebaseUser] = []
+        var title: String
         
         // formatted to be written directly to the /streams/{streamID}/ path
         var firebaseDict: [String: Any] {
             var dict: [String: Any] = ["isPlaying": self.isPlaying,
-                                       "song": NSNull()]
+                                       "song": NSNull(),
+                                       "title": self.title]
             dict["host"] = [host.spotifyID: host.firebaseDict]
             var result: [String: Any] = [:]
             for member in members {
@@ -113,12 +116,15 @@ class Models {
         init?(dict: [String: Any?]) {
             guard let streamID = dict["streamID"] as? String else { return nil }
             guard let isPlaying = dict["isPlaying"] as? Bool else { return nil }
+            guard let title = dict["title"] as? String else { return nil }
             self.streamID = streamID
             self.isPlaying = isPlaying
+            self.title = title
             // jesus this is tedious
-            let otherDict = dict["host"] as! [String: Any?]
-            var userDict = otherDict.first!.value as! [String: Any?]
-            userDict["spotifyID"] = otherDict.first!.key
+            guard let otherDict = dict["host"] as? [String: Any?] else { return nil }
+            guard let spotifyID = otherDict.first?.key else { return nil }
+            guard var userDict = otherDict.first?.value as? [String: Any?] else { return nil }
+            userDict["spotifyID"] = spotifyID
             self.host = FirebaseUser(dict: userDict)
             
             if let membersDict = dict["members"] as? [String: Any?] {
@@ -145,9 +151,10 @@ class Models {
         }
         
         // called to generate new stream with solely host
-        init() {
+        init(title: String) {
             let streamID = ref.childByAutoId().key
             self.streamID = streamID
+            self.title = title
         }
     }
     

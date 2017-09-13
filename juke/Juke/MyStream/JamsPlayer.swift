@@ -129,15 +129,23 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     }
     
     public func resync() {
-        if !Current.stream.isPlaying {
-            setPlayStatus(shouldPlay: false, topSong: Current.stream.song)
+        guard let stream = Current.stream else {
+            // if no stream found, shut down music player
+            position_ms = 0.0
+            setPlayStatus(shouldPlay: false, topSong: nil)
             return
         }
         
+        if !stream.isPlaying {
+            setPlayStatus(shouldPlay: false, topSong: stream.song)
+            return
+        }
+        
+        // below here we know stream is set to playing. play music if host or if member && listen button selected
         if Current.isHost() {
-            setPlayStatus(shouldPlay: true, topSong: Current.stream.song)
+            setPlayStatus(shouldPlay: true, topSong: stream.song)
         } else {
-            setPlayStatus(shouldPlay: Current.listenSelected, topSong: Current.stream.song)
+            setPlayStatus(shouldPlay: Current.listenSelected, topSong: stream.song)
         }
     }
 

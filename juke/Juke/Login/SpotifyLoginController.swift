@@ -14,7 +14,17 @@ class SpotifyLoginController: UIViewController, UIWebViewDelegate {
     let kClientID = "77d4489425fe464483f0934f99847c8b"
     let kCallbackURL = URL(string:"juke1231://callback")!
     let kTokenSwapURL = URL(string: "https://juketokenrefresh.herokuapp.com/swap")!
+    let kTokenRefreshURL = URL(string: "https://juketokenrefresh.herokuapp.com/refresh")
     var completion: ()->Void = { }
+    
+    public func setSpotifyAppCredentials() {
+        let auth = SPTAuth.defaultInstance()!
+        auth.clientID = kClientID
+        auth.redirectURL = kCallbackURL
+        auth.tokenSwapURL = kTokenSwapURL
+        auth.tokenRefreshURL = kTokenRefreshURL
+        auth.requestedScopes = [SPTAuthStreamingScope, SPTAuthUserLibraryReadScope, SPTAuthUserLibraryModifyScope, SPTAuthPlaylistReadPrivateScope]
+    }
     
     override func loadView() {
         super.loadView()
@@ -31,12 +41,6 @@ class SpotifyLoginController: UIViewController, UIWebViewDelegate {
     
     func login(completion: @escaping(()->Void)) {
         self.completion = completion
-        let auth = SPTAuth.defaultInstance()!
-        auth.clientID = kClientID
-        auth.redirectURL = kCallbackURL
-        auth.tokenSwapURL = kTokenSwapURL
-        auth.tokenRefreshURL = URL(string: "https://juketokenrefresh.herokuapp.com/refresh")
-        auth.requestedScopes = [SPTAuthStreamingScope, SPTAuthUserLibraryReadScope, SPTAuthUserLibraryModifyScope, SPTAuthPlaylistReadPrivateScope]
         let loginURL = SPTAuth.defaultInstance().spotifyWebAuthenticationURL()!
         let request = URLRequest(url: loginURL, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10)
         self.webView.loadRequest(request)
@@ -44,7 +48,7 @@ class SpotifyLoginController: UIViewController, UIWebViewDelegate {
     
     func loginSuccessful() {
         self.dismiss(animated: true) {
-            self.completion()
+            self.completion()   // run the handler passed in by login view controller
         }
     }
     

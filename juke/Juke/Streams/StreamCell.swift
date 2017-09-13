@@ -50,12 +50,8 @@ class StreamCell: UITableViewCell {
     
     public func populateCell(stream: Models.FirebaseStream) {
         loadCellImages(stream: stream)
-        var titleString = stream.host.username.components(separatedBy: " ").first! + "'s stream"
-        if Current.stream.streamID == stream.streamID {
-            titleString = "Your Stream"
-        }
+        let titleString = stream.host.username.components(separatedBy: " ").first! + "'s stream"
         self.username.text = titleString
-        self.isUserInteractionEnabled = (Current.stream.streamID != stream.streamID)
         if let song = stream.song {
             self.artist.text = song.artistName
             self.song.text = song.songName

@@ -39,7 +39,7 @@ class SpotifySearchTableViewController: JukeSearchTableViewController {
             "Authorization": "Bearer " + Current.accessToken
         ]
         
-        Alamofire.request(ServerConstants.kSpotifySearchURL, method: .get, parameters: params, headers: headers)
+        Alamofire.request(Constants.kSpotifySearchURL, method: .get, parameters: params, headers: headers)
             .validate().responseJSON { response in
                 switch response.result {
                 case .success:
