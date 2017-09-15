@@ -57,28 +57,28 @@ class LoginViewController: UIViewController {
     
     func fetchSpotifyUser() {
         // first retrieve user object from spotify server using access token
-        print("Fetching user")
-        
         let accessToken = Current.accessToken
         let headers: HTTPHeaders = ["Authorization": "Bearer " + accessToken]
         let url = Constants.kSpotifyBaseURL + Constants.kCurrentUserPath
+        print("fetching spotify user")
         Alamofire.request(url, method: .get, parameters: nil, encoding: URLEncoding.default, headers: headers).validate().responseJSON {
             response in
             switch response.result {
             case .success:
                 do {
+                    print("fetched spotify user")
                     let dictionary = response.result.value as! UnboxableDictionary
                     let spotifyUser: Models.SpotifyUser = try unbox(dictionary: dictionary)
                     FirebaseAPI.loginUser(spotifyUser: spotifyUser) { success in
+                        print("fetched spotify user")
                         if success {
                             DispatchQueue.main.async {
                                 self.performSegue(withIdentifier: "loginSegue", sender: nil)
                             }
                         } else {
-                            print("that's life in the city")
+                            print("error logging in firebase user -- that's life in the city")
                         }
                     }
-                    print("Fetched user")
                 } catch {
                     print("error unboxing spotify user: ", error)
                 }

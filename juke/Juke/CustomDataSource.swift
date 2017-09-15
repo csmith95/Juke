@@ -208,8 +208,11 @@ class StreamsDataSource: CustomDataSource {
     }
     
     override func shouldInclude(item: CollectionItem) -> Bool {
-        guard let currentStream = Current.stream else { return true }
-        let included = (item.stream.streamID != currentStream.streamID && item.stream.song != nil)
+        return true
+        var included = (item.stream.song != nil)
+        if let currentStream = Current.stream {
+            included = (included && item.stream.streamID != currentStream.streamID)
+        }
         if !included || query.isEmpty {
             return included
         }
@@ -240,7 +243,8 @@ class UsersDataSource: CustomDataSource {
     }
     
     override func shouldInclude(item: CollectionItem) -> Bool {
-        let included = item.user.spotifyID != Current.user.spotifyID
+        guard let user = Current.user else { return true }
+        let included = item.user.spotifyID != user.spotifyID
         if !included || query.isEmpty {
             return included
         }
@@ -266,7 +270,12 @@ class SongQueueDataSource: CustomDataSource {
     // this should be called whenever user changes streams 
     // or just whenever the MyStreamController view will appear
     public func setObservedStream() {
-        guard let stream = Current.stream else { return }
+        guard let stream = Current.stream else {
+            ref.child("/songs/\(observedStreamID)").removeAllObservers()
+            filteredCollection.removeAll()
+            collection.removeAll()
+            return
+        }
         if stream.streamID == observedStreamID { return } // don't set observer for same stream twice
         
         // remove old observer

@@ -27,8 +27,8 @@
 		4B48FDE11F5DCEC700E87507 /* MenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B48FDE01F5DCEC700E87507 /* MenuCell.xib */; };
 		4B48FDE31F5DCF7900E87507 /* ActionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B48FDE21F5DCF7900E87507 /* ActionData.swift */; };
 		4B48FDE71F6108E700E87507 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B48FDE61F6108E700E87507 /* GradientView.swift */; };
-		4B48FDE91F6337C800E87507 /* MakeStreamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B48FDE81F6337C800E87507 /* MakeStreamViewController.swift */; };
 		4B4920C01F5722440089C61F /* SpotifyLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4920BF1F5722440089C61F /* SpotifyLoginController.swift */; };
+		4B62A2D81F69D05B00864EFF /* MyStreamRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B62A2D71F69D05B00864EFF /* MyStreamRootViewController.swift */; };
 		4B73AB7E1F69022B008DF5A2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B73AB7D1F69022B008DF5A2 /* Assets.xcassets */; };
 		4B7C1EA11F484DF00064F1C3 /* FirebaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */; };
 		4B852BAD1F67649B00B31AD5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B852BAC1F67649B00B31AD5 /* GoogleService-Info.plist */; };
@@ -69,8 +69,8 @@
 		4B48FDE01F5DCEC700E87507 /* MenuCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MenuCell.xib; sourceTree = "<group>"; };
 		4B48FDE21F5DCF7900E87507 /* ActionData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionData.swift; sourceTree = "<group>"; };
 		4B48FDE61F6108E700E87507 /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
-		4B48FDE81F6337C800E87507 /* MakeStreamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakeStreamViewController.swift; sourceTree = "<group>"; };
 		4B4920BF1F5722440089C61F /* SpotifyLoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyLoginController.swift; sourceTree = "<group>"; };
+		4B62A2D71F69D05B00864EFF /* MyStreamRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyStreamRootViewController.swift; sourceTree = "<group>"; };
 		4B73AB7D1F69022B008DF5A2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseAPI.swift; sourceTree = "<group>"; };
 		4B852BAC1F67649B00B31AD5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -118,11 +118,11 @@
 			children = (
 				4B48FDE21F5DCF7900E87507 /* ActionData.swift */,
 				4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */,
-				4B48FDE81F6337C800E87507 /* MakeStreamViewController.swift */,
 				4B48FDDC1F5DCCE400E87507 /* MenuActionController.swift */,
 				4B48FDE01F5DCEC700E87507 /* MenuCell.xib */,
 				4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */,
 				4B0490E81E734614003F49DF /* SongTableViewCell.swift */,
+				4B62A2D71F69D05B00864EFF /* MyStreamRootViewController.swift */,
 			);
 			path = MyStream;
 			sourceTree = "<group>";
@@ -442,12 +442,12 @@
 				4B05323D1F687B6200ADA988 /* SpotifySearchCell.swift in Sources */,
 				4B4920C01F5722440089C61F /* SpotifyLoginController.swift in Sources */,
 				4B13DE4E1E8AFB850060D29A /* StreamsTableViewController.swift in Sources */,
-				4B48FDE91F6337C800E87507 /* MakeStreamViewController.swift in Sources */,
 				F2DB0B331EA1145A00A13E30 /* JukeSearchTableViewController.swift in Sources */,
 				4BA7CB701E8ED007003E3DC8 /* MyStreamController.swift in Sources */,
 				4B48FDDD1F5DCCE400E87507 /* MenuActionController.swift in Sources */,
 				4B7C1EA11F484DF00064F1C3 /* FirebaseAPI.swift in Sources */,
 				4B05323B1F68528900ADA988 /* MyLibraryCell.swift in Sources */,
+				4B62A2D81F69D05B00864EFF /* MyStreamRootViewController.swift in Sources */,
 				F2E815581E90BBBC00404DDF /* LoginViewController.swift in Sources */,
 				4B04E4591F55682C001605E2 /* CustomDataSource.swift in Sources */,
 				4B48FDE71F6108E700E87507 /* GradientView.swift in Sources */,

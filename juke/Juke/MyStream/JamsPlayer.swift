@@ -22,12 +22,14 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         get {
             return self.position_ms_private
         }
-        
+    
         set(newPosition) {
             if abs(self.position_ms_private - newPosition) >= 3000 {
                 self.position_ms_private = newPosition
                 self.resync()
             }
+            self.resync()
+
             self.position_ms_private = newPosition
         }
         

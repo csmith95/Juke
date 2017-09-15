@@ -39,7 +39,8 @@ class SongTableViewCell: UITableViewCell {
         songName.text = song.songName
         artist.text = song.artistName
         upvoteButton.isSelected = song.upvoters.keys.contains(where: { (userSpotifyID) -> Bool in
-            return userSpotifyID == Current.user.spotifyID
+            guard let user = Current.user else { return false }
+            return userSpotifyID == user.spotifyID
         })
         numVotesLabel.text = String(song.votes)
 //        if let unwrappedUrl = song.memberImageURL {

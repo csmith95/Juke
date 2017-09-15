@@ -52,4 +52,8 @@ class SpotifyLoginController: UIViewController, UIWebViewDelegate {
         }
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
 }

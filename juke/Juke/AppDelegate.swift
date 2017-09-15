@@ -134,6 +134,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        FirebaseAPI.addPresenceListener()   // add presence listener because Current.stream might not be reassigned during user session, which is what I rely on to trigger listener set-up
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {

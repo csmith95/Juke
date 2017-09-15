@@ -58,4 +58,8 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
     
     // set status bar text to white
     override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 }

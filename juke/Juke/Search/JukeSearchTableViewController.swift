@@ -84,21 +84,8 @@ class JukeSearchTableViewController: UITableViewController, UISearchBarDelegate 
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell") as! SearchCell
         cell.populateCell(song: self.displayedResults[indexPath.row])
-        
-//        cell.tapAction = { (cell) in
-//            FirebaseAPI.queueSong(spotifySong: self.displayedResults[indexPath.row])
-//            cell.addToStreamButton.isSelected = true
-//        }
-        
-//        let mainLabel = cell.viewWithTag(1) as! UILabel
-//        let artistLabel = cell.viewWithTag(2) as! UILabel
-        
-//        mainLabel.text = displayedResults[indexPath.row].songName
-//        artistLabel.text = displayedResults[indexPath.row].artistName
-        
         return cell
     }
     

@@ -82,7 +82,7 @@ class Models {
             self.duration = song.duration
             self.songName = song.songName
             self.coverArtURL = song.coverArtURL
-            self.memberImageURL = Current.user.imageURL
+            self.memberImageURL = Current.user?.imageURL
             self.votes = 0
         }
     }
@@ -116,7 +116,9 @@ class Models {
         init?(dict: [String: Any?]) {
             guard let streamID = dict["streamID"] as? String else { return nil }
             guard let isPlaying = dict["isPlaying"] as? Bool else { return nil }
-            guard let title = dict["title"] as? String else { return nil }
+//            guard let title = dict["title"] as? String else { return nil }
+            let title = dict["title"] as? String ?? "Placeholder Title"
+
             self.streamID = streamID
             self.isPlaying = isPlaying
             self.title = title
@@ -125,7 +127,8 @@ class Models {
             guard let spotifyID = otherDict.first?.key else { return nil }
             guard var userDict = otherDict.first?.value as? [String: Any?] else { return nil }
             userDict["spotifyID"] = spotifyID
-            self.host = FirebaseUser(dict: userDict)
+            guard let host = FirebaseUser(dict: userDict) else { return nil }
+            self.host = host
             
             if let membersDict = dict["members"] as? [String: Any?] {
                 for member in membersDict {

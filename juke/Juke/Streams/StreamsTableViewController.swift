@@ -77,5 +77,8 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate {
     
     // set status bar content to white text
     override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
 }
