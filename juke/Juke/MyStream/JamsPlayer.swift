@@ -14,29 +14,29 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     static let shared = JamsPlayer()
     private let userDefaults = UserDefaults.standard
     private let sharedInstance = SPTAudioStreamingController.sharedInstance()
-    private let core = SPTCoreAudioController()
     private var session: SPTSession? = nil
     private let kClientID = "77d4489425fe464483f0934f99847c8b"
-    private var position_ms_private: TimeInterval = 0.0
+    private var old_position_ms: TimeInterval?
     public var position_ms: TimeInterval {
-        get {
-            return self.position_ms_private
-        }
-    
-        set(newPosition) {
-            if abs(self.position_ms_private - newPosition) >= 3000 {
-                self.position_ms_private = newPosition
+        
+        didSet(newPosition) {
+            if old_position_ms == nil || abs(newPosition - old_position_ms!) >= 3000 {
                 self.resync()
             }
-            self.resync()
-
-            self.position_ms_private = newPosition
+            old_position_ms = newPosition
+        }
+    
+        willSet(newPosition) {
+            if newPosition == 0.0 {
+                 old_position_ms = nil
+            }
         }
         
     }
     
     
     override private init() {
+        self.position_ms = 0.0
         super.init()
         do {
             try sharedInstance?.start(withClientId: kClientID)
@@ -92,8 +92,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePosition position: TimeInterval) {
         // signal StreamController so that it can update UISlider
-        let position_ms = position * 1000
-        self.position_ms_private = position_ms  // update private copy to compare against db pushed progress in setter
+        position_ms = position * 1000
         let data: [String:Any] = ["progress": position_ms]
         NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
     }
@@ -133,7 +132,6 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     public func resync() {
         guard let stream = Current.stream else {
             // if no stream found, shut down music player
-            position_ms = 0.0
             setPlayStatus(shouldPlay: false, topSong: nil)
             return
         }

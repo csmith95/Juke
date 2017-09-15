@@ -208,7 +208,6 @@ class StreamsDataSource: CustomDataSource {
     }
     
     override func shouldInclude(item: CollectionItem) -> Bool {
-        return true
         var included = (item.stream.song != nil)
         if let currentStream = Current.stream {
             included = (included && item.stream.streamID != currentStream.streamID)

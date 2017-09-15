@@ -18,11 +18,11 @@ class Current {
         willSet(newValue) {
             if let currentStream = stream, let newStream = newValue {
                 if currentStream.streamID == newStream.streamID {
-                    return
+                    return  // do nothing if same stream
                 }
             }
             
-            let current = stream
+            let current = stream    // make a copy and pass to leaveStream otherwise concurrency issues
             FirebaseAPI.leaveStream(current: current) {
                 // once user has left current stream, join new stream
                 FirebaseAPI.joinStream(newStream: newValue)   // sets user tunedInto field in db

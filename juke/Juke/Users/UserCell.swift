@@ -48,8 +48,9 @@ class UserCell: UITableViewCell {
         loadUserIcon(url: member.imageURL)
         if member.online {
             presenceDot.image = #imageLiteral(resourceName: "green dot")
+            presenceDot.isHidden = false
         } else {
-            presenceDot.image = #imageLiteral(resourceName: "red dot")
+            presenceDot.isHidden = true
         }
         
     }

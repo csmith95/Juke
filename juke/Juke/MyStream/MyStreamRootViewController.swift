@@ -24,17 +24,15 @@ class MyStreamRootViewController: UIViewController {
     }
     
     func transitionChildViews() {
-        if Current.stream != nil {
-            print("not nil")
-            UIView.animate(withDuration: 0.5, animations: {
-                self.myStreamContainerView.alpha = 1
-                self.createNewStreamContainerView.alpha = 0
-            })
-        } else {
-            print("nil")
+        if Current.stream == nil || Current.stream!.song == nil {
             UIView.animate(withDuration: 0.5, animations: {
                 self.createNewStreamContainerView.alpha = 1
                 self.myStreamContainerView.alpha = 0
+            })
+        } else {
+            UIView.animate(withDuration: 0.5, animations: {
+                self.myStreamContainerView.alpha = 1
+                self.createNewStreamContainerView.alpha = 0
             })
         }
     }
