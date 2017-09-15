@@ -11,6 +11,7 @@ import Alamofire
 import AlamofireImage
 import Unbox
 import Firebase
+import Crashlytics
 
 class JukeSearchTableViewController: UITableViewController, UISearchBarDelegate {
     

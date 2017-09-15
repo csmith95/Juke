@@ -12,6 +12,8 @@ import Alamofire
 import UserNotifications
 import Firebase
 import PKHUD
+import Fabric
+import Crashlytics
 
 
 @UIApplicationMain
@@ -20,7 +22,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
+        // config firebase
         FirebaseApp.configure()
+        
+        // config Fabric/Crashlytics
+        Fabric.with([Crashlytics.self])
         
         Messaging.messaging().delegate = self
         Database.database().isPersistenceEnabled = true // allow offline

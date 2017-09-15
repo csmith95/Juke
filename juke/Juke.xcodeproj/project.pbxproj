@@ -280,6 +280,7 @@
 				4B3A34C71E58120F00C314A0 /* Resources */,
 				CC88373AA3F209863ABDC536 /* [CP] Embed Pods Frameworks */,
 				34A7314F190E8126F182500E /* [CP] Copy Pods Resources */,
+				F26D78C91F69115200805B33 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -302,7 +303,7 @@
 				TargetAttributes = {
 					4B3A34C81E58120F00C314A0 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = UL2WBS3TV4;
+						DevelopmentTeam = 2746PGXGF5;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -422,6 +423,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Juke/Pods-Juke-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		F26D78C91F69115200805B33 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 39e3dc0e29d04626dd144ab01da9be3f217ce19c fa888c4c3b08ec79605550be0052a8f23f8a7c0a05751fdb4f35aa0b65ef75ab";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -578,7 +592,7 @@
 				CODE_SIGN_ENTITLEMENTS = Juke/Static/Juke.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = UL2WBS3TV4;
+				DEVELOPMENT_TEAM = 2746PGXGF5;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -591,7 +605,7 @@
 					"-ObjC",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.csmith95.juke;
+				PRODUCT_BUNDLE_IDENTIFIER = jukedev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -610,7 +624,7 @@
 				CODE_SIGN_ENTITLEMENTS = Juke/Static/Juke.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = UL2WBS3TV4;
+				DEVELOPMENT_TEAM = 2746PGXGF5;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -623,7 +637,7 @@
 					"-ObjC",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.csmith95.juke;
+				PRODUCT_BUNDLE_IDENTIFIER = jukedev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";

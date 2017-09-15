@@ -5,7 +5,10 @@ PODS:
   - ChameleonFramework/Default (2.1.0)
   - ChameleonFramework/Swift (2.1.0):
     - ChameleonFramework/Default
+  - Crashlytics (3.8.5):
+    - Fabric (~> 1.6.3)
   - ESTMusicIndicator (0.1.3)
+  - Fabric (1.6.12)
   - Firebase/Auth (4.0.4):
     - Firebase/Core
     - FirebaseAuth (= 4.0.0)
@@ -80,7 +83,9 @@ DEPENDENCIES:
   - Alamofire (~> 4.4)
   - AlamofireImage (~> 3.1)
   - ChameleonFramework/Swift (from `https://github.com/ViccAlexander/Chameleon.git`)
+  - Crashlytics
   - ESTMusicIndicator
+  - Fabric
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
@@ -107,7 +112,9 @@ SPEC CHECKSUMS:
   Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
   AlamofireImage: 157ed682cc81d3b9db4fb90c1f12180ac552d93b
   ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
+  Crashlytics: dfbae35ef22ca189240d230ad501feea4ee85d2d
   ESTMusicIndicator: 0b28ed54b5ec2206aa135b2b9db3fe255bb6e6ef
+  Fabric: f050464eac45a2ce5a8e6e6a07e977c0df32fe28
   Firebase: 1492bf04e1b73a7353b4fb2cf5a20bac9692f341
   FirebaseAnalytics: ad41720e3e67fc63fbe3d2948d3e26932a8de311
   FirebaseAuth: ebb6abcbabae00fc47446d690c19ce68d8484fde
@@ -128,6 +135,6 @@ SPEC CHECKSUMS:
   Whisper: 051f25e704bf8992641ffd28b20d5682ddc5f5d3
   XLActionController: 57fe0ce1642e2eed971b188b490762345fdbf963
 
-PODFILE CHECKSUM: 5d0a253dd644e975fbb342a5ef9a49d4e360d3f9
+PODFILE CHECKSUM: 4a4d690738262c38b07732d0f0edd3e63706aae2
 
 COCOAPODS: 1.2.0

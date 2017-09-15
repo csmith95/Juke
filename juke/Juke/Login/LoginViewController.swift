@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import Unbox
 import Firebase
+import Crashlytics
 
 class LoginViewController: UIViewController {
 
@@ -53,6 +54,11 @@ class LoginViewController: UIViewController {
                 self.fetchSpotifyUser()
             }
         }
+    }
+    
+    func logUserToCrashlytics() {
+        Crashlytics.sharedInstance().setUserName(Current.user.username)
+        Crashlytics.sharedInstance().setUserIdentifier(Current.user.spotifyID)
     }
     
     func fetchSpotifyUser() {
