@@ -21,7 +21,6 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
         
         usersTableView.dataSource = usersDataSource
         usersTableView.delegate = usersDataSource
-        searchBar.delegate = self
         
         // setup notifications received from usersDataSource
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadCollection), name: Notification.Name("reloadCollection"), object: nil)
@@ -34,8 +33,14 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        print("began")
+        print("began editing in users table view controller")
         searchBar.setShowsCancelButton(true, animated: true)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        execSearchQuery()
+        hideKeyboard()
     }
     
     private func execSearchQuery() {

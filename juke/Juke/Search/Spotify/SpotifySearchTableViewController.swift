@@ -13,6 +13,12 @@ import Unbox
 class SpotifySearchTableViewController: JukeSearchTableViewController {
     
     @IBOutlet var searchBar: UISearchBar!
+    
+    override var cellName: String {
+        get {
+            return "SpotifySearchCell"
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +35,7 @@ class SpotifySearchTableViewController: JukeSearchTableViewController {
     }
     
     override func execSearch(keywords: String) {
+        print("\n spotify exec search")
         displayedResults.removeAll()
         if keywords.isEmpty {
             threadSafeReloadView()

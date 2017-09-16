@@ -14,6 +14,12 @@ class MyLibraryTableViewController: JukeSearchTableViewController {
     
     @IBOutlet var searchBar: UISearchBar!
     
+    override var cellName: String {
+        get {
+            return "MyLibrarySearchCell"
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadSavedTracks()
@@ -31,6 +37,7 @@ class MyLibraryTableViewController: JukeSearchTableViewController {
     }
     
     override func hideKeyboard() {
+        print("\n my lib exec search")
         self.view.endEditing(true)
         searchBar.setShowsCancelButton(false, animated: true)
     }

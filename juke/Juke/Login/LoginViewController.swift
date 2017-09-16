@@ -77,7 +77,7 @@ class LoginViewController: UIViewController {
                     let dictionary = response.result.value as! UnboxableDictionary
                     let spotifyUser: Models.SpotifyUser = try unbox(dictionary: dictionary)
                     FirebaseAPI.loginUser(spotifyUser: spotifyUser) { success in
-                        print("fetched spotify user")
+                        print("logged in firebase user")
                         if success {
                             self.logUserToCrashlytics()
                             DispatchQueue.main.async {

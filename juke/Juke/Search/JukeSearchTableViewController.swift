@@ -19,6 +19,12 @@ class JukeSearchTableViewController: UITableViewController, UISearchBarDelegate 
     var displayedResults:[Models.SpotifySong] = []  // filtered results
     typealias JSONStandard = [String: AnyObject]
     
+    var cellName: String {
+        get {
+            fatalError("This property must be set by subclass")
+        }
+    }
+    
     // this method will be called with lowercased search text. subclass should 
     // handle how to translate searchText to a filtered set of results.
     func execSearch(keywords: String) {
@@ -78,15 +84,15 @@ class JukeSearchTableViewController: UITableViewController, UISearchBarDelegate 
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("\n\(cellName); displayed results count: ", self.displayedResults.count)
         return displayedResults.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("displayed results count: ", self.displayedResults.count)
-        print("Row: \(indexPath.row); item: ", self.displayedResults[indexPath.row])
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell") as! SearchCell
+        print("\n\(cellName); Row: \(indexPath.row); item: ", self.displayedResults[indexPath.row])
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellName) as! SearchCell
         cell.populateCell(song: self.displayedResults[indexPath.row])
-        print("2")
+        print("populated the cell")
         return cell
     }
     

@@ -129,7 +129,7 @@ class MyStreamController: UITableViewController {
             return
         }
         
-        numContributorsButton.setTitle("\(stream.members.count+1) contributors", for: .normal)
+        numContributorsButton.setTitle("\(stream.members.count+1) members", for: .normal)   // +1 for host
         streamNameLabel.text = stream.title
         if let song = stream.song {
             self.coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil)
@@ -224,19 +224,6 @@ class MyStreamController: UITableViewController {
     private func setEmptyStreamUI() {
         // notification handled in MyStreamRootViewController
         NotificationCenter.default.post(name: Notification.Name("userStreamChanged"), object: nil)
-////        self.noSongsLabel.isHidden = false
-//        coverArtImage.isHidden = true
-//        bgblurimg.image = #imageLiteral(resourceName: "jukedef")
-//        currentSongLabel.text = ""
-//        currentArtistLabel.text = ""
-//        progressSlider.value = 0.0
-//        listenButton.isHidden = true
-//        listenButton.isSelected = false
-//        Current.listenSelected = false
-//        progressSlider.isHidden = true
-//        currTimeLabel.isHidden = true
-//        addToSpotifyLibButton.isHidden = true
-//        handleAutomaticProgressSlider()
     }
     
     @IBAction func addToSpotifyLibButtonPressed(_ sender: Any) {
@@ -325,6 +312,18 @@ class MyStreamController: UITableViewController {
         
         actionController.addAction(Action("Close", style: .cancel, handler: nil))
         present(actionController, animated: true, completion: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ShowMembers" {
+            guard let stream = Current.stream else { return }
+            let dest = segue.destination as! MembersTableViewController
+            dest.stream = stream
+        }
+    }
+    
+    @IBAction func unwindToViewControllerNameHere(segue: UIStoryboardSegue) {
+        //nothing goes here
     }
     
     // set status bar text to white

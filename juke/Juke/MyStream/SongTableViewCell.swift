@@ -12,11 +12,8 @@ import AlamofireImage
 class SongTableViewCell: UITableViewCell {
 
     @IBOutlet var upvoteButton: UIButton!
-    @IBOutlet var numVotesLabel: UILabel!
     @IBOutlet var songName: UILabel!
     @IBOutlet var artist: UILabel!
-//    let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
-//    let imageFilter = CircleFilter()
     var song: Models.FirebaseSong!
     
     override func awakeFromNib() {
@@ -42,12 +39,7 @@ class SongTableViewCell: UITableViewCell {
             guard let user = Current.user else { return false }
             return userSpotifyID == user.spotifyID
         })
-        numVotesLabel.text = String(song.votes)
-//        if let unwrappedUrl = song.memberImageURL {
-//            memberImageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultImage, filter: imageFilter)
-//        } else {
-//            memberImageView.image = imageFilter.filter(defaultImage)
-//        }
+        upvoteButton.setTitle("\(song.upvoters.count)", for: .normal)
     }
 
 }

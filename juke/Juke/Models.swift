@@ -26,7 +26,6 @@ class Models {
         var songName: String
         var artistName: String
         var duration: Double
-        var votes: Int
         var coverArtURL: String
         var memberImageURL: String?
         var upvoters: [String: Bool] = [:]
@@ -35,7 +34,6 @@ class Models {
         var firebaseDict: [String: Any] {
             var dict: [String: Any] = ["spotifyID": self.spotifyID, "songName":self.songName,
                     "artistName": self.artistName, "coverArtURL": self.coverArtURL,
-                    "votes": self.votes,
                     "duration": self.duration,
                     "upvoters": upvoters
                     ]
@@ -50,7 +48,6 @@ class Models {
             guard let songName = dict["songName"] as? String else { return nil }
             guard let artistName = dict["artistName"] as? String else { return nil }
             guard let coverArtURL = dict["coverArtURL"] as? String else { return nil }
-            guard let votes = dict["votes"] as? Int else { return nil }
             guard let duration = dict["duration"] as? Double else { return nil }
             guard let key = dict["key"] as? String else { return nil }
             
@@ -58,7 +55,6 @@ class Models {
             self.songName = songName
             self.artistName = artistName
             self.coverArtURL = coverArtURL
-            self.votes = votes
             self.duration = duration
             self.memberImageURL = dict["memberImageURL"] as? String
             self.key = key
@@ -83,7 +79,7 @@ class Models {
             self.songName = song.songName
             self.coverArtURL = song.coverArtURL
             self.memberImageURL = Current.user?.imageURL
-            self.votes = 0
+            self.upvoters = [:]
         }
     }
     

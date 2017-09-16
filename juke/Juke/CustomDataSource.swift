@@ -305,7 +305,7 @@ class SongQueueDataSource: CustomDataSource {
     
     // comparator function used for sorting in super class
     override func comparator(first: CollectionItem, second: CollectionItem) -> Bool {
-        return first.song.votes > second.song.votes
+        return first.song.upvoters.count > second.song.upvoters.count
     }
     
     override func shouldInclude(item: CollectionItem) -> Bool {

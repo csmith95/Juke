@@ -432,16 +432,6 @@ class FirebaseAPI {
         } else {
             self.ref.child("/songs/\(stream.streamID)/\(song.key)/upvoters/\(user.spotifyID)").removeValue()
         }
-        self.ref.child("/songs/\(stream.streamID)/\(song.key)/votes").runTransactionBlock({ (data) -> TransactionResult in
-            if let numVotes = data.value as? Int {
-                data.value = upvoted ? numVotes+1 : numVotes-1
-            }
-            return TransactionResult.success(withValue: data)
-        }) { (error, committed, snapshot) in
-            if let error = error {
-                print(error.localizedDescription)
-            }
-        }
     }
     
     // Function URL: https://us-central1-juke-9fbd6.cloudfunctions.net/sendNotification
