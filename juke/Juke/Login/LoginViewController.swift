@@ -57,8 +57,9 @@ class LoginViewController: UIViewController {
     }
     
     func logUserToCrashlytics() {
-        Crashlytics.sharedInstance().setUserName(Current.user.username)
-        Crashlytics.sharedInstance().setUserIdentifier(Current.user.spotifyID)
+        guard let user = Current.user else { print("error logging user to crashlytics"); return }
+        Crashlytics.sharedInstance().setUserName(user.username)
+        Crashlytics.sharedInstance().setUserIdentifier(user.spotifyID)
     }
     
     func fetchSpotifyUser() {
@@ -78,6 +79,7 @@ class LoginViewController: UIViewController {
                     FirebaseAPI.loginUser(spotifyUser: spotifyUser) { success in
                         print("fetched spotify user")
                         if success {
+                            self.logUserToCrashlytics()
                             DispatchQueue.main.async {
                                 self.performSegue(withIdentifier: "loginSegue", sender: nil)
                             }

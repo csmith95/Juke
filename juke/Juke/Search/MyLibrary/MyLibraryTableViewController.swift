@@ -12,15 +12,27 @@ import Unbox
 
 class MyLibraryTableViewController: JukeSearchTableViewController {
     
+    @IBOutlet var searchBar: UISearchBar!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadSavedTracks()
         NotificationCenter.default.addObserver(self, selector: #selector(self.libraryChanged), name: Notification.Name("libraryChanged"), object: nil)
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.searchBar.text = ""
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func hideKeyboard() {
+        self.view.endEditing(true)
+        searchBar.setShowsCancelButton(false, animated: true)
     }
     
     override func execSearch(keywords: String) {

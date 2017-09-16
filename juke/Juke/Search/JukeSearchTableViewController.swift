@@ -15,7 +15,6 @@ import Crashlytics
 
 class JukeSearchTableViewController: UITableViewController, UISearchBarDelegate {
     
-    @IBOutlet var searchBar: UISearchBar!
     var allResults:[Models.SpotifySong] = []           // all results
     var displayedResults:[Models.SpotifySong] = []  // filtered results
     typealias JSONStandard = [String: AnyObject]
@@ -61,14 +60,12 @@ class JukeSearchTableViewController: UITableViewController, UISearchBarDelegate 
     
     override func viewWillAppear(_ animated: Bool) {
         // reset UI
-        self.searchBar.text = ""
         execSearch(keywords: "")
         hideKeyboard()
     }
     
     func hideKeyboard() {
-        self.view.endEditing(true)
-        searchBar.setShowsCancelButton(false, animated: true)
+        fatalError("This method should be overridden by subclass to handle searchBar animation")
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -85,8 +82,11 @@ class JukeSearchTableViewController: UITableViewController, UISearchBarDelegate 
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print("displayed results count: ", self.displayedResults.count)
+        print("Row: \(indexPath.row); item: ", self.displayedResults[indexPath.row])
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell") as! SearchCell
         cell.populateCell(song: self.displayedResults[indexPath.row])
+        print("2")
         return cell
     }
     

@@ -34,6 +34,7 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        print("began")
         searchBar.setShowsCancelButton(true, animated: true)
     }
     

@@ -11,9 +11,21 @@ import Alamofire
 import Unbox
 
 class SpotifySearchTableViewController: JukeSearchTableViewController {
+    
+    @IBOutlet var searchBar: UISearchBar!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.searchBar.text = ""
+    }
+    
+    override func hideKeyboard() {
+        self.view.endEditing(true)
+        searchBar.setShowsCancelButton(false, animated: true)
     }
     
     override func execSearch(keywords: String) {
