@@ -14,7 +14,6 @@ final class MyStreamRootViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        updateChildViews()
     }
     
     // init child view controllers
@@ -41,6 +40,7 @@ final class MyStreamRootViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamRootViewController.updateChildViews), name: Notification.Name("userStreamChanged"), object: nil)
+        updateChildViews()
     }
 
     override func didReceiveMemoryWarning() {
@@ -49,7 +49,7 @@ final class MyStreamRootViewController: UIViewController {
     }
     
     func updateChildViews() {
-        print("update")
+        print("update child views my stream root controller")
 
         var toRemove: UIViewController!
         var toAdd: UIViewController!
@@ -84,7 +84,6 @@ final class MyStreamRootViewController: UIViewController {
     }
     
     deinit {
-        print("deinit")
         NotificationCenter.default.removeObserver(self)
     }
     
