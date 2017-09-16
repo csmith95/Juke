@@ -36,6 +36,7 @@
 		4BA7CB701E8ED007003E3DC8 /* MyStreamController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */; };
 		4BA9B3F51E91B043003D352E /* Current.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA9B3F41E91B043003D352E /* Current.swift */; };
 		4BCFA0231F6DBAA600E49516 /* MembersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCFA0221F6DBAA600E49516 /* MembersTableViewController.swift */; };
+		4BCFA0251F6DC75F00E49516 /* EmptyStreamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCFA0241F6DC75F00E49516 /* EmptyStreamViewController.swift */; };
 		4BDCEBA81E709F7F00D9D3EE /* JamsPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */; };
 		4BDCEC061E720D0B00D9D3EE /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEC051E720D0B00D9D3EE /* Constants.swift */; };
 		F26A65301EB194F100ADB14E /* SpotifyAudioPlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26A652D1EB194F100ADB14E /* SpotifyAudioPlayback.framework */; };
@@ -80,6 +81,7 @@
 		4BA9B3F41E91B043003D352E /* Current.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Current.swift; sourceTree = "<group>"; };
 		4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Juke-Bridging-Header.h"; sourceTree = "<group>"; };
 		4BCFA0221F6DBAA600E49516 /* MembersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MembersTableViewController.swift; sourceTree = "<group>"; };
+		4BCFA0241F6DC75F00E49516 /* EmptyStreamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyStreamViewController.swift; sourceTree = "<group>"; };
 		4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JamsPlayer.swift; sourceTree = "<group>"; };
 		4BDCEC051E720D0B00D9D3EE /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		72A8139088E7F63BECA297C9 /* Pods-Juke.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke.release.xcconfig"; path = "Pods/Target Support Files/Pods-Juke/Pods-Juke.release.xcconfig"; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				4B0490E81E734614003F49DF /* SongTableViewCell.swift */,
 				4B62A2D71F69D05B00864EFF /* MyStreamRootViewController.swift */,
 				4BCFA0221F6DBAA600E49516 /* MembersTableViewController.swift */,
+				4BCFA0241F6DC75F00E49516 /* EmptyStreamViewController.swift */,
 			);
 			path = MyStream;
 			sourceTree = "<group>";
@@ -455,6 +458,7 @@
 				4B0532371F6846EC00ADA988 /* MyLibraryTableViewController.swift in Sources */,
 				4B3A34D01E58120F00C314A0 /* Juke.xcdatamodeld in Sources */,
 				4B0490E91E734614003F49DF /* SongTableViewCell.swift in Sources */,
+				4BCFA0251F6DC75F00E49516 /* EmptyStreamViewController.swift in Sources */,
 				4B48FDE31F5DCF7900E87507 /* ActionData.swift in Sources */,
 				4B05323D1F687B6200ADA988 /* SpotifySearchCell.swift in Sources */,
 				4B4920C01F5722440089C61F /* SpotifyLoginController.swift in Sources */,

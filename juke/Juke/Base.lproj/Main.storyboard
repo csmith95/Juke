@@ -798,9 +798,9 @@
         <!--My Stream Controller-->
         <scene sceneID="pLI-YZ-uUK">
             <objects>
-                <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="jrN-KO-RtA" customClass="MyStreamController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="MyStreamController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="jrN-KO-RtA" customClass="MyStreamController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="65" sectionHeaderHeight="28" sectionFooterHeight="28" id="LWa-N4-anR">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.13333333333333333" green="0.12549019607843137" blue="0.14509803921568626" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="B8I-GM-8XQ" userLabel="Header View">
@@ -1090,14 +1090,14 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7dZ-hc-aso" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3079.1999999999998" y="1034.4827586206898"/>
+            <point key="canvasLocation" x="2724" y="1021"/>
         </scene>
         <!--Members Table View Controller-->
         <scene sceneID="WYc-5N-Krt">
             <objects>
                 <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="gQb-YA-QaX" customClass="MembersTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="bml-Rd-AP2">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.13333333333333333" green="0.12549019607843137" blue="0.14509803921568626" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="gll-tP-F2c" customClass="GradientView" customModule="Juke" customModuleProvider="target">
@@ -1229,7 +1229,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KAh-5e-YBy" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="er6-VX-dTP" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4008.8000000000002" y="1049.7751124437782"/>
+            <point key="canvasLocation" x="3721" y="1021"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="OYg-Dy-j9s">
@@ -1257,73 +1257,47 @@
                         <viewControllerLayoutGuide type="top" id="oL0-Ki-bq3"/>
                         <viewControllerLayoutGuide type="bottom" id="zcv-MB-ZpI"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="xfV-xK-KXm">
+                    <view key="view" contentMode="scaleToFill" id="xfV-xK-KXm" customClass="GradientView" customModule="Juke" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KOw-mR-dkd" customClass="GradientView" customModule="Juke" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="startColor">
-                                        <color key="value" red="0.1333333333" green="0.094117647060000004" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="endColor">
-                                        <color key="value" red="0.61125642059999996" green="0.3991789818" blue="0.69314861299999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
-                            <containerView opaque="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2og-0i-p4C" userLabel="Create new stream container">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
-                                <connections>
-                                    <segue destination="Uqg-8N-dQp" kind="embed" id="Coe-6M-5zD"/>
-                                </connections>
-                            </containerView>
-                            <containerView opaque="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kn3-Nk-OtA">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
-                                <connections>
-                                    <segue destination="jrN-KO-RtA" kind="embed" id="nX1-fn-oMb"/>
-                                </connections>
-                            </containerView>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="2og-0i-p4C" firstAttribute="top" secondItem="xfV-xK-KXm" secondAttribute="top" id="7gL-Pk-YIH"/>
-                            <constraint firstAttribute="trailing" secondItem="kn3-Nk-OtA" secondAttribute="trailing" id="EG8-X3-i9v"/>
-                            <constraint firstItem="2og-0i-p4C" firstAttribute="leading" secondItem="xfV-xK-KXm" secondAttribute="leading" id="Py1-iy-Wte"/>
-                            <constraint firstItem="zcv-MB-ZpI" firstAttribute="top" secondItem="2og-0i-p4C" secondAttribute="bottom" id="RYL-UV-8Gh"/>
-                            <constraint firstItem="zcv-MB-ZpI" firstAttribute="top" secondItem="kn3-Nk-OtA" secondAttribute="bottom" id="exR-hh-wnH"/>
-                            <constraint firstAttribute="trailing" secondItem="2og-0i-p4C" secondAttribute="trailing" id="u2h-4B-vId"/>
-                            <constraint firstItem="kn3-Nk-OtA" firstAttribute="leading" secondItem="xfV-xK-KXm" secondAttribute="leading" id="y7q-7v-S6Q"/>
-                            <constraint firstItem="kn3-Nk-OtA" firstAttribute="top" secondItem="xfV-xK-KXm" secondAttribute="top" id="zRY-No-J9x"/>
-                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="startColor">
+                                <color key="value" red="0.13333333333333333" green="0.094117647058823528" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="endColor">
+                                <color key="value" red="0.61125642059999996" green="0.3991789818" blue="0.69314861299999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="startLocation">
+                                <real key="value" value="-0.25"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="endLocation">
+                                <real key="value" value="1.25"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="diagonalMode" value="YES"/>
+                        </userDefinedRuntimeAttributes>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <navigationItem key="navigationItem" id="QkT-6B-vIR"/>
-                    <connections>
-                        <outlet property="createNewStreamContainerView" destination="2og-0i-p4C" id="cHZ-eV-UjB"/>
-                        <outlet property="myStreamContainerView" destination="kn3-Nk-OtA" id="i6S-E4-k63"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kuF-6i-ZDR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1564" y="680"/>
+            <point key="canvasLocation" x="1564" y="679.61019490254876"/>
         </scene>
-        <!--View Controller-->
+        <!--Empty Stream View Controller-->
         <scene sceneID="Md0-gR-CLY">
             <objects>
-                <viewController id="Uqg-8N-dQp" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EmptyStreamViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Uqg-8N-dQp" customClass="EmptyStreamViewController" customModule="Juke" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Eiu-Ej-4bR"/>
                         <viewControllerLayoutGuide type="bottom" id="Kow-Rk-vmo"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="OAF-0v-QFj" customClass="GradientView" customModule="Juke" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="8XU-tG-YsO">
-                                <rect key="frame" x="52.5" y="288.5" width="270.5" height="41"/>
+                                <rect key="frame" x="52.5" y="313" width="270.5" height="41"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ready to stream?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C9e-ek-p4f">
                                         <rect key="frame" x="69" y="0.0" width="133" height="20.5"/>
@@ -1359,7 +1333,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="McG-7T-949" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3079.7101449275365" y="452.85326086956525"/>
+            <point key="canvasLocation" x="2724" y="385"/>
         </scene>
     </scenes>
     <resources>
