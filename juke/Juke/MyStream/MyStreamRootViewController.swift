@@ -39,17 +39,13 @@ final class MyStreamRootViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamRootViewController.updateChildViews), name: Notification.Name("userStreamChanged"), object: nil)
+        // whenever top song changes or user stream changes, see if this tab should animate
+        // to/from empty controller to/from my stream controller
+        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamRootViewController.updateChildViews), name: Notification.Name("updateMyStreamView"), object: nil)
         updateChildViews()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func updateChildViews() {
-        print("update child views my stream root controller")
 
         var toRemove: UIViewController!
         var toAdd: UIViewController!
@@ -64,6 +60,7 @@ final class MyStreamRootViewController: UIViewController {
         if currentControllerID == toAdd.restorationIdentifier! {
             return  // never animate to the same controller
         }
+        currentControllerID = toAdd.restorationIdentifier!
         
         toRemove.willMove(toParentViewController: nil)
         self.addChildViewController(toAdd)

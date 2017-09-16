@@ -32,7 +32,7 @@ class Current {
                     jamsPlayer.position_ms = 0.0
                 }
                 DispatchQueue.main.async {
-                    NotificationCenter.default.post(name: Notification.Name("userStreamChanged"), object: nil)
+                    NotificationCenter.default.post(name: Notification.Name("updateMyStreamView"), object: nil)
                 }
             }
         }

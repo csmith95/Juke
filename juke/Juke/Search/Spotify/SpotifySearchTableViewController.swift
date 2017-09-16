@@ -10,31 +10,83 @@ import UIKit
 import Alamofire
 import Unbox
 
-class SpotifySearchTableViewController: JukeSearchTableViewController {
+class SpotifySearchTableViewController: UITableViewController, UISearchBarDelegate {
     
     @IBOutlet var searchBar: UISearchBar!
     
-    override var cellName: String {
-        get {
-            return "SpotifySearchCell"
+    var allResults:[Models.SpotifySong] = []           // all results
+    var displayedResults:[Models.SpotifySong] = []  // filtered results
+    typealias JSONStandard = [String: AnyObject]
+    
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        execSearch(keywords: searchText.lowercased())
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if let searchText = searchBar.text {
+            execSearch(keywords: searchText.lowercased())
+        } else {
+            execSearch(keywords: "")
         }
     }
-
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        execSearch(keywords: "")
+        hideKeyboard()
+    }
+    
+    func threadSafeReloadView() {
+        objc_sync_enter(tableView)
+        tableView.reloadData()
+        objc_sync_exit(tableView)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        self.tableView.addGestureRecognizer(tapRecognizer)
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.searchBar.text = ""
+        // reset UI
+        execSearch(keywords: "")
+        hideKeyboard()
     }
     
-    override func hideKeyboard() {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        hideKeyboard()
+    }
+    
+    // MARK: - Table view data source
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return displayedResults.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SpotifySearchCell") as! SearchCell
+        cell.populateCell(song: self.displayedResults[indexPath.row])
+        print("populated the cell")
+        return cell
+    }
+    
+    // set status bar text to white
+    override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
+    
+    func hideKeyboard() {
         self.view.endEditing(true)
         searchBar.setShowsCancelButton(false, animated: true)
     }
     
-    override func execSearch(keywords: String) {
+    func execSearch(keywords: String) {
         print("\n spotify exec search")
         displayedResults.removeAll()
         if keywords.isEmpty {

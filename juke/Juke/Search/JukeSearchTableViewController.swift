@@ -84,15 +84,12 @@ class JukeSearchTableViewController: UITableViewController, UISearchBarDelegate 
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("\n\(cellName); displayed results count: ", self.displayedResults.count)
         return displayedResults.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("\n\(cellName); Row: \(indexPath.row); item: ", self.displayedResults[indexPath.row])
         let cell = tableView.dequeueReusableCell(withIdentifier: cellName) as! SearchCell
         cell.populateCell(song: self.displayedResults[indexPath.row])
-        print("populated the cell")
         return cell
     }
     

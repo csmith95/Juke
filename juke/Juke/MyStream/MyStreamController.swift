@@ -286,10 +286,10 @@ class MyStreamController: UITableViewController {
         switch event {
         case .MemberJoined, .MemberLeft:
             break
-        case .ResyncStream:
-            self.progressSliderValue = jamsPlayer.position_ms
-            self.setUI()
+        case .PlayStatusChanged:
             self.handleAutomaticProgressSlider()
+        case .TopSongChanged:
+            self.setUI()
             break
         case .SetProgress:
             self.progressSliderValue = jamsPlayer.position_ms

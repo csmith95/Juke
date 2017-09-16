@@ -38,4 +38,7 @@ class MembersTableViewController: UITableViewController {
         return cell
     }
     
+    // set status bar text to white
+    override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
+    
 }
