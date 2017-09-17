@@ -33,9 +33,6 @@ class UserCell: UITableViewCell {
     }
     
     public func populateCell(member: Models.FirebaseUser) {
-        inviteToStreamButton.layer.cornerRadius = 10
-        inviteToStreamButton.layer.borderWidth = 1
-        inviteToStreamButton.layer.borderColor = UIColor.white.cgColor
         
         // reset elements
         self.inviteToStreamButton.isSelected = false

@@ -24,6 +24,7 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         print("streams table view did load called")
         streamsTableView.dataSource = streamsDataSource
         streamsTableView.delegate = streamsDataSource
@@ -84,3 +85,5 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate {
     }
 
 }
+
+

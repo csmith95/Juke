@@ -129,17 +129,26 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" text="" placeholder="Filter" translatesAutoresizingMaskIntoConstraints="NO" id="Erg-HO-Koo">
-                                    <rect key="frame" x="0.0" y="106" width="375" height="44"/>
+                                <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" text="" placeholder="Filter" showsScopeBar="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Erg-HO-Koo">
+                                    <rect key="frame" x="0.0" y="62" width="375" height="88"/>
                                     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="barTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
+                                    <scopeButtonTitles>
+                                        <string>Following</string>
+                                        <string>All</string>
+                                    </scopeButtonTitles>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                            <color key="value" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
                                     <connections>
                                         <outlet property="delegate" destination="c9m-Vg-o4b" id="B3H-gt-mqp"/>
                                     </connections>
                                 </searchBar>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Users" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XgX-aC-GjG">
-                                    <rect key="frame" x="8" y="64" width="78" height="34"/>
+                                    <rect key="frame" x="8" y="20" width="78" height="34"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
@@ -189,18 +198,6 @@
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                         </imageView>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bAf-PO-nkL">
-                                            <rect key="frame" x="338" y="19" width="21" height="22"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="21" id="2iZ-Jk-MeM"/>
-                                                <constraint firstAttribute="height" constant="22" id="TCd-D7-CYC"/>
-                                            </constraints>
-                                            <state key="normal" image="Invite button"/>
-                                            <state key="selected" image="checkmark"/>
-                                            <connections>
-                                                <action selector="inviteToStreamPressed:" destination="dK4-Ge-qtA" eventType="touchUpInside" id="CAJ-Rw-Z8P"/>
-                                            </connections>
-                                        </button>
                                         <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="jE1-Dq-iml">
                                             <rect key="frame" x="60" y="17" width="100" height="25"/>
                                             <subviews>
@@ -227,19 +224,33 @@
                                                 </imageView>
                                             </subviews>
                                         </stackView>
+                                        <stackView opaque="NO" contentMode="scaleToFill" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="x0z-o3-vpr">
+                                            <rect key="frame" x="305" y="18" width="62" height="24"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tkc-x0-wcr" userLabel="Follow Button">
+                                                    <rect key="frame" x="0.0" y="0.0" width="24" height="24"/>
+                                                    <state key="normal" image="ic_star_border_white"/>
+                                                    <state key="selected" image="ic_star_white"/>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5op-3b-306" userLabel="Invite to stream Button">
+                                                    <rect key="frame" x="38" y="0.0" width="24" height="24"/>
+                                                    <state key="normal" image="ic_mail_outline_white"/>
+                                                </button>
+                                            </subviews>
+                                        </stackView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="bAf-PO-nkL" firstAttribute="centerY" secondItem="yV7-hP-hvl" secondAttribute="centerY" id="OSR-o5-ITi"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="x0z-o3-vpr" secondAttribute="trailing" id="Ary-gl-pN7"/>
                                         <constraint firstItem="jE1-Dq-iml" firstAttribute="centerY" secondItem="yV7-hP-hvl" secondAttribute="centerY" id="QHj-84-Nwu"/>
                                         <constraint firstItem="AIn-81-5oX" firstAttribute="leading" secondItem="yV7-hP-hvl" secondAttribute="leadingMargin" constant="4" id="e5w-58-3qS"/>
                                         <constraint firstItem="AIn-81-5oX" firstAttribute="centerY" secondItem="yV7-hP-hvl" secondAttribute="centerY" id="hL8-gj-9Vd"/>
                                         <constraint firstItem="jE1-Dq-iml" firstAttribute="leading" secondItem="AIn-81-5oX" secondAttribute="trailing" constant="8" id="m6d-tD-Gje"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="bAf-PO-nkL" secondAttribute="trailing" constant="8" id="whE-iv-grR"/>
+                                        <constraint firstItem="x0z-o3-vpr" firstAttribute="centerY" secondItem="yV7-hP-hvl" secondAttribute="centerY" id="mJK-1n-Zkx"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="0.13333333333333333" green="0.12549019607843137" blue="0.14509803921568626" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
-                                    <outlet property="inviteToStreamButton" destination="bAf-PO-nkL" id="DMo-Z6-ctd"/>
+                                    <outlet property="inviteToStreamButton" destination="5op-3b-306" id="gFR-Rt-37j"/>
                                     <outlet property="presenceDot" destination="feO-dx-22v" id="s5o-h3-Pio"/>
                                     <outlet property="userImageView" destination="AIn-81-5oX" id="Vgb-1S-c8Q"/>
                                     <outlet property="userNameLabel" destination="oqN-V0-Cpg" id="DRO-B9-OmD"/>
@@ -1280,8 +1291,11 @@
         <image name="ellipsis" width="50" height="50"/>
         <image name="ic_account_circle_white" width="24" height="24"/>
         <image name="ic_keyboard_arrow_up_white" width="24" height="24"/>
+        <image name="ic_mail_outline_white" width="24" height="24"/>
         <image name="ic_pause_white_48pt" width="48" height="48"/>
         <image name="ic_play_arrow_white_48pt" width="48" height="48"/>
+        <image name="ic_star_border_white" width="24" height="24"/>
+        <image name="ic_star_white" width="24" height="24"/>
         <image name="jukedef" width="486" height="486"/>
         <image name="loginButton" width="244" height="44"/>
         <image name="music" width="29" height="29"/>
