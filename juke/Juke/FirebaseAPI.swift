@@ -19,8 +19,9 @@ class FirebaseAPI {
     enum FirebaseEvent {
         case MemberJoined
         case MemberLeft
-        case ResyncStream
+        case TopSongChanged
         case SetProgress
+        case PlayStatusChanged
     }
     
     private static var observedPaths: [String] = []
@@ -64,7 +65,7 @@ class FirebaseAPI {
             if snapshot.exists(), let isPlaying = snapshot.value as? Bool {
                 Current.stream!.isPlaying = isPlaying
                 self.listenForSongProgress()    // fetch updated status
-                NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.ResyncStream)
+                NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.PlayStatusChanged)
             }
         }) { err in print(err.localizedDescription)}
         observedPaths.append(path)
@@ -201,7 +202,9 @@ class FirebaseAPI {
             Current.stream!.song = Models.FirebaseSong(snapshot: snapshot)
             jamsPlayer.position_ms = 0.0
             // post event telling controller to resync
-            NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.ResyncStream)
+            NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.TopSongChanged)
+            // post event telling my stream root controller to refresh in case queue was empty
+            NotificationCenter.default.post(name: Notification.Name("updateMyStreamView"), object: nil)
         }) { error in print(error.localizedDescription) }
         observedPaths.append(path)
     }

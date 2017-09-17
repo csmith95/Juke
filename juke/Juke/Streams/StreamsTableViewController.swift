@@ -18,13 +18,16 @@ import FirebaseDatabaseUI
 class StreamsTableViewController: UITableViewController, UISearchBarDelegate {
     
     @IBOutlet var searchBar: UISearchBar!
+    @IBOutlet var streamsTableView: UITableView!
     let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
     var streamsDataSource = StreamsDataSource()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.dataSource = streamsDataSource
-        tableView.delegate = streamsDataSource
+
+        print("streams table view did load called")
+        streamsTableView.dataSource = streamsDataSource
+        streamsTableView.delegate = streamsDataSource
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadCollection), name: Notification.Name("reloadCollection"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.newStreamJoined), name: Notification.Name("newStreamJoined"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
@@ -82,3 +85,5 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate {
     }
 
 }
+
+
