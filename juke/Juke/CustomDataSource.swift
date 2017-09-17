@@ -257,6 +257,38 @@ class UsersDataSource: CustomDataSource {
     }
 }
 
+class StarredUsersDataSource: CustomDataSource {
+    init() {
+        super.init(path: "starredTable/\(Current.user!.spotifyID)")
+        reloadEventName = "reloadCollection"
+    }
+    
+    override func isEqual(current: CollectionItem, other: CollectionItem) -> Bool {
+        return other.user.spotifyID == current.user.spotifyID
+    }
+    
+    // comparator function used for sorting in super class
+    override func comparator(first: CollectionItem, second: CollectionItem) -> Bool {
+        return first.user.username < second.user.username
+    }
+    
+    override func shouldInclude(item: CollectionItem) -> Bool {
+        guard let user = Current.user else { return true }
+        let included = item.user.spotifyID != user.spotifyID
+        if !included || query.isEmpty {
+            return included
+        }
+        return item.user.username.lowercased().contains(query.lowercased())
+    }
+    
+    override func populateCell(tableView: UITableView, indexPath: IndexPath, item: CollectionItem) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath) as! UserCell
+        cell.populateCell(member: self.filteredCollection[indexPath.row].user)
+        return cell
+    }
+
+}
+
 class SongQueueDataSource: CustomDataSource {
     
     private var observedStreamID = ""

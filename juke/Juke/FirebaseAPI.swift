@@ -437,6 +437,11 @@ class FirebaseAPI {
         }
     }
     
+    public static func addToStarredTable(user: Models.FirebaseUser) {
+        guard let currUser = Current.user else { return }
+        self.ref.child("/starredTable/\(currUser.spotifyID)").child(user.spotifyID).setValue(user.firebaseDict)
+    }
+    
     // Function URL: https://us-central1-juke-9fbd6.cloudfunctions.net/sendNotification
     public static func sendNotification(receiver: Models.FirebaseUser) {
         guard let user = Current.user else { return }

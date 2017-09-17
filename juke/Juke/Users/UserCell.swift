@@ -16,6 +16,9 @@ class UserCell: UITableViewCell {
     @IBOutlet var userNameLabel: UILabel!
     @IBOutlet var userImageView: UIImageView!
     @IBOutlet var presenceDot: UIImageView!
+    @IBOutlet weak var starButton: UIButton!
+    
+    
     private let defaultIcon = CircleFilter().filter(UIImage(named: "juke_icon")!)
     private var member: Models.FirebaseUser!
 
@@ -32,12 +35,22 @@ class UserCell: UITableViewCell {
         self.inviteToStreamButton.isUserInteractionEnabled = false
     }
     
+    @IBAction func starButtonPressed(_ sender: Any) {
+        print("star button pressed")
+        // TODO: implement star button pressed
+        FirebaseAPI.addToStarredTable(user: self.member)
+        starButton.isEnabled = false
+    }
+
+    
     public func populateCell(member: Models.FirebaseUser) {
         
         // reset elements
-        self.inviteToStreamButton.isSelected = false
-        self.inviteToStreamButton.isHidden = false
-        self.inviteToStreamButton.isUserInteractionEnabled = true
+        if (inviteToStreamButton != nil) {
+            self.inviteToStreamButton.isSelected = false
+            self.inviteToStreamButton.isHidden = false
+            self.inviteToStreamButton.isUserInteractionEnabled = true
+        }
         
         // set elements
         self.member = member
