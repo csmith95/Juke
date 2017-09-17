@@ -15,6 +15,7 @@ class StarUserTableViewController: UITableViewController, UISearchBarDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet var usersTableView: UITableView!
     var usersDataSource = UsersDataSource()
+    var starredUsers: NSDictionary = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
