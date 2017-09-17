@@ -15,11 +15,9 @@ Add documentation for libraries used below
   * Alamofire extension for image-specific requests. Useful because we only store image URLs in our db.
 3. Unbox -> https://github.com/JohnSundell/Unbox
   * Swift JSON decoder. See Models.swift for the models we're using.
-4. Socket.io Swift Client -> https://github.com/socketio/socket.io-client-swift
-  * Web socket interface for Swift. Here is the server-side repo: https://github.com/socketio/socket.io
-5. Miscellaneous Awesome Libs -> https://github.com/matteocrippa/awesome-swift#uitableview
+4. Miscellaneous Awesome Libs -> https://github.com/matteocrippa/awesome-swift#uitableview
   * Great list of Swift libraries for any task. 
-6. PKHUD -> https://github.com/pkluz/PKHUD
+5. PKHUD -> https://github.com/pkluz/PKHUD
   * Progress spinner 
   
 ## Spotify Auth Credentials
