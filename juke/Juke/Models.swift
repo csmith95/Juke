@@ -105,7 +105,6 @@ class Models {
             if let song = self.song {
                 dict["song"] = song.firebaseDict
             }
-            
             return dict
         }
         

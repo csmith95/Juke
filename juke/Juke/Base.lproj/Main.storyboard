@@ -9,11 +9,6 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="HelveticaNeue.ttc">
-            <string>HelveticaNeue</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--Login View Controller-->
         <scene sceneID="viY-uY-OtI">
@@ -307,17 +302,26 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" placeholder="Filter" translatesAutoresizingMaskIntoConstraints="NO" id="RVm-kU-lxe">
-                                    <rect key="frame" x="0.0" y="106" width="375" height="44"/>
+                                <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" placeholder="Search" showsScopeBar="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RVm-kU-lxe">
+                                    <rect key="frame" x="0.0" y="62" width="375" height="88"/>
                                     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
+                                    <scopeButtonTitles>
+                                        <string>Following</string>
+                                        <string>All</string>
+                                    </scopeButtonTitles>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                            <color key="value" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
                                     <connections>
                                         <outlet property="delegate" destination="enB-aq-hv1" id="u1R-0k-YMm"/>
                                     </connections>
                                 </searchBar>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Streams" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OWM-xA-xVt">
-                                    <rect key="frame" x="8" y="64" width="108" height="34"/>
+                                    <rect key="frame" x="8" y="20" width="108" height="34"/>
                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="28"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
@@ -364,106 +368,42 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="132"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Stream owner name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aea-QF-noH">
-                                                        <rect key="frame" x="130" y="57" width="153" height="18"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="153" id="iHr-A1-6Zz"/>
-                                                        </constraints>
-                                                        <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="13"/>
-                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M0O-I1-PMl" userLabel="Owner Image View">
-                                                        <rect key="frame" x="196" y="55" width="22" height="22"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="22" id="nk8-uf-4YW"/>
-                                                            <constraint firstAttribute="height" constant="22" id="ykj-sM-z3b"/>
-                                                        </constraints>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                                <integer key="value" value="15"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </imageView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" fixedFrame="YES" text="Song" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H37-2U-rxa">
-                                                        <rect key="frame" x="177" y="51" width="59" height="30"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="25"/>
-                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Artist" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hqm-qn-moX">
-                                                        <rect key="frame" x="192" y="59" width="29" height="14"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aFs-mn-Ry6" userLabel="member1">
-                                                        <rect key="frame" x="196" y="55" width="22" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                                <integer key="value" value="15"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </imageView>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qkl-dC-mJf" userLabel="member2">
-                                                        <rect key="frame" x="196" y="55" width="21" height="21"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="21" id="mQ8-Xo-ZQc"/>
-                                                        </constraints>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                                <integer key="value" value="15"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </imageView>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5uT-JN-brC" userLabel="member3">
-                                                        <rect key="frame" x="196" y="55" width="21" height="21"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="21" id="yQn-Lc-QjP"/>
-                                                        </constraints>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                                <integer key="value" value="15"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </imageView>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ksw-Rt-c9e" userLabel="member4">
-                                                        <rect key="frame" x="197" y="55" width="20" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                                <integer key="value" value="15"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </imageView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="More" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2li-3F-P1W">
-                                                        <rect key="frame" x="191" y="55" width="31" height="21"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="31" id="OFA-tM-F9n"/>
-                                                        </constraints>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CNA-1P-JWi" userLabel="Music Indicator View">
-                                                        <rect key="frame" x="196" y="55" width="22" height="22"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                    </view>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="jukedef" translatesAutoresizingMaskIntoConstraints="NO" id="2hN-dI-cFM" userLabel="Cover Art image">
-                                                        <rect key="frame" x="8" y="15" width="139" height="100"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    </imageView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="cGL-Tc-WHi">
+                                                        <rect key="frame" x="132.5" y="25" width="110.5" height="91"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stream Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oqN-Lb-Xub">
+                                                                <rect key="frame" x="0.0" y="0.0" width="110.5" height="21.5"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Host Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="phk-OG-RhB">
+                                                                <rect key="frame" x="25" y="28.5" width="61" height="14.5"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Num of members" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZLT-Sc-5Ga">
+                                                                <rect key="frame" x="14" y="50" width="83" height="12"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CNA-1P-JWi" userLabel="Music Indicator View">
+                                                                <rect key="frame" x="44.5" y="69" width="22" height="22"/>
+                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="22" id="CPW-na-AIu"/>
+                                                                    <constraint firstAttribute="height" constant="22" id="t4Q-Dj-ke4"/>
+                                                                </constraints>
+                                                            </view>
+                                                        </subviews>
+                                                    </stackView>
                                                 </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="oqN-Lb-Xub" firstAttribute="top" secondItem="9Qq-2G-3hJ" secondAttribute="top" constant="25" id="N0H-b4-aNQ"/>
+                                                    <constraint firstItem="cGL-Tc-WHi" firstAttribute="centerX" secondItem="9Qq-2G-3hJ" secondAttribute="centerX" id="d51-JF-lMM"/>
+                                                </constraints>
                                             </view>
                                             <blurEffect style="dark"/>
                                         </visualEffectView>
@@ -481,18 +421,11 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="artist" destination="hqm-qn-moX" id="opl-ty-jTI"/>
                                     <outlet property="blurredBgImage" destination="5nB-OQ-3xx" id="V4W-bE-J6E"/>
-                                    <outlet property="coverArt" destination="2hN-dI-cFM" id="o5J-kU-dzU"/>
-                                    <outlet property="member1ImageView" destination="aFs-mn-Ry6" id="ZDn-mh-AxK"/>
-                                    <outlet property="member2ImageView" destination="Qkl-dC-mJf" id="JJn-os-Sqd"/>
-                                    <outlet property="member3ImageView" destination="5uT-JN-brC" id="5MN-mU-6Qh"/>
-                                    <outlet property="member4ImageView" destination="ksw-Rt-c9e" id="dvH-es-U1b"/>
-                                    <outlet property="moreMembersLabel" destination="2li-3F-P1W" id="aPr-8R-tF9"/>
+                                    <outlet property="hostLabel" destination="phk-OG-RhB" id="gt1-Ka-NOx"/>
                                     <outlet property="musicIndicatorView" destination="CNA-1P-JWi" id="U41-Tc-iCj"/>
-                                    <outlet property="ownerIcon" destination="M0O-I1-PMl" id="9BD-gt-Eiq"/>
-                                    <outlet property="song" destination="H37-2U-rxa" id="Des-Ia-Omf"/>
-                                    <outlet property="username" destination="aea-QF-noH" id="oTq-MX-hpa"/>
+                                    <outlet property="numMembers" destination="ZLT-Sc-5Ga" id="Ddv-0P-F1I"/>
+                                    <outlet property="streamName" destination="oqN-Lb-Xub" id="yTm-OP-Y6h"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -506,11 +439,12 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="searchBar" destination="RVm-kU-lxe" id="Ghp-m8-Ekg"/>
+                        <outlet property="streamsTableView" destination="pmb-Az-v7r" id="YbC-OR-MHe"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gLs-tM-CaO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1563.768115942029" y="19.565217391304348"/>
+            <point key="canvasLocation" x="1562.4000000000001" y="19.340329835082461"/>
         </scene>
         <!--Search-->
         <scene sceneID="ci0-Us-Elf">

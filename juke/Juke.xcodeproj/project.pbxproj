@@ -309,9 +309,9 @@
 				TargetAttributes = {
 					4B3A34C81E58120F00C314A0 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = UL2WBS3TV4;
+						DevelopmentTeam = 2746PGXGF5;
 						LastSwiftMigration = 0800;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -600,7 +600,7 @@
 				CODE_SIGN_ENTITLEMENTS = Juke/Static/Juke.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = UL2WBS3TV4;
+				DEVELOPMENT_TEAM = 2746PGXGF5;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -613,10 +613,10 @@
 					"-ObjC",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.csmith95.juke;
+				PRODUCT_BUNDLE_IDENTIFIER = jukedev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "6b4aaaaf-dc7c-4ea3-9af6-1feba242fcd7";
+				PROVISIONING_PROFILE_SPECIFIER = jukedevprofile;
 				SWIFT_OBJC_BRIDGING_HEADER = "Juke/Static/Juke-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -632,7 +632,7 @@
 				CODE_SIGN_ENTITLEMENTS = Juke/Static/Juke.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = UL2WBS3TV4;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -645,7 +645,7 @@
 					"-ObjC",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.csmith95.juke;
+				PRODUCT_BUNDLE_IDENTIFIER = jukedev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
