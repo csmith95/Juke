@@ -18,6 +18,7 @@ class UserCell: UITableViewCell {
     @IBOutlet var userImageView: UIImageView!
     @IBOutlet var presenceDot: UIImageView!
     @IBOutlet weak var starButton: UIButton!
+    @IBOutlet var starIcon: UIImageView!
     
     
     private let defaultIcon = CircleFilter().filter(UIImage(named: "juke_icon")!)
@@ -27,50 +28,31 @@ class UserCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    @IBAction func inviteToStreamPressed(_ sender: Any) {
-        // need to send invite to this user when pressed
-        let button = sender as! UIButton
-        button.isSelected = !button.isSelected
-        FirebaseAPI.sendNotification(receiver: self.member)
-        HUD.flash(.labeledSuccess(title: nil, subtitle: "Invited \(self.member.username) to your stream"), delay: 1.00)
-        self.inviteToStreamButton.isUserInteractionEnabled = false
-    }
-    
     @IBAction func starButtonPressed(_ sender: Any) {
-        print("star button pressed")
-        // TODO: implement star button pressed
-        FirebaseAPI.addToStarredTable(user: self.member)
-        starButton.isEnabled = false
+        var message = ""
+        if self.starIcon.isHidden {
+            FirebaseAPI.addToStarredTable(user: self.member)
+            self.starIcon.isHidden = false
+            self.starButton.isSelected = true
+            message = "Starred \(self.member.username)"
+        } else {
+            FirebaseAPI.removeFromStarredTable(user: self.member)
+            self.starIcon.isHidden = true
+            self.starButton.isSelected = false
+            message = "Removed \(self.member.username) from your starred users"
+        }
+        HUD.flash(.labeledSuccess(title: nil, subtitle: message), delay: 1.0)
     }
     
-    public func isStarred(user: Models.FirebaseUser) {
-        
-    }
     
     public func populateCell(member: Models.FirebaseUser) {
         
-        // is this efficient? i really don't want to have a store for this
-        guard let currUser = Current.user else { return }
-        Database.database().reference().child("starredTable/\(currUser.spotifyID)").observeSingleEvent(of: .value, with: { (snapshot) in
-            //print("SNAP", snapshot)
-            let starredUsersDict = (snapshot.value as? NSDictionary)!
-            let keyExists = starredUsersDict[member.spotifyID] != nil
-            print(starredUsersDict)
-            if self.starButton != nil {
-                if keyExists {
-                    self.starButton.isEnabled = false
-                } else {
-                    self.starButton.isEnabled = true
-                }
-            }
-            //return (starredUsersDict![user.spotifyID] != nil)
-        }) { error in print(error.localizedDescription) }
-        
-        // reset elements
-        if (inviteToStreamButton != nil) {
-            self.inviteToStreamButton.isSelected = false
-            self.inviteToStreamButton.isHidden = false
-            self.inviteToStreamButton.isUserInteractionEnabled = true
+        if Current.isStarred(user: member) {
+            starButton.isSelected = true
+            starIcon.isHidden = false
+        } else {
+            starButton.isSelected = false
+            starIcon.isHidden = true
         }
         
         // set elements

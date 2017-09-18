@@ -447,8 +447,9 @@ class FirebaseAPI {
         self.ref.child("/starredTable/\(currUser.spotifyID)").child(user.spotifyID).setValue(user.firebaseDict)
     }
     
-    public static func isStarredMember(user: Models.FirebaseUser) {
-        
+    public static func removeFromStarredTable(user: Models.FirebaseUser) {
+        guard let currUser = Current.user else { return }
+        self.ref.child("/starredTable/\(currUser.spotifyID)").child(user.spotifyID).removeValue()
     }
     
     // Function URL: https://us-central1-juke-9fbd6.cloudfunctions.net/sendNotification

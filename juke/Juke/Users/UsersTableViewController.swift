@@ -10,12 +10,11 @@ import UIKit
 import Firebase
 import FirebaseDatabaseUI
 
-class StarUserTableViewController: UITableViewController, UISearchBarDelegate {
+class UsersTableViewController: UITableViewController, UISearchBarDelegate {
 
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet var usersTableView: UITableView!
     var usersDataSource = UsersDataSource()
-    var starredUsers: NSDictionary = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +23,7 @@ class StarUserTableViewController: UITableViewController, UISearchBarDelegate {
         usersTableView.delegate = usersDataSource
         
         // setup notifications received from usersDataSource
-        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadCollection), name: Notification.Name("reloadCollection"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadAllUsers), name: Notification.Name("reloadAllUsers"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
     }
     
@@ -39,7 +38,6 @@ class StarUserTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        print("began editing in users table view controller")
         searchBar.setShowsCancelButton(true, animated: true)
     }
     
@@ -60,11 +58,11 @@ class StarUserTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     // triggered from data source class
-    func reloadCollection() {
+    func reloadAllUsers() {
         DispatchQueue.main.async {
-            objc_sync_enter(self.tableView.dataSource)
-            self.tableView.reloadData()
-            objc_sync_exit(self.tableView.dataSource)
+            objc_sync_enter(self.usersTableView.dataSource)
+            self.usersTableView.reloadData()
+            objc_sync_exit(self.usersTableView.dataSource)
         }
     }
     
