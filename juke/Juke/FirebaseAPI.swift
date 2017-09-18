@@ -200,11 +200,16 @@ class FirebaseAPI {
         let path = "/streams/\(stream.streamID)/song"
         self.ref.child(path).observe(.value, with: { (snapshot) in
             Current.stream!.song = Models.FirebaseSong(snapshot: snapshot)
-            jamsPlayer.position_ms = 0.0
-            // post event telling controller to resync
-            NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.TopSongChanged)
-            // post event telling my stream root controller to refresh in case queue was empty
+            self.jamsPlayer.position_ms = 0.0
+            self.listenForSongProgress()
+            
+            // post event telling my stream root controller to refresh in case queue was empty, so 
+            // controller wasn't active
             NotificationCenter.default.post(name: Notification.Name("updateMyStreamView"), object: nil)
+            
+            // post event telling controller to resync in case it's already active
+            NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.TopSongChanged)
+            
         }) { error in print(error.localizedDescription) }
         observedPaths.append(path)
     }
