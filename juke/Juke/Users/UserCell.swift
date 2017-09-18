@@ -9,6 +9,7 @@
 import UIKit
 import AlamofireImage
 import PKHUD
+import Firebase
 
 class UserCell: UITableViewCell {
 
@@ -16,6 +17,9 @@ class UserCell: UITableViewCell {
     @IBOutlet var userNameLabel: UILabel!
     @IBOutlet var userImageView: UIImageView!
     @IBOutlet var presenceDot: UIImageView!
+    @IBOutlet weak var starButton: UIButton!
+    
+    
     private let defaultIcon = CircleFilter().filter(UIImage(named: "juke_icon")!)
     private var member: Models.FirebaseUser!
 
@@ -32,12 +36,42 @@ class UserCell: UITableViewCell {
         self.inviteToStreamButton.isUserInteractionEnabled = false
     }
     
+    @IBAction func starButtonPressed(_ sender: Any) {
+        print("star button pressed")
+        // TODO: implement star button pressed
+        FirebaseAPI.addToStarredTable(user: self.member)
+        starButton.isEnabled = false
+    }
+    
+    public func isStarred(user: Models.FirebaseUser) {
+        
+    }
+    
     public func populateCell(member: Models.FirebaseUser) {
         
+        // is this efficient? i really don't want to have a store for this
+        guard let currUser = Current.user else { return }
+        Database.database().reference().child("starredTable/\(currUser.spotifyID)").observeSingleEvent(of: .value, with: { (snapshot) in
+            //print("SNAP", snapshot)
+            let starredUsersDict = (snapshot.value as? NSDictionary)!
+            let keyExists = starredUsersDict[member.spotifyID] != nil
+            print(starredUsersDict)
+            if self.starButton != nil {
+                if keyExists {
+                    self.starButton.isEnabled = false
+                } else {
+                    self.starButton.isEnabled = true
+                }
+            }
+            //return (starredUsersDict![user.spotifyID] != nil)
+        }) { error in print(error.localizedDescription) }
+        
         // reset elements
-        self.inviteToStreamButton.isSelected = false
-        self.inviteToStreamButton.isHidden = false
-        self.inviteToStreamButton.isUserInteractionEnabled = true
+        if (inviteToStreamButton != nil) {
+            self.inviteToStreamButton.isSelected = false
+            self.inviteToStreamButton.isHidden = false
+            self.inviteToStreamButton.isUserInteractionEnabled = true
+        }
         
         // set elements
         self.member = member

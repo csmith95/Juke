@@ -10,11 +10,12 @@ import UIKit
 import Firebase
 import FirebaseDatabaseUI
 
-class UsersTableViewController: UITableViewController, UISearchBarDelegate {
+class StarUserTableViewController: UITableViewController, UISearchBarDelegate {
 
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet var usersTableView: UITableView!
     var usersDataSource = UsersDataSource()
+    var starredUsers: NSDictionary = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +27,11 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadCollection), name: Notification.Name("reloadCollection"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
     }
+    
+    @IBAction func doneButtonPressed(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
+    }
+    
     
     func hideKeyboard() {
         self.view.endEditing(true)
