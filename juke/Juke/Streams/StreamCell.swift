@@ -12,6 +12,7 @@ import AlamofireImage
 
 class StreamCell: UITableViewCell {
 
+    @IBOutlet var hostStarIcon: UIImageView!
     @IBOutlet var blurredBgImage: UIImageView!
     @IBOutlet var musicIndicatorView: UIView!
     @IBOutlet weak var streamName: UILabel!
@@ -22,11 +23,8 @@ class StreamCell: UITableViewCell {
 //    @IBOutlet var member3ImageView: UIImageView!
 //    @IBOutlet var member2ImageView: UIImageView!
 //    @IBOutlet var member1ImageView: UIImageView!
-//    @IBOutlet var ownerIcon: UIImageView!
-//    @IBOutlet var coverArt: UIImageView!
 //    @IBOutlet var artist: UILabel!
 //    @IBOutlet var song: UILabel!
-//    @IBOutlet var username: UILabel!
 //    private var imageViewDict:[Int:UIImageView] = [:]
     private var indicator:ESTMusicIndicatorView!
     private let defaultIcon = CircleFilter().filter(UIImage(named: "juke_icon")!)
@@ -46,30 +44,29 @@ class StreamCell: UITableViewCell {
 //        imageViewDict[2] = member3ImageView
 //        imageViewDict[3] = member4ImageView
         indicator = ESTMusicIndicatorView.init(frame: musicIndicatorView.bounds)
-        indicator.tintColor = .red
+        indicator.tintColor = .green
         indicator.sizeToFit()
         musicIndicatorView.addSubview(indicator)
     }
     
     public func populateCell(stream: Models.FirebaseStream) {
-        print("called populateCell for streams")
         loadCellImages(stream: stream)
-//        let titleString =
-        //self.username.text = titleString
         self.streamName.text = stream.title
-//        if let streamTitle = stream.title {
-//            self.streamName.text = streamTitle
-//        } else {
-//            self.streamName.text = stream.host.username.components(separatedBy: " ").first! + "'s stream"
-//        }
-        
         self.hostLabel.text = "Hosted by \(stream.host.username)"
+        self.hostStarIcon.isHidden = !Current.isStarred(user: stream.host)
         if let song = stream.song {
             self.blurredBgImage.af_setImage(withURL: URL(string: song.coverArtURL)!)
         } else {
             self.blurredBgImage.image = #imageLiteral(resourceName: "jukedef")
         }
         indicator.state = (stream.isPlaying) ? .playing : .stopped
+        let count = stream.members.count
+        if count == 0 {
+            numMembers.isHidden = true
+        } else {
+            numMembers.isHidden = false
+            numMembers.text = "\(count) member" + ((count > 1) ? "s" : "")
+        }
     }
     
     // set user icons
@@ -81,17 +78,8 @@ class StreamCell: UITableViewCell {
         }
     }
     
-//    private func loadCoverArt(stream: Models.FirebaseStream) {
-//        if let song = stream.song {
-//            self.coverArt.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: defaultCoverArtImage, filter: coverArtFilter)
-//        } else {
-//            self.coverArt.image = defaultCoverArtImage
-//        }
-//    }
-    
     private func loadCellImages(stream: Models.FirebaseStream) {
         clearMemberIcons()  // start fresh
-        //loadCoverArt(stream: stream)
         // load owner icon
 //        loadUserIcon(url: stream.host.imageURL, imageView: self.ownerIcon)
 //        let numMemberIcons = stream.members.count

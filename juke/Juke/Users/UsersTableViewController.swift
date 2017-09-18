@@ -14,7 +14,7 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
 
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet var usersTableView: UITableView!
-    var usersDataSource = UsersDataSource()
+    let usersDataSource = UsersDataSource()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,7 +30,6 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
     @IBAction func doneButtonPressed(_ sender: Any) {
         navigationController?.popViewController(animated: true)
     }
-    
     
     func hideKeyboard() {
         self.view.endEditing(true)
