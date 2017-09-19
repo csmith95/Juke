@@ -1,19 +1,19 @@
 //
-//  StreamsDataSource.swift
+//  StarredStreamsDataSource.swift
 //  Juke
 //
-//  Created by Conner Smith on 9/18/17.
+//  Created by Kojo Worai Osei on 9/19/17.
 //  Copyright © 2017 csmith. All rights reserved.
 //
 
 import Foundation
 import PKHUD
 
-class StreamsDataSource: CustomDataSource {
+class StarredStreamsDataSource: CustomDataSource {
     
     override var reloadEventName: String {
         get {
-            return "reloadStreams"
+            return "reloadStarredStreams"
         }
     }
     
@@ -51,18 +51,57 @@ class StreamsDataSource: CustomDataSource {
     }
     
     override func shouldInclude(item: CollectionItem) -> Bool {
-        // add if you are starred by the current user
-        var included = (item.stream.song != nil)
+        
+        // check if there is a song
+        //var included = (item.stream.song != nil)
+        if (item.stream.song == nil) { return false }
+        
+        
+        // check if this is not the same as the stream you are currently in
         if let currentStream = Current.stream {
-            included = (included && item.stream.streamID != currentStream.streamID)
-        }
-        if !included || query.isEmpty {
-            return included
+            if (item.stream.streamID == currentStream.streamID) { return false }
         }
         
+        // check if stream host is starred
+        //if (!Current.isStarred(user: item.stream.host)) { return false } //|| streamHasStarredUser(item: item)
+        
+        // check if stream member has someone in it
+        //if (!streamHasStarredUser(item: item)) { return false }
+        
+        if (query.isEmpty) {
+            return streamHasStarredUser(item: item)
+            //print("query is empty")
+            //return true
+        } else {
+            return item.stream.host.username.lowercased().contains(query.lowercased())
+        }
+        
+        //return true
         
         
-        return item.stream.host.username.lowercased().contains(query.lowercased())
+        // check if anything is in search query
+//        if !included || query.isEmpty {
+//            return included
+//        }
+        
+        
+    }
+    
+    func streamHasStarredUser(item: CollectionItem) -> Bool {
+        if (Current.isStarred(user: item.stream.host)) {
+            print("host is in, returning true")
+            return true
+        }
+        
+        for user in item.stream.members {
+            print("host was not in it... checking users")
+            if (Current.isStarred(user: user)) {
+                print("found user returning true")
+                return true
+            }
+        }
+        print("found no one, returning false")
+        return false
     }
     
     override func populateCell(tableView: UITableView, indexPath: IndexPath, item: CollectionItem) -> UITableViewCell {
