@@ -140,10 +140,6 @@
                                     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
-                                    <scopeButtonTitles>
-                                        <string>Following</string>
-                                        <string>All</string>
-                                    </scopeButtonTitles>
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
                                             <color key="value" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -236,8 +232,12 @@
                                                 </imageView>
                                             </subviews>
                                         </stackView>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="wQo-Rf-l8v" userLabel="Star Image View">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="wQo-Rf-l8v" userLabel="Star Image View">
                                             <rect key="frame" x="40" y="38" width="12" height="12"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="12" id="AXW-Q3-QyS"/>
+                                                <constraint firstAttribute="width" constant="12" id="S6I-uE-4Yc"/>
+                                            </constraints>
                                         </imageView>
                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="x0z-o3-vpr">
                                             <rect key="frame" x="305" y="18" width="62" height="24"/>
