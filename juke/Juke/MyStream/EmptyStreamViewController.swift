@@ -10,10 +10,31 @@ import UIKit
 
 class EmptyStreamViewController: UIViewController {
 
+    @IBOutlet weak var streamTitleLabel: UILabel!
+    @IBOutlet weak var numMembersButton: UIButton!
+    @IBOutlet weak var twoDownArrows: UIImageView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        guard let stream = Current.stream else {
+            //  if user not in stream
+            streamTitleLabel.isHidden = true
+            numMembersButton.isHidden = true
+            return
+        }
+        
+        // if user in a stream
+        streamTitleLabel.isHidden = false
+        streamTitleLabel.text = stream.title
+        numMembersButton.isHidden = false
+        numMembersButton.setTitle("\(stream.members.count+1) members", for: .normal)
+        
     }
 
     override func didReceiveMemoryWarning() {
