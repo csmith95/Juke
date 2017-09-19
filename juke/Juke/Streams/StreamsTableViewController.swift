@@ -25,7 +25,6 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        print("streams table view did load called")
         streamsTableView.dataSource = streamsDataSource
         streamsTableView.delegate = streamsDataSource
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStreams), name: Notification.Name("reloadStreams"), object: nil)

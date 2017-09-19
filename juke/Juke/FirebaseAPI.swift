@@ -75,30 +75,23 @@ class FirebaseAPI {
         // listen for member presence changes
         let path = "/streams/\(Current.stream!.streamID)/members"
         ref.child(path).observe(.childChanged, with:{ (snapshot) in
-            
-            print("\n*** changed: ", snapshot)
-            
             if Current.stream == nil { return }
             guard let changedMember = Models.FirebaseUser(snapshot: snapshot) else { return }
             if let index = Current.stream!.members.index(where: { (member) -> Bool in
                 member.spotifyID == changedMember.spotifyID
             }) {
-                Current.stream!.members[index].online = true
+                Current.stream?.members[index] = changedMember // update member
             }
-            
-            // TODO: post notification telling view controller to refresh member list to reflect new presence status? not super important to update in real time
-            
         }) { error in print(error.localizedDescription)}
         observedPaths.append(path)  // only need to append this path once -- not again for member joined/member left
         
         // listen for host presence changes
         let hostPath = "/streams/\(Current.stream!.streamID)/host"
         ref.child(hostPath).observe(.childChanged, with:{ (snapshot) in
-            
-            print("/n*** host online status changed: ", snapshot)
-            
+            guard let host = Models.FirebaseUser(snapshot: snapshot) else { return }
+            Current.stream?.host = host
         }) { error in print(error.localizedDescription)}
-
+        observedPaths.append(hostPath)
     }
     
     private static func addMemberJoinedListener() {
@@ -280,11 +273,17 @@ class FirebaseAPI {
             
             Current.stream = stream
             guard let user = Current.user else { return }
-            ref.child("/streams/\(stream.streamID)/members/\(user.spotifyID)").setValue(user.firebaseDict)
+            
+            // have to do this because race condition inside Current.stream update function :(
+            var dict = user.firebaseDict
+            dict["tunedInto"] = stream.streamID
+            ref.child("/streams/\(stream.streamID)/members/\(user.spotifyID)").setValue(dict)
+            
+            
             Current.stream!.members.append(user)
             jamsPlayer.position_ms = 0.0
 
-            // callback provided by StreamsTableViewController to communicate success/failure
+            // callback to StreamsDataSource to communicate success/failure
             callback(true)
         }) {error in print(error.localizedDescription)}
     }

@@ -39,13 +39,21 @@ class UserCell: UITableViewCell {
             FirebaseAPI.removeFromStarredTable(user: self.member)
             self.starIcon.isHidden = true
             self.starButton.isSelected = false
-            message = "Removed \(self.member.username) from your starred users"
+            message = "Removed \(self.member.username)"
         }
         HUD.flash(.labeledSuccess(title: nil, subtitle: message), delay: 1.0)
     }
     
     
     public func populateCell(member: Models.FirebaseUser) {
+        
+        if Current.user!.spotifyID == member.spotifyID {
+            // necessary because this cell is used in the stream members table view controller
+            starButton.isHidden = true
+            starIcon.isHidden = true
+        } else {
+            starButton.isHidden = false
+        }
         
         if Current.isStarred(user: member) {
             starButton.isSelected = true

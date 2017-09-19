@@ -27,12 +27,10 @@ class StarredUserCell: UITableViewCell {
         self.inviteToStreamButton.isUserInteractionEnabled = false
     }
     
-    
     @IBAction func starButtonPressed(_ sender: Any) {
         FirebaseAPI.removeFromStarredTable(user: self.member)
-        HUD.flash(.labeledSuccess(title: nil, subtitle: "Removed \(self.member.username) from your starred users"), delay: 1.0)
+        HUD.flash(.labeledSuccess(title: nil, subtitle: "Removed \(self.member.username)"), delay: 1.0)
     }
-    
     
     public func populateCell(member: Models.FirebaseUser) {
         

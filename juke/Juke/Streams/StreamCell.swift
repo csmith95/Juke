@@ -53,20 +53,15 @@ class StreamCell: UITableViewCell {
         loadCellImages(stream: stream)
         self.streamName.text = stream.title
         self.hostLabel.text = "Hosted by \(stream.host.username)"
-        self.hostStarIcon.isHidden = !Current.isStarred(user: stream.host)
+        self.hostStarIcon.isHidden = false //!Current.isStarred(user: stream.host)
         if let song = stream.song {
             self.blurredBgImage.af_setImage(withURL: URL(string: song.coverArtURL)!)
         } else {
             self.blurredBgImage.image = #imageLiteral(resourceName: "jukedef")
         }
         indicator.state = (stream.isPlaying) ? .playing : .stopped
-        let count = stream.members.count
-        if count == 0 {
-            numMembers.isHidden = true
-        } else {
-            numMembers.isHidden = false
-            numMembers.text = "\(count) member" + ((count > 1) ? "s" : "")
-        }
+        let count = stream.members.count+1  // +1 for host
+        numMembers.text = "\(count) member" + ((count > 1) ? "s" : "")
     }
     
     // set user icons

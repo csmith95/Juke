@@ -29,12 +29,16 @@ class MembersTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return stream.members.count
+        return stream.members.count+1
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath) as! UserCell
-        cell.populateCell(member: stream.members[indexPath.row])
+        if indexPath.row == 0 {
+            cell.populateCell(member: stream.host)
+        } else {
+            cell.populateCell(member: stream.members[indexPath.row-1])
+        }
         return cell
     }
     
