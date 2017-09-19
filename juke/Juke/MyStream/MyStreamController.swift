@@ -129,7 +129,9 @@ class MyStreamController: UITableViewController {
             return
         }
         
-        numContributorsButton.setTitle("\(stream.members.count+1) members", for: .normal)   // +1 for host
+        let numMembers = stream.members.count + 1 // +1 for host
+        let numMembersString = "\(numMembers) member" + (numMembers > 1 ? "s" : "")
+        numContributorsButton.setTitle(numMembersString, for: .normal)   // +1 for host
         streamNameLabel.text = stream.title
         if let song = stream.song {
             self.coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil)

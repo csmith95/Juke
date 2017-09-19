@@ -11,7 +11,6 @@ import Firebase
 
 class Current {
     private static let jamsPlayer = JamsPlayer.shared
-    private static let ref = Database.database().reference()
     public static var user: Models.FirebaseUser?
     public static var stream: Models.FirebaseStream? {
     
@@ -27,11 +26,12 @@ class Current {
                 // once user has left current stream, join new stream
                 FirebaseAPI.joinStream(newStream: newValue)   // sets user tunedInto field in db
                 FirebaseAPI.addListeners()
-                // this event is listened for in MyStreamRootViewController to handle transitioning between container views
                 if stream == nil {
                     jamsPlayer.position_ms = 0.0
                 }
+                
                 DispatchQueue.main.async {
+                    // this event is listened for in MyStreamRootViewController to handle transitioning between container views
                     NotificationCenter.default.post(name: Notification.Name("updateMyStreamView"), object: nil)
                 }
             }
@@ -44,4 +44,22 @@ class Current {
     }
     public static var listenSelected: Bool = false // if user has listen button selected -- used in jamsPlayer.resync
     public static var accessToken = ""
+    
+    // MARK: cached copy of starred users updated from StarredUsersDataSource.swift
+    private static var starredUsers = Set<Models.FirebaseUser>()
+    
+    public static func addStarredUser(user: Models.FirebaseUser) {
+        starredUsers.insert(user)
+    }
+    
+    public static func removeStarredUser(user: Models.FirebaseUser) {
+        starredUsers.remove(user)
+    }
+    
+    public static func isStarred(user: Models.FirebaseUser) -> Bool {
+        return starredUsers.contains(where: { (other) -> Bool in
+            return other.spotifyID == user.spotifyID
+        })
+    }
+    
 }

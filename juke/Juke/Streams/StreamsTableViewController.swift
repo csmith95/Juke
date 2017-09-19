@@ -25,10 +25,9 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        print("streams table view did load called")
         streamsTableView.dataSource = streamsDataSource
         streamsTableView.delegate = streamsDataSource
-        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadCollection), name: Notification.Name("reloadCollection"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStreams), name: Notification.Name("reloadStreams"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.newStreamJoined), name: Notification.Name("newStreamJoined"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
     }
@@ -59,7 +58,7 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     // triggered from data source class
-    func reloadCollection() {
+    func reloadStreams() {
         DispatchQueue.main.async {
             objc_sync_enter(self.tableView.dataSource)
             self.tableView.reloadData()

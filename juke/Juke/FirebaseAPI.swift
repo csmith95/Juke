@@ -75,30 +75,23 @@ class FirebaseAPI {
         // listen for member presence changes
         let path = "/streams/\(Current.stream!.streamID)/members"
         ref.child(path).observe(.childChanged, with:{ (snapshot) in
-            
-            print("\n*** changed: ", snapshot)
-            
             if Current.stream == nil { return }
             guard let changedMember = Models.FirebaseUser(snapshot: snapshot) else { return }
             if let index = Current.stream!.members.index(where: { (member) -> Bool in
                 member.spotifyID == changedMember.spotifyID
             }) {
-                Current.stream!.members[index].online = true
+                Current.stream?.members[index] = changedMember // update member
             }
-            
-            // TODO: post notification telling view controller to refresh member list to reflect new presence status? not super important to update in real time
-            
         }) { error in print(error.localizedDescription)}
         observedPaths.append(path)  // only need to append this path once -- not again for member joined/member left
         
         // listen for host presence changes
         let hostPath = "/streams/\(Current.stream!.streamID)/host"
         ref.child(hostPath).observe(.childChanged, with:{ (snapshot) in
-            
-            print("/n*** host online status changed: ", snapshot)
-            
+            guard let host = Models.FirebaseUser(snapshot: snapshot) else { return }
+            Current.stream?.host = host
         }) { error in print(error.localizedDescription)}
-
+        observedPaths.append(hostPath)
     }
     
     private static func addMemberJoinedListener() {
@@ -200,11 +193,16 @@ class FirebaseAPI {
         let path = "/streams/\(stream.streamID)/song"
         self.ref.child(path).observe(.value, with: { (snapshot) in
             Current.stream!.song = Models.FirebaseSong(snapshot: snapshot)
-            jamsPlayer.position_ms = 0.0
-            // post event telling controller to resync
-            NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.TopSongChanged)
-            // post event telling my stream root controller to refresh in case queue was empty
+            self.jamsPlayer.position_ms = 0.0
+            self.listenForSongProgress()
+            
+            // post event telling my stream root controller to refresh in case queue was empty, so 
+            // controller wasn't active
             NotificationCenter.default.post(name: Notification.Name("updateMyStreamView"), object: nil)
+            
+            // post event telling controller to resync in case it's already active
+            NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.TopSongChanged)
+            
         }) { error in print(error.localizedDescription) }
         observedPaths.append(path)
     }
@@ -275,11 +273,17 @@ class FirebaseAPI {
             
             Current.stream = stream
             guard let user = Current.user else { return }
-            ref.child("/streams/\(stream.streamID)/members/\(user.spotifyID)").setValue(user.firebaseDict)
+            
+            // have to do this because race condition inside Current.stream update function :(
+            var dict = user.firebaseDict
+            dict["tunedInto"] = stream.streamID
+            ref.child("/streams/\(stream.streamID)/members/\(user.spotifyID)").setValue(dict)
+            
+            
             Current.stream!.members.append(user)
             jamsPlayer.position_ms = 0.0
 
-            // callback provided by StreamsTableViewController to communicate success/failure
+            // callback to StreamsDataSource to communicate success/failure
             callback(true)
         }) {error in print(error.localizedDescription)}
     }
@@ -435,6 +439,16 @@ class FirebaseAPI {
         } else {
             self.ref.child("/songs/\(stream.streamID)/\(song.key)/upvoters/\(user.spotifyID)").removeValue()
         }
+    }
+    
+    public static func addToStarredTable(user: Models.FirebaseUser) {
+        guard let currUser = Current.user else { return }
+        self.ref.child("/starredTable/\(currUser.spotifyID)").child(user.spotifyID).setValue(user.firebaseDict)
+    }
+    
+    public static func removeFromStarredTable(user: Models.FirebaseUser) {
+        guard let currUser = Current.user else { return }
+        self.ref.child("/starredTable/\(currUser.spotifyID)").child(user.spotifyID).removeValue()
     }
     
     // Function URL: https://us-central1-juke-9fbd6.cloudfunctions.net/sendNotification

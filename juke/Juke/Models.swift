@@ -156,13 +156,16 @@ class Models {
         }
     }
     
-    struct FirebaseUser {
+    struct FirebaseUser: Hashable {
         var spotifyID: String   // key in the /users table
         var tunedInto: String?
         var username: String
         var imageURL: String?
         var online: Bool
         var fcmToken: String?
+        var hashValue: Int {
+            return self.spotifyID.hashValue
+        }
         
         // formatted to be written to /hosts/{streamID}/{spotifyID}/
         // or /users/{spotifyID}/
@@ -173,6 +176,10 @@ class Models {
             if let imageURL = imageURL { dict["imageURL"] = imageURL }
             if let fcmToken = fcmToken {dict["fcmToken"] = fcmToken }
             return dict
+        }
+        
+        static func ==(lhs: Models.FirebaseUser, rhs: Models.FirebaseUser) -> Bool {
+            return lhs.hashValue == rhs.hashValue
         }
         
         init?(dict: [String: Any?]) {

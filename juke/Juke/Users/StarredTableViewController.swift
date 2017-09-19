@@ -1,34 +1,28 @@
 //
-//  UsersTableViewController.swift
+//  StarUserTableViewController.swift
 //  Juke
 //
-//  Created by Kojo Worai Osei on 9/9/17.
+//  Created by Kojo Worai Osei on 9/17/17.
 //  Copyright © 2017 csmith. All rights reserved.
 //
 
 import UIKit
-import Firebase
-import FirebaseDatabaseUI
 
-class UsersTableViewController: UITableViewController, UISearchBarDelegate {
+class StarredTableViewController: UITableViewController {
 
+    @IBOutlet var starredTableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet var usersTableView: UITableView!
-    let usersDataSource = UsersDataSource()
+    var starredDataSource = StarredUsersDataSource()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        usersTableView.dataSource = usersDataSource
-        usersTableView.delegate = usersDataSource
+        starredTableView.dataSource = starredDataSource
+        starredTableView.delegate = starredDataSource
         
         // setup notifications received from usersDataSource
-        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadAllUsers), name: Notification.Name("reloadAllUsers"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStarredUsers), name: Notification.Name("reloadStarredUsers"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
-    }
-    
-    @IBAction func doneButtonPressed(_ sender: Any) {
-        navigationController?.popViewController(animated: true)
     }
     
     func hideKeyboard() {
@@ -47,7 +41,7 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     private func execSearchQuery() {
-        if let source = tableView.dataSource as? CustomDataSource, let query = searchBar.text {
+        if let source = starredTableView.dataSource as? CustomDataSource, let query = searchBar.text {
             source.searchBy(query: query)
         }
     }
@@ -57,11 +51,11 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     // triggered from data source class
-    func reloadAllUsers() {
+    func reloadStarredUsers() {
         DispatchQueue.main.async {
-            objc_sync_enter(self.usersTableView.dataSource)
-            self.usersTableView.reloadData()
-            objc_sync_exit(self.usersTableView.dataSource)
+            objc_sync_enter(self.starredTableView.dataSource)
+            self.starredTableView.reloadData()
+            objc_sync_exit(self.starredTableView.dataSource)
         }
     }
     
@@ -71,4 +65,6 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
+
+
 }
