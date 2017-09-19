@@ -42,7 +42,7 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        reloadStreams()
+        execSearchQuery()
     }
     
     func hideKeyboard() {
