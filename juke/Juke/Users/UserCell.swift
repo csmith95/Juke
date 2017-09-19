@@ -19,7 +19,7 @@ class UserCell: UITableViewCell {
     @IBOutlet var presenceDot: UIImageView!
     @IBOutlet weak var starButton: UIButton!
     @IBOutlet var starIcon: UIImageView!
-    
+    @IBOutlet var hostLabel: UILabel!
     
     private let defaultIcon = CircleFilter().filter(UIImage(named: "juke_icon")!)
     private var member: Models.FirebaseUser!
@@ -46,6 +46,14 @@ class UserCell: UITableViewCell {
     
     
     public func populateCell(member: Models.FirebaseUser) {
+        
+        if hostLabel != nil {
+            if Current.stream!.host.spotifyID == member.spotifyID {
+                hostLabel.isHidden = false
+            } else {
+                hostLabel.isHidden = true
+            }
+        }
         
         if Current.user!.spotifyID == member.spotifyID {
             // necessary because this cell is used in the stream members table view controller
