@@ -21,15 +21,28 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate {
     @IBOutlet var streamsTableView: UITableView!
     let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
     var streamsDataSource = StreamsDataSource()
+    var starredStreamsDataSource = StarredStreamsDataSource()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if(searchBar.selectedScopeButtonIndex == 0) {
+            streamsTableView.dataSource = starredStreamsDataSource
+            streamsTableView.delegate = starredStreamsDataSource
+        } else {
+            streamsTableView.dataSource = streamsDataSource
+            streamsTableView.delegate = streamsDataSource
+        }
 
-        streamsTableView.dataSource = streamsDataSource
-        streamsTableView.delegate = streamsDataSource
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStreams), name: Notification.Name("reloadStreams"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStreams), name: Notification.Name("reloadStarredStreams"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.newStreamJoined), name: Notification.Name("newStreamJoined"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        execSearchQuery()
     }
     
     func hideKeyboard() {
@@ -45,6 +58,20 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         execSearchQuery()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        // print what selectedScope
+        print("**SCOPE CHANGED; selectedScope**", selectedScope)
+        if(searchBar.selectedScopeButtonIndex == 0) {
+            streamsTableView.dataSource = starredStreamsDataSource
+            streamsTableView.delegate = starredStreamsDataSource
+            reloadStreams()
+        } else {
+            streamsTableView.dataSource = streamsDataSource
+            streamsTableView.delegate = streamsDataSource
+            reloadStreams()
+        }
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {

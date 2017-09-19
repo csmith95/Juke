@@ -107,7 +107,7 @@
                     <tabBarItem key="tabBarItem" title="Users" image="toolbarPeople" selectedImage="toolbarPeople" id="7Kw-ed-VIZ"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="YjN-Z8-Ndf">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="YjN-Z8-Ndf">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -324,7 +324,7 @@
                     <tabBarItem key="tabBarItem" title="Streams" image="toolbarStreams" selectedImage="toolbarStreams" id="te7-SS-y4N"/>
                     <toolbarItems/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="KoR-Mg-UzL">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="KoR-Mg-UzL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -523,7 +523,7 @@
                 <navigationController navigationBarHidden="YES" id="oRk-jp-Vtn" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Search" image="search" id="fEr-so-Hm8"/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="NJe-yO-XzD">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="NJe-yO-XzD">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -665,7 +665,7 @@
                     <tabBarItem key="tabBarItem" title="My Library" image="toolbarMyLibrary" selectedImage="toolbarMyLibrary" id="uL8-We-Nn7"/>
                     <toolbarItems/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="zhr-dh-TNo">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="zhr-dh-TNo">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
