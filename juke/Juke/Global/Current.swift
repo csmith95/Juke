@@ -43,7 +43,6 @@ class Current {
         return stream.host.spotifyID == user.spotifyID
     }
     public static var listenSelected: Bool = false // if user has listen button selected -- used in jamsPlayer.resync
-    public static var accessToken = ""
     
     // MARK: cached copy of starred users updated from StarredUsersDataSource.swift
     private static var starredUsers = Set<Models.FirebaseUser>()

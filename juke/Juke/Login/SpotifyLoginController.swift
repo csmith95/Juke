@@ -12,9 +12,9 @@ class SpotifyLoginController: UIViewController, UIWebViewDelegate {
     
     let webView: UIWebView = UIWebView(frame: CGRect.zero)
     let kClientID = "77d4489425fe464483f0934f99847c8b"
-    let kCallbackURL = URL(string:"juke1231://callback")!
-    let kTokenSwapURL = URL(string: "https://juketokenrefresh.herokuapp.com/swap")!
-    let kTokenRefreshURL = URL(string: "https://juketokenrefresh.herokuapp.com/refresh")
+    let kCallbackURL = URL(string: Constants.kCallbackURL)!
+    let kTokenSwapURL = URL(string: Constants.kTokenSwapURL)!
+    let kTokenRefreshURL = URL(string: Constants.kTokenRefreshURL)
     var completion: ()->Void = { }
     
     public func setSpotifyAppCredentials() {

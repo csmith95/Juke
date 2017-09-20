@@ -10,39 +10,65 @@ import UIKit
 import Alamofire
 import Unbox
 
-class MyLibraryTableViewController: JukeSearchTableViewController {
+class MyLibraryTableViewController: UITableViewController {
     
     @IBOutlet var searchBar: UISearchBar!
     
-    override var cellName: String {
-        get {
-            return "MyLibrarySearchCell"
-        }
-    }
+    var allResults:[Models.SpotifySong] = []           // all results
+    var displayedResults:[Models.SpotifySong] = []  // filtered results
+    typealias JSONStandard = [String: AnyObject]
     
+    // MARK: view life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        self.tableView.addGestureRecognizer(tapRecognizer)
         loadSavedTracks()
         NotificationCenter.default.addObserver(self, selector: #selector(self.libraryChanged), name: Notification.Name("libraryChanged"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.searchBar.text = ""
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
-    override func hideKeyboard() {
-        print("\n my lib exec search")
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        // reset UI
+        self.searchBar.text = ""
+        execSearch(keywords: "")
+    }
+    
+    // MARK: - Table view data source/delegate
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        hideKeyboard()
+    }
+    
+    func threadSafeReloadView() {
+        objc_sync_enter(tableView)
+        tableView.reloadData()
+        objc_sync_exit(tableView)
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return displayedResults.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MyLibrarySearchCell") as! MyLibraryCell
+        cell.populateCell(song: self.displayedResults[indexPath.row])
+        return cell
+    }
+    
+    func hideKeyboard() {
         self.view.endEditing(true)
         searchBar.setShowsCancelButton(false, animated: true)
     }
     
-    override func execSearch(keywords: String) {
+    func execSearch(keywords: String) {
         if keywords.isEmpty {
             displayedResults = allResults
         } else {
@@ -76,7 +102,7 @@ class MyLibraryTableViewController: JukeSearchTableViewController {
         self.allResults.removeAll()
         let url = "https://api.spotify.com/v1/me/tracks"
         let headers = [
-            "Authorization": "Bearer " + Current.accessToken
+            "Authorization": "Bearer " + SessionManager.accessToken
         ]
         let params: Parameters = ["limit": 50, "offset": 0]
         Alamofire.request(url, parameters: params, headers: headers).responseJSON { response in
@@ -139,5 +165,32 @@ class MyLibraryTableViewController: JukeSearchTableViewController {
             }
         }
     }
+    
+    // set status bar text to white
+    override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
 
+
+}
+
+extension MyLibraryTableViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        execSearch(keywords: searchText.lowercased())
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if let searchText = searchBar.text {
+            execSearch(keywords: searchText.lowercased())
+        } else {
+            execSearch(keywords: "")
+        }
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        execSearch(keywords: "")
+        hideKeyboard()
+    }
 }

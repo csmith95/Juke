@@ -16,6 +16,12 @@ class UsersDataSource: CustomDataSource {
         }
     }
     
+    override var cellName: String {
+        get {
+            return "UserCell"
+        }
+    }
+    
     init() {
         print("init")
         super.init(path: "users")
@@ -39,9 +45,8 @@ class UsersDataSource: CustomDataSource {
         return item.user.username.lowercased().contains(query.lowercased())
     }
     
-    override func populateCell(tableView: UITableView, indexPath: IndexPath, item: CollectionItem) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath) as! UserCell
-        cell.populateCell(member: self.filteredCollection[indexPath.row].user)
-        return cell
+    override func populateCell(cell: UITableViewCell, item: CollectionItem) {
+        let cell = cell as! UserCell
+        cell.populateCell(member: item.user)
     }
 }

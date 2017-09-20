@@ -360,7 +360,6 @@ class FirebaseAPI {
     public static func setfcmtoken() {
         guard let user = Current.user else { return }
         let fcmToken = Messaging.messaging().fcmToken
-        print("FCMToken", fcmToken!)
         Current.user!.fcmToken = fcmToken
         self.ref.child("users/\(user.spotifyID)/fcmToken").setValue(fcmToken)
         guard let stream = Current.stream else { return }

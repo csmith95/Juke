@@ -234,7 +234,7 @@ class MyStreamController: UITableViewController {
         let method: HTTPMethod = songAdded ? .put : .delete
         if let song = Current.stream?.song {
             let headers = [
-                "Authorization": "Bearer " + Current.accessToken
+                "Authorization": "Bearer " + SessionManager.accessToken
             ]
             let url = URL(string: Constants.kSpotifyBaseURL+path+song.spotifyID)!
             addToSpotifyLibButton.isSelected = !addToSpotifyLibButton.isSelected
@@ -260,7 +260,7 @@ class MyStreamController: UITableViewController {
     
     func checkIfUserLibContainsCurrentSong(song: Models.FirebaseSong) {
         let headers = [
-            "Authorization": "Bearer " + Current.accessToken
+            "Authorization": "Bearer " + SessionManager.accessToken
         ]
         let url = URL(string: Constants.kSpotifyBaseURL+Constants.kContainsSongPath+song.spotifyID)!
         Alamofire.request(url, method: .get, headers: headers)

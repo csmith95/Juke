@@ -18,6 +18,12 @@ class SongQueueDataSource: CustomDataSource {
         }
     }
     
+    override var cellName: String {
+        get {
+            return "SongCell"
+        }
+    }
+    
     init() {
         super.init(path: "")
     }
@@ -68,10 +74,9 @@ class SongQueueDataSource: CustomDataSource {
         return true // don't filter out any queued songs
     }
     
-    override func populateCell(tableView: UITableView, indexPath: IndexPath, item: CollectionItem) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongTableViewCell
-        cell.populateCell(song: self.filteredCollection[indexPath.row].song)
-        return cell
+   override func populateCell(cell: UITableViewCell, item: CollectionItem) {
+        let cell = cell as! SongTableViewCell
+        cell.populateCell(song: item.song)
     }
     
     public func getNextSong() -> Models.FirebaseSong? {
