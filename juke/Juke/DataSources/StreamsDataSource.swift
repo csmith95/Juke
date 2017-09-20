@@ -57,6 +57,7 @@ class StreamsDataSource: CustomDataSource {
     }
     
     override func shouldInclude(item: CollectionItem) -> Bool {
+        // add if you are starred by the current user
         var included = (item.stream.song != nil)
         if let currentStream = Current.stream {
             included = (included && item.stream.streamID != currentStream.streamID)
@@ -64,6 +65,9 @@ class StreamsDataSource: CustomDataSource {
         if !included || query.isEmpty {
             return included
         }
+        
+        
+        
         return item.stream.host.username.lowercased().contains(query.lowercased())
     }
     
