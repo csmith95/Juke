@@ -21,7 +21,6 @@ target 'Juke' do
     pod 'Whisper'
     pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
     pod 'XLActionController'
-    pod 'SkyFloatingLabelTextField', '~> 3.0'
     pod 'Fabric'
     pod 'Crashlytics'
 
