@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="rXL-Ez-cdK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="rXL-Ez-cdK">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -107,7 +107,7 @@
                     <tabBarItem key="tabBarItem" title="Users" image="toolbarPeople" selectedImage="toolbarPeople" id="7Kw-ed-VIZ"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="YjN-Z8-Ndf">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="YjN-Z8-Ndf">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -324,7 +324,7 @@
                     <tabBarItem key="tabBarItem" title="Streams" image="toolbarStreams" selectedImage="toolbarStreams" id="te7-SS-y4N"/>
                     <toolbarItems/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="KoR-Mg-UzL">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="KoR-Mg-UzL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -523,7 +523,7 @@
                 <navigationController navigationBarHidden="YES" id="oRk-jp-Vtn" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Search" image="search" id="fEr-so-Hm8"/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="NJe-yO-XzD">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="NJe-yO-XzD">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -552,7 +552,7 @@
                                     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     <connections>
-                                        <outlet property="delegate" destination="NwJ-zM-geD" id="OAZ-T6-Kgo"/>
+                                        <outlet property="delegate" destination="NwJ-zM-geD" id="E0o-FQ-B0k"/>
                                     </connections>
                                 </searchBar>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dIt-WQ-aVS">
@@ -587,7 +587,7 @@
                             </userDefinedRuntimeAttributes>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="SpotifySearchCell" rowHeight="60" id="rU3-UO-65s" customClass="SpotifySearchCell">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="SpotifySearchCell" rowHeight="60" id="rU3-UO-65s" customClass="SpotifySearchCell" customModule="Juke" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="178" width="375" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rU3-UO-65s" id="L24-ep-Anz">
@@ -621,7 +621,7 @@
                                             <state key="normal" image="Add song button"/>
                                             <state key="selected" image="checkmark_white"/>
                                             <connections>
-                                                <action selector="addButtonPressed:" destination="rU3-UO-65s" eventType="touchUpInside" id="zIh-XM-kX4"/>
+                                                <action selector="addButtonPressed:" destination="rU3-UO-65s" eventType="touchUpInside" id="huz-IU-09l"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -636,9 +636,9 @@
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="0.1333333333" green="0.12549019610000001" blue="0.1450980392" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
-                                    <outlet property="addButton" destination="fLz-xn-Rxe" id="JD8-Y3-7GN"/>
-                                    <outlet property="artistLabel" destination="J7R-QU-Yzk" id="4Sh-Qe-wqD"/>
-                                    <outlet property="songLabel" destination="wUE-XA-Nbs" id="RlR-bj-v9J"/>
+                                    <outlet property="addButton" destination="fLz-xn-Rxe" id="ueR-x3-QPh"/>
+                                    <outlet property="artistLabel" destination="J7R-QU-Yzk" id="FNW-3h-coQ"/>
+                                    <outlet property="songLabel" destination="wUE-XA-Nbs" id="jcy-d2-u2Y"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -651,7 +651,7 @@
                     <navigationItem key="navigationItem" title="Root View Controller" id="GEd-TQ-iP9"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
-                        <outlet property="searchBar" destination="0xC-Se-ZoZ" id="EXh-nL-ZwG"/>
+                        <outlet property="searchBar" destination="0xC-Se-ZoZ" id="30Q-X7-z9f"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6lz-fK-iIE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -665,7 +665,7 @@
                     <tabBarItem key="tabBarItem" title="My Library" image="toolbarMyLibrary" selectedImage="toolbarMyLibrary" id="uL8-We-Nn7"/>
                     <toolbarItems/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="zhr-dh-TNo">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="zhr-dh-TNo">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1319,10 +1319,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="twoDownArrows" translatesAutoresizingMaskIntoConstraints="NO" id="BPY-hg-VfQ">
-                                <rect key="frame" x="246" y="641" width="98" height="16"/>
+                                <rect key="frame" x="246" y="636" width="98" height="16"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add some songs to start your stream " textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b6J-ji-QzM">
-                                <rect key="frame" x="235" y="581" width="120" height="52"/>
+                                <rect key="frame" x="235" y="576" width="120" height="52"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="RIn-Gk-0Ki"/>
                                     <constraint firstAttribute="height" constant="52" id="aCm-s1-mi1"/>
@@ -1335,12 +1335,12 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="DME-aq-I78" firstAttribute="top" secondItem="Eiu-Ej-4bR" secondAttribute="bottom" constant="56" id="021-U1-0pH"/>
+                            <constraint firstItem="Kow-Rk-vmo" firstAttribute="top" secondItem="BPY-hg-VfQ" secondAttribute="bottom" constant="15" id="0au-FL-RC4"/>
                             <constraint firstItem="C9e-ek-p4f" firstAttribute="top" secondItem="EfU-AW-sC9" secondAttribute="bottom" constant="33" id="4WW-9M-fYL"/>
                             <constraint firstItem="BJC-YC-E3U" firstAttribute="top" secondItem="DME-aq-I78" secondAttribute="bottom" constant="3" id="8SY-V9-sBh"/>
                             <constraint firstItem="EfU-AW-sC9" firstAttribute="centerX" secondItem="OAF-0v-QFj" secondAttribute="centerX" id="GLN-T3-IzX"/>
                             <constraint firstItem="BPY-hg-VfQ" firstAttribute="trailing" secondItem="OAF-0v-QFj" secondAttribute="trailingMargin" constant="-15" id="Ix7-qG-S58"/>
                             <constraint firstItem="BPY-hg-VfQ" firstAttribute="top" secondItem="b6J-ji-QzM" secondAttribute="bottom" constant="8" id="QfY-7S-tDo"/>
-                            <constraint firstItem="Kow-Rk-vmo" firstAttribute="top" secondItem="BPY-hg-VfQ" secondAttribute="bottom" constant="10" id="QyU-Pt-1Dp"/>
                             <constraint firstItem="BJC-YC-E3U" firstAttribute="top" secondItem="DME-aq-I78" secondAttribute="bottom" constant="3" id="VdM-Jg-GK8"/>
                             <constraint firstItem="EfU-AW-sC9" firstAttribute="top" secondItem="BJC-YC-E3U" secondAttribute="bottom" constant="93" id="krh-Qq-JAb"/>
                             <constraint firstItem="BJC-YC-E3U" firstAttribute="centerX" secondItem="OAF-0v-QFj" secondAttribute="centerX" id="kte-ga-dwt"/>

@@ -58,9 +58,12 @@ class MyLibraryTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MyLibrarySearchCell") as! MyLibraryCell
+        return tableView.dequeueReusableCell(withIdentifier: "MyLibrarySearchCell", for: indexPath)
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let cell = cell as! MyLibraryCell
         cell.populateCell(song: self.displayedResults[indexPath.row])
-        return cell
     }
     
     func hideKeyboard() {
@@ -69,6 +72,7 @@ class MyLibraryTableViewController: UITableViewController {
     }
     
     func execSearch(keywords: String) {
+        print("exec search in my library table view")
         if keywords.isEmpty {
             displayedResults = allResults
         } else {

@@ -47,11 +47,12 @@ class SpotifySearchTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return tableView.dequeueReusableCell(withIdentifier: "SpotifySearchCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SpotifySearchCell", for: indexPath)
+        return cell
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let cell = cell as! SearchCell
+        let cell = cell as! SpotifySearchCell
         cell.populateCell(song: self.displayedResults[indexPath.row])
     }
     

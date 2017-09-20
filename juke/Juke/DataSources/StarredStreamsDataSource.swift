@@ -17,6 +17,12 @@ class StarredStreamsDataSource: CustomDataSource {
         }
     }
     
+    override var cellName: String {
+        get {
+            return "StreamCell"
+        }
+    }
+    
     init() {
         super.init(path: "streams")
     }
@@ -104,9 +110,8 @@ class StarredStreamsDataSource: CustomDataSource {
         return false
     }
     
-    override func populateCell(tableView: UITableView, indexPath: IndexPath, item: CollectionItem) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell", for: indexPath) as! StreamCell
-        cell.populateCell(stream: self.filteredCollection[indexPath.row].stream)
-        return cell
+    override func populateCell(cell: UITableViewCell, item: CollectionItem) {
+        let cell = cell as! StreamCell
+        cell.populateCell(stream: item.stream)
     }
 }
