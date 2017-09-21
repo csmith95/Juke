@@ -37,23 +37,16 @@ class StreamsPager: ButtonBarPagerTabStripViewController, UISearchBarDelegate {
             if newCell?.label.text == "All" {
                 //set who receives notification
                 self?.notificationName = "allStreamsSearchNotification"
-                
-                //self?.streamsSource = self?.allStreamsSource as? CustomDataSource
-                //var children = self?.childViewControllers
-                
-                //self?.searchBar.text = ""
-                
-                //self?.streamsSource = StreamsTableViewController().streams
-                
-                //print("changed data source to all", children?[0])
+                self?.searchBar.text = ""
+
+                self?.execSearchQuery()
+
             } else {
                 //set who receives notification
                 self?.notificationName = "starredStreamsSearchNotification"
-                
-                //var children = self?.childViewControllers
-                //self?.searchBar.text = ""
-                //self?.streamsSource = self?.starredStreamsSource as? CustomDataSource
-                //print("changed data source to starred", children?[1])
+                self?.searchBar.text = ""
+                self?.execSearchQuery()
+
             }
         }
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
@@ -73,17 +66,14 @@ class StreamsPager: ButtonBarPagerTabStripViewController, UISearchBarDelegate {
     }
     
     private func execSearchQuery() {
-        //print("Search bar text is*************", searchBar.text)
         if let query = searchBar.text {
-            print("found query, calling search")
-            //self.streamsSource!.searchBy(query: query)
+
             NotificationCenter.default.post(name: Notification.Name(notificationName!), object: nil, userInfo: ["query" : query])
-            //self.reloadPagerTabStripView()
         }
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print("called search bar did change")
+        //print("called search bar did change")
         execSearchQuery()
     }
     
