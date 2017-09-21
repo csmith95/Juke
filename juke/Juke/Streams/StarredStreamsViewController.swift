@@ -1,8 +1,8 @@
 //
-//  ContactsTableViewController.swift
+//  StarredStreamsViewController.swift
 //  Juke
 //
-//  Created by Conner Smith on 3/28/17.
+//  Created by Kojo Worai Osei on 9/20/17.
 //  Copyright © 2017 csmith. All rights reserved.
 //
 
@@ -16,20 +16,19 @@ import Firebase
 import FirebaseDatabaseUI
 import XLPagerTabStrip
 
-class StreamsTableViewController: UITableViewController, UISearchBarDelegate, IndicatorInfoProvider {
+class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, IndicatorInfoProvider {
     
     @IBOutlet var searchBar: UISearchBar!
     @IBOutlet var streamsTableView: UITableView!
     let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
-    var streamsDataSource = StreamsDataSource()
-
+    var starredStreamsDataSource = StarredStreamsDataSource()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        streamsTableView.dataSource = starredStreamsDataSource
+        streamsTableView.delegate = starredStreamsDataSource
 
-        streamsTableView.dataSource = streamsDataSource
-        streamsTableView.delegate = streamsDataSource
         
-
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStreams), name: Notification.Name("reloadStreams"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStreams), name: Notification.Name("reloadStarredStreams"), object: nil)
@@ -38,7 +37,7 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
     }
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
-        return IndicatorInfo(title: "All")
+        return IndicatorInfo(title: "Starred")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -92,7 +91,7 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
             objc_sync_exit(self.tableView.dataSource)
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -109,7 +108,5 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-
+    
 }
-
-
