@@ -18,7 +18,7 @@ import XLPagerTabStrip
 
 class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, IndicatorInfoProvider {
     
-    @IBOutlet var searchBar: UISearchBar!
+    //@IBOutlet var searchBar: UISearchBar!
     @IBOutlet var streamsTableView: UITableView!
     let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
     var starredStreamsDataSource = StarredStreamsDataSource()
@@ -33,7 +33,8 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStreams), name: Notification.Name("reloadStreams"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStreams), name: Notification.Name("reloadStarredStreams"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.newStreamJoined), name: Notification.Name("newStreamJoined"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
+        NotificationCenter.default.addObserver(forName: Notification.Name("starredStreamsSearchNotification"), object: nil, queue: nil, using: execSearchQuery)
+//        NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
     }
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
@@ -41,23 +42,24 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        execSearchQuery()
+        //execSearchQuery()
     }
     
-    func hideKeyboard() {
-        self.view.endEditing(true)
-        searchBar.setShowsCancelButton(false, animated: true)
-    }
-    
-    private func execSearchQuery() {
-        if let source = tableView.dataSource as? CustomDataSource, let query = searchBar.text {
-            source.searchBy(query: query)
+//    func hideKeyboard() {
+//        self.view.endEditing(true)
+//        searchBar.setShowsCancelButton(false, animated: true)
+//    }
+//    
+    private func execSearchQuery(notification: Notification) {
+        guard let userInfo = notification.userInfo else { return }
+        if let source = tableView.dataSource as? CustomDataSource {
+            source.searchBy(query: userInfo["query"] as! String)
         }
     }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        execSearchQuery()
-    }
+//
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        execSearchQuery()
+//    }
     
 //    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
 //        // print what selectedScope
@@ -73,18 +75,19 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
 //        }
 //    }
     
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        searchBar.setShowsCancelButton(true, animated: true)
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.text = ""
-        execSearchQuery()
-        hideKeyboard()
-    }
+//    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+//        searchBar.setShowsCancelButton(true, animated: true)
+//    }
+//    
+//    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+//        searchBar.text = ""
+//        execSearchQuery()
+//        hideKeyboard()
+//    }
     
     // triggered from data source class
     func reloadStreams() {
+        print("calling starred reload")
         DispatchQueue.main.async {
             objc_sync_enter(self.tableView.dataSource)
             self.tableView.reloadData()

@@ -350,25 +350,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.13333333333333333" green="0.12549019607843137" blue="0.14509803921568626" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <searchBar key="tableHeaderView" contentMode="redraw" barStyle="black" searchBarStyle="minimal" placeholder="Filter" id="RVm-kU-lxe">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                    <color key="value" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                            <connections>
-                                <outlet property="delegate" destination="enB-aq-hv1" id="u1R-0k-YMm"/>
-                            </connections>
-                        </searchBar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StreamCell" rowHeight="132" id="zyp-1U-jUo" customClass="StreamCell" customModule="Juke" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="72" width="375" height="132"/>
+                                <rect key="frame" x="0.0" y="28" width="375" height="132"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zyp-1U-jUo" id="gVb-Ra-gLQ">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="132"/>
@@ -470,7 +454,6 @@
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <navigationItem key="navigationItem" id="GwB-zs-5Rn"/>
                     <connections>
-                        <outlet property="searchBar" destination="RVm-kU-lxe" id="Ghp-m8-Ekg"/>
                         <outlet property="streamsTableView" destination="pmb-Az-v7r" id="YbC-OR-MHe"/>
                     </connections>
                 </tableViewController>
@@ -1336,7 +1319,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="McG-7T-949" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2724" y="1414"/>
-
         </scene>
         <!--StarUserViewController-->
         <scene sceneID="ZJx-Pw-dYq">
@@ -1525,25 +1507,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.1333333333" green="0.12549019610000001" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <searchBar key="tableHeaderView" contentMode="redraw" barStyle="black" searchBarStyle="minimal" placeholder="Filter" id="mgy-Hj-qYC">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                    <color key="value" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                            <connections>
-                                <outlet property="delegate" destination="Sw3-c0-vDO" id="RXL-7L-0j7"/>
-                            </connections>
-                        </searchBar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StreamCell" rowHeight="132" id="bm4-ef-IlQ" customClass="StreamCell" customModule="Juke" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="72" width="375" height="132"/>
+                                <rect key="frame" x="0.0" y="28" width="375" height="132"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bm4-ef-IlQ" id="IT1-j7-cFY">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="132"/>
@@ -1645,7 +1611,6 @@
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <navigationItem key="navigationItem" id="dVY-V6-qrV"/>
                     <connections>
-                        <outlet property="searchBar" destination="mgy-Hj-qYC" id="x1t-sa-LIZ"/>
                         <outlet property="streamsTableView" destination="1Y3-qw-ie0" id="1v8-4I-hpG"/>
                     </connections>
                 </tableViewController>
@@ -1669,7 +1634,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="161"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Streams" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Qr-gU-n0H">
-                                        <rect key="frame" x="12" y="66" width="96" height="29"/>
+                                        <rect key="frame" x="12" y="37" width="96" height="29"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -1688,15 +1653,27 @@
                                         </collectionViewFlowLayout>
                                         <cells/>
                                     </collectionView>
+                                    <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" translatesAutoresizingMaskIntoConstraints="NO" id="wXh-Dt-doQ">
+                                        <rect key="frame" x="0.0" y="67" width="375" height="44"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="BZy-C8-JzH" id="21H-gE-CRc"/>
+                                        </connections>
+                                    </searchBar>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="ee8-OM-8Pu" firstAttribute="top" secondItem="wXh-Dt-doQ" secondAttribute="bottom" id="5ZJ-Cw-OFz"/>
                                     <constraint firstItem="ee8-OM-8Pu" firstAttribute="leading" secondItem="gso-gl-GQS" secondAttribute="leading" id="A9z-Fe-EoR"/>
                                     <constraint firstAttribute="height" constant="161" id="Jtx-F0-cUY"/>
                                     <constraint firstItem="2Qr-gU-n0H" firstAttribute="leading" secondItem="gso-gl-GQS" secondAttribute="leading" constant="12" id="OsC-BA-FYk"/>
                                     <constraint firstAttribute="bottom" secondItem="ee8-OM-8Pu" secondAttribute="bottom" id="OwU-YE-o8e"/>
                                     <constraint firstAttribute="trailing" secondItem="ee8-OM-8Pu" secondAttribute="trailing" id="UjE-5N-T8J"/>
-                                    <constraint firstAttribute="bottom" secondItem="2Qr-gU-n0H" secondAttribute="bottom" constant="66" id="z8K-0p-WEk"/>
+                                    <constraint firstAttribute="trailing" secondItem="wXh-Dt-doQ" secondAttribute="trailing" id="mt6-Ox-zTJ"/>
+                                    <constraint firstItem="wXh-Dt-doQ" firstAttribute="leading" secondItem="gso-gl-GQS" secondAttribute="leading" id="rQd-GV-hUo"/>
+                                    <constraint firstAttribute="bottom" secondItem="2Qr-gU-n0H" secondAttribute="bottom" constant="95" id="z8K-0p-WEk"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="startColor">
@@ -1733,6 +1710,7 @@
                     <connections>
                         <outlet property="buttonBarView" destination="ee8-OM-8Pu" id="fxu-SE-byx"/>
                         <outlet property="containerView" destination="SPb-GA-L82" id="1bg-Hs-zw4"/>
+                        <outlet property="searchBar" destination="wXh-Dt-doQ" id="tHB-5d-0qa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Yn-fG-xVD" userLabel="First Responder" sceneMemberID="firstResponder"/>

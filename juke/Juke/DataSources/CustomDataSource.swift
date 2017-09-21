@@ -106,7 +106,7 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
         filteredCollection = collection.filter({ (collectionItem) -> Bool in
             return self.shouldInclude(item: collectionItem)
         })
-
+        //print("called trigger with eventname", reloadEventName)
         NotificationCenter.default.post(name: Notification.Name(reloadEventName), object: nil)
     }
     
@@ -157,6 +157,7 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     }
     
     public func searchBy(query: String) {
+        print("called search in Custom data source****************")
         self.query = query
         triggerTableViewRefresh()
     }

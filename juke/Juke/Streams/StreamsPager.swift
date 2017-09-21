@@ -6,10 +6,16 @@
 //  Copyright © 2017 csmith. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import XLPagerTabStrip
 
-class StreamsPager: ButtonBarPagerTabStripViewController {
+class StreamsPager: ButtonBarPagerTabStripViewController, UISearchBarDelegate {
+    
+    @IBOutlet var searchBar: UISearchBar!
+    let allStreamsSource = StreamsDataSource()
+    let starredStreamsSource = StarredStreamsDataSource()
+    var streamsSource: CustomDataSource?
+    var notificationName: String?
     
     let purpleInspireColor = UIColor(red:0.13, green:0.03, blue:0.25, alpha:1.0)
     
@@ -27,17 +33,31 @@ class StreamsPager: ButtonBarPagerTabStripViewController {
         settings.style.buttonBarRightContentInset = 0
         changeCurrentIndexProgressive = { [weak self] (oldCell: ButtonBarViewCell?, newCell: ButtonBarViewCell?, progressPercentage: CGFloat, changeCurrentIndex: Bool, animated: Bool) -> Void in
             guard changeCurrentIndex == true else { return }
-            //oldCell?.label.textColor = .black
-            //newCell?.label.textColor = self?.purpleInspireColor
+            //print("NEW LABELLLLLLLLLLLLLLLLLL", newCell?.label.text)
+            if newCell?.label.text == "All" {
+                //set who receives notification
+                self?.notificationName = "allStreamsSearchNotification"
+                
+                //self?.streamsSource = self?.allStreamsSource as? CustomDataSource
+                //var children = self?.childViewControllers
+                
+                //self?.searchBar.text = ""
+                
+                //self?.streamsSource = StreamsTableViewController().streams
+                
+                //print("changed data source to all", children?[0])
+            } else {
+                //set who receives notification
+                self?.notificationName = "starredStreamsSearchNotification"
+                
+                //var children = self?.childViewControllers
+                //self?.searchBar.text = ""
+                //self?.streamsSource = self?.starredStreamsSource as? CustomDataSource
+                //print("changed data source to starred", children?[1])
+            }
         }
+        NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
         
-//        settings.style.selectedBarBackgroundColor = UIColor.clear
-//        settings.style.buttonBarItemBackgroundColor = UIColor.clear
-//        changeCurrentIndexProgressive = { [weak self] (oldCell: ButtonBarViewCell?, newCell: ButtonBarViewCell?, progressPercentage: CGFloat, changeCurrentIndex: Bool, animated: Bool) -> Void in
-//            guard changeCurrentIndex == true else { return }
-//            //oldCell?.label.textColor = .black
-//            //newCell?.label.textColor = self?.purpleInspireColor
-//        }
         super.viewDidLoad()
     }
     
@@ -46,6 +66,40 @@ class StreamsPager: ButtonBarPagerTabStripViewController {
         let child_2 = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "allStreams")
         return [child_1, child_2]
     }
+    
+    func hideKeyboard() {
+        self.view.endEditing(true)
+        searchBar.setShowsCancelButton(false, animated: true)
+    }
+    
+    private func execSearchQuery() {
+        //print("Search bar text is*************", searchBar.text)
+        if let query = searchBar.text {
+            print("found query, calling search")
+            //self.streamsSource!.searchBy(query: query)
+            NotificationCenter.default.post(name: Notification.Name(notificationName!), object: nil, userInfo: ["query" : query])
+            //self.reloadPagerTabStripView()
+        }
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print("called search bar did change")
+        execSearchQuery()
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        execSearchQuery()
+        hideKeyboard()
+    }
+    
+    
+    
+    
     
 }
 

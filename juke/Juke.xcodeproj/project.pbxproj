@@ -52,8 +52,6 @@
 		F26A65321EB194F100ADB14E /* SpotifyMetadata.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26A652F1EB194F100ADB14E /* SpotifyMetadata.framework */; };
 		F2B98C051F71B6A400BDECEC /* StarredStreamsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B98C041F71B6A400BDECEC /* StarredStreamsDataSource.swift */; };
 		F2B98C121F724C1700BDECEC /* StreamsPager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B98C111F724C1700BDECEC /* StreamsPager.swift */; };
-		F2DB0B331EA1145A00A13E30 /* JukeSearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DB0B321EA1145A00A13E30 /* JukeSearchTableViewController.swift */; };
-
 		F2DB0B371EA14BA200A13E30 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DB0B361EA14BA200A13E30 /* SearchCell.swift */; };
 		F2E10C131F64EFE900E6723F /* UsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E10C121F64EFE900E6723F /* UsersTableViewController.swift */; };
 		F2E815581E90BBBC00404DDF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E815571E90BBBC00404DDF /* LoginViewController.swift */; };
@@ -112,8 +110,6 @@
 		F2A24EE71F57879400E0FE2F /* Juke.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Juke.entitlements; sourceTree = "<group>"; };
 		F2B98C041F71B6A400BDECEC /* StarredStreamsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarredStreamsDataSource.swift; sourceTree = "<group>"; };
 		F2B98C111F724C1700BDECEC /* StreamsPager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamsPager.swift; sourceTree = "<group>"; };
-		F2DB0B321EA1145A00A13E30 /* JukeSearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JukeSearchTableViewController.swift; sourceTree = "<group>"; };
-
 		F2DB0B361EA14BA200A13E30 /* SearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		F2E10C121F64EFE900E6723F /* UsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersTableViewController.swift; sourceTree = "<group>"; };
 		F2E815571E90BBBC00404DDF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -348,7 +344,7 @@
 				TargetAttributes = {
 					4B3A34C81E58120F00C314A0 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = UL2WBS3TV4;
+						DevelopmentTeam = 2746PGXGF5;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -648,7 +644,7 @@
 				CODE_SIGN_ENTITLEMENTS = Juke/Static/Juke.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = UL2WBS3TV4;
+				DEVELOPMENT_TEAM = 2746PGXGF5;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -661,7 +657,7 @@
 					"-ObjC",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.csmith95.juke;
+				PRODUCT_BUNDLE_IDENTIFIER = jukedev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -680,7 +676,7 @@
 				CODE_SIGN_ENTITLEMENTS = Juke/Static/Juke.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = UL2WBS3TV4;
+				DEVELOPMENT_TEAM = 2746PGXGF5;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -693,7 +689,7 @@
 					"-ObjC",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.csmith95.juke;
+				PRODUCT_BUNDLE_IDENTIFIER = jukedev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";

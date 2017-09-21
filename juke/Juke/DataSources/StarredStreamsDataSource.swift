@@ -95,18 +95,18 @@ class StarredStreamsDataSource: CustomDataSource {
     
     func streamHasStarredUser(item: CollectionItem) -> Bool {
         if (Current.isStarred(user: item.stream.host)) {
-            print("host is in, returning true")
+            //print("host is in, returning true")
             return true
         }
         
         for user in item.stream.members {
-            print("host was not in it... checking users")
+            //print("host was not in it... checking users")
             if (Current.isStarred(user: user)) {
-                print("found user returning true")
+                //print("found user returning true")
                 return true
             }
         }
-        print("found no one, returning false")
+        //print("found no one, returning false")
         return false
     }
     
