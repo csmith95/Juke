@@ -23,5 +23,6 @@ target 'Juke' do
     pod 'XLActionController'
     pod 'Fabric'
     pod 'Crashlytics'
+    pod 'XLPagerTabStrip'
 
 end

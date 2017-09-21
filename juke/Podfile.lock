@@ -77,6 +77,7 @@ PODS:
   - XLActionController (3.0.1):
     - XLActionController/Core (= 3.0.1)
   - XLActionController/Core (3.0.1)
+  - XLPagerTabStrip (7.0.0)
 
 DEPENDENCIES:
   - Alamofire (~> 4.4)
@@ -96,6 +97,7 @@ DEPENDENCIES:
   - Unbox
   - Whisper
   - XLActionController
+  - XLPagerTabStrip
 
 EXTERNAL SOURCES:
   ChameleonFramework:
@@ -131,7 +133,9 @@ SPEC CHECKSUMS:
   Unbox: c8b2ab69d3337597b4a3f47a0538807dc12db670
   Whisper: 051f25e704bf8992641ffd28b20d5682ddc5f5d3
   XLActionController: 57fe0ce1642e2eed971b188b490762345fdbf963
+  XLPagerTabStrip: 9be80a66c6b7d60306b2c0a6004965016d68f813
 
-PODFILE CHECKSUM: 87d67cac8d4581d057aecb55daad18ef4eeb83a6
+PODFILE CHECKSUM: f93ee5fff04894773e31d2e98e818548a782f2e1
+
 
 COCOAPODS: 1.2.0

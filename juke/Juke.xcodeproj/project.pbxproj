@@ -45,11 +45,15 @@
 		4BCFA0331F71B71C00E49516 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCFA0321F71B71C00E49516 /* SessionManager.swift */; };
 		4BDCEBA81E709F7F00D9D3EE /* JamsPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */; };
 		4BDCEC061E720D0B00D9D3EE /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEC051E720D0B00D9D3EE /* Constants.swift */; };
+		F2242EB61F730416000BE18A /* StarredStreamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2242EB51F730416000BE18A /* StarredStreamsViewController.swift */; };
 		F25133C01F6E7C8F002745C7 /* StarredTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25133BF1F6E7C8F002745C7 /* StarredTableViewController.swift */; };
 		F26A65301EB194F100ADB14E /* SpotifyAudioPlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26A652D1EB194F100ADB14E /* SpotifyAudioPlayback.framework */; };
 		F26A65311EB194F100ADB14E /* SpotifyAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26A652E1EB194F100ADB14E /* SpotifyAuthentication.framework */; };
 		F26A65321EB194F100ADB14E /* SpotifyMetadata.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26A652F1EB194F100ADB14E /* SpotifyMetadata.framework */; };
 		F2B98C051F71B6A400BDECEC /* StarredStreamsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B98C041F71B6A400BDECEC /* StarredStreamsDataSource.swift */; };
+		F2B98C121F724C1700BDECEC /* StreamsPager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B98C111F724C1700BDECEC /* StreamsPager.swift */; };
+		F2DB0B331EA1145A00A13E30 /* JukeSearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DB0B321EA1145A00A13E30 /* JukeSearchTableViewController.swift */; };
+
 		F2DB0B371EA14BA200A13E30 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DB0B361EA14BA200A13E30 /* SearchCell.swift */; };
 		F2E10C131F64EFE900E6723F /* UsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E10C121F64EFE900E6723F /* UsersTableViewController.swift */; };
 		F2E815581E90BBBC00404DDF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E815571E90BBBC00404DDF /* LoginViewController.swift */; };
@@ -100,12 +104,16 @@
 		72A8139088E7F63BECA297C9 /* Pods-Juke.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke.release.xcconfig"; path = "Pods/Target Support Files/Pods-Juke/Pods-Juke.release.xcconfig"; sourceTree = "<group>"; };
 		D9D54D33C710A946C6515520 /* Pods_Juke.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Juke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECDA8CAF8FCA9C3B7EFCAFF4 /* Pods-Juke.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Juke/Pods-Juke.debug.xcconfig"; sourceTree = "<group>"; };
+		F2242EB51F730416000BE18A /* StarredStreamsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarredStreamsViewController.swift; sourceTree = "<group>"; };
 		F25133BF1F6E7C8F002745C7 /* StarredTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarredTableViewController.swift; sourceTree = "<group>"; };
 		F26A652D1EB194F100ADB14E /* SpotifyAudioPlayback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAudioPlayback.framework; sourceTree = "<group>"; };
 		F26A652E1EB194F100ADB14E /* SpotifyAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAuthentication.framework; sourceTree = "<group>"; };
 		F26A652F1EB194F100ADB14E /* SpotifyMetadata.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyMetadata.framework; sourceTree = "<group>"; };
 		F2A24EE71F57879400E0FE2F /* Juke.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Juke.entitlements; sourceTree = "<group>"; };
 		F2B98C041F71B6A400BDECEC /* StarredStreamsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarredStreamsDataSource.swift; sourceTree = "<group>"; };
+		F2B98C111F724C1700BDECEC /* StreamsPager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamsPager.swift; sourceTree = "<group>"; };
+		F2DB0B321EA1145A00A13E30 /* JukeSearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JukeSearchTableViewController.swift; sourceTree = "<group>"; };
+
 		F2DB0B361EA14BA200A13E30 /* SearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		F2E10C121F64EFE900E6723F /* UsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersTableViewController.swift; sourceTree = "<group>"; };
 		F2E815571E90BBBC00404DDF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -162,6 +170,8 @@
 			children = (
 				4B13DE4B1E8AFA970060D29A /* StreamCell.swift */,
 				4B13DE4D1E8AFB850060D29A /* StreamsTableViewController.swift */,
+				F2B98C111F724C1700BDECEC /* StreamsPager.swift */,
+				F2242EB51F730416000BE18A /* StarredStreamsViewController.swift */,
 			);
 			path = Streams;
 			sourceTree = "<group>";
@@ -503,12 +513,14 @@
 				4B48FDDD1F5DCCE400E87507 /* MenuActionController.swift in Sources */,
 				4B7C1EA11F484DF00064F1C3 /* FirebaseAPI.swift in Sources */,
 				4B05323B1F68528900ADA988 /* MyLibraryCell.swift in Sources */,
+				F2242EB61F730416000BE18A /* StarredStreamsViewController.swift in Sources */,
 				4B62A2D81F69D05B00864EFF /* MyStreamRootViewController.swift in Sources */,
 				F2E815581E90BBBC00404DDF /* LoginViewController.swift in Sources */,
 				4BCFA0331F71B71C00E49516 /* SessionManager.swift in Sources */,
 				4B04E4591F55682C001605E2 /* CustomDataSource.swift in Sources */,
 				4B48FDE71F6108E700E87507 /* GradientView.swift in Sources */,
 				F2B98C051F71B6A400BDECEC /* StarredStreamsDataSource.swift in Sources */,
+				F2B98C121F724C1700BDECEC /* StreamsPager.swift in Sources */,
 				4B3A34CD1E58120F00C314A0 /* AppDelegate.swift in Sources */,
 				4BDCEBA81E709F7F00D9D3EE /* JamsPlayer.swift in Sources */,
 				F2DB0B371EA14BA200A13E30 /* SearchCell.swift in Sources */,
