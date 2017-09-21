@@ -42,6 +42,12 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
         }
     }
     
+    var cellName: String {
+        get {
+            fatalError("Subclass should override this property")
+        }
+    }
+    
     init(path: String) {
         super.init()
         
@@ -84,7 +90,11 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return populateCell(tableView: tableView, indexPath: indexPath, item: filteredCollection[indexPath.row])
+        return tableView.dequeueReusableCell(withIdentifier: cellName, for: indexPath)
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        populateCell(cell: cell, item: filteredCollection[indexPath.row])
     }
     
     @available(iOS 2.0, *)
@@ -170,7 +180,8 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
         fatalError("This method must be overriden")
     }
     
-    func populateCell(tableView: UITableView, indexPath: IndexPath, item: CollectionItem) -> UITableViewCell {
+    func populateCell(cell: UITableViewCell, item: CollectionItem) {
         fatalError("This method must be overriden")
     }
+
 }

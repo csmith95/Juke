@@ -16,6 +16,12 @@ class StarredUsersDataSource: CustomDataSource {
         }
     }
     
+    override var cellName: String {
+        get {
+            return "StarredUserCell"
+        }
+    }
+    
     init() {
         super.init(path: "starredTable/\(Current.user!.spotifyID)")
     }
@@ -36,10 +42,9 @@ class StarredUsersDataSource: CustomDataSource {
         return item.user.username.lowercased().contains(query.lowercased())
     }
     
-    override func populateCell(tableView: UITableView, indexPath: IndexPath, item: CollectionItem) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "StarredUserCell", for: indexPath) as! StarredUserCell
-        cell.populateCell(member: self.filteredCollection[indexPath.row].user)
-        return cell
+    override func populateCell(cell: UITableViewCell, item: CollectionItem) {
+        let cell = cell as! StarredUserCell
+        cell.populateCell(member: item.user)
     }
     
     override func handleChildAdded(collectionItem: CollectionItem) {

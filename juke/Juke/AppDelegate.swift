@@ -62,6 +62,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // a global setting for HUD pop-ups
         PKHUD.sharedHUD.userInteractionOnUnderlyingViewsEnabled = true
         
+        // for background refreshing spotify token
+        UIApplication.shared.setMinimumBackgroundFetchInterval(Constants.kSpotifyTokenRefreshIntervalSeconds)
+        
+        FirebaseAPI.addPresenceListener()   // add presence listener because Current.stream might not be reassigned during user session, which is what I rely on to trigger listener set-up
+        
         return true
     }
     
@@ -111,14 +116,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     print("AUTHENTICATION ERROR: \(err.localizedDescription)")
                     return
                 }
+
                 if let session = session {
                     // archive spotify session
-                    let userDefaults = UserDefaults.standard
-                    let sessionData = NSKeyedArchiver.archivedData(withRootObject: session)
-                    userDefaults.set(sessionData, forKey: Constants.kSpotifySessionKey)
-                    Current.accessToken = session.accessToken
-                    // notify spotify login controller to dismiss webview and initiate loginSegue
-                    NotificationCenter.default.post(name: Notification.Name("loginSuccessful"), object: nil)
+                    SessionManager.storeSession(session: session)
                 }
             })
         } else {
@@ -127,6 +128,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         
         return true
+    }
+    
+    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        print("in background refresh")
+        SessionManager.refreshSession() { success in
+            if success {
+                completionHandler(.newData)
+            } else {
+                completionHandler(.failed)
+            }
+        }
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
@@ -141,12 +153,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-        FirebaseAPI.addPresenceListener()   // add presence listener because Current.stream might not be reassigned during user session, which is what I rely on to trigger listener set-up
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        
+        SessionManager.refreshSession { _ in
+            // do nothing in this callback
+        }
+
     }
     
     func applicationWillTerminate(_ application: UIApplication) {

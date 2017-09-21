@@ -19,5 +19,10 @@ public class Constants {
     static let kContainsSongPath = "me/tracks/contains?ids="
     static let kSendNotificationsURL = "https://us-central1-juke-9fbd6.cloudfunctions.net/sendNotification"
     static let kSpotifySessionKey = "SpotifySession"    // key session is stored as in user defaults
+    static let kClientID = "77d4489425fe464483f0934f99847c8b"
+    static let kCallbackURL = "juke1231://callback"
+    static let kTokenSwapURL = "https://juketokenrefresh.herokuapp.com/swap"
+    static let kTokenRefreshURL = "https://juketokenrefresh.herokuapp.com/refresh"
+    static let kSpotifyTokenRefreshIntervalSeconds: TimeInterval = 40 * 60 // every 40 minutes
     
 }

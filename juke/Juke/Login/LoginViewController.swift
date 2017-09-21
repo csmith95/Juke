@@ -15,41 +15,31 @@ import Crashlytics
 class LoginViewController: UIViewController {
 
     @IBOutlet weak var loginButton: UIButton!
-    let loginController: SpotifyLoginController = SpotifyLoginController()
+    let spotifyLoginController: SpotifyLoginController = SpotifyLoginController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loginController.setSpotifyAppCredentials()
-        
-        //check if session is available everytime you launch app
-        let userDefaults = UserDefaults.standard
-        if let sessionObj = userDefaults.object(forKey: Constants.kSpotifySessionKey) { // session available
-            let sessionDataObj = sessionObj as! Data
-            let session = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
-            if !session.isValid() {
-                // session is not valid so renew it
-                SPTAuth.defaultInstance().renewSession(session, callback: { (error, renewedSession) in
-                    if let session = renewedSession {
-                        Current.accessToken = session.accessToken
-                        self.fetchSpotifyUser()
-                        SPTAuth.defaultInstance().session = session
-                        let sessionData = NSKeyedArchiver.archivedData(withRootObject: session)
-                        userDefaults.set(sessionData, forKey: Constants.kSpotifySessionKey)
-                        userDefaults.synchronize()
-                    }
-                })
+        spotifyLoginController.setSpotifyAppCredentials()  // set credentials before trying to fetch session
+        if let session = SessionManager.fetchSession() {
+            if session.isValid() {
+                self.fetchSpotifyUser()
             } else {
-                Current.accessToken = session.accessToken
-                fetchSpotifyUser()
+                SessionManager.refreshSession() { success in
+                    if success {
+                        self.fetchSpotifyUser()
+                    } else {
+                        print("uh oh. refreshing session failed")
+                    }
+                }
             }
         } else {
-            loginButton.isHidden = false
+            self.loginButton.isHidden = false
         }
     }
 
     @IBAction func loginWithSpotify(_ sender: Any) {
-        self.present(loginController, animated: true) {
-            self.loginController.login() {
+        self.present(spotifyLoginController, animated: true) {
+            self.spotifyLoginController.login() {
                 self.loginButton.isHidden = true
                 self.fetchSpotifyUser()
             }
@@ -64,7 +54,7 @@ class LoginViewController: UIViewController {
     
     func fetchSpotifyUser() {
         // first retrieve user object from spotify server using access token
-        let accessToken = Current.accessToken
+        let accessToken = SessionManager.accessToken
         let headers: HTTPHeaders = ["Authorization": "Bearer " + accessToken]
         let url = Constants.kSpotifyBaseURL + Constants.kCurrentUserPath
         print("fetching spotify user")
@@ -99,6 +89,10 @@ class LoginViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     // set status bar text to white

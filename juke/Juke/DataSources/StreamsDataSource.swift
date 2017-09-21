@@ -17,6 +17,12 @@ class StreamsDataSource: CustomDataSource {
         }
     }
     
+    override var cellName: String {
+        get {
+            return "StreamCell"
+        }
+    }
+    
     init() {
         super.init(path: "streams")
     }
@@ -65,9 +71,8 @@ class StreamsDataSource: CustomDataSource {
         return item.stream.host.username.lowercased().contains(query.lowercased())
     }
     
-    override func populateCell(tableView: UITableView, indexPath: IndexPath, item: CollectionItem) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell", for: indexPath) as! StreamCell
-        cell.populateCell(stream: self.filteredCollection[indexPath.row].stream)
-        return cell
+    override func populateCell(cell: UITableViewCell, item: CollectionItem) {
+        let cell = cell as! StreamCell
+        cell.populateCell(stream: item.stream)
     }
 }
