@@ -29,8 +29,6 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
         streamsTableView.dataSource = streamsDataSource
         streamsTableView.delegate = streamsDataSource
         
-
-        
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStreams), name: Notification.Name("reloadStreams"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStreams), name: Notification.Name("reloadStarredStreams"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.newStreamJoined), name: Notification.Name("newStreamJoined"), object: nil)
@@ -42,49 +40,12 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
         return IndicatorInfo(title: "All")
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        //execSearchQuery()
-    }
-    
-//    func hideKeyboard() {
-//        self.view.endEditing(true)
-//        searchBar.setShowsCancelButton(false, animated: true)
-//    }
-//    
     private func execSearchQuery(notification: Notification) {
         guard let userInfo = notification.userInfo else { return }
         if let source = tableView.dataSource as? CustomDataSource {
             source.searchBy(query: userInfo["query"] as! String)
         }
     }
-//
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        execSearchQuery()
-//    }
-    
-//    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-//        // print what selectedScope
-//        print("**SCOPE CHANGED; selectedScope**", selectedScope)
-//        if(searchBar.selectedScopeButtonIndex == 0) {
-//            streamsTableView.dataSource = starredStreamsDataSource
-//            streamsTableView.delegate = starredStreamsDataSource
-//            reloadStreams()
-//        } else {
-//            streamsTableView.dataSource = streamsDataSource
-//            streamsTableView.delegate = streamsDataSource
-//            reloadStreams()
-//        }
-//    }
-    
-//    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-//        searchBar.setShowsCancelButton(true, animated: true)
-//    }
-//    
-//    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-//        searchBar.text = ""
-//        execSearchQuery()
-//        hideKeyboard()
-//    }
     
     // triggered from data source class
     func reloadStreams() {
