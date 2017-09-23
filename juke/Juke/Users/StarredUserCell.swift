@@ -21,7 +21,7 @@ class StarredUserCell: UITableViewCell {
     private var member: Models.FirebaseUser!
 
     @IBAction func inviteToStreamPressed(_ sender: Any) {
-        inviteToStreamButton.isSelected = true
+        //inviteToStreamButton.isSelected = true
         FirebaseAPI.sendNotification(receiver: self.member)
         HUD.flash(.labeledSuccess(title: nil, subtitle: "Invited \(self.member.username) to your stream"), delay: 1.00)
         //self.inviteToStreamButton.isUserInteractionEnabled = false
