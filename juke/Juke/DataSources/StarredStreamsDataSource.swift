@@ -68,12 +68,6 @@ class StarredStreamsDataSource: CustomDataSource {
             if (item.stream.streamID == currentStream.streamID) { return false }
         }
         
-        // check if stream host is starred
-        //if (!Current.isStarred(user: item.stream.host)) { return false } //|| streamHasStarredUser(item: item)
-        
-        // check if stream member has someone in it
-        //if (!streamHasStarredUser(item: item)) { return false }
-        
         if (query.isEmpty) {
             return streamHasStarredUser(item: item)
             //print("query is empty")
@@ -81,16 +75,6 @@ class StarredStreamsDataSource: CustomDataSource {
         } else {
             return item.stream.host.username.lowercased().contains(query.lowercased())
         }
-        
-        //return true
-        
-        
-        // check if anything is in search query
-//        if !included || query.isEmpty {
-//            return included
-//        }
-        
-        
     }
     
     func streamHasStarredUser(item: CollectionItem) -> Bool {

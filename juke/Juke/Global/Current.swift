@@ -49,7 +49,6 @@ class Current {
     
     public static func addStarredUser(user: Models.FirebaseUser) {
         starredUsers.insert(user)
-        print("*****STARRED USERS*****", starredUsers)
     }
     
     public static func removeStarredUser(user: Models.FirebaseUser) {

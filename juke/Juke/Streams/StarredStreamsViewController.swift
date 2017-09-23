@@ -52,6 +52,7 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
         DispatchQueue.main.async {
             objc_sync_enter(self.tableView.dataSource)
             self.tableView.reloadData()
+            self.streamsTableView.reloadData()
             objc_sync_exit(self.tableView.dataSource)
         }
     }

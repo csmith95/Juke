@@ -18,14 +18,17 @@ class StreamCell: UITableViewCell {
     @IBOutlet weak var streamName: UILabel!
     @IBOutlet weak var hostLabel: UILabel!
     @IBOutlet weak var numMembers: UILabel!
+    @IBOutlet weak var member1ImageView: UIImageView!
+    @IBOutlet weak var member2ImageView: UIImageView!
+    @IBOutlet weak var member3ImageView: UIImageView!
+    @IBOutlet weak var member4ImageView: UIImageView!
+    
+    
 //    @IBOutlet var moreMembersLabel: UILabel!
-//    @IBOutlet var member4ImageView: UIImageView!
-//    @IBOutlet var member3ImageView: UIImageView!
-//    @IBOutlet var member2ImageView: UIImageView!
-//    @IBOutlet var member1ImageView: UIImageView!
+
 //    @IBOutlet var artist: UILabel!
 //    @IBOutlet var song: UILabel!
-//    private var imageViewDict:[Int:UIImageView] = [:]
+    private var imageViewDict:[Int:UIImageView] = [:]
     private var indicator:ESTMusicIndicatorView!
     private let defaultIcon = CircleFilter().filter(UIImage(named: "juke_icon")!)
     private var coverArtFilter: ImageFilter!
@@ -39,10 +42,10 @@ class StreamCell: UITableViewCell {
 //            radius: 20.0
 //        )
 //        defaultCoverArtImage = coverArtFilter.filter(#imageLiteral(resourceName: "jukedef"))
-//        imageViewDict[0] = member1ImageView
-//        imageViewDict[1] = member2ImageView
-//        imageViewDict[2] = member3ImageView
-//        imageViewDict[3] = member4ImageView
+        imageViewDict[0] = member1ImageView
+        imageViewDict[1] = member2ImageView
+        imageViewDict[2] = member3ImageView
+        imageViewDict[3] = member4ImageView
         indicator = ESTMusicIndicatorView.init(frame: musicIndicatorView.bounds)
         indicator.tintColor = .green
         indicator.sizeToFit()
@@ -53,7 +56,7 @@ class StreamCell: UITableViewCell {
         loadCellImages(stream: stream)
         self.streamName.text = stream.title
         self.hostLabel.text = "Hosted by \(stream.host.username)"
-        self.hostStarIcon.isHidden = false //!Current.isStarred(user: stream.host)
+        self.hostStarIcon.isHidden = !Current.isStarred(user: stream.host)
         if let song = stream.song {
             self.blurredBgImage.af_setImage(withURL: URL(string: song.coverArtURL)!)
         } else {
@@ -67,9 +70,13 @@ class StreamCell: UITableViewCell {
     // set user icons
     private func loadUserIcon(url: String?, imageView: UIImageView) {
         if let unwrappedUrl = url {
+            imageView.isHidden = false
             imageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultIcon)
+            
         } else {
+            imageView.isHidden = false
             imageView.image = defaultIcon
+            
         }
     }
     
@@ -77,16 +84,16 @@ class StreamCell: UITableViewCell {
         clearMemberIcons()  // start fresh
         // load owner icon
 //        loadUserIcon(url: stream.host.imageURL, imageView: self.ownerIcon)
-//        let numMemberIcons = stream.members.count
-//        if numMemberIcons > 0 {
-//            let numMemberIconsToDisplay = min(numMemberIcons, self.imageViewDict.count)
-//            for i in 0..<numMemberIconsToDisplay {
-//                loadUserIcon(url: stream.members[i].imageURL, imageView: self.imageViewDict[i]!)
-//            }
-//        } else {
-//            self.clearMemberIcons()
-//        }
-//        // if there are more members than we're displaying, show a label
+        let numMemberIcons = stream.members.count
+        if numMemberIcons > 0 {
+            let numMemberIconsToDisplay = min(numMemberIcons, self.imageViewDict.count)
+            for i in 0..<numMemberIconsToDisplay {
+                loadUserIcon(url: stream.members[i].imageURL, imageView: self.imageViewDict[i]!)
+            }
+        } else {
+            self.clearMemberIcons()
+        }
+        // if there are more members than we're displaying, show a label
 //        let remainder = stream.members.count - 5;
 //        if remainder > 0 {
 //            self.moreMembersLabel.text = "+ \(remainder) more member" + ((remainder > 1) ? "s" : "")
@@ -97,9 +104,10 @@ class StreamCell: UITableViewCell {
     }
     
     public func clearMemberIcons() {
-//        for (_, imageView) in imageViewDict {
-//            imageView.image = nil
-//        }
+        for (_, imageView) in imageViewDict {
+            imageView.image = nil
+            imageView.isHidden = true
+        }
 //        moreMembersLabel.text = ""
     }
 
