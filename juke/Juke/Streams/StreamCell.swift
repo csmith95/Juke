@@ -88,7 +88,9 @@ class StreamCell: UITableViewCell {
         if numMemberIcons > 0 {
             let numMemberIconsToDisplay = min(numMemberIcons, self.imageViewDict.count)
             for i in 0..<numMemberIconsToDisplay {
-                loadUserIcon(url: stream.members[i].imageURL, imageView: self.imageViewDict[i]!)
+                if Current.isStarred(user: stream.members[i]) {
+                    loadUserIcon(url: stream.members[i].imageURL, imageView: self.imageViewDict[i]!)
+                }
             }
         } else {
             self.clearMemberIcons()
