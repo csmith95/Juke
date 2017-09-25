@@ -13,6 +13,7 @@ public class Constants {
     static let kSpotifyBaseURL = "https://api.spotify.com/v1/"
     static let kSpotifySearchURL = Constants.kSpotifyBaseURL + "search/"
     static let kSpotifyTrackDataURL = Constants.kSpotifyBaseURL + "tracks/"
+    static let kSpotifyMyPlaylistsURL = Constants.kSpotifyBaseURL + "me/playlists"
     static let kCurrentUserPath = "me"
     static let kAddSongByIDPath = "me/tracks?ids="
     static let kDeleteSongByIDPath = "me/tracks?ids="

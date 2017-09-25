@@ -12,12 +12,7 @@ import XLPagerTabStrip
 class StreamsPager: ButtonBarPagerTabStripViewController, UISearchBarDelegate {
     
     @IBOutlet var searchBar: UISearchBar!
-    let allStreamsSource = StreamsDataSource()
-    let starredStreamsSource = StarredStreamsDataSource()
-    var streamsSource: CustomDataSource?
     var notificationName: String?
-    
-    let purpleInspireColor = UIColor(red:0.13, green:0.03, blue:0.25, alpha:1.0)
     
     override func viewDidLoad() {
         // change selected bar color
@@ -33,21 +28,14 @@ class StreamsPager: ButtonBarPagerTabStripViewController, UISearchBarDelegate {
         settings.style.buttonBarRightContentInset = 0
         changeCurrentIndexProgressive = { [weak self] (oldCell: ButtonBarViewCell?, newCell: ButtonBarViewCell?, progressPercentage: CGFloat, changeCurrentIndex: Bool, animated: Bool) -> Void in
             guard changeCurrentIndex == true else { return }
-            //print("NEW LABELLLLLLLLLLLLLLLLLL", newCell?.label.text)
+            //set who receives notification
             if newCell?.label.text == "All" {
-                //set who receives notification
                 self?.notificationName = "allStreamsSearchNotification"
-                self?.searchBar.text = ""
-
-                self?.execSearchQuery()
-
             } else {
-                //set who receives notification
                 self?.notificationName = "starredStreamsSearchNotification"
-                self?.searchBar.text = ""
-                self?.execSearchQuery()
-
             }
+            self?.searchBar.text = ""
+            self?.execSearchQuery()
         }
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
         
@@ -67,7 +55,6 @@ class StreamsPager: ButtonBarPagerTabStripViewController, UISearchBarDelegate {
     
     private func execSearchQuery() {
         if let query = searchBar.text {
-
             NotificationCenter.default.post(name: Notification.Name(notificationName!), object: nil, userInfo: ["query" : query])
         }
     }
@@ -86,10 +73,4 @@ class StreamsPager: ButtonBarPagerTabStripViewController, UISearchBarDelegate {
         execSearchQuery()
         hideKeyboard()
     }
-    
-    
-    
-    
-    
 }
-

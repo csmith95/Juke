@@ -344,7 +344,7 @@
 				TargetAttributes = {
 					4B3A34C81E58120F00C314A0 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 2746PGXGF5;
+						DevelopmentTeam = UL2WBS3TV4;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -644,7 +644,7 @@
 				CODE_SIGN_ENTITLEMENTS = Juke/Static/Juke.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 2746PGXGF5;
+				DEVELOPMENT_TEAM = UL2WBS3TV4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -657,7 +657,7 @@
 					"-ObjC",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = jukedev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.csmith95.juke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -676,7 +676,7 @@
 				CODE_SIGN_ENTITLEMENTS = Juke/Static/Juke.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 2746PGXGF5;
+				DEVELOPMENT_TEAM = UL2WBS3TV4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -689,7 +689,7 @@
 					"-ObjC",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = jukedev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.csmith95.juke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
