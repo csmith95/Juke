@@ -25,12 +25,18 @@ class SearchCell: UITableViewCell {
         songLabel.text = song.songName
         
         // reset button
-        addButton.isSelected = false
-        addButton.isUserInteractionEnabled = true
+        if SongKeeper.addedSongs.contains(song.spotifyID) {
+            addButton.isSelected = true
+            addButton.isUserInteractionEnabled = false
+        } else {
+            addButton.isSelected = false
+            addButton.isUserInteractionEnabled = true
+        }
     }
     
     @IBAction func addButtonPressed(_ sender: Any) {
         handleAddButtonPressed()
+        SongKeeper.addedSongs.insert(self.song.spotifyID)
         addButton.isSelected = true
         addButton.isUserInteractionEnabled = false
     }

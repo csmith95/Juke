@@ -22,26 +22,13 @@ class StreamCell: UITableViewCell {
     @IBOutlet weak var member2ImageView: UIImageView!
     @IBOutlet weak var member3ImageView: UIImageView!
     @IBOutlet weak var member4ImageView: UIImageView!
-    
-    
-//    @IBOutlet var moreMembersLabel: UILabel!
-
-//    @IBOutlet var artist: UILabel!
-//    @IBOutlet var song: UILabel!
     private var imageViewDict:[Int:UIImageView] = [:]
     private var indicator:ESTMusicIndicatorView!
-    private let defaultIcon = CircleFilter().filter(UIImage(named: "juke_icon")!)
     private var coverArtFilter: ImageFilter!
     private var defaultCoverArtImage: UIImage!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-//        coverArtFilter = AspectScaledToFillSizeWithRoundedCornersFilter(
-//            size: coverArt.frame.size,
-//            radius: 20.0
-//        )
-//        defaultCoverArtImage = coverArtFilter.filter(#imageLiteral(resourceName: "jukedef"))
         imageViewDict[0] = member1ImageView
         imageViewDict[1] = member2ImageView
         imageViewDict[2] = member3ImageView
@@ -69,21 +56,15 @@ class StreamCell: UITableViewCell {
     
     // set user icons
     private func loadUserIcon(url: String?, imageView: UIImageView) {
-        if let unwrappedUrl = url {
+        imageView.isHidden = false
+        ImageCache.downloadUserImage(url: url, callback: { (image) in
             imageView.isHidden = false
-            imageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultIcon)
-            
-        } else {
-            imageView.isHidden = false
-            imageView.image = defaultIcon
-            
-        }
+            imageView.image = image
+        })
     }
     
     private func loadCellImages(stream: Models.FirebaseStream) {
         clearMemberIcons()  // start fresh
-        // load owner icon
-//        loadUserIcon(url: stream.host.imageURL, imageView: self.ownerIcon)
         let numMemberIcons = stream.members.count
         if numMemberIcons > 0 {
             let numMemberIconsToDisplay = min(numMemberIcons, self.imageViewDict.count)
@@ -95,14 +76,6 @@ class StreamCell: UITableViewCell {
         } else {
             self.clearMemberIcons()
         }
-        // if there are more members than we're displaying, show a label
-//        let remainder = stream.members.count - 5;
-//        if remainder > 0 {
-//            self.moreMembersLabel.text = "+ \(remainder) more member" + ((remainder > 1) ? "s" : "")
-//            self.moreMembersLabel.isHidden = false
-//        } else {
-//            self.moreMembersLabel.isHidden = true
-//        }
     }
     
     public func clearMemberIcons() {
@@ -110,7 +83,6 @@ class StreamCell: UITableViewCell {
             imageView.image = nil
             imageView.isHidden = true
         }
-//        moreMembersLabel.text = ""
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

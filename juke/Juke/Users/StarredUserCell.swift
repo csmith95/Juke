@@ -17,7 +17,6 @@ class StarredUserCell: UITableViewCell {
     @IBOutlet var usernameLabel: UILabel!
     @IBOutlet var userImageView: UIImageView!
     
-    private let defaultIcon = CircleFilter().filter(UIImage(named: "juke_icon")!)
     private var member: Models.FirebaseUser!
 
     @IBAction func inviteToStreamPressed(_ sender: Any) {
@@ -55,11 +54,9 @@ class StarredUserCell: UITableViewCell {
     }
     
     private func loadUserIcon(url: String?) {
-        if let unwrappedUrl = url {
-            userImageView.af_setImage(withURL: URL(string: unwrappedUrl)!, placeholderImage: defaultIcon)
-        } else {
-            userImageView.image = defaultIcon
-        }
+        ImageCache.downloadUserImage(url: url, callback: { (image) in
+            self.userImageView.image = image
+        })
     }
     
 

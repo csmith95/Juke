@@ -89,7 +89,7 @@ class Models {
         var song: FirebaseSong? = nil
         var host: FirebaseUser! = Current.user
         var members: [FirebaseUser] = []
-        var title: String
+        var title = ""
         
         // formatted to be written directly to the /streams/{streamID}/ path
         var firebaseDict: [String: Any] {
@@ -111,7 +111,6 @@ class Models {
         init?(dict: [String: Any?]) {
             guard let streamID = dict["streamID"] as? String else { return nil }
             guard let isPlaying = dict["isPlaying"] as? Bool else { return nil }
-//            guard let title = dict["title"] as? String else { return nil }
             let title = dict["title"] as? String ?? "Placeholder Title"
 
             self.streamID = streamID
@@ -149,10 +148,11 @@ class Models {
         }
         
         // called to generate new stream with solely host
-        init(title: String) {
+        init() {
             let streamID = ref.childByAutoId().key
             self.streamID = streamID
-            self.title = title
+            guard let user = Current.user else { return }
+            self.title = "\(user.username)'s Stream"
         }
     }
     

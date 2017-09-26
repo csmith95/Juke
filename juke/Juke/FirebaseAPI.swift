@@ -22,6 +22,7 @@ class FirebaseAPI {
         case TopSongChanged
         case SetProgress
         case PlayStatusChanged
+        case StreamTitleChanged
     }
     
     private static var observedPaths: [String] = []
@@ -42,6 +43,7 @@ class FirebaseAPI {
         addTopSongChangedListener()
         addSongPlayStatusListener()
         addStreamDeletedListener()
+        addStreamTitleChangedListener()
     }
     
     private static func addStreamDeletedListener() {
@@ -113,7 +115,7 @@ class FirebaseAPI {
             // display Whisper notification
             whisper(title: "\(member.username) joined your stream!" , backgroundColor: FlatPink())
             
-            // post event telling controller to resync
+            // post event telling controller to update UI
             NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.MemberJoined)
             
         }) { error in print(error.localizedDescription)}
@@ -138,7 +140,7 @@ class FirebaseAPI {
             // display Whisper notification
             whisper(title: "\(member.username) left your stream" , backgroundColor: FlatPink())
             
-            // post event telling controller to resync
+            // post event telling controller to update UI
             NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.MemberLeft)
             
         }) { error in print(error.localizedDescription) }
@@ -327,7 +329,7 @@ class FirebaseAPI {
     
     // creates and joins empty stream with user as host. leaves current stream if any
     public static func createNewStream(title: String, callback: @escaping ((Void) -> Void)) {
-        let newStream = Models.FirebaseStream(title: title)
+        let newStream = Models.FirebaseStream()
         
         // create stream in firebase
         ref.child("streams/\(newStream.streamID)").setValue(newStream.firebaseDict)
@@ -384,6 +386,7 @@ class FirebaseAPI {
     public static func loginUser(spotifyUser: Models.SpotifyUser, callback: @escaping ((_: Bool) -> Void)) {
         ref.child("users/\(spotifyUser.spotifyID)").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
+                print(snapshot.value)
                 if var userDict = snapshot.value as? [String: Any?] {
                     userDict["spotifyID"] = spotifyUser.spotifyID
                     Current.user = Models.FirebaseUser(dict: userDict)
@@ -407,6 +410,7 @@ class FirebaseAPI {
                 self.ref.child("users/\(spotifyUser.spotifyID)").setValue(newUserDict)
                 newUserDict["spotifyID"] = spotifyUser.spotifyID
                 Current.user = Models.FirebaseUser(dict: newUserDict)
+                print("** ", newUserDict)
             }
             
             // now that current user is set, try to fetch stream
@@ -438,6 +442,23 @@ class FirebaseAPI {
         } else {
             self.ref.child("/songs/\(stream.streamID)/\(song.key)/upvoters/\(user.spotifyID)").removeValue()
         }
+    }
+    
+    public static func addStreamTitleChangedListener() {
+        guard let stream = Current.stream else { return }
+        let path = "/streams/\(stream.streamID)/title"
+        ref.child(path).observe(.value, with:{ (snapshot) in
+            guard let _ = Current.stream else { return }
+            guard let title = snapshot.value as? String else { return }
+            Current.stream!.title = title
+            NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.StreamTitleChanged)
+        })
+        observedPaths.append("/streams/\(stream.streamID)/title")
+    }
+    
+    public static func setStreamName(name: String) {
+        guard let stream = Current.stream else { return }
+        self.ref.child("/streams/\(stream.streamID)/title").setValue(name)
     }
     
     public static func addToStarredTable(user: Models.FirebaseUser) {

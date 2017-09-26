@@ -28,9 +28,10 @@ class SpotifySearchTableViewController: UITableViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // reset UI
+        // reset
         searchBar.text = ""
         execSearch(keywords: "")
+        SongKeeper.addedSongs.removeAll()
     }
     
     // MARK: - Table view data source/delegate

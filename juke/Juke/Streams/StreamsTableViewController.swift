@@ -18,7 +18,6 @@ import XLPagerTabStrip
 
 class StreamsTableViewController: UITableViewController, UISearchBarDelegate, IndicatorInfoProvider {
     
-    //@IBOutlet var searchBar: UISearchBar!
     @IBOutlet var streamsTableView: UITableView!
     let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
     public var streamsDataSource = StreamsDataSource()
@@ -30,10 +29,8 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
         streamsTableView.delegate = streamsDataSource
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStreams), name: Notification.Name("reloadStreams"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStreams), name: Notification.Name("reloadStarredStreams"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.newStreamJoined), name: Notification.Name("newStreamJoined"), object: nil)
         NotificationCenter.default.addObserver(forName: Notification.Name("allStreamsSearchNotification"), object: nil, queue: nil, using: execSearchQuery)
-
     }
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
@@ -49,11 +46,11 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
     
     // triggered from data source class
     func reloadStreams() {
-        print("called reload streams for streams table vc")
+        print("reload streams")
         DispatchQueue.main.async {
-            objc_sync_enter(self.tableView.dataSource)
-            self.tableView.reloadData()
-            objc_sync_exit(self.tableView.dataSource)
+            objc_sync_enter(self.streamsTableView.dataSource)
+            self.streamsTableView.reloadData()
+            objc_sync_exit(self.streamsTableView.dataSource)
         }
     }
 
@@ -68,8 +65,6 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
         self.tabBarController?.selectedIndex = 2
     }
     
-    // set status bar content to white text
-    override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
     deinit {
         NotificationCenter.default.removeObserver(self)
     }

@@ -19,7 +19,6 @@ import XLPagerTabStrip
 class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, IndicatorInfoProvider {
     
     @IBOutlet var streamsTableView: UITableView!
-    let defaultImage = CircleFilter().filter(UIImage(named: "juke_icon")!)
     var starredStreamsDataSource = StarredStreamsDataSource()
     
     override func viewDidLoad() {
@@ -27,7 +26,6 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
         streamsTableView.dataSource = starredStreamsDataSource
         streamsTableView.delegate = starredStreamsDataSource
 
-        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStreams), name: Notification.Name("reloadStreams"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStreams), name: Notification.Name("reloadStarredStreams"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.newStreamJoined), name: Notification.Name("newStreamJoined"), object: nil)
         NotificationCenter.default.addObserver(forName: Notification.Name("starredStreamsSearchNotification"), object: nil, queue: nil, using: execSearchQuery)
@@ -42,10 +40,8 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
         if let source = tableView.dataSource as? CustomDataSource {
             source.searchBy(query: "")
         }
-
     }
     
-
     private func execSearchQuery(notification: Notification) {
         guard let userInfo = notification.userInfo else { return }
         if let source = tableView.dataSource as? CustomDataSource {
@@ -56,12 +52,11 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
     
     // triggered from data source class
     func reloadStreams() {
-        print("calling starred reload")
+        print("reload starred")
         DispatchQueue.main.async {
-            objc_sync_enter(self.tableView.dataSource)
-            self.tableView.reloadData()
+            objc_sync_enter(self.streamsTableView.dataSource)
             self.streamsTableView.reloadData()
-            objc_sync_exit(self.tableView.dataSource)
+            objc_sync_exit(self.streamsTableView.dataSource)
         }
     }
     
@@ -76,8 +71,6 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
         self.tabBarController?.selectedIndex = 2
     }
     
-    // set status bar content to white text
-    override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
     deinit {
         NotificationCenter.default.removeObserver(self)
     }

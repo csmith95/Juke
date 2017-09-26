@@ -33,7 +33,9 @@ class EmptyStreamViewController: UIViewController {
         streamTitleLabel.isHidden = false
         streamTitleLabel.text = stream.title
         numMembersButton.isHidden = false
-        numMembersButton.setTitle("\(stream.members.count+1) members", for: .normal)
+        let count = stream.members.count+1
+        let message = "\(count) member" + ((count > 1) ? "s" : "")
+        numMembersButton.setTitle(message, for: .normal)
         
     }
 

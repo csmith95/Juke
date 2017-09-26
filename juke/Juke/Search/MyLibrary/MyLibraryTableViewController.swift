@@ -36,6 +36,7 @@ class MyLibraryTableViewController: UITableViewController {
         // reset UI
         self.searchBar.text = ""
         execSearch(keywords: "")
+        SongKeeper.addedSongs.removeAll()
     }
     
     // MARK: - Table view data source/delegate

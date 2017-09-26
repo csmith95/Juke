@@ -62,11 +62,10 @@ class StreamsDataSource: CustomDataSource {
         if let currentStream = Current.stream {
             included = (included && item.stream.streamID != currentStream.streamID)
         }
+        
         if !included || query.isEmpty {
             return included
         }
-        
-        
         
         return item.stream.host.username.lowercased().contains(query.lowercased())
     }

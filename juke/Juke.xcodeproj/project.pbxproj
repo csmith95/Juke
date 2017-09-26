@@ -14,6 +14,10 @@
 		4B0532391F684FD600ADA988 /* SpotifySearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0532381F684FD600ADA988 /* SpotifySearchTableViewController.swift */; };
 		4B05323B1F68528900ADA988 /* MyLibraryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B05323A1F68528900ADA988 /* MyLibraryCell.swift */; };
 		4B05323D1F687B6200ADA988 /* SpotifySearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B05323C1F687B6200ADA988 /* SpotifySearchCell.swift */; };
+		4B0DDE111F7971DD009307D5 /* NameStreamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0DDE101F7971DD009307D5 /* NameStreamViewController.swift */; };
+		4B0DDE131F79BD7C009307D5 /* NameStreamViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B0DDE121F79BD7C009307D5 /* NameStreamViewController.xib */; };
+		4B0DDE151F79C649009307D5 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0DDE141F79C649009307D5 /* ImageCache.swift */; };
+		4B0DDE191F7A292C009307D5 /* SongKeeper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0DDE181F7A292C009307D5 /* SongKeeper.swift */; };
 		4B0FB5801E59A12C008D34FD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B0FB57F1E59A12C008D34FD /* CoreLocation.framework */; };
 		4B13DE4C1E8AFA970060D29A /* StreamCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B13DE4B1E8AFA970060D29A /* StreamCell.swift */; };
 		4B13DE4E1E8AFB850060D29A /* StreamsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B13DE4D1E8AFB850060D29A /* StreamsTableViewController.swift */; };
@@ -65,6 +69,10 @@
 		4B0532381F684FD600ADA988 /* SpotifySearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifySearchTableViewController.swift; sourceTree = "<group>"; };
 		4B05323A1F68528900ADA988 /* MyLibraryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyLibraryCell.swift; sourceTree = "<group>"; };
 		4B05323C1F687B6200ADA988 /* SpotifySearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifySearchCell.swift; sourceTree = "<group>"; };
+		4B0DDE101F7971DD009307D5 /* NameStreamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameStreamViewController.swift; sourceTree = "<group>"; };
+		4B0DDE121F79BD7C009307D5 /* NameStreamViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NameStreamViewController.xib; sourceTree = "<group>"; };
+		4B0DDE141F79C649009307D5 /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		4B0DDE181F7A292C009307D5 /* SongKeeper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongKeeper.swift; sourceTree = "<group>"; };
 		4B0FB57F1E59A12C008D34FD /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		4B13DE4B1E8AFA970060D29A /* StreamCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamCell.swift; sourceTree = "<group>"; };
 		4B13DE4D1E8AFB850060D29A /* StreamsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamsTableViewController.swift; sourceTree = "<group>"; };
@@ -147,6 +155,8 @@
 				4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */,
 				4B62A2D71F69D05B00864EFF /* MyStreamRootViewController.swift */,
 				4B0490E81E734614003F49DF /* SongTableViewCell.swift */,
+				4B0DDE101F7971DD009307D5 /* NameStreamViewController.swift */,
+				4B0DDE121F79BD7C009307D5 /* NameStreamViewController.xib */,
 			);
 			path = MyStream;
 			sourceTree = "<group>";
@@ -189,6 +199,7 @@
 				4B0532431F687D6400ADA988 /* MyLibrary */,
 				4B0532441F687D6800ADA988 /* Spotify */,
 				F2DB0B361EA14BA200A13E30 /* SearchCell.swift */,
+				4B0DDE181F7A292C009307D5 /* SongKeeper.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -216,6 +227,7 @@
 			children = (
 				4BDCEC051E720D0B00D9D3EE /* Constants.swift */,
 				4BA9B3F41E91B043003D352E /* Current.swift */,
+				4B0DDE141F79C649009307D5 /* ImageCache.swift */,
 			);
 			path = Global;
 			sourceTree = "<group>";
@@ -380,6 +392,7 @@
 			files = (
 				4B852BAD1F67649B00B31AD5 /* GoogleService-Info.plist in Resources */,
 				4B48FDE11F5DCEC700E87507 /* MenuCell.xib in Resources */,
+				4B0DDE131F79BD7C009307D5 /* NameStreamViewController.xib in Resources */,
 				4B73AB7E1F69022B008DF5A2 /* Assets.xcassets in Resources */,
 				4B3A34D71E58120F00C314A0 /* Main.storyboard in Resources */,
 			);
@@ -499,6 +512,7 @@
 				4B48FDE31F5DCF7900E87507 /* ActionData.swift in Sources */,
 				4B05323D1F687B6200ADA988 /* SpotifySearchCell.swift in Sources */,
 				4B4920C01F5722440089C61F /* SpotifyLoginController.swift in Sources */,
+				4B0DDE191F7A292C009307D5 /* SongKeeper.swift in Sources */,
 				4BCFA02C1F70517900E49516 /* UsersDataSource.swift in Sources */,
 				4B13DE4E1E8AFB850060D29A /* StreamsTableViewController.swift in Sources */,
 				F25133C01F6E7C8F002745C7 /* StarredTableViewController.swift in Sources */,
@@ -513,6 +527,7 @@
 				4B62A2D81F69D05B00864EFF /* MyStreamRootViewController.swift in Sources */,
 				F2E815581E90BBBC00404DDF /* LoginViewController.swift in Sources */,
 				4BCFA0331F71B71C00E49516 /* SessionManager.swift in Sources */,
+				4B0DDE151F79C649009307D5 /* ImageCache.swift in Sources */,
 				4B04E4591F55682C001605E2 /* CustomDataSource.swift in Sources */,
 				4B48FDE71F6108E700E87507 /* GradientView.swift in Sources */,
 				F2B98C051F71B6A400BDECEC /* StarredStreamsDataSource.swift in Sources */,
@@ -522,6 +537,7 @@
 				F2DB0B371EA14BA200A13E30 /* SearchCell.swift in Sources */,
 				F2E10C131F64EFE900E6723F /* UsersTableViewController.swift in Sources */,
 				4BA9B3F51E91B043003D352E /* Current.swift in Sources */,
+				4B0DDE111F7971DD009307D5 /* NameStreamViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

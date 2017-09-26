@@ -14,6 +14,7 @@ import PKHUD
 import Firebase
 import FirebaseDatabaseUI
 import XLActionController
+import Presentr
 
 class MyStreamController: UITableViewController {
     
@@ -60,6 +61,20 @@ class MyStreamController: UITableViewController {
             }
         }
     }
+    
+    // presenter vars for naming stream
+    let presenter: Presentr = {
+        let presenter = Presentr(presentationType: .alert)
+        presenter.dismissAnimated = true
+        presenter.cornerRadius = 10
+        presenter.transitionType = TransitionType.coverVerticalFromTop
+        presenter.keyboardTranslationType = .moveUp
+        return presenter
+    }()
+    
+    lazy var nameStreamViewController: NameStreamViewController = {
+        return NameStreamViewController(nibName: "NameStreamViewController", bundle: nil)
+    }()
     
     func delay(_ delay: Double, closure:@escaping () -> Void) {
         DispatchQueue.main.asyncAfter(
@@ -149,7 +164,6 @@ class MyStreamController: UITableViewController {
             self.setEmptyStreamUI()
         }
     }
-    
     
     private func setUpControlButtons() {
         guard let stream = Current.stream else { return }
@@ -286,30 +300,73 @@ class MyStreamController: UITableViewController {
         guard let event = notification.object as? FirebaseAPI.FirebaseEvent else { print("erro"); return }
         switch event {
         case .MemberJoined, .MemberLeft:
-            break
+            let numMembers = Current.stream!.members.count + 1 // +1 for host
+            let numMembersString = "\(numMembers) member" + (numMembers > 1 ? "s" : "")
+            self.numContributorsButton.setTitle(numMembersString, for: .normal)
         case .PlayStatusChanged:
             self.handleAutomaticProgressSlider()
         case .TopSongChanged:
             self.setUI()
-            break
+
         case .SetProgress:
             self.progressSliderValue = jamsPlayer.position_ms
+        case .StreamTitleChanged:
+            self.streamNameLabel.text = Current.stream?.title
         }
+    }
+    
+    let nameStreamPrompts = ["Sunday Candy", "Monday Funday", "Taco Tuesday", "Hump Day Jams", "Thirsty Thursday", "Flashback Friday", "Saturday Vibes"]
+    
+    func showNameStreamModal() {
+        let today = Date()
+        let gregorian = Calendar(identifier: .gregorian)
+        let dateComponents = gregorian.dateComponents([.weekday], from: today)
+        let weekday = dateComponents.weekday!
+        nameStreamViewController.placeholder = nameStreamPrompts[weekday-1]
+        presenter.viewControllerForContext = self
+        customPresentViewController(presenter, viewController: nameStreamViewController, animated: true, completion: nil)
+    }
+    
+    func showEndStreamModal() {
+        let title = "Are you sure?"
+        let body = "The vibe will be lost forever if you do this!"
+        let controller = Presentr.alertViewController(title: title, body: body)
+        
+        let deleteAction = AlertAction(title: "Sure 🕶", style: .destructive) {
+            Current.stream = nil
+        }
+        
+        let okAction = AlertAction(title: "NO, sorry 🙄", style: .cancel) {
+            print("Ok!")
+        }
+        
+        controller.addAction(deleteAction)
+        controller.addAction(okAction)
+        
+        presenter.presentationType = .alert
+        customPresentViewController(presenter, viewController: controller, animated: true, completion: nil)
     }
 
     @IBAction func showMenuButtonPressed(_ sender: Any) {
         let actionController = MenuActionController()
         
         if Current.isHost() {
+            actionController.addAction(Action("Name Stream", style: .default, handler: { action in
+                self.showNameStreamModal()
+            }))
+            
             actionController.addAction(Action("Skip Song", style: .default, handler: { action in
                 self.songFinished()
             }))
+            
+            actionController.addAction(Action("End Stream", style: .default, handler: { action in
+                self.showEndStreamModal()
+            }))
+        } else {
+            actionController.addAction(Action("Leave Stream", style: .default, handler: { action in
+                Current.stream = nil    // see Current.swift for everything this entails
+            }))
         }
-        
-        let leaveMessage = Current.isHost() ? "End Stream" : "Leave Stream"
-        actionController.addAction(Action(leaveMessage, style: .default, handler: { action in
-            Current.stream = nil    // see Current.swift for everything this entails
-        }))
         
         actionController.addAction(Action("Close", style: .cancel, handler: nil))
         present(actionController, animated: true, completion: nil)
@@ -332,38 +389,6 @@ class MyStreamController: UITableViewController {
     
     deinit {
         NotificationCenter.default.removeObserver(self)
-    }
-}
-
-// basic extension to make border radius on button from storyboard
-extension UIView {
-    
-    @IBInspectable var cornerRadius: CGFloat {
-        get {
-            return layer.cornerRadius
-        }
-        set {
-            layer.cornerRadius = newValue
-            layer.masksToBounds = newValue > 0
-        }
-    }
-    
-    @IBInspectable var borderWidth: CGFloat {
-        get {
-            return layer.borderWidth
-        }
-        set {
-            layer.borderWidth = newValue
-        }
-    }
-    
-    @IBInspectable var borderColor: UIColor? {
-        get {
-            return UIColor(cgColor: layer.borderColor!)
-        }
-        set {
-            layer.borderColor = newValue?.cgColor
-        }
     }
 }
 

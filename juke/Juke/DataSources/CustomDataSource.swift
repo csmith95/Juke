@@ -78,6 +78,7 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
             handleChildAdded(collectionItem: collectionItem)
             break
         case .childRemoved:
+            print("*** child removed")
             handleChildRemoved(collectionItem: collectionItem)
             break
         case .childChanged:
@@ -106,7 +107,6 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
         filteredCollection = collection.filter({ (collectionItem) -> Bool in
             return self.shouldInclude(item: collectionItem)
         })
-        //print("called trigger with eventname", reloadEventName)
         NotificationCenter.default.post(name: Notification.Name(reloadEventName), object: nil)
     }
     

@@ -73,4 +73,7 @@ class StreamsPager: ButtonBarPagerTabStripViewController, UISearchBarDelegate {
         execSearchQuery()
         hideKeyboard()
     }
+    
+    // set status bar content to white text
+    override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
 }
