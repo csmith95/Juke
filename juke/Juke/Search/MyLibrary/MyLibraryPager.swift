@@ -12,6 +12,7 @@ import XLPagerTabStrip
 class MyLibraryPager: ButtonBarPagerTabStripViewController {
 
     @IBOutlet var searchBar: UISearchBar!
+    var notificationName: String?
     
     override func viewDidLoad() {
         // change selected bar color
@@ -27,15 +28,15 @@ class MyLibraryPager: ButtonBarPagerTabStripViewController {
         changeCurrentIndexProgressive = { [weak self] (oldCell: ButtonBarViewCell?, newCell: ButtonBarViewCell?, progressPercentage: CGFloat, changeCurrentIndex: Bool, animated: Bool) -> Void in
             guard changeCurrentIndex == true else { return }
             
-//            if newCell?.label == "" {
-//                currentChild = children[0]
-//            } else {
-//                currentChild = children[1]
-//            }
-            
-            // reset UI
+            //set who receives notification
+            if newCell?.label.text == "Songs" {
+                self?.notificationName = "MySongsSearchNotification"
+            } else {
+                self?.notificationName = "MyPlaylistsSearchNotification"
+            }
             self?.searchBar.text = ""
             self?.execSearchQuery()
+            
         }
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("MyLibraryPager.hideKeyboard"), object: nil)
         
@@ -55,7 +56,7 @@ class MyLibraryPager: ButtonBarPagerTabStripViewController {
     
     func execSearchQuery() {
         if let query = searchBar.text {
-//            NotificationCenter.default.post(name: Notification.Name(notificationName!), object: nil, userInfo: ["query" : query])
+            NotificationCenter.default.post(name: Notification.Name(notificationName!), object: nil, userInfo: ["query" : query.lowercased()])
         }
     }
     

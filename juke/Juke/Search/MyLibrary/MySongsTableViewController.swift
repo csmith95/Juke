@@ -24,16 +24,17 @@ class MySongsTableViewController: UITableViewController, IndicatorInfoProvider {
     // MARK: view life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadSavedTracks()
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         self.tableView.addGestureRecognizer(tapRecognizer)
-        loadSavedTracks()
         NotificationCenter.default.addObserver(self, selector: #selector(self.libraryChanged), name: Notification.Name("libraryChanged"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.execSearch), name: Notification.Name("MySongsSearchNotification"), object: nil)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         // reset UI
-        execSearch(keywords: "")
+        execSearchHelper(keywords: "")
         SongKeeper.addedSongs.removeAll()
     }
     
@@ -69,8 +70,17 @@ class MySongsTableViewController: UITableViewController, IndicatorInfoProvider {
         self.view.endEditing(true)
     }
     
-    func execSearch(keywords: String) {
-        print("exec search in my library table view")
+    func execSearch(notification: Notification) {
+        print("1")
+        guard let userInfo = notification.userInfo else { return }
+        print(userInfo)
+//        guard let keywords = userInfo["query"] as! String else { return }
+//        print(keywords)
+        self.execSearchHelper(keywords: userInfo["query"] as! String)
+    }
+    
+    private func execSearchHelper(keywords: String) {
+        print("** ", keywords)
         if keywords.isEmpty {
             displayedSongs = allSongs
         } else {
@@ -80,6 +90,7 @@ class MySongsTableViewController: UITableViewController, IndicatorInfoProvider {
         }
         threadSafeReloadView()
     }
+    
     
     func libraryChanged(notification: Notification) {
         guard let song = notification.object as? Models.FirebaseSong else { return }

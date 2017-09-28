@@ -78,7 +78,6 @@ class PlaylistTableViewController: UITableViewController {
         let params: Parameters = ["limit": 50, "offset": 0]
         Alamofire.request(playlist.tracksURL, parameters: params, headers: headers).responseJSON { response in
             do {
-                print(response.data)
                 var serializedJSON = try JSONSerialization.jsonObject(with: response.data!, options: .mutableContainers) as! JSONStandard
                 if let items = serializedJSON["items"] as? [JSONStandard] {
                     for i in 0..<items.count {
