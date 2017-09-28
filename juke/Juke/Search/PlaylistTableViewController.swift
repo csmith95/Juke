@@ -10,8 +10,9 @@ import UIKit
 import Alamofire
 import Unbox
 
-class PlaylistTableViewController: UITableViewController {
+class PlaylistTableViewController: UIViewController {
     
+    @IBOutlet var tableView: UITableView!
     public var playlist: Models.SpotifyPlaylist!
     public var allSongs: [Models.SpotifySong] = []
     public var displayedSongs: [Models.SpotifySong] = []
@@ -42,27 +43,6 @@ class PlaylistTableViewController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return displayedSongs.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return tableView.dequeueReusableCell(withIdentifier: "SearchCell", for: indexPath)
-    }
-    
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let cell = cell as! SearchCell
-        cell.populateCell(song: self.displayedSongs[indexPath.row])
     }
     
     private func threadSafeReloadView() {
@@ -139,4 +119,27 @@ class PlaylistTableViewController: UITableViewController {
     
     // set status bar content to white text
     override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
+}
+
+extension PlaylistTableViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
+        return displayedSongs.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return tableView.dequeueReusableCell(withIdentifier: "SearchCell", for: indexPath)
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let cell = cell as! SearchCell
+        cell.populateCell(song: self.displayedSongs[indexPath.row])
+    }
+    
 }
