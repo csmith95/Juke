@@ -244,13 +244,6 @@
                                                 </imageView>
                                             </subviews>
                                         </stackView>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="wQo-Rf-l8v" userLabel="Star Image View">
-                                            <rect key="frame" x="40" y="38" width="12" height="12"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="12" id="AXW-Q3-QyS"/>
-                                                <constraint firstAttribute="width" constant="12" id="S6I-uE-4Yc"/>
-                                            </constraints>
-                                        </imageView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5op-3b-306" userLabel="Invite to stream Button">
                                             <rect key="frame" x="287" y="10" width="40" height="40"/>
                                             <constraints>
@@ -274,16 +267,23 @@
                                                 <action selector="starButtonPressed:" destination="dK4-Ge-qtA" eventType="touchUpInside" id="70w-Lx-hNP"/>
                                             </connections>
                                         </button>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Star" translatesAutoresizingMaskIntoConstraints="NO" id="wQo-Rf-l8v" userLabel="Star Image View">
+                                            <rect key="frame" x="33" y="30" width="25" height="25"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="25" id="AXW-Q3-QyS"/>
+                                                <constraint firstAttribute="width" constant="25" id="S6I-uE-4Yc"/>
+                                            </constraints>
+                                        </imageView>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="jxU-OR-5tG" firstAttribute="leading" secondItem="5op-3b-306" secondAttribute="trailing" constant="10" id="7fQ-Kq-hZg"/>
                                         <constraint firstItem="jxU-OR-5tG" firstAttribute="centerY" secondItem="yV7-hP-hvl" secondAttribute="centerY" id="Ixi-VM-4Ai"/>
                                         <constraint firstItem="jE1-Dq-iml" firstAttribute="centerY" secondItem="yV7-hP-hvl" secondAttribute="centerY" id="QHj-84-Nwu"/>
-                                        <constraint firstItem="wQo-Rf-l8v" firstAttribute="bottom" secondItem="AIn-81-5oX" secondAttribute="bottom" id="WkB-ef-Tun"/>
+                                        <constraint firstItem="wQo-Rf-l8v" firstAttribute="bottom" secondItem="AIn-81-5oX" secondAttribute="bottom" constant="5" id="WkB-ef-Tun"/>
                                         <constraint firstItem="5op-3b-306" firstAttribute="centerY" secondItem="yV7-hP-hvl" secondAttribute="centerY" id="ZIG-ra-6pj"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="jxU-OR-5tG" secondAttribute="trailing" id="cOm-Rs-1Zx"/>
                                         <constraint firstItem="AIn-81-5oX" firstAttribute="leading" secondItem="yV7-hP-hvl" secondAttribute="leadingMargin" constant="4" id="e5w-58-3qS"/>
-                                        <constraint firstItem="wQo-Rf-l8v" firstAttribute="trailing" secondItem="AIn-81-5oX" secondAttribute="trailing" id="gYF-p7-vDt"/>
+                                        <constraint firstItem="wQo-Rf-l8v" firstAttribute="trailing" secondItem="AIn-81-5oX" secondAttribute="trailing" constant="6" id="gYF-p7-vDt"/>
                                         <constraint firstItem="AIn-81-5oX" firstAttribute="centerY" secondItem="yV7-hP-hvl" secondAttribute="centerY" id="hL8-gj-9Vd"/>
                                         <constraint firstItem="jE1-Dq-iml" firstAttribute="leading" secondItem="AIn-81-5oX" secondAttribute="trailing" constant="8" id="m6d-tD-Gje"/>
                                     </constraints>
@@ -1838,7 +1838,11 @@
                                             </connections>
                                         </button>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Star" translatesAutoresizingMaskIntoConstraints="NO" id="yVp-ES-6zW" userLabel="Star Image View">
-                                            <rect key="frame" x="25" y="22" width="27" height="28"/>
+                                            <rect key="frame" x="33" y="30" width="25" height="25"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="25" id="EAi-78-Wmx"/>
+                                                <constraint firstAttribute="height" constant="25" id="Xuk-3B-x4Y"/>
+                                            </constraints>
                                         </imageView>
                                     </subviews>
                                     <constraints>
@@ -1847,9 +1851,9 @@
                                         <constraint firstAttribute="trailingMargin" secondItem="2Vw-kW-c0a" secondAttribute="trailing" id="N7n-Kn-YJw"/>
                                         <constraint firstItem="2Vw-kW-c0a" firstAttribute="centerY" secondItem="Hz2-Ze-NXJ" secondAttribute="centerY" id="gl1-Is-4NQ"/>
                                         <constraint firstItem="kLJ-pr-Bno" firstAttribute="leading" secondItem="Hz2-Ze-NXJ" secondAttribute="leadingMargin" constant="4" id="j2d-q5-X8d"/>
-                                        <constraint firstItem="yVp-ES-6zW" firstAttribute="bottom" secondItem="kLJ-pr-Bno" secondAttribute="bottom" id="qFc-4F-BK7"/>
+                                        <constraint firstItem="yVp-ES-6zW" firstAttribute="bottom" secondItem="kLJ-pr-Bno" secondAttribute="bottom" constant="5" id="qFc-4F-BK7"/>
                                         <constraint firstItem="kLJ-pr-Bno" firstAttribute="centerY" secondItem="Hz2-Ze-NXJ" secondAttribute="centerY" id="wAH-sO-EAN"/>
-                                        <constraint firstItem="yVp-ES-6zW" firstAttribute="trailing" secondItem="kLJ-pr-Bno" secondAttribute="trailing" id="xSd-iu-GDj"/>
+                                        <constraint firstItem="yVp-ES-6zW" firstAttribute="trailing" secondItem="kLJ-pr-Bno" secondAttribute="trailing" constant="6" id="xSd-iu-GDj"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="0.1333333333" green="0.12549019610000001" blue="0.1450980392" alpha="1" colorSpace="calibratedRGB"/>
