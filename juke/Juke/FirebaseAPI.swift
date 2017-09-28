@@ -370,7 +370,6 @@ class FirebaseAPI {
         } else {
             self.ref.child("streams/\(stream.streamID)/members/\(user.spotifyID)/fcmToken").setValue(fcmToken)
         }
-
     }
 
     public static func fetchStream(streamID: String, callback: @escaping ((_: Models.FirebaseStream?) -> Void)) {
