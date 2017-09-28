@@ -1625,10 +1625,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="twoDownArrows" translatesAutoresizingMaskIntoConstraints="NO" id="BPY-hg-VfQ">
-                                <rect key="frame" x="246" y="621" width="98" height="16"/>
+                                <rect key="frame" x="246" y="624" width="98" height="16"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add some songs to start your stream " textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b6J-ji-QzM">
-                                <rect key="frame" x="235" y="561" width="120" height="52"/>
+                                <rect key="frame" x="235" y="564" width="120" height="52"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="RIn-Gk-0Ki"/>
                                     <constraint firstAttribute="height" constant="52" id="aCm-s1-mi1"/>
@@ -1661,7 +1661,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="DME-aq-I78" firstAttribute="top" secondItem="Eiu-Ej-4bR" secondAttribute="bottom" constant="56" id="021-U1-0pH"/>
-                            <constraint firstItem="Kow-Rk-vmo" firstAttribute="top" secondItem="BPY-hg-VfQ" secondAttribute="bottom" constant="30" id="0au-FL-RC4"/>
+                            <constraint firstItem="Kow-Rk-vmo" firstAttribute="top" secondItem="BPY-hg-VfQ" secondAttribute="bottom" constant="27" id="0au-FL-RC4"/>
                             <constraint firstItem="C9e-ek-p4f" firstAttribute="top" secondItem="EfU-AW-sC9" secondAttribute="bottom" constant="33" id="4WW-9M-fYL"/>
                             <constraint firstItem="BJC-YC-E3U" firstAttribute="top" secondItem="DME-aq-I78" secondAttribute="bottom" constant="3" id="8SY-V9-sBh"/>
                             <constraint firstItem="EfU-AW-sC9" firstAttribute="centerX" secondItem="OAF-0v-QFj" secondAttribute="centerX" id="GLN-T3-IzX"/>

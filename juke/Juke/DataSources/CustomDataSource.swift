@@ -78,7 +78,6 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
             handleChildAdded(collectionItem: collectionItem)
             break
         case .childRemoved:
-            print("*** child removed")
             handleChildRemoved(collectionItem: collectionItem)
             break
         case .childChanged:
@@ -127,8 +126,13 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     }
     
     func handleChildRemoved(collectionItem: CollectionItem) {
+        print("** child removed: stream ", collectionItem.stream)
+        print("** child removed: user ", collectionItem.user)
+        print("** child removed: song ", collectionItem.song)
         guard let index = getIndex(collectionItem: collectionItem) else { return }
+        print("** index: ", index)
         collection.remove(at: index.row)
+        print("** new collection: ", collection)
         triggerTableViewRefresh()
     }
     
@@ -157,7 +161,6 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     }
     
     public func searchBy(query: String) {
-        print("called search in Custom data source****************")
         self.query = query
         triggerTableViewRefresh()
     }
