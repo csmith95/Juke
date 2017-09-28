@@ -107,10 +107,41 @@ class MyPlaylistsTableViewController: UITableViewController, IndicatorInfoProvid
                     DispatchQueue.main.async {
                         self.threadSafeReloadView()
                     }
-                    //                    self.recursiveLoadTracks(urlString: serializedJSON["next"] as? String, headers: headers)
+                    self.recursiveLoadPlaylists(urlString: serializedJSON["next"] as? String, headers: headers)
                 }
             } catch {
                 print("error unboxing JSON")
+            }
+        }
+    }
+    
+    private func recursiveLoadPlaylists(urlString: String?, headers: HTTPHeaders) {
+        if let urlString = urlString, let url = URL(string: urlString) {
+            Alamofire.request(url, headers: headers).validate().responseJSON { response in
+                do {
+                    var serializedJSON = try JSONSerialization.jsonObject(with: response.data!, options: .mutableContainers) as! JSONStandard
+                    if let items = serializedJSON["items"] as? [JSONStandard] {
+                        objc_sync_enter(self.allPlaylists)
+                        for item in items {
+                            do {
+                                let playlist: Models.SpotifyPlaylist = try unbox(dictionary: item)
+                                self.allPlaylists.append(playlist)
+                            } catch {
+                                print("error unboxing spotify song: ", error)
+                            }
+                        }
+                        objc_sync_exit(self.allPlaylists)
+                        self.recursiveLoadPlaylists(urlString: serializedJSON["next"] as? String, headers: headers)
+                    }
+                } catch {
+                    print("error unboxing JSON")
+                }
+            }
+        } else {
+            // url is nil -- all songs have been loaded, so update table on main thread
+            self.displayedPlaylists = self.allPlaylists
+            DispatchQueue.main.async {
+                self.threadSafeReloadView()
             }
         }
     }

@@ -97,10 +97,42 @@ class PlaylistTableViewController: UITableViewController {
                     DispatchQueue.main.async {
                         self.threadSafeReloadView()
                     }
-//                    self.recursiveLoadTracks(urlString: serializedJSON["next"] as? String, headers: headers)
+                    self.recursiveLoadTracks(urlString: serializedJSON["next"] as? String, headers: headers)
                 }
             } catch {
                 print("error unboxing JSON")
+            }
+        }
+    }
+    
+    private func recursiveLoadTracks(urlString: String?, headers: HTTPHeaders) {
+        if let urlString = urlString, let url = URL(string: urlString) {
+            Alamofire.request(url, headers: headers).validate().responseJSON { response in
+                do {
+                    var serializedJSON = try JSONSerialization.jsonObject(with: response.data!, options: .mutableContainers) as! JSONStandard
+                    if let items = serializedJSON["items"] as? [JSONStandard] {
+                        objc_sync_enter(self.allSongs)
+                        for item in items {
+                            let curr = item["track"] as! UnboxableDictionary
+                            do {
+                                let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
+                                self.allSongs.append(spotifySong)
+                            } catch {
+                                print("error unboxing spotify song: ", error)
+                            }
+                        }
+                        objc_sync_exit(self.allSongs)
+                        self.recursiveLoadTracks(urlString: serializedJSON["next"] as? String, headers: headers)
+                    }
+                } catch {
+                    print("error unboxing JSON")
+                }
+            }
+        } else {
+            // url is nil -- all songs have been loaded, so update table on main thread
+            self.displayedSongs = self.allSongs
+            DispatchQueue.main.async {
+                self.threadSafeReloadView()
             }
         }
     }
