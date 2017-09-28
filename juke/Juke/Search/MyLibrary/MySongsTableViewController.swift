@@ -1,22 +1,25 @@
 //
-//  MyLibraryTableViewController.swift
+//  MySongsTableViewController.swift
 //  Juke
 //
-//  Created by Conner Smith on 9/12/17.
+//  Created by Conner Smith on 9/26/17.
 //  Copyright © 2017 csmith. All rights reserved.
 //
 
 import UIKit
+import XLPagerTabStrip
 import Alamofire
 import Unbox
 
-class MyLibraryTableViewController: UITableViewController {
+class MySongsTableViewController: UITableViewController, IndicatorInfoProvider {
+
+    func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
+        return IndicatorInfo(title: "Songs")
+    }
     
-    @IBOutlet var searchBar: UISearchBar!
-    
-    var allResults:[Models.SpotifySong] = []           // all results
-    var displayedResults:[Models.SpotifySong] = []  // filtered results
-    typealias JSONStandard = [String: AnyObject]
+    var allSongs:[Models.SpotifySong] = []           // all results
+    var displayedSongs:[Models.SpotifySong] = []  // filtered results
+    typealias JSONStandard = [String: Any?]
     
     // MARK: view life cycle
     override func viewDidLoad() {
@@ -27,14 +30,9 @@ class MyLibraryTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.libraryChanged), name: Notification.Name("libraryChanged"), object: nil)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         // reset UI
-        self.searchBar.text = ""
         execSearch(keywords: "")
         SongKeeper.addedSongs.removeAll()
     }
@@ -55,7 +53,7 @@ class MyLibraryTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return displayedResults.count
+        return displayedSongs.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -63,21 +61,20 @@ class MyLibraryTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let cell = cell as! MyLibraryCell
-        cell.populateCell(song: self.displayedResults[indexPath.row])
+        let cell = cell as! SearchCell
+        cell.populateCell(song: self.displayedSongs[indexPath.row])
     }
     
     func hideKeyboard() {
         self.view.endEditing(true)
-        searchBar.setShowsCancelButton(false, animated: true)
     }
     
     func execSearch(keywords: String) {
         print("exec search in my library table view")
         if keywords.isEmpty {
-            displayedResults = allResults
+            displayedSongs = allSongs
         } else {
-            displayedResults = allResults.filter({ (song) -> Bool in
+            displayedSongs = allSongs.filter({ (song) -> Bool in
                 return song.songName.lowercased().contains(keywords) || song.artistName.lowercased().contains(keywords)
             })
         }
@@ -86,9 +83,9 @@ class MyLibraryTableViewController: UITableViewController {
     
     func libraryChanged(notification: Notification) {
         guard let song = notification.object as? Models.FirebaseSong else { return }
-        guard let firstSong = allResults.first else { return }
+        guard let firstSong = allSongs.first else { return }
         if firstSong.spotifyID == song.spotifyID {
-            allResults.remove(at: 0)    // song was already in lib -- remove it
+            allSongs.remove(at: 0)    // song was already in lib -- remove it
         } else {
             // song wasn't in lib -- insert at first index
             let spotifySong = Models.SpotifySong(songName: song.songName,
@@ -96,15 +93,15 @@ class MyLibraryTableViewController: UITableViewController {
                                                  spotifyID: song.spotifyID,
                                                  duration: song.duration,
                                                  coverArtURL: song.coverArtURL)
-            allResults.insert(spotifySong, at: 0)
+            allSongs.insert(spotifySong, at: 0)
         }
         DispatchQueue.main.async {
             self.threadSafeReloadView()
         }
     }
-
+    
     func loadSavedTracks() {
-        self.allResults.removeAll()
+        self.allSongs.removeAll()
         let url = "https://api.spotify.com/v1/me/tracks"
         let headers = [
             "Authorization": "Bearer " + SessionManager.accessToken
@@ -119,7 +116,7 @@ class MyLibraryTableViewController: UITableViewController {
                         let curr = item as! UnboxableDictionary
                         do {
                             let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
-                            self.allResults.append(spotifySong)
+                            self.allSongs.append(spotifySong)
                         } catch {
                             print("error unboxing spotify song: ", error)
                         }
@@ -127,7 +124,7 @@ class MyLibraryTableViewController: UITableViewController {
                     
                     // to make UI more responsive, display first 50 immediately
                     // then load the rest
-                    self.displayedResults = self.allResults
+                    self.displayedSongs = self.allSongs
                     DispatchQueue.main.async {
                         self.threadSafeReloadView()
                     }
@@ -145,17 +142,17 @@ class MyLibraryTableViewController: UITableViewController {
                 do {
                     var serializedJSON = try JSONSerialization.jsonObject(with: response.data!, options: .mutableContainers) as! JSONStandard
                     if let items = serializedJSON["items"] as? [JSONStandard] {
-                        objc_sync_enter(self.allResults)
+                        objc_sync_enter(self.allSongs)
                         for item in items {
                             let curr = item["track"] as! UnboxableDictionary
                             do {
                                 let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
-                                self.allResults.append(spotifySong)
+                                self.allSongs.append(spotifySong)
                             } catch {
                                 print("error unboxing spotify song: ", error)
                             }
                         }
-                        objc_sync_exit(self.allResults)
+                        objc_sync_exit(self.allSongs)
                         self.recursiveLoadTracks(urlString: serializedJSON["next"] as? String, headers: headers)
                     }
                 } catch {
@@ -164,38 +161,11 @@ class MyLibraryTableViewController: UITableViewController {
             }
         } else {
             // url is nil -- all songs have been loaded, so update table on main thread
-            self.displayedResults = self.allResults
+            self.displayedSongs = self.allSongs
             DispatchQueue.main.async {
                 self.threadSafeReloadView()
             }
         }
     }
-    
-    // set status bar text to white
-    override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
 
-
-}
-
-extension MyLibraryTableViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        execSearch(keywords: searchText.lowercased())
-    }
-    
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        searchBar.setShowsCancelButton(true, animated: true)
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        if let searchText = searchBar.text {
-            execSearch(keywords: searchText.lowercased())
-        } else {
-            execSearch(keywords: "")
-        }
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        execSearch(keywords: "")
-        hideKeyboard()
-    }
 }

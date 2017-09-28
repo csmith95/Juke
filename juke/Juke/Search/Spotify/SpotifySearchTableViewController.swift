@@ -16,7 +16,7 @@ class SpotifySearchTableViewController: UITableViewController {
     
     var allResults:[Models.SpotifySong] = []           // all results
     var displayedResults:[Models.SpotifySong] = []  // filtered results
-    typealias JSONStandard = [String: AnyObject]
+    typealias JSONStandard = [String: Any]
     
     
     // MARK: view life cycle
@@ -53,7 +53,7 @@ class SpotifySearchTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let cell = cell as! SpotifySearchCell
+        let cell = cell as! SearchCell
         cell.populateCell(song: self.displayedResults[indexPath.row])
     }
     
@@ -69,7 +69,6 @@ class SpotifySearchTableViewController: UITableViewController {
     }
     
     func execSearch(keywords: String) {
-        print("\n spotify exec search")
         displayedResults.removeAll()
         if keywords.isEmpty {
             threadSafeReloadView()
@@ -81,12 +80,14 @@ class SpotifySearchTableViewController: UITableViewController {
     
     func searchSpotify(keywords: String) {
         let params: Parameters = [
-            "query" : keywords,
-            "type" : "track,artist,album",
+            "query" : keywords + "*",
+            "type" : "track,artist",
             "offset": "00",
-            "limit": "50",
+            "limit": "20",
             "market": "US"
         ]
+        
+        print(params)
         
         let headers = [
             "Authorization": "Bearer " + SessionManager.accessToken

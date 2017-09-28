@@ -12,6 +12,8 @@ import AlamofireImage
 class ImageCache {
     
     private static let circleUserFilter = CircleFilter()
+    private static let roundedCornersFilter = RoundedCornersFilter(radius: 10.0)
+    private static let defaultPlaylistImage = RoundedCornersFilter(radius: 10.0).filter(UIImage(named: "juke_icon")!)
     private static let defaultUserIcon = CircleFilter().filter(UIImage(named: "juke_icon")!)
     private static let downloader = ImageDownloader(
         configuration: ImageDownloader.defaultURLSessionConfiguration(),
@@ -32,6 +34,17 @@ class ImageCache {
             }
         } else {
             callback(defaultUserIcon)
+        }
+    }
+    
+    public static func downloadPlaylistImage(url: String, callback: @escaping (UIImage?)->Void) {
+        let urlRequest = URLRequest(url: URL(string: url)!)
+        downloader.download(urlRequest, filter: roundedCornersFilter) { response in
+            if let image = response.result.value {
+                callback(image)
+            } else {
+                callback(defaultPlaylistImage)
+            }
         }
     }
     

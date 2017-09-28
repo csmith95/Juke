@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PKHUD
 
 class SearchCell: UITableViewCell {
     
@@ -35,13 +36,10 @@ class SearchCell: UITableViewCell {
     }
     
     @IBAction func addButtonPressed(_ sender: Any) {
-        handleAddButtonPressed()
+        FirebaseAPI.queueSong(spotifySong: self.song)
+        HUD.flash(.labeledSuccess(title: nil, subtitle: "Added \(self.song.songName) to your stream"), delay: 1.0)
         SongKeeper.addedSongs.insert(self.song.spotifyID)
         addButton.isSelected = true
         addButton.isUserInteractionEnabled = false
-    }
-    
-    func handleAddButtonPressed() {
-        fatalError("This method must be overridden by subclass")
     }
 }

@@ -215,6 +215,24 @@ class Models {
         let username: String?
         let imageURL: String?
     }
+    
+    struct SpotifyPlaylist {
+        let spotifyID: String
+        let ownerUsername: String?
+        let imageURL: String
+        let tracksURL: String
+        let name: String
+    }
+}
+
+extension Models.SpotifyPlaylist: Unboxable {
+    init(unboxer: Unboxer) throws {
+        self.spotifyID = try unboxer.unbox(key: "id")
+        self.ownerUsername = unboxer.unbox(keyPath: "owner.display_name")
+        self.imageURL = try unboxer.unbox(keyPath: "images.0.url")
+        self.tracksURL = try unboxer.unbox(keyPath: "tracks.href")
+        self.name = try unboxer.unbox(key: "name")
+    }
 }
 
 extension Models.SpotifyUser: Unboxable {
