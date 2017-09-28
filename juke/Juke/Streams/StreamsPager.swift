@@ -12,7 +12,7 @@ import XLPagerTabStrip
 class StreamsPager: ButtonBarPagerTabStripViewController, UISearchBarDelegate {
     
     @IBOutlet var searchBar: UISearchBar!
-    var notificationName: String?
+    var notificationName: String!
     
     override func viewDidLoad() {
         // change selected bar color
@@ -28,6 +28,8 @@ class StreamsPager: ButtonBarPagerTabStripViewController, UISearchBarDelegate {
         settings.style.buttonBarRightContentInset = 0
         changeCurrentIndexProgressive = { [weak self] (oldCell: ButtonBarViewCell?, newCell: ButtonBarViewCell?, progressPercentage: CGFloat, changeCurrentIndex: Bool, animated: Bool) -> Void in
             guard changeCurrentIndex == true else { return }
+            if oldCell == nil || newCell == nil { return }  // because this block fires on init
+            
             //set who receives notification
             if newCell?.label.text == "All" {
                 self?.notificationName = "allStreamsSearchNotification"
@@ -37,6 +39,9 @@ class StreamsPager: ButtonBarPagerTabStripViewController, UISearchBarDelegate {
             self?.searchBar.text = ""
             self?.execSearchQuery()
         }
+        // notification should start as MySongsSearchNotification
+        self.notificationName = "starredStreamsSearchNotification"
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
         
         super.viewDidLoad()

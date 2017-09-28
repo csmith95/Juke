@@ -44,6 +44,10 @@ class EmptyStreamViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func unwindToViewControllerNameHere(segue: UIStoryboardSegue) {
+        //nothing goes here
+    }
+    
 
     // set status bar text to white
     override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }

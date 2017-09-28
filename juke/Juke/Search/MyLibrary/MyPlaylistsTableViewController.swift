@@ -70,11 +70,8 @@ class MyPlaylistsTableViewController: UITableViewController, IndicatorInfoProvid
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print("prep")
         if segue.identifier == "ShowPlaylist" {
-            print("1")
             if let row = tableView.indexPathForSelectedRow?.row, let dest = segue.destination as? PlaylistTableViewController  {
-                print(self.displayedPlaylists[row])
                 dest.playlist = self.displayedPlaylists[row]
             }
         }

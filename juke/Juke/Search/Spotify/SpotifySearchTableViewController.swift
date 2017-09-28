@@ -10,8 +10,9 @@ import UIKit
 import Alamofire
 import Unbox
 
-class SpotifySearchTableViewController: UITableViewController {
+class SpotifySearchTableViewController: UIViewController {
     
+    @IBOutlet var tableView: UITableView!
     @IBOutlet var searchBar: UISearchBar!
     
     var allResults:[Models.SpotifySong] = []           // all results
@@ -32,29 +33,6 @@ class SpotifySearchTableViewController: UITableViewController {
         searchBar.text = ""
         execSearch(keywords: "")
         SongKeeper.addedSongs.removeAll()
-    }
-    
-    // MARK: - Table view data source/delegate
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        hideKeyboard()
-    }
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return displayedResults.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SpotifySearchCell", for: indexPath)
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let cell = cell as! SearchCell
-        cell.populateCell(song: self.displayedResults[indexPath.row])
     }
     
     func threadSafeReloadView() {
@@ -157,5 +135,30 @@ extension SpotifySearchTableViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         execSearch(keywords: "")
         hideKeyboard()
+    }
+}
+
+extension SpotifySearchTableViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        hideKeyboard()
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return displayedResults.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SpotifySearchCell", for: indexPath)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let cell = cell as! SearchCell
+        cell.populateCell(song: self.displayedResults[indexPath.row])
     }
 }

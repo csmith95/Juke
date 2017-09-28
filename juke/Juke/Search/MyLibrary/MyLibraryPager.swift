@@ -12,7 +12,7 @@ import XLPagerTabStrip
 class MyLibraryPager: ButtonBarPagerTabStripViewController {
 
     @IBOutlet var searchBar: UISearchBar!
-    var notificationName: String?
+    var notificationName: String!
     
     override func viewDidLoad() {
         // change selected bar color
@@ -27,6 +27,7 @@ class MyLibraryPager: ButtonBarPagerTabStripViewController {
         settings.style.buttonBarRightContentInset = 0
         changeCurrentIndexProgressive = { [weak self] (oldCell: ButtonBarViewCell?, newCell: ButtonBarViewCell?, progressPercentage: CGFloat, changeCurrentIndex: Bool, animated: Bool) -> Void in
             guard changeCurrentIndex == true else { return }
+            if oldCell == nil || newCell == nil { return }  // because this block fires on init
             
             //set who receives notification
             if newCell?.label.text == "Songs" {
@@ -38,6 +39,8 @@ class MyLibraryPager: ButtonBarPagerTabStripViewController {
             self?.execSearchQuery()
             
         }
+        // notification should start as MySongsSearchNotification
+        self.notificationName = "MySongsSearchNotification"
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("MyLibraryPager.hideKeyboard"), object: nil)
         
         super.viewDidLoad()
@@ -55,8 +58,10 @@ class MyLibraryPager: ButtonBarPagerTabStripViewController {
     }
     
     func execSearchQuery() {
+        print("here")
         if let query = searchBar.text {
-            NotificationCenter.default.post(name: Notification.Name(notificationName!), object: nil, userInfo: ["query" : query.lowercased()])
+            print("here2. notification name: ", notificationName)
+            NotificationCenter.default.post(name: Notification.Name(notificationName), object: nil, userInfo: ["query" : query.lowercased()])
         }
     }
     

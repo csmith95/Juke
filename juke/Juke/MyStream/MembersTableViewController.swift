@@ -8,8 +8,10 @@
 
 import UIKit
 
-class MembersTableViewController: UITableViewController {
+class MembersTableViewController: UIViewController {
     
+    
+    @IBOutlet var tableView: UITableView!
     @IBOutlet var unwindButton: UIButton!
     
     // this should be set from MyStreamController before segue
@@ -21,18 +23,25 @@ class MembersTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         unwindButton.setTitle(stream.title, for: .normal)
     }
+    
+    // set status bar text to white
+    override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
+    
+}
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+extension MembersTableViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return stream.members.count+1
     }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath) as! UserCell
         if indexPath.row == 0 {
             cell.populateCell(member: stream.host)
@@ -41,8 +50,4 @@ class MembersTableViewController: UITableViewController {
         }
         return cell
     }
-    
-    // set status bar text to white
-    override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
-    
 }

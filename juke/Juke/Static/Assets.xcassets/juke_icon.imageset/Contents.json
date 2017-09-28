@@ -2,11 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "JUKE_LOGO.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "juke_icon.png",
+      "filename" : "JUKE_LOGO@2x.png",
       "scale" : "2x"
     },
     {
