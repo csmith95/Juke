@@ -386,7 +386,6 @@ class FirebaseAPI {
     public static func loginUser(spotifyUser: Models.SpotifyUser, callback: @escaping ((_: Bool) -> Void)) {
         ref.child("users/\(spotifyUser.spotifyID)").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
-                print(snapshot.value)
                 if var userDict = snapshot.value as? [String: Any?] {
                     userDict["spotifyID"] = spotifyUser.spotifyID
                     Current.user = Models.FirebaseUser(dict: userDict)
@@ -404,13 +403,11 @@ class FirebaseAPI {
                 }
                 // set firebase messaging token
                 let token = Messaging.messaging().fcmToken
-                print("FCM token: \(token ?? "")")
                 newUserDict["fcmToken"] = token
                 // write to firebase DB
                 self.ref.child("users/\(spotifyUser.spotifyID)").setValue(newUserDict)
                 newUserDict["spotifyID"] = spotifyUser.spotifyID
                 Current.user = Models.FirebaseUser(dict: newUserDict)
-                print("** ", newUserDict)
             }
             
             // now that current user is set, try to fetch stream
