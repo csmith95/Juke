@@ -38,6 +38,15 @@ class EmptyStreamViewController: UIViewController {
         numMembersButton.setTitle(message, for: .normal)
         
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ShowMembers" {
+            guard let stream = Current.stream else { return }
+            print(stream)
+            let dest = segue.destination as! MembersTableViewController
+            dest.stream = stream
+        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
