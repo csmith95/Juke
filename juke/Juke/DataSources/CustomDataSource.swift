@@ -64,7 +64,6 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
         })
         
         ref.child(path).observe(.childRemoved, with: { (snapshot) in
-            print("** child removed")
             self.updateCollection(type: .childRemoved, snapshot: snapshot)
         })
     }

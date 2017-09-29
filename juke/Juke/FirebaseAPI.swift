@@ -58,7 +58,6 @@ class FirebaseAPI {
                 whisper(title: "\(stream.host.username) deleted stream \"\(stream.title)\"" , backgroundColor: FlatPink())
             }
         })
-        observedPaths.append(path)
     }
     
     private static func addSongPlayStatusListener() {
@@ -317,6 +316,10 @@ class FirebaseAPI {
                     self.ref.child("/streams/\(currentStreamID)/members/\(user.spotifyID)").removeValue()    // remove self from members list
                 }
             }
+//            print("in remove all observers, reloading streams now#&(&#(*#&*(&#*(&(#&")
+//            NotificationCenter.default.post(name: Notification.Name("reloadStreams"), object: nil)
+//            NotificationCenter.default.post(name: Notification.Name("reloadStarredStreams"), object: nil)
+            
             callback()
         }
     }
