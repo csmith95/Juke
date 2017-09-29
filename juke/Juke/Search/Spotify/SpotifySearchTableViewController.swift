@@ -52,8 +52,7 @@ class SpotifySearchTableViewController: UIViewController {
             threadSafeReloadView()
             return
         }
-        let finalKeywords = keywords.replacingOccurrences(of: " ", with: "+")
-        searchSpotify(keywords: finalKeywords)
+        searchSpotify(keywords: keywords)
     }
     
     func searchSpotify(keywords: String) {
