@@ -10,6 +10,7 @@
 import Foundation
 import Unbox
 import Firebase
+import MediaPlayer
 
 // the database models should match these almost **exactly** (except for the coverArt optional)
 // for any requests to our server, use these names to encode parameters.
@@ -29,6 +30,7 @@ class Models {
         var coverArtURL: String
         var memberImageURL: String?
         var upvoters: [String: Bool] = [:]
+        var image: MPMediaItemArtwork?
         
         // formatted to be written directly to /streams/{streamID}/song/ or /songs/{streamID}/{key}/
         var firebaseDict: [String: Any] {

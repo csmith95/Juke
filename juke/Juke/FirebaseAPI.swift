@@ -385,6 +385,7 @@ class FirebaseAPI {
     public static func loginUser(spotifyUser: Models.SpotifyUser, callback: @escaping ((_: Bool) -> Void)) {
         ref.child("users/\(spotifyUser.spotifyID)").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
+                print(snapshot.value)
                 if var userDict = snapshot.value as? [String: Any?] {
                     userDict["spotifyID"] = spotifyUser.spotifyID
                     Current.user = Models.FirebaseUser(dict: userDict)

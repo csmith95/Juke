@@ -22,6 +22,7 @@ class EmptyStreamViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        print("viewWillAppear. stream: ", Current.stream)
         guard let stream = Current.stream else {
             //  if user not in stream
             streamTitleLabel.isHidden = true
@@ -36,7 +37,6 @@ class EmptyStreamViewController: UIViewController {
         let count = stream.members.count+1
         let message = "\(count) member" + ((count > 1) ? "s" : "")
         numMembersButton.setTitle(message, for: .normal)
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

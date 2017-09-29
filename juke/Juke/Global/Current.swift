@@ -29,11 +29,13 @@ class Current {
                 if stream == nil {
                     jamsPlayer.position_ms = 0.0
                 }
-                
-                DispatchQueue.main.async {
-                    // this event is listened for in MyStreamRootViewController to handle transitioning between container views
-                    NotificationCenter.default.post(name: Notification.Name("updateMyStreamView"), object: nil)
-                }
+            }
+        }
+        
+        didSet(newValue) {
+            DispatchQueue.main.async {
+                // this event is listened for in MyStreamRootViewController to handle transitioning between container views
+                NotificationCenter.default.post(name: Notification.Name("updateMyStreamView"), object: nil)
             }
         }
     }

@@ -22,7 +22,7 @@ class ImageCache {
         imageCache: AutoPurgingImageCache()
     )
     
-    public static func downloadUserImage(url: String?, callback: @escaping (UIImage?)->Void) {
+    public static func downloadUserImage(url: String?, callback: @escaping (UIImage)->Void) {
         if let url = url {
             let urlRequest = URLRequest(url: URL(string: url)!)
             downloader.download(urlRequest, filter: circleUserFilter) { response in
@@ -37,7 +37,7 @@ class ImageCache {
         }
     }
     
-    public static func downloadPlaylistImage(url: String, callback: @escaping (UIImage?)->Void) {
+    public static func downloadPlaylistImage(url: String, callback: @escaping (UIImage)->Void) {
         let urlRequest = URLRequest(url: URL(string: url)!)
         downloader.download(urlRequest, filter: roundedCornersFilter) { response in
             if let image = response.result.value {
