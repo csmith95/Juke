@@ -45,10 +45,10 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
     }
     
     override func viewWillAppear(_ animated: Bool) {
-//        // hack to reload on new starred user
-//        if let source = tableView.dataSource as? CustomDataSource {
-//            source.searchBy(query: "")
-//        }
+        // hack to reload
+        if let source = tableView.dataSource as? CustomDataSource {
+            source.searchBy(query: "")
+        }
     }
     
     // triggered from data source class

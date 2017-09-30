@@ -36,7 +36,7 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        // hack to reload on new starred user
+        // hack to reload
         if let source = tableView.dataSource as? CustomDataSource {
             source.searchBy(query: "")
         }
