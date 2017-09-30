@@ -79,10 +79,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
             MPNowPlayingInfoPropertyPlaybackRate: stream.isPlaying && Current.listenSelected,
         ]
         
-        if let image = song.image {
-            print("image not nil")
-            mpic.nowPlayingInfo![MPMediaItemPropertyArtwork] = image
-        } else {
+        if song.image == nil {
             print("image == nil")
             setImage(url: song.coverArtURL)
         }
@@ -96,7 +93,9 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
                 return image.imageScaled(to: mySize)
             }
 //            self.mpic.nowPlayingInfo![MPMediaItemPropertyArtwork] = albumArt
-            self.updateNowPlayingInfoCenter()
+//            self.updateNowPlayingInfoCenter()
+            self.mpic.nowPlayingInfo![MPMediaItemPropertyArtwork] = image
+
         }
     }
 
