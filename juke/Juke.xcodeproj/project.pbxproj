@@ -41,6 +41,7 @@
 		4B8CD0F81F51FF47005C61D1 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8CD0F71F51FF47005C61D1 /* UserCell.swift */; };
 		4BA7CB701E8ED007003E3DC8 /* MyStreamController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */; };
 		4BA9B3F51E91B043003D352E /* Current.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA9B3F41E91B043003D352E /* Current.swift */; };
+		4BB2B37A1F7F1DE400DDB6F5 /* LockScreenDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB2B3791F7F1DE400DDB6F5 /* LockScreenDelegate.swift */; };
 		4BCFA0231F6DBAA600E49516 /* MembersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCFA0221F6DBAA600E49516 /* MembersTableViewController.swift */; };
 		4BCFA0251F6DC75F00E49516 /* EmptyStreamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCFA0241F6DC75F00E49516 /* EmptyStreamViewController.swift */; };
 		4BCFA0281F70515D00E49516 /* StreamsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCFA0271F70515D00E49516 /* StreamsDataSource.swift */; };
@@ -100,6 +101,7 @@
 		4B8CD0F71F51FF47005C61D1 /* UserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyStreamController.swift; sourceTree = "<group>"; };
 		4BA9B3F41E91B043003D352E /* Current.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Current.swift; sourceTree = "<group>"; };
+		4BB2B3791F7F1DE400DDB6F5 /* LockScreenDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenDelegate.swift; sourceTree = "<group>"; };
 		4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Juke-Bridging-Header.h"; sourceTree = "<group>"; };
 		4BCFA0221F6DBAA600E49516 /* MembersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MembersTableViewController.swift; sourceTree = "<group>"; };
 		4BCFA0241F6DC75F00E49516 /* EmptyStreamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyStreamViewController.swift; sourceTree = "<group>"; };
@@ -285,6 +287,7 @@
 				4B48FDE61F6108E700E87507 /* GradientView.swift */,
 				4B3A34D51E58120F00C314A0 /* Main.storyboard */,
 				4B336A661E8B54A0003CEDBB /* Models.swift */,
+				4BB2B3791F7F1DE400DDB6F5 /* LockScreenDelegate.swift */,
 			);
 			path = Juke;
 			sourceTree = "<group>";
@@ -527,6 +530,7 @@
 				4BCFA0231F6DBAA600E49516 /* MembersTableViewController.swift in Sources */,
 				4BCFA0281F70515D00E49516 /* StreamsDataSource.swift in Sources */,
 				4BCFA0301F70532700E49516 /* StarredUserCell.swift in Sources */,
+				4BB2B37A1F7F1DE400DDB6F5 /* LockScreenDelegate.swift in Sources */,
 				4BA7CB701E8ED007003E3DC8 /* MyStreamController.swift in Sources */,
 				4B48FDDD1F5DCCE400E87507 /* MenuActionController.swift in Sources */,
 				4B7C1EA11F484DF00064F1C3 /* FirebaseAPI.swift in Sources */,

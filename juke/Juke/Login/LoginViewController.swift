@@ -16,9 +16,11 @@ class LoginViewController: UIViewController {
 
     @IBOutlet weak var loginButton: UIButton!
     let spotifyLoginController: SpotifyLoginController = SpotifyLoginController()
+    let lockScreenDelegate = LockScreenDelegate()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        lockScreenDelegate.setUpNowPlayingInfoCenter()
         spotifyLoginController.setSpotifyAppCredentials()  // set credentials before trying to fetch session
         if let session = SessionManager.fetchSession() {
             if session.isValid() {
