@@ -48,7 +48,6 @@ class FirebaseAPI {
     
     private static func addStreamDeletedListener() {
         ref.child("/streams").observe(.childRemoved, with:{ (snapshot) in
-            print("childRemoved: ", snapshot)
             guard let stream = Current.stream else { return }
             if snapshot.key == stream.streamID {    // if deleted stream is my stream
                 Current.stream = nil    // this entails firebase calls and posted notifications that will initiate segue in middle tab. See Current.swift
@@ -66,6 +65,7 @@ class FirebaseAPI {
                 Current.stream!.isPlaying = isPlaying
                 self.listenForSongProgress()    // fetch updated status
                 NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.PlayStatusChanged)
+                NotificationCenter.default.post(name: Notification.Name("firebaseEventLockScreen"), object: FirebaseEvent.PlayStatusChanged)
             }
         }) { err in print(err.localizedDescription)}
         observedPaths.append(path)
@@ -202,6 +202,7 @@ class FirebaseAPI {
             
             // post event telling controller to resync in case it's already active
             NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.TopSongChanged)
+            NotificationCenter.default.post(name: Notification.Name("firebaseEventLockScreen"), object: FirebaseEvent.TopSongChanged)
             
         }) { error in print(error.localizedDescription) }
         observedPaths.append(path)
@@ -300,7 +301,7 @@ class FirebaseAPI {
     }
     
     // this method is called from Current.swift when stream is assigned a new value
-    public static func leaveStream(current: Models.FirebaseStream?, callback: @escaping ((Void) -> Void)) {
+    public static func leaveStream(current: Models.FirebaseStream?, callback: @escaping (() -> Void)) {
         // cancel listeners because they're wired to old stream
         removeAllObservers() {
             // when all observers are removed, update db

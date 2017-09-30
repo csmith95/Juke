@@ -8,7 +8,6 @@
 
 import Foundation
 import AVFoundation
-import MediaPlayer
 
 class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate {
     
@@ -34,8 +33,6 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         }
     }
     
-    let mpic = MPNowPlayingInfoCenter.default()
-    
     override private init() {
         self.position_ms = 0.0
         super.init()
@@ -46,57 +43,9 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
             refreshSession()
             try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try? AVAudioSession.sharedInstance().setActive(true)
-            setUpNowPlayingInfoCenter()
+            
         } catch let err {
             print(err)
-        }
-    }
-    
-    private func setUpNowPlayingInfoCenter() {
-        UIApplication.shared.beginReceivingRemoteControlEvents()
-        MPRemoteCommandCenter.shared().playCommand.addTarget {event in
-            self.setPlayStatus(shouldPlay: true, topSong: Current.stream?.song)
-            return .success
-        }
-        
-        MPRemoteCommandCenter.shared().pauseCommand.addTarget {event in
-            self.setPlayStatus(shouldPlay: false, topSong: Current.stream?.song)
-            return .success
-        }
-    }
-    
-    private func updateNowPlayingInfoCenter() {
-        guard let stream = Current.stream, let song = stream.song else {
-            mpic.nowPlayingInfo = [String: AnyObject]()
-            return
-        }
-        
-        mpic.nowPlayingInfo = [
-            MPMediaItemPropertyTitle: song.songName,
-            MPMediaItemPropertyArtist: song.artistName,
-            MPMediaItemPropertyPlaybackDuration: song.duration/1000,
-            MPNowPlayingInfoPropertyElapsedPlaybackTime: self.position_ms/1000,
-            MPNowPlayingInfoPropertyPlaybackRate: stream.isPlaying && Current.listenSelected,
-        ]
-        
-        if let image = song.image {
-            print("image not nil")
-            mpic.nowPlayingInfo![MPMediaItemPropertyArtwork] = image
-        } else {
-            print("image == nil")
-            setImage(url: song.coverArtURL)
-        }
-    }
-    
-    private func setImage(url: String) {
-        ImageCache.downloadPlaylistImage(url: url) { (image) in
-            print("downloaded")
-            let mySize = CGSize(width: 400, height: 400)
-            Current.stream?.song?.image = MPMediaItemArtwork(boundsSize:mySize) { sz in
-                return image.imageScaled(to: mySize)
-            }
-//            self.mpic.nowPlayingInfo![MPMediaItemPropertyArtwork] = albumArt
-            self.updateNowPlayingInfoCenter()
         }
     }
 
@@ -149,8 +98,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
     }
     
-    private func setPlayStatus(shouldPlay: Bool, topSong: Models.FirebaseSong?) {
-        updateNowPlayingInfoCenter()
+    public func setPlayStatus(shouldPlay: Bool, topSong: Models.FirebaseSong?) {
         guard let player = sharedInstance else { self.refreshSession(); return; }
         guard let song = topSong else {                     // turn off if nil passed in for topSong
             player.setIsPlaying(false, callback: { (err) in

@@ -87,12 +87,11 @@ class MyStreamController: UITableViewController {
         listenButton.isSelected = status
         Current.listenSelected = status
         handleAutomaticProgressSlider()
-        FirebaseAPI.listenForSongProgress() // fetch real song progress to maintain sync
         if Current.isHost() {
-            print("set status: ", status)
-            FirebaseAPI.setPlayStatus(status: status)
-            Current.stream!.isPlaying = status
+            Current.stream?.isPlaying = status
+            FirebaseAPI.setPlayStatus(status: status)   // update db
         }
+        FirebaseAPI.listenForSongProgress() // fetch real song progress to maintain sync
         jamsPlayer.resync()
     }
     
@@ -307,7 +306,6 @@ class MyStreamController: UITableViewController {
             self.handleAutomaticProgressSlider()
         case .TopSongChanged:
             self.setUI()
-
         case .SetProgress:
             self.progressSliderValue = jamsPlayer.position_ms
         case .StreamTitleChanged:

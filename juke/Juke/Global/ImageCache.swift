@@ -48,5 +48,16 @@ class ImageCache {
         }
     }
     
+    public static func downloadLockScreenAlbumArtImage(url: String, callback: @escaping (UIImage?)->Void) {
+        let urlRequest = URLRequest(url: URL(string: url)!)
+        downloader.download(urlRequest) { response in
+            if let image = response.result.value {
+                callback(image)
+            } else {
+                callback(nil)
+            }
+        }
+    }
+    
     
 }
