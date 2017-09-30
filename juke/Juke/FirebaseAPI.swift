@@ -47,7 +47,6 @@ class FirebaseAPI {
     }
     
     private static func addStreamDeletedListener() {
-        let path = "/streams"
         ref.child("/streams").observe(.childRemoved, with:{ (snapshot) in
             print("childRemoved: ", snapshot)
             guard let stream = Current.stream else { return }
