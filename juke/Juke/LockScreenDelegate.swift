@@ -18,7 +18,6 @@ class LockScreenDelegate: NSObject {
     private let jamsPlayer = JamsPlayer.shared
 
     public func setUpNowPlayingInfoCenter() {
-        print("init mpic")
         mpic.nowPlayingInfo = [String: AnyObject]()
         UIApplication.shared.beginReceivingRemoteControlEvents()
         MPRemoteCommandCenter.shared().playCommand.addTarget {event in
@@ -27,6 +26,7 @@ class LockScreenDelegate: NSObject {
                 Current.stream?.isPlaying = true
                 FirebaseAPI.setPlayStatus(status: true)   // update db
             }
+            Current.listenSelected = true
             self.jamsPlayer.setPlayStatus(shouldPlay: Current.stream!.isPlaying && Current.listenSelected, topSong: Current.stream?.song)
             return .success
         }
@@ -37,6 +37,7 @@ class LockScreenDelegate: NSObject {
                 Current.stream?.isPlaying = false
                 FirebaseAPI.setPlayStatus(status: false)   // update db
             }
+            Current.listenSelected = false
             self.jamsPlayer.setPlayStatus(shouldPlay: Current.stream!.isPlaying && Current.listenSelected, topSong: Current.stream?.song)
             return .success
         }
@@ -45,8 +46,6 @@ class LockScreenDelegate: NSObject {
     }
     
     func firebaseEventHandler(notification: NSNotification) {
-        print("handler")
-
         guard let stream = Current.stream, let song = stream.song else {
             mpic.nowPlayingInfo = [String: AnyObject]()
             return
@@ -73,7 +72,9 @@ class LockScreenDelegate: NSObject {
                 self.mpic.nowPlayingInfo = current
             }
         case .SetProgress:
-            mpic.nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = jamsPlayer.position_ms/1000
+            var current = mpic.nowPlayingInfo
+            current![MPNowPlayingInfoPropertyElapsedPlaybackTime] = jamsPlayer.position_ms/1000
+            mpic.nowPlayingInfo = current
         default:
             return
         }

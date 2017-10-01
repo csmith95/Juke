@@ -34,6 +34,7 @@ class Current {
         
         didSet(newValue) {
             DispatchQueue.main.async {
+                print("*** stream nil: ", Current.stream == nil)
                 // this event is listened for in MyStreamRootViewController to handle transitioning between container views
                 NotificationCenter.default.post(name: Notification.Name("updateMyStreamView"), object: nil)
             }

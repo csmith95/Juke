@@ -15,22 +15,29 @@ class EmptyStreamViewController: UIViewController {
     @IBOutlet weak var twoDownArrows: UIImageView!
     @IBOutlet var endStreamButton: UIButton!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Do any additional setup after loading the view.
+    override func viewWillAppear(_ animated: Bool) {
+        print("viewWillAppear. stream nil: ", Current.stream == nil)
+        setUI()
+        super.viewWillAppear(animated)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        print("viewWillAppear. stream: ", Current.stream)
+    private func setUI() {
+        print("setting UI")
         guard let stream = Current.stream else {
             //  if user not in stream
             streamTitleLabel.isHidden = true
             numMembersButton.isHidden = true
+            endStreamButton.isHidden = true
             return
         }
         
         // if user in a stream
+        endStreamButton.isHidden = false
+        if Current.isHost() {
+            endStreamButton.setTitle("End stream", for: .normal)
+        } else {
+            endStreamButton.setTitle("Leave stream", for: .normal)
+        }
         streamTitleLabel.isHidden = false
         streamTitleLabel.text = stream.title
         numMembersButton.isHidden = false
@@ -42,13 +49,14 @@ class EmptyStreamViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ShowMembers" {
             guard let stream = Current.stream else { return }
-            print(stream)
             let dest = segue.destination as! MembersTableViewController
             dest.stream = stream
         }
     }
 
     @IBAction func endStreamPressed(_ sender: Any) {
+        Current.stream = nil
+        setUI()
     }
     
     override func didReceiveMemoryWarning() {

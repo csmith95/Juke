@@ -55,7 +55,6 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
         
         // add listeners to detect db changes
         ref.child(path).observe(.childChanged, with: { (snapshot) in
-            print("** child added")
             self.updateCollection(type: .childChanged, snapshot: snapshot)
         })
         
@@ -74,7 +73,6 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
         let collectionItem = CollectionItem(snapshot: snapshot)
         if !collectionItem.isValid() { return } // no fields were extracted from snapshot -- do nothing
         objc_sync_enter(self)
-        print("*** going to handle child added/removed")
         switch (type) {
         case .childAdded:
             handleChildAdded(collectionItem: collectionItem)
@@ -128,13 +126,8 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     }
     
     func handleChildRemoved(collectionItem: CollectionItem) {
-        print("** child removed: stream ", collectionItem.stream)
-        print("** child removed: user ", collectionItem.user)
-        print("** child removed: song ", collectionItem.song)
         guard let index = getIndex(collectionItem: collectionItem) else { return }
-        print("** index: ", index)
         collection.remove(at: index.row)
-        print("** new collection: ", collection)
         triggerTableViewRefresh()
     }
     
