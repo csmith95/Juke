@@ -107,7 +107,7 @@
                     <tabBarItem key="tabBarItem" title="Users" image="toolbarPeople" selectedImage="toolbarPeople" id="7Kw-ed-VIZ"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="YjN-Z8-Ndf">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="YjN-Z8-Ndf">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -322,7 +322,7 @@
                     <tabBarItem key="tabBarItem" title="Streams" image="toolbarStreams" selectedImage="toolbarStreams" id="te7-SS-y4N"/>
                     <toolbarItems/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="KoR-Mg-UzL">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="KoR-Mg-UzL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -366,16 +366,16 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="cGL-Tc-WHi">
-                                                        <rect key="frame" x="133" y="32" width="110.5" height="68.5"/>
+                                                        <rect key="frame" x="120.5" y="17" width="135" height="98.5"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stream Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oqN-Lb-Xub">
-                                                                <rect key="frame" x="0.0" y="0.0" width="110.5" height="21.5"/>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stream Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="oqN-Lb-Xub">
+                                                                <rect key="frame" x="12.5" y="0.0" width="110.5" height="21.5"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="2hM-7N-nbz">
-                                                                <rect key="frame" x="17.5" y="29.5" width="75" height="11"/>
+                                                                <rect key="frame" x="30" y="29.5" width="75" height="11"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Host Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="phk-OG-RhB">
                                                                         <rect key="frame" x="0.0" y="0.0" width="61" height="11"/>
@@ -396,10 +396,10 @@
                                                                 </constraints>
                                                             </stackView>
                                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="rZ1-hT-gD2" userLabel="Members Stack View">
-                                                                <rect key="frame" x="55" y="48.5" width="0.0" height="0.0"/>
+                                                                <rect key="frame" x="0.0" y="48.5" width="135" height="30"/>
                                                                 <subviews>
-                                                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="juke_icon" translatesAutoresizingMaskIntoConstraints="NO" id="YUM-W3-Cvn" userLabel="Member1">
-                                                                        <rect key="frame" x="-188" y="-80.5" width="0.0" height="30"/>
+                                                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="juke_icon" translatesAutoresizingMaskIntoConstraints="NO" id="YUM-W3-Cvn" userLabel="Member1">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="30" id="R20-lW-kfc"/>
                                                                             <constraint firstAttribute="width" constant="30" id="gkb-Uh-cEV"/>
@@ -416,8 +416,8 @@
                                                                             </userDefinedRuntimeAttribute>
                                                                         </userDefinedRuntimeAttributes>
                                                                     </imageView>
-                                                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="juke_icon" translatesAutoresizingMaskIntoConstraints="NO" id="1m4-Gp-HM8" userLabel="Member2">
-                                                                        <rect key="frame" x="-188" y="-80.5" width="0.0" height="30"/>
+                                                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="juke_icon" translatesAutoresizingMaskIntoConstraints="NO" id="1m4-Gp-HM8" userLabel="Member2">
+                                                                        <rect key="frame" x="35" y="0.0" width="30" height="30"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="30" id="9On-dF-57n"/>
                                                                             <constraint firstAttribute="width" constant="30" id="YwN-NB-1Nc"/>
@@ -434,8 +434,8 @@
                                                                             </userDefinedRuntimeAttribute>
                                                                         </userDefinedRuntimeAttributes>
                                                                     </imageView>
-                                                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="juke_icon" translatesAutoresizingMaskIntoConstraints="NO" id="Jzb-bm-jCb" userLabel="Member3">
-                                                                        <rect key="frame" x="-188" y="-80.5" width="0.0" height="30"/>
+                                                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="juke_icon" translatesAutoresizingMaskIntoConstraints="NO" id="Jzb-bm-jCb" userLabel="Member3">
+                                                                        <rect key="frame" x="70" y="0.0" width="30" height="30"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="30" id="SIB-kI-tg8"/>
                                                                             <constraint firstAttribute="height" constant="30" id="mEg-hA-nyx"/>
@@ -452,8 +452,8 @@
                                                                             </userDefinedRuntimeAttribute>
                                                                         </userDefinedRuntimeAttributes>
                                                                     </imageView>
-                                                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="juke_icon" translatesAutoresizingMaskIntoConstraints="NO" id="31Q-WE-c9k" userLabel="Member3">
-                                                                        <rect key="frame" x="-188" y="-80.5" width="0.0" height="30"/>
+                                                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="juke_icon" translatesAutoresizingMaskIntoConstraints="NO" id="31Q-WE-c9k" userLabel="Member3">
+                                                                        <rect key="frame" x="105" y="0.0" width="30" height="30"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="30" id="8Xe-FW-Yz8"/>
                                                                             <constraint firstAttribute="width" constant="30" id="myN-L1-0jp"/>
@@ -473,7 +473,7 @@
                                                                 </subviews>
                                                             </stackView>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Num members" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZLT-Sc-5Ga">
-                                                                <rect key="frame" x="20" y="56.5" width="70" height="12"/>
+                                                                <rect key="frame" x="32.5" y="86.5" width="70" height="12"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <nil key="highlightedColor"/>
@@ -491,9 +491,11 @@
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstItem="CNA-1P-JWi" firstAttribute="top" secondItem="9Qq-2G-3hJ" secondAttribute="top" constant="8" id="09z-gT-PBq"/>
+                                                    <constraint firstItem="cGL-Tc-WHi" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="9Qq-2G-3hJ" secondAttribute="leading" constant="5" id="Wyg-dI-CNw"/>
                                                     <constraint firstAttribute="trailing" secondItem="CNA-1P-JWi" secondAttribute="trailing" constant="8" id="ZhN-Xl-TjY"/>
                                                     <constraint firstItem="cGL-Tc-WHi" firstAttribute="centerY" secondItem="9Qq-2G-3hJ" secondAttribute="centerY" id="bGf-Kg-S6m"/>
                                                     <constraint firstItem="cGL-Tc-WHi" firstAttribute="centerX" secondItem="9Qq-2G-3hJ" secondAttribute="centerX" id="d51-JF-lMM"/>
+                                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="cGL-Tc-WHi" secondAttribute="trailing" constant="5" id="mPi-VC-IlU"/>
                                                 </constraints>
                                             </view>
                                             <blurEffect style="dark"/>
@@ -542,7 +544,7 @@
                 <navigationController navigationBarHidden="YES" id="oRk-jp-Vtn" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Search" image="search" id="fEr-so-Hm8"/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="NJe-yO-XzD">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="NJe-yO-XzD">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -704,7 +706,7 @@
                     <tabBarItem key="tabBarItem" title="My Library" image="toolbarMyLibrary" selectedImage="toolbarMyLibrary" id="uL8-We-Nn7"/>
                     <toolbarItems/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="zhr-dh-TNo">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="zhr-dh-TNo">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1551,7 +1553,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="aFy-QO-1jJ" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <tabBarItem key="tabBarItem" title="" image="music" id="vMP-0c-7Ux"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="M5b-gh-iM0">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="M5b-gh-iM0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1914,7 +1916,7 @@
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="AYJ-9t-1XW">
                                                         <rect key="frame" x="120" y="21.5" width="135" height="89.5"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stream Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="Kjn-Kw-fPp">
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stream Name" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="Kjn-Kw-fPp">
                                                                 <rect key="frame" x="12.5" y="0.0" width="110.5" height="21.5"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="21.5" id="RMR-vO-Q7w"/>
@@ -2041,8 +2043,10 @@
                                                 <constraints>
                                                     <constraint firstItem="AYJ-9t-1XW" firstAttribute="centerY" secondItem="kag-qz-Gh4" secondAttribute="centerY" id="D6O-Jv-KB2"/>
                                                     <constraint firstItem="jYx-qo-ale" firstAttribute="top" secondItem="kag-qz-Gh4" secondAttribute="top" constant="8" id="b24-ey-B3N"/>
+                                                    <constraint firstItem="AYJ-9t-1XW" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="kag-qz-Gh4" secondAttribute="leading" constant="5" id="fX5-sm-sm1"/>
                                                     <constraint firstItem="AYJ-9t-1XW" firstAttribute="centerX" secondItem="kag-qz-Gh4" secondAttribute="centerX" id="pTR-fc-aQb"/>
                                                     <constraint firstAttribute="trailing" secondItem="jYx-qo-ale" secondAttribute="trailing" constant="8" id="qBa-lH-Prh"/>
+                                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="AYJ-9t-1XW" secondAttribute="trailing" constant="5" id="tR0-Qz-upy"/>
                                                 </constraints>
                                             </view>
                                             <blurEffect style="dark"/>
