@@ -310,7 +310,7 @@ class FirebaseAPI {
             // when all observers are removed, update db
             if let currentStreamID = current?.streamID {
                 guard let user = Current.user else { return }
-                if current!.host.spotifyID == user.spotifyID {
+                if current?.host.spotifyID == user.spotifyID {
                     // delete current stream and associated resources if host
                     self.ref.child("/streams/\(currentStreamID)").removeValue()
                     self.ref.child("/songs/\(currentStreamID)").removeValue()
@@ -319,9 +319,6 @@ class FirebaseAPI {
                     self.ref.child("/streams/\(currentStreamID)/members/\(user.spotifyID)").removeValue()    // remove self from members list
                 }
             }
-//            print("in remove all observers, reloading streams now#&(&#(*#&*(&#*(&(#&")
-//            NotificationCenter.default.post(name: Notification.Name("reloadStreams"), object: nil)
-//            NotificationCenter.default.post(name: Notification.Name("reloadStarredStreams"), object: nil)
             
             callback()
         }
