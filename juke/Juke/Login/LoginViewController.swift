@@ -13,10 +13,14 @@ import Firebase
 import Crashlytics
 
 class LoginViewController: UIViewController {
+    
 
     @IBOutlet weak var loginButton: UIButton!
     let spotifyLoginController: SpotifyLoginController = SpotifyLoginController()
     let lockScreenDelegate = LockScreenDelegate()
+    
+    let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +44,12 @@ class LoginViewController: UIViewController {
     }
 
     @IBAction func loginWithSpotify(_ sender: Any) {
+        print("in login with spotify")
         self.present(spotifyLoginController, animated: true) {
+            print("in login controller")
+            self.activityIndicator.center = self.view.center
+            self.activityIndicator.startAnimating()
+            self.view.addSubview(self.activityIndicator)
             self.spotifyLoginController.login() {
                 self.loginButton.isHidden = true
                 self.fetchSpotifyUser()
