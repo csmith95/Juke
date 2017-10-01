@@ -13,7 +13,7 @@ class EmptyStreamViewController: UIViewController {
     @IBOutlet weak var streamTitleLabel: UILabel!
     @IBOutlet weak var numMembersButton: UIButton!
     @IBOutlet weak var twoDownArrows: UIImageView!
-    
+    @IBOutlet var endStreamButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +48,9 @@ class EmptyStreamViewController: UIViewController {
         }
     }
 
+    @IBAction func endStreamPressed(_ sender: Any) {
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

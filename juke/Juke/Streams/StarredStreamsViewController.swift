@@ -10,7 +10,6 @@ import UIKit
 import AlamofireImage
 import Alamofire
 import Unbox
-import PKHUD
 import SCLAlertView
 import Firebase
 import FirebaseDatabaseUI

@@ -254,7 +254,8 @@ class MyStreamController: UITableViewController {
                 switch response.result {
                 case .success:
                     // tell spotify search table view controller to update lib
-                    NotificationCenter.default.post(name: Notification.Name("libraryChanged"), object: song)
+                    let dict: [String: Any?] = ["song": song, "shouldAdd": songAdded]
+                    NotificationCenter.default.post(name: Notification.Name("libraryChanged"), object: dict)
                     self.delay(0.5) {
                         let message = songAdded ? "Saved \(song.songName) to your library!" : "Removed \(song.songName) from your library"
                         HUD.flash(.labeledSuccess(title: nil, subtitle: message), delay: 1.00)
@@ -263,7 +264,7 @@ class MyStreamController: UITableViewController {
                 case .failure(let error):
                     print("Error saving to spotify lib: ", error)
                     self.delay(0.5) {
-                        HUD.flash(.labeledError(title: nil, subtitle: "Error saving \(song.songName) to your librar"), delay: 1.00)
+                        HUD.flash(.labeledError(title: nil, subtitle: "Error saving \(song.songName) to your library"), delay: 1.00)
                     }
                 }
             }

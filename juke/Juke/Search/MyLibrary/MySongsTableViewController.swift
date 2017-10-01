@@ -71,16 +71,11 @@ class MySongsTableViewController: UITableViewController, IndicatorInfoProvider {
     }
     
     func execSearch(notification: Notification) {
-        print("1")
         guard let userInfo = notification.userInfo else { return }
-        print(userInfo)
-//        guard let keywords = userInfo["query"] as! String else { return }
-//        print(keywords)
         self.execSearchHelper(keywords: userInfo["query"] as! String)
     }
     
     private func execSearchHelper(keywords: String) {
-        print("** ", keywords)
         if keywords.isEmpty {
             displayedSongs = allSongs
         } else {
@@ -93,11 +88,10 @@ class MySongsTableViewController: UITableViewController, IndicatorInfoProvider {
     
     
     func libraryChanged(notification: Notification) {
-        guard let song = notification.object as? Models.FirebaseSong else { return }
-        guard let firstSong = allSongs.first else { return }
-        if firstSong.spotifyID == song.spotifyID {
-            allSongs.remove(at: 0)    // song was already in lib -- remove it
-        } else {
+        guard let dict = notification.object as? [String: Any?] else { return }
+        guard let song = dict["song"] as? Models.FirebaseSong else { return }
+        guard let shouldAdd = dict["shouldAdd"] as? Bool else { return }
+        if shouldAdd {
             // song wasn't in lib -- insert at first index
             let spotifySong = Models.SpotifySong(songName: song.songName,
                                                  artistName: song.artistName,
@@ -105,7 +99,11 @@ class MySongsTableViewController: UITableViewController, IndicatorInfoProvider {
                                                  duration: song.duration,
                                                  coverArtURL: song.coverArtURL)
             allSongs.insert(spotifySong, at: 0)
+        } else {
+            allSongs.remove(at: 0)    // song was already in lib -- remove it
         }
+        
+        displayedSongs = allSongs
         DispatchQueue.main.async {
             self.threadSafeReloadView()
         }

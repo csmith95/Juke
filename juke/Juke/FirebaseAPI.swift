@@ -53,7 +53,7 @@ class FirebaseAPI {
                 Current.stream = nil    // this entails firebase calls and posted notifications that will initiate segue in middle tab. See Current.swift
 
                 // display Whisper notification
-                whisper(title: "\(stream.host.username) deleted stream \"\(stream.title)\"" , backgroundColor: FlatPink())
+                whisper(title: "\(stream.host.username) erased stream \"\(stream.title)\"" , backgroundColor: FlatPink())
             }
         })
     }
@@ -63,7 +63,9 @@ class FirebaseAPI {
         ref.child(path).observe(.value, with:{ (snapshot) in
             if snapshot.exists(), let isPlaying = snapshot.value as? Bool {
                 Current.stream!.isPlaying = isPlaying
+                jamsPlayer.resync()
                 self.listenForSongProgress()    // fetch updated status
+                print("got play status change event")
                 NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.PlayStatusChanged)
                 NotificationCenter.default.post(name: Notification.Name("firebaseEventLockScreen"), object: FirebaseEvent.PlayStatusChanged)
             }
@@ -146,7 +148,7 @@ class FirebaseAPI {
     
     public static func whisper(title: String, backgroundColor: UIColor) {
         let murmur = Murmur(title: title, backgroundColor: backgroundColor, titleColor: FlatWhite(), font: UIFont.boldSystemFont(ofSize: 16))
-        Whisper.show(whistle: murmur, action: .show(2.0))
+        Whisper.show(whistle: murmur, action: .show(4.0))
     }
     
     // listens once to song progress and triggers update if necessary (out of sync by > 3 seconds)
@@ -156,6 +158,7 @@ class FirebaseAPI {
         guard let stream = Current.stream else { return }
         self.ref.child("/songProgressTable/\(stream.streamID)").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists(), let updatedProgress = snapshot.value as? Double {
+                print("listened for progress. new: \(updatedProgress), old: \(jamsPlayer.position_ms)")
                 jamsPlayer.position_ms = updatedProgress
             } else {
                 jamsPlayer.position_ms = 0.0
@@ -388,7 +391,6 @@ class FirebaseAPI {
     public static func loginUser(spotifyUser: Models.SpotifyUser, callback: @escaping ((_: Bool) -> Void)) {
         ref.child("users/\(spotifyUser.spotifyID)").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
-                print(snapshot.value)
                 if var userDict = snapshot.value as? [String: Any?] {
                     userDict["spotifyID"] = spotifyUser.spotifyID
                     Current.user = Models.FirebaseUser(dict: userDict)

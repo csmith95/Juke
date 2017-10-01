@@ -69,7 +69,7 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
-  - PKHUD (4.2.0)
+  - PKHUD (4.2.3)
   - Presentr (1.2.3)
   - Protobuf (3.3.0)
   - SCLAlertView (0.7.0)
@@ -94,7 +94,7 @@ DEPENDENCIES:
   - Firebase/Messaging
   - Firebase/Storage
   - FirebaseUI/Database (~> 4.0)
-  - PKHUD (~> 4.0)
+  - PKHUD (from `https://github.com/pkluz/PKHUD.git`, branch `release/swift4`)
   - Presentr
   - SCLAlertView
   - SkyFloatingLabelTextField (~> 3.0)
@@ -106,11 +106,17 @@ DEPENDENCIES:
 EXTERNAL SOURCES:
   ChameleonFramework:
     :git: https://github.com/ViccAlexander/Chameleon.git
+  PKHUD:
+    :branch: release/swift4
+    :git: https://github.com/pkluz/PKHUD.git
 
 CHECKOUT OPTIONS:
   ChameleonFramework:
     :commit: 6dd284bde21ea2e7f9fd89bc36f40df16e16369d
     :git: https://github.com/ViccAlexander/Chameleon.git
+  PKHUD:
+    :commit: 4d8fbf70ae912dd72280cde0a5c1440ada9a7306
+    :git: https://github.com/pkluz/PKHUD.git
 
 SPEC CHECKSUMS:
   Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
@@ -131,7 +137,7 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
   GTMSessionFetcher: 5ad62e8200fa00ed011fe5e08d27fef72c5b1429
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
-  PKHUD: 48af884cf00c2213b0313b739d914e6cab1c0f5e
+  PKHUD: 351011b853e6b942e7ee8ad335864cc84c787241
   Presentr: a21c7bbb3532c8ff60320e235c0a4869e72f8885
   Protobuf: d582fecf68201eac3d79ed61369ef45734394b9c
   SCLAlertView: 8a14ffc40590c619e183eed2298b854385f30be1
@@ -141,6 +147,6 @@ SPEC CHECKSUMS:
   XLActionController: 57fe0ce1642e2eed971b188b490762345fdbf963
   XLPagerTabStrip: 9be80a66c6b7d60306b2c0a6004965016d68f813
 
-PODFILE CHECKSUM: c41b8dd143ae00203e80089b4610f458d17e5387
+PODFILE CHECKSUM: 3d336b1e8cd0dd31e79c2b901e82a5337ffaaa62
 
 COCOAPODS: 1.2.0
