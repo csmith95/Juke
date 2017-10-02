@@ -15,17 +15,19 @@ class StreamsPager: ButtonBarPagerTabStripViewController, UISearchBarDelegate {
     var notificationName: String!
     
     override func viewDidLoad() {
+        
         // change selected bar color
-        settings.style.buttonBarBackgroundColor = .clear
-        settings.style.buttonBarItemBackgroundColor = .clear
+        settings.style.buttonBarBackgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
+        settings.style.buttonBarItemBackgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
         settings.style.selectedBarBackgroundColor = .white
-        //settings.style.buttonBarItemFont = .boldSystemFont(ofSize: 14)
+        settings.style.buttonBarItemFont = UIFont.systemFont(ofSize: 16)
         settings.style.selectedBarHeight = 2.0
         settings.style.buttonBarMinimumLineSpacing = 0
         settings.style.buttonBarItemTitleColor = .white
         settings.style.buttonBarItemsShouldFillAvailiableWidth = true
         settings.style.buttonBarLeftContentInset = 0
         settings.style.buttonBarRightContentInset = 0
+       
         changeCurrentIndexProgressive = { [weak self] (oldCell: ButtonBarViewCell?, newCell: ButtonBarViewCell?, progressPercentage: CGFloat, changeCurrentIndex: Bool, animated: Bool) -> Void in
             guard changeCurrentIndex == true else { return }
             if oldCell == nil || newCell == nil { return }  // because this block fires on init

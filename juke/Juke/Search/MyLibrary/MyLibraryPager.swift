@@ -16,9 +16,10 @@ class MyLibraryPager: ButtonBarPagerTabStripViewController {
     
     override func viewDidLoad() {
         // change selected bar color
-        settings.style.buttonBarBackgroundColor = .clear
-        settings.style.buttonBarItemBackgroundColor = .clear
+        settings.style.buttonBarBackgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
+        settings.style.buttonBarItemBackgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
         settings.style.selectedBarBackgroundColor = .white
+        settings.style.buttonBarItemFont = UIFont.systemFont(ofSize: 16)
         settings.style.selectedBarHeight = 2.0
         settings.style.buttonBarMinimumLineSpacing = 0
         settings.style.buttonBarItemTitleColor = .white
