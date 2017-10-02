@@ -71,12 +71,12 @@
         <scene sceneID="zsD-Os-w13">
             <objects>
                 <tabBarController storyboardIdentifier="mainTabCtrl" title="MyStreamRoot" id="Wsq-F5-h4X" sceneMemberID="viewController">
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" id="xjB-LA-3Pt">
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" translucent="NO" id="xjB-LA-3Pt">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.13333333333333333" green="0.12549019607843137" blue="0.14509803921568626" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.088277284263959421" green="0.077688035937646449" blue="0.078947113770433466" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
                                 <color key="value" red="0.52430921792984009" green="0.4009014368057251" blue="0.80392372608184814" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -278,12 +278,12 @@
                                                 <constraint firstAttribute="width" constant="30" id="2Ep-kK-g3r"/>
                                                 <constraint firstAttribute="height" constant="40" id="4i9-oU-SYc"/>
                                             </constraints>
-                                            <state key="normal" image="Star"/>
+                                            <state key="normal" image="star"/>
                                             <connections>
                                                 <action selector="starButtonPressed:" destination="dK4-Ge-qtA" eventType="touchUpInside" id="70w-Lx-hNP"/>
                                             </connections>
                                         </button>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Star" translatesAutoresizingMaskIntoConstraints="NO" id="wQo-Rf-l8v" userLabel="Star Image View">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="wQo-Rf-l8v" userLabel="Star Image View">
                                             <rect key="frame" x="33" y="30" width="25" height="25"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="25" id="AXW-Q3-QyS"/>
@@ -382,7 +382,7 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="cGL-Tc-WHi">
-                                                        <rect key="frame" x="120" y="17.5" width="135" height="98.5"/>
+                                                        <rect key="frame" x="120.5" y="17.5" width="135" height="98.5"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stream Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="oqN-Lb-Xub">
                                                                 <rect key="frame" x="12.5" y="0.0" width="110.5" height="21.5"/>
@@ -1025,7 +1025,7 @@
                         <viewControllerLayoutGuide type="bottom" id="Rqd-Es-uvM"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="pwy-Wb-0Df">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Noc-Al-6a7" customClass="GradientView" customModule="Juke" customModuleProvider="target">
@@ -1498,9 +1498,9 @@
                                                         <constraint firstAttribute="height" constant="40" id="Dbm-2G-h00"/>
                                                         <constraint firstAttribute="width" constant="40" id="HWz-dE-Lvn"/>
                                                     </constraints>
-                                                    <state key="normal" image="ic_star_border_white"/>
+                                                    <state key="normal" image="empty star"/>
                                                     <state key="disabled" image="ic_star_white"/>
-                                                    <state key="selected" image="ic_star_white"/>
+                                                    <state key="selected" image="star"/>
                                                     <connections>
                                                         <action selector="starButtonPressed:" destination="Wne-Ll-EU5" eventType="touchUpInside" id="6IF-fN-nSD"/>
                                                     </connections>
@@ -1571,7 +1571,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="aFy-QO-1jJ" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
-                    <tabBarItem key="tabBarItem" title="" image="music" id="vMP-0c-7Ux"/>
+                    <tabBarItem key="tabBarItem" title="Now Playing" image="music" id="vMP-0c-7Ux"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="M5b-gh-iM0">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
@@ -1872,12 +1872,12 @@
                                             </constraints>
                                             <state key="normal" image="empty star"/>
                                             <state key="disabled" image="ic_star_white"/>
-                                            <state key="selected" image="Star"/>
+                                            <state key="selected" image="star"/>
                                             <connections>
                                                 <action selector="starButtonPressed:" destination="dZo-Kb-5oG" eventType="touchUpInside" id="OH1-pO-SXs"/>
                                             </connections>
                                         </button>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Star" translatesAutoresizingMaskIntoConstraints="NO" id="yVp-ES-6zW" userLabel="Star Image View">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="yVp-ES-6zW" userLabel="Star Image View">
                                             <rect key="frame" x="33" y="30" width="25" height="25"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="25" id="EAi-78-Wmx"/>
@@ -1951,7 +1951,7 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="AYJ-9t-1XW">
-                                                        <rect key="frame" x="120" y="22" width="135" height="89"/>
+                                                        <rect key="frame" x="120.5" y="22" width="135" height="89"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stream Name" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="Kjn-Kw-fPp">
                                                                 <rect key="frame" x="12.5" y="0.0" width="110.5" height="21"/>
@@ -2135,7 +2135,7 @@
                         <viewControllerLayoutGuide type="bottom" id="OLq-iP-FW1"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="c1G-e7-XEn">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gso-gl-GQS" customClass="GradientView" customModule="Juke" customModuleProvider="target">
@@ -2229,7 +2229,6 @@
     </scenes>
     <resources>
         <image name="Add song button" width="19" height="19"/>
-        <image name="Star" width="27" height="28"/>
         <image name="addStar" width="30" height="18"/>
         <image name="checkmark" width="50" height="50"/>
         <image name="checkmark_white" width="14" height="13"/>
@@ -2239,7 +2238,6 @@
         <image name="ic_mail_outline_white" width="32" height="32"/>
         <image name="ic_pause_white_48pt" width="48" height="48"/>
         <image name="ic_play_arrow_white_48pt" width="48" height="48"/>
-        <image name="ic_star_border_white" width="24" height="24"/>
         <image name="ic_star_white" width="24" height="24"/>
         <image name="jukeLogo" width="160" height="81"/>
         <image name="juke_icon" width="512" height="512"/>
