@@ -43,11 +43,9 @@ final class MyStreamRootViewController: UIViewController {
         // to/from empty controller to/from my stream controller
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamRootViewController.updateChildViews), name: Notification.Name("updateMyStreamView"), object: nil)
         updateChildViews()
-        FirebaseAPI.setOnlineTrue()
     }
     
     func updateChildViews() {
-
         var toRemove: UIViewController!
         var toAdd: UIViewController!
         if Current.stream == nil || Current.stream!.song == nil {

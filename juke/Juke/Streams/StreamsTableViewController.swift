@@ -44,15 +44,23 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        // hack to reload
-        if let source = tableView.dataSource as? CustomDataSource {
-            source.searchBy(query: "")
-        }
+        print("************** appear")
+        super.viewWillAppear(animated)
+        streamsDataSource.listen()
+        
+//        // hack to reload
+//        if let source = tableView.dataSource as? CustomDataSource {
+//            source.searchBy(query: "")
+//        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        streamsDataSource.detach()
     }
     
     // triggered from data source class
     func reloadStreams() {
-        print("reload streams")
         DispatchQueue.main.async {
             objc_sync_enter(self.streamsTableView.dataSource)
             self.streamsTableView.reloadData()

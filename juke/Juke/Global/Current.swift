@@ -22,10 +22,11 @@ class Current {
             }
             
             let current = stream    // make a copy and pass to leaveStream otherwise concurrency issues
+            print("about to leave")
             FirebaseAPI.leaveStream(current: current) {
                 // once user has left current stream, join new stream
+                print("** joining stream")
                 FirebaseAPI.joinStream(newStream: newValue)   // sets user tunedInto field in db
-                FirebaseAPI.addListeners()
                 if stream == nil {
                     jamsPlayer.position_ms = 0.0
                 }
@@ -33,6 +34,7 @@ class Current {
         }
         
         didSet(newValue) {
+            FirebaseAPI.addListeners()
             DispatchQueue.main.async {
                 print("*** stream nil: ", Current.stream == nil)
                 // this event is listened for in MyStreamRootViewController to handle transitioning between container views
@@ -47,20 +49,20 @@ class Current {
     }
     public static var listenSelected: Bool = false // if user has listen button selected -- used in jamsPlayer.resync
     
-    // MARK: cached copy of starred users updated from StarredUsersDataSource.swift
-    private static var starredUsers = Set<Models.FirebaseUser>()
+    // MARK: cached copy of starred user spotify IDs from StarredUsersDataSource.swift
+    private static var starredUsers = Set<String>()
     
     public static func addStarredUser(user: Models.FirebaseUser) {
-        starredUsers.insert(user)
+        starredUsers.insert(user.spotifyID)
     }
     
     public static func removeStarredUser(user: Models.FirebaseUser) {
-        starredUsers.remove(user)
+        starredUsers.remove(user.spotifyID)
     }
     
     public static func isStarred(user: Models.FirebaseUser) -> Bool {
-        return starredUsers.contains(where: { (other) -> Bool in
-            return other.spotifyID == user.spotifyID
+        return starredUsers.contains(where: { (spotifyID) -> Bool in
+            return spotifyID == user.spotifyID
         })
     }
     

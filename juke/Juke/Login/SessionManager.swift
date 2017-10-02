@@ -46,7 +46,6 @@ final class SessionManager {
         SPTAuth.defaultInstance().renewSession(self.session, callback: { (error, renewedSession) in
             if let session = renewedSession {
                 self.session = session
-                print("renewed session. new token: ", session.accessToken)
                 completionHandler(true)
             }
             completionHandler(false)

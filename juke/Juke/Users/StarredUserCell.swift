@@ -44,12 +44,16 @@ class StarredUserCell: UITableViewCell {
         self.member = member
         self.usernameLabel.text = member.username
         loadUserIcon(url: member.imageURL)
-        if member.online {
-            presenceDot.image = #imageLiteral(resourceName: "green dot")
-            presenceDot.isHidden = false
-        } else {
-            presenceDot.isHidden = true
-        }
+        
+        
+        presenceDot.isHidden = true
+
+//        if member.online {
+//            presenceDot.image = #imageLiteral(resourceName: "green dot")
+//            presenceDot.isHidden = false
+//        } else {
+//            presenceDot.isHidden = true
+//        }
         
     }
     

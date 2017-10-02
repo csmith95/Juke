@@ -65,8 +65,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // for background refreshing spotify token
         UIApplication.shared.setMinimumBackgroundFetchInterval(Constants.kSpotifyTokenRefreshIntervalSeconds)
         
-        FirebaseAPI.addPresenceListener()   // add presence listener because Current.stream might not be reassigned during user session, which is what I rely on to trigger listener set-up
-        
         return true
     }
     
@@ -131,7 +129,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        print("in background refresh")
         SessionManager.refreshSession() { success in
             if success {
                 completionHandler(.newData)
@@ -153,6 +150,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+         FirebaseAPI.setOnlineTrue()
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -160,7 +158,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         SessionManager.refreshSession { _ in
             // do nothing in this callback
         }
-
+        FirebaseAPI.setOnlineTrue()
     }
     
     func applicationWillTerminate(_ application: UIApplication) {

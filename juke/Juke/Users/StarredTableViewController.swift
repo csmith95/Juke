@@ -25,6 +25,16 @@ class StarredTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        starredDataSource.listen()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        starredDataSource.detach()
+    }
+    
     func hideKeyboard() {
         self.view.endEditing(true)
         searchBar.setShowsCancelButton(false, animated: true)

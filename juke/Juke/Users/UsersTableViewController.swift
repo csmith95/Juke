@@ -27,6 +27,16 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        usersDataSource.listen()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        usersDataSource.detach()
+    }
+    
     @IBAction func doneButtonPressed(_ sender: Any) {
         navigationController?.popViewController(animated: true)
     }

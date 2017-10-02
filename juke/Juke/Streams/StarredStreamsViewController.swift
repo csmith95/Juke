@@ -35,10 +35,17 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        // hack to reload
-        if let source = tableView.dataSource as? CustomDataSource {
-            source.searchBy(query: "")
-        }
+        super.viewWillAppear(animated)
+        starredStreamsDataSource.listen()
+//        // hack to reload
+//        if let source = tableView.dataSource as? CustomDataSource {
+//            source.searchBy(query: "")
+//        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        starredStreamsDataSource.detach()
     }
     
     private func execSearchQuery(notification: Notification) {
@@ -51,7 +58,6 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
     
     // triggered from data source class
     func reloadStreams() {
-        print("reload starred")
         DispatchQueue.main.async {
             objc_sync_enter(self.streamsTableView.dataSource)
             self.streamsTableView.reloadData()

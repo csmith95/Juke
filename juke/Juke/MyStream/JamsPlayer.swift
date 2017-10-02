@@ -50,7 +50,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     }
 
     func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
-        print("** JamsPlayer audio logged in")
+//        print("** JamsPlayer audio logged in")
         NotificationCenter.default.post(name: Notification.Name("jamsPlayerReady"), object: nil)
     }
     

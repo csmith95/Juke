@@ -19,6 +19,7 @@ class EmptyStreamViewController: UIViewController {
         print("viewWillAppear. stream nil: ", Current.stream == nil)
         setUI()
         super.viewWillAppear(animated)
+        FirebaseAPI.setOnlineTrue()
     }
     
     private func setUI() {

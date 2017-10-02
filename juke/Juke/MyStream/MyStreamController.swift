@@ -134,6 +134,7 @@ class MyStreamController: UITableViewController {
         FirebaseAPI.setfcmtoken()
         setUI()
         reloadSongs()
+        FirebaseAPI.setOnlineTrue()
     }
     
     private func setUI() {

@@ -29,7 +29,7 @@ class StreamsDataSource: CustomDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let stream = filteredCollection[indexPath.row].stream!
-        FirebaseAPI.joinStream(stream: stream) { success in
+        FirebaseAPI.joinStreamPressed(stream: stream) { success in
             if success {
                 NotificationCenter.default.post(name: Notification.Name("newStreamJoined"), object: nil)
                 HUD.flash(.success, delay: 1.0)
