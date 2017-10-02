@@ -20,27 +20,30 @@ class LockScreenDelegate: NSObject {
     public func setUpNowPlayingInfoCenter() {
         mpic.nowPlayingInfo = [String: AnyObject]()
         UIApplication.shared.beginReceivingRemoteControlEvents()
-        MPRemoteCommandCenter.shared().playCommand.addTarget {event in
-            guard let _ = Current.stream else { return .commandFailed }
-            if Current.isHost() {
-                Current.stream?.isPlaying = true
-                FirebaseAPI.setPlayStatus(status: true)   // update db
+        if Current.isHost() {
+            MPRemoteCommandCenter.shared().playCommand.addTarget {event in
+                guard let _ = Current.stream else { return .commandFailed }
+                if Current.isHost() {
+                    Current.stream?.isPlaying = true
+                    FirebaseAPI.setPlayStatus(status: true)   // update db
+                }
+                Current.listenSelected = true
+                self.jamsPlayer.setPlayStatus(shouldPlay: Current.stream!.isPlaying && Current.listenSelected, topSong: Current.stream?.song)
+                return .success
             }
-            Current.listenSelected = true
-            self.jamsPlayer.setPlayStatus(shouldPlay: Current.stream!.isPlaying && Current.listenSelected, topSong: Current.stream?.song)
-            return .success
-        }
-        
-        MPRemoteCommandCenter.shared().pauseCommand.addTarget {event in
-            guard let _ = Current.stream else { return .commandFailed }
-            if Current.isHost() {
-                Current.stream?.isPlaying = false
-                FirebaseAPI.setPlayStatus(status: false)   // update db
+            
+            MPRemoteCommandCenter.shared().pauseCommand.addTarget {event in
+                guard let _ = Current.stream else { return .commandFailed }
+                if Current.isHost() {
+                    Current.stream?.isPlaying = false
+                    FirebaseAPI.setPlayStatus(status: false)   // update db
+                }
+                Current.listenSelected = false
+                self.jamsPlayer.setPlayStatus(shouldPlay: Current.stream!.isPlaying && Current.listenSelected, topSong: Current.stream?.song)
+                return .success
             }
-            Current.listenSelected = false
-            self.jamsPlayer.setPlayStatus(shouldPlay: Current.stream!.isPlaying && Current.listenSelected, topSong: Current.stream?.song)
-            return .success
         }
+    
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.firebaseEventHandler), name: Notification.Name("firebaseEventLockScreen"), object: nil)
     }
@@ -53,7 +56,8 @@ class LockScreenDelegate: NSObject {
         guard let event = notification.object as? FirebaseAPI.FirebaseEvent else { print("error"); return }
         switch event {
         case .PlayStatusChanged:
-            mpic.nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = stream.isPlaying && Current.listenSelected
+            mpic.nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = stream.isPlaying
+//            mpic.nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = jamsPlayer.position_ms/1000
         case .TopSongChanged:
             var current = mpic.nowPlayingInfo
             current![MPMediaItemPropertyTitle] = song.songName

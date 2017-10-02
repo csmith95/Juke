@@ -90,8 +90,9 @@ class MyStreamController: UITableViewController {
         if Current.isHost() {
             Current.stream?.isPlaying = status
             FirebaseAPI.setPlayStatus(status: status)   // update db
+        } else {
+            FirebaseAPI.listenForSongProgress() // fetch real song progress to maintain sync
         }
-        FirebaseAPI.listenForSongProgress() // fetch real song progress to maintain sync
         jamsPlayer.resync()
     }
     
@@ -154,8 +155,11 @@ class MyStreamController: UITableViewController {
             self.currentSongLabel.text = song.songName
             self.currentArtistLabel.text = song.artistName
             self.listenButton.isHidden = false
+            print(stream.isPlaying)
             if Current.isHost() {
                 self.listenButton.isSelected = stream.isPlaying
+            } else {
+                self.listenButton.isSelected = Current.listenSelected
             }
             self.checkIfUserLibContainsCurrentSong(song: song)
             progressSlider.isHidden = false
@@ -238,7 +242,7 @@ class MyStreamController: UITableViewController {
     
     private func setEmptyStreamUI() {
         // notification handled in MyStreamRootViewController
-        NotificationCenter.default.post(name: Notification.Name("userStreamChanged"), object: nil)
+        NotificationCenter.default.post(name: Notification.Name("updateMyStreamView"), object: nil)
     }
     
     @IBAction func addToSpotifyLibButtonPressed(_ sender: Any) {

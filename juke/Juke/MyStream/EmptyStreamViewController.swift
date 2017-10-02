@@ -15,15 +15,22 @@ class EmptyStreamViewController: UIViewController {
     @IBOutlet weak var twoDownArrows: UIImageView!
     @IBOutlet var endStreamButton: UIButton!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.streamDeleted), name: Notification.Name("streamDeleted"), object: nil)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
-        print("viewWillAppear. stream nil: ", Current.stream == nil)
-        setUI()
         super.viewWillAppear(animated)
+        setUI()
         FirebaseAPI.setOnlineTrue()
     }
     
+    func streamDeleted() {
+        setUI()
+    }
+    
     private func setUI() {
-        print("setting UI")
         guard let stream = Current.stream else {
             //  if user not in stream
             streamTitleLabel.isHidden = true
@@ -72,5 +79,9 @@ class EmptyStreamViewController: UIViewController {
 
     // set status bar text to white
     override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
 }

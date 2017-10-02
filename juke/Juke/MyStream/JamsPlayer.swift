@@ -14,7 +14,6 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     static let shared = JamsPlayer()
     private let userDefaults = UserDefaults.standard
     private let sharedInstance = SPTAudioStreamingController.sharedInstance()
-    private var session: SPTSession? = nil
     private let kClientID = "77d4489425fe464483f0934f99847c8b"
     private var old_position_ms: TimeInterval?
     public var position_ms: TimeInterval {
@@ -35,22 +34,23 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     
     override private init() {
         self.position_ms = 0.0
+        print("init jams player")
         super.init()
         do {
             try sharedInstance?.start(withClientId: kClientID)
             sharedInstance?.delegate = self
             sharedInstance?.playbackDelegate = self
-            refreshSession()
+            authenticatePlayer()
             try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try? AVAudioSession.sharedInstance().setActive(true)
-            
+            NotificationCenter.default.addObserver(self, selector: #selector(self.authenticatePlayer), name: Notification.Name("reauthenticatePlayer"), object: nil)
         } catch let err {
             print(err)
         }
     }
 
     func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
-//        print("** JamsPlayer audio logged in")
+        print("** JamsPlayer audio logged in")
         NotificationCenter.default.post(name: Notification.Name("jamsPlayerReady"), object: nil)
     }
     
@@ -78,28 +78,34 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         }
     }
     
-    private func refreshSession() {
-        if (session != nil && sharedInstance!.loggedIn && session!.isValid()) {
-            return
-        }
-        
-        if let sessionObj = userDefaults.object(forKey: "SpotifySession") {
-            let sessionDataObj = sessionObj as! Data
-            self.session = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as? SPTSession
-            let token:String = session?.accessToken as String!
-            self.sharedInstance?.login(withAccessToken: token)
-        }
+    func authenticatePlayer() {
+        print("** JamsPlayer logging in with token: \(SessionManager.accessToken)")
+        self.sharedInstance?.login(withAccessToken: SessionManager.accessToken)
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePosition position: TimeInterval) {
-        // signal StreamController so that it can update UISlider
+        // signal MyStreamController so that it can update UISlider and update Firebase if host
+        print("got updated position \(position) for: ", audioStreaming.metadata.currentTrack?.uri)
         position_ms = position * 1000
         let data: [String:Any] = ["progress": position_ms]
         NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
     }
     
     public func setPlayStatus(shouldPlay: Bool, topSong: Models.FirebaseSong?) {
-        guard let player = sharedInstance else { self.refreshSession(); return; }
+        // in this public version, check that access token is valid. if not, refresh token
+        
+        
+        guard let player = sharedInstance, let session = SessionManager.session, let token = SessionManager.accessToken else {
+            SessionManager.refreshSession(completionHandler: { (_) in
+                self.authenticatePlayer()
+            })
+            return;
+        }
+        internalSetPlayStatus(shouldPlay: shouldPlay, topSong: topSong)
+    }
+    
+    private func internalSetPlayStatus(shouldPlay: Bool, topSong: Models.FirebaseSong?) {
+        guard let player = sharedInstance else { return }
         guard let song = topSong else {                     // turn off if nil passed in for topSong
             player.setIsPlaying(false, callback: { (err) in
                 if let err = err {
@@ -126,6 +132,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
             });
         }
     }
+
     
     public func resync() {
         guard let stream = Current.stream else {

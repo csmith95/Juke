@@ -12,20 +12,21 @@ import Firebase
 class Current {
     private static let jamsPlayer = JamsPlayer.shared
     public static var user: Models.FirebaseUser?
+    private static var didChangeStreams = true
     public static var stream: Models.FirebaseStream? {
     
         willSet(newValue) {
             if let currentStream = stream, let newStream = newValue {
                 if currentStream.streamID == newStream.streamID {
+                    didChangeStreams = false // to avoid adding listeners multiple times in didSet -- leads to vicious cycle
                     return  // do nothing if same stream
                 }
             }
+            didChangeStreams = true
             
             let current = stream    // make a copy and pass to leaveStream otherwise concurrency issues
-            print("about to leave")
             FirebaseAPI.leaveStream(current: current) {
                 // once user has left current stream, join new stream
-                print("** joining stream")
                 FirebaseAPI.joinStream(newStream: newValue)   // sets user tunedInto field in db
                 if stream == nil {
                     jamsPlayer.position_ms = 0.0
@@ -34,12 +35,10 @@ class Current {
         }
         
         didSet(newValue) {
-            FirebaseAPI.addListeners()
-            DispatchQueue.main.async {
-                print("*** stream nil: ", Current.stream == nil)
-                // this event is listened for in MyStreamRootViewController to handle transitioning between container views
-                NotificationCenter.default.post(name: Notification.Name("updateMyStreamView"), object: nil)
+            if didChangeStreams {
+                FirebaseAPI.addListeners()
             }
+            NotificationCenter.default.post(name: Notification.Name("updateMyStreamView"), object: nil)
         }
     }
     public static func isHost() -> Bool {

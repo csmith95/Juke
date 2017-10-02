@@ -1549,6 +1549,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="aFy-QO-1jJ" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <tabBarItem key="tabBarItem" title="" image="music" id="vMP-0c-7Ux"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="M5b-gh-iM0">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1704,6 +1705,7 @@
                             <userDefinedRuntimeAttribute type="boolean" keyPath="horizontalMode" value="NO"/>
                         </userDefinedRuntimeAttributes>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <navigationItem key="navigationItem" id="nPS-1C-a3t"/>
                     <connections>
                         <outlet property="endStreamButton" destination="Fpq-uQ-wK5" id="HJJ-OQ-w3p"/>
@@ -2233,6 +2235,6 @@
         <image name="upvote-carat-white" width="11" height="7"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="dEN-pM-yCw"/>
+        <segue reference="JxZ-Hy-tRA"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -37,6 +37,14 @@ class NameStreamViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    @IBAction func didSelectDone(_ sender: Any) {
+        if self.textField.text!.isEmpty {
+            self.textField.errorMessage = "C'mon, give it a name!"
+            return
+        }
+        FirebaseAPI.setStreamName(name: self.textField.text!)
+        self.dismiss(animated: true, completion: nil)
+    }
 }
 
 // MARK: - Presentr Delegate
@@ -59,15 +67,7 @@ extension NameStreamViewController: UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
-        if self.textField.text!.isEmpty {
-            self.textField.errorMessage = "C'mon, give it a name!"
-            return false
-        }
-        
-        FirebaseAPI.setStreamName(name: self.textField.text!)
         self.textField.resignFirstResponder()
-        self.dismiss(animated: true, completion: nil)
         return true
     }
     

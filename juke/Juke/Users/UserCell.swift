@@ -33,13 +33,13 @@ class UserCell: UITableViewCell {
             self.starIcon.isHidden = false
             self.starButton.isSelected = true
             message = "Starred \(self.member.username)"
-            //NotificationCenter.default.post(name: Notification.Name("starredStreamsSearchNotification"), object: nil, userInfo: ["query" : ""])
+            Current.addStarredUser(user: self.member)
         } else {
             FirebaseAPI.removeFromStarredTable(user: self.member)
             self.starIcon.isHidden = true
             self.starButton.isSelected = false
             message = "Removed \(self.member.username)"
-            //NotificationCenter.default.post(name: Notification.Name("starredStreamsSearchNotification"), object: nil, userInfo: ["query" : ""])
+            Current.removeStarredUser(user: self.member)
         }
         HUD.flash(.labeledSuccess(title: nil, subtitle: message), delay: 1.0)
     }

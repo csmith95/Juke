@@ -12,7 +12,7 @@ import Alamofire
 final class SessionManager {
     
     private static let userDefaults = UserDefaults.standard
-    private static var session: SPTSession! {
+    public static var session: SPTSession! {
         didSet {
             SPTAuth.defaultInstance().session = session
             let sessionData = NSKeyedArchiver.archivedData(withRootObject: session)
@@ -20,8 +20,9 @@ final class SessionManager {
             self.userDefaults.synchronize()
         }
     }
-    public static var accessToken: String {
+    public static var accessToken: String! {
         get {
+            if session == nil { return nil }
             return session.accessToken
         }
     }
@@ -47,6 +48,7 @@ final class SessionManager {
             if let session = renewedSession {
                 self.session = session
                 completionHandler(true)
+                NotificationCenter.default.post(name: Notification.Name("reauthenticatePlayer"), object: nil)
             }
             completionHandler(false)
         })

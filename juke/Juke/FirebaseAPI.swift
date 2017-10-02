@@ -34,16 +34,9 @@ class FirebaseAPI {
     private static let jamsPlayer = JamsPlayer.shared
     
     // this method is called from Current.swift when stream is reassigned a new value
-    private static var currentStreamIDListenedTo: String?
     public static func addListeners() {
         addPresenceListener()
-        guard let current = Current.stream else { return }
-        if let observing = currentStreamIDListenedTo {
-            if observing == current.streamID {
-                return // don't add listeners again
-            }
-        }
-        currentStreamIDListenedTo = current.streamID
+        guard let _ = Current.stream else { return }
         addMemberLeftListener()
         addMemberJoinedListener()
         addMemberPresenceChangeListener() // used to listen for online/offline change
@@ -54,22 +47,26 @@ class FirebaseAPI {
     }
     
     private static func addStreamDeletedListener() {
-        ref.child("/streams").observe(.childRemoved, with:{ (snapshot) in
-            print("1")
+        let path = "/streams/\(Current.stream!.streamID)"
+        ref.child(path).observe(.childRemoved, with:{ (snapshot) in
             guard let stream = Current.stream else { return }
-            if snapshot.key == stream.streamID {    // if deleted stream is my stream
+            if snapshot.key == "host" {    // if deleted stream is my stream
                 Current.stream = nil    // this entails firebase calls and posted notifications that will initiate segue in middle tab. See Current.swift
 
                 // display Whisper notification
                 whisper(title: "\(stream.host.username) erased stream \"\(stream.title)\"" , backgroundColor: FlatPink())
+                
+                // post event telling empty stream controller to refresh in case queue was empty, so
+                // controller wasn't active
+                NotificationCenter.default.post(name: Notification.Name("streamDeleted"), object: nil)
             }
         })
+        self.observedPaths.append(path)
     }
     
     private static func addSongPlayStatusListener() {
         let path = "streams/\(Current.stream!.streamID)/isPlaying"
         ref.child(path).observe(.value, with:{ (snapshot) in
-            print("2")
             if snapshot.exists(), let isPlaying = snapshot.value as? Bool {
                 Current.stream!.isPlaying = isPlaying
                 jamsPlayer.resync()
@@ -85,7 +82,6 @@ class FirebaseAPI {
         // listen for member presence changes
         let path = "/streams/\(Current.stream!.streamID)/members"
         ref.child(path).observe(.childChanged, with:{ (snapshot) in
-            print("3")
             if Current.stream == nil { return }
             guard let changedMember = Models.FirebaseUser(snapshot: snapshot) else { return }
             if let index = Current.stream!.members.index(where: { (member) -> Bool in
@@ -108,7 +104,6 @@ class FirebaseAPI {
     private static func addMemberJoinedListener() {
         let path = "/streams/\(Current.stream!.streamID)/members"   // don't append to observedPaths again (see memberChange)
         ref.child(path).observe(.childAdded, with:{ (snapshot) in
-            print("4")
             // update Current stream
             guard let stream = Current.stream else { return }
             guard let member = Models.FirebaseUser(snapshot: snapshot) else { return }
@@ -134,7 +129,6 @@ class FirebaseAPI {
     private static func addMemberLeftListener() {
         let path = "/streams/\(Current.stream!.streamID)/members"   // don't append to observedPaths again (see memberChange)
         ref.child(path).observe(.childRemoved, with:{ (snapshot) in
-            print("5")
             // update Current stream
             guard let member = Models.FirebaseUser(snapshot: snapshot) else { return }
             guard let index = Current.stream!.members.index(where: { (other) -> Bool in
@@ -204,14 +198,10 @@ class FirebaseAPI {
         // listen for top song changes -- includes song skips and song finishes
         let path = "/streams/\(stream.streamID)/song"
         self.ref.child(path).observe(.value, with: { (snapshot) in
-            print("6")
+            guard let _ = Current.stream else { return }
             Current.stream!.song = Models.FirebaseSong(snapshot: snapshot)
             self.jamsPlayer.position_ms = 0.0
             self.listenForSongProgress()
-            
-            // post event telling my stream root controller to refresh in case queue was empty, so 
-            // controller wasn't active
-            NotificationCenter.default.post(name: Notification.Name("updateMyStreamView"), object: nil)
             
             // post event telling controller to resync in case it's already active
             NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.TopSongChanged)
@@ -222,25 +212,22 @@ class FirebaseAPI {
     }
     
     public static func addPresenceListener() {
-        return
         guard let user = Current.user else { return }
-        print("******* set disconnect values *******")
         
         // update main user object
         self.ref.child("/users/\(user.spotifyID)/online").onDisconnectSetValue(false)
         
         // STREAM object updates
         guard let stream = Current.stream else { return }
-        print("*** set for stream: \(stream.streamID)")
         if Current.isHost() {
             // you are the host so update path: stream/host
-            self.ref.child("/streams/\(stream.streamID)/host/\(user.spotifyID)/online").onDisconnectSetValue(false)
+//            self.ref.child("/streams/\(stream.streamID)/host/\(user.spotifyID)/online").onDisconnectSetValue(false)
             
             // you are the host so pause stream playing
             self.ref.child("/streams/\(stream.streamID)/isPlaying").onDisconnectSetValue(false)
         } else {
             // you are not the host so update stream/members
-            self.ref.child("/streams/\(stream.streamID)/members/\(user.spotifyID)/online").onDisconnectSetValue(false)
+//            self.ref.child("/streams/\(stream.streamID)/members/\(user.spotifyID)/online").onDisconnectSetValue(false)
         }
     }
 
@@ -304,7 +291,7 @@ class FirebaseAPI {
         Current.stream = stream
         ref.child("/streams/\(stream.streamID)/members/\(user.spotifyID)").setValue(dict)
         Current.stream!.members.append(user)
-        jamsPlayer.position_ms = 0.0
+        Current.listenSelected = true // default listen when join stream
 
         // callback to StreamsDataSource/StarredStreamsDataSource to communicate success
         callback(true)

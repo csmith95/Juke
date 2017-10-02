@@ -64,8 +64,7 @@ class LoginViewController: UIViewController {
     }
     
     func fetchSpotifyUser() {
-        // first retrieve user object from spotify server using access token
-        let accessToken = SessionManager.accessToken
+        let accessToken = SessionManager.accessToken!
         let headers: HTTPHeaders = ["Authorization": "Bearer " + accessToken]
         let url = Constants.kSpotifyBaseURL + Constants.kCurrentUserPath
         print("fetching spotify user")

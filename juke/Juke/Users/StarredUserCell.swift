@@ -29,6 +29,7 @@ class StarredUserCell: UITableViewCell {
     @IBAction func starButtonPressed(_ sender: Any) {
         FirebaseAPI.removeFromStarredTable(user: self.member)
         HUD.flash(.labeledSuccess(title: nil, subtitle: "Removed \(self.member.username)"), delay: 1.0)
+        Current.removeStarredUser(user: self.member)
     }
     
     public func populateCell(member: Models.FirebaseUser) {
