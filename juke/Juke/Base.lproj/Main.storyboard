@@ -1505,26 +1505,30 @@
                                                         <action selector="starButtonPressed:" destination="Wne-Ll-EU5" eventType="touchUpInside" id="6IF-fN-nSD"/>
                                                     </connections>
                                                 </button>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="CPp-nq-kIe" userLabel="Star Image View">
-                                                    <rect key="frame" x="25" y="24.5" width="27" height="28"/>
-                                                </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Host" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ccn-e6-7dl">
                                                     <rect key="frame" x="60" y="43" width="26.5" height="14.5"/>
                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="CPp-nq-kIe" userLabel="Star Image View">
+                                                    <rect key="frame" x="33" y="32.5" width="25" height="25"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="25" id="l2v-Fb-jyB"/>
+                                                        <constraint firstAttribute="width" constant="25" id="wgE-5n-Gcw"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="9Rf-Dn-oX3" firstAttribute="leading" secondItem="EGW-Eb-Taf" secondAttribute="trailing" constant="8" id="0oM-S4-bKw"/>
                                                 <constraint firstItem="Ccn-e6-7dl" firstAttribute="leading" secondItem="asU-QY-oeN" secondAttribute="leading" id="19C-zl-4qG"/>
-                                                <constraint firstItem="CPp-nq-kIe" firstAttribute="trailing" secondItem="EGW-Eb-Taf" secondAttribute="trailing" id="3T7-OV-2Gh"/>
+                                                <constraint firstItem="CPp-nq-kIe" firstAttribute="trailing" secondItem="EGW-Eb-Taf" secondAttribute="trailing" constant="6" id="3T7-OV-2Gh"/>
                                                 <constraint firstItem="EGW-Eb-Taf" firstAttribute="leading" secondItem="FOK-kx-WNe" secondAttribute="leadingMargin" constant="4" id="6jk-U9-fan"/>
                                                 <constraint firstItem="Ccn-e6-7dl" firstAttribute="top" secondItem="asU-QY-oeN" secondAttribute="bottom" constant="-2" id="Qiz-dg-lcA"/>
                                                 <constraint firstItem="Odm-y7-VTK" firstAttribute="centerY" secondItem="FOK-kx-WNe" secondAttribute="centerY" id="Tae-aR-8Qn"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="Odm-y7-VTK" secondAttribute="trailing" id="V7h-Dr-kPb"/>
                                                 <constraint firstItem="9Rf-Dn-oX3" firstAttribute="centerY" secondItem="FOK-kx-WNe" secondAttribute="centerY" id="pVo-z5-VOQ"/>
-                                                <constraint firstItem="CPp-nq-kIe" firstAttribute="bottom" secondItem="EGW-Eb-Taf" secondAttribute="bottom" id="yF5-aM-Dwx"/>
+                                                <constraint firstItem="CPp-nq-kIe" firstAttribute="bottom" secondItem="EGW-Eb-Taf" secondAttribute="bottom" constant="5" id="yF5-aM-Dwx"/>
                                                 <constraint firstItem="EGW-Eb-Taf" firstAttribute="centerY" secondItem="FOK-kx-WNe" secondAttribute="centerY" id="z1q-Oe-BAc"/>
                                             </constraints>
                                         </tableViewCellContentView>
