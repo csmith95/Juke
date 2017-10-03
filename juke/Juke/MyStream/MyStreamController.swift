@@ -238,6 +238,7 @@ class MyStreamController: UITableViewController {
     // fires every half second when timer is on
     func updateAnimationProgress() {
         self.progressSliderValue += 1000
+        jamsPlayer.position_ms += 1000  // also update this so when user toggles, picks up here
     }
     
     private func setEmptyStreamUI() {

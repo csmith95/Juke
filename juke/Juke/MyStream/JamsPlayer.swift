@@ -94,7 +94,6 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     public func setPlayStatus(shouldPlay: Bool, topSong: Models.FirebaseSong?) {
         // in this public version, check that access token is valid. if not, refresh token
         
-        
         guard let player = sharedInstance, let session = SessionManager.session, let token = SessionManager.accessToken else {
             SessionManager.refreshSession(completionHandler: { (_) in
                 self.authenticatePlayer()
