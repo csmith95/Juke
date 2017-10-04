@@ -85,9 +85,11 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     }
     
     public func detach() {
+        ref.child(path).removeAllObservers()
+        objc_sync_enter(self)
         collection.removeAll()
         filteredCollection.removeAll()
-        ref.child(path).removeAllObservers()
+        objc_sync_exit(self)
     }
     
     // thread safe, delegates work to helpers to modify collection property
