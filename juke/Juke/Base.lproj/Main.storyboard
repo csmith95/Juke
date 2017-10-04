@@ -185,11 +185,24 @@
                                         <constraint firstAttribute="trailing" secondItem="dnM-Pv-kya" secondAttribute="trailing" id="KN2-2X-jNN"/>
                                     </constraints>
                                 </stackView>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sy7-fp-TS3">
+                                    <rect key="frame" x="326" y="23" width="46" height="30"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="46" id="NWv-AY-qDA"/>
+                                        <constraint firstAttribute="height" constant="30" id="eBy-FZ-3Uf"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <state key="normal" title="Add">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                </button>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstItem="Erg-HO-Koo" firstAttribute="leading" secondItem="iCW-7q-hAr" secondAttribute="leading" constant="5" id="2Mt-DJ-7Ym"/>
+                                <constraint firstAttribute="trailing" secondItem="sy7-fp-TS3" secondAttribute="trailing" constant="3" id="B5a-dd-jcZ"/>
                                 <constraint firstItem="dnM-Pv-kya" firstAttribute="centerY" secondItem="XgX-aC-GjG" secondAttribute="centerY" id="Bw8-Kg-V6T"/>
+                                <constraint firstItem="Erg-HO-Koo" firstAttribute="top" secondItem="sy7-fp-TS3" secondAttribute="bottom" constant="53" id="F3d-DK-Yow"/>
                                 <constraint firstItem="Erg-HO-Koo" firstAttribute="top" secondItem="XgX-aC-GjG" secondAttribute="bottom" constant="-3" id="Liw-VZ-KDx"/>
                                 <constraint firstItem="U3K-hm-9VO" firstAttribute="trailing" secondItem="iCW-7q-hAr" secondAttribute="trailingMargin" id="MkI-tx-v8j"/>
                                 <constraint firstAttribute="bottom" secondItem="Erg-HO-Koo" secondAttribute="bottom" id="VaG-Oj-4AP"/>
@@ -244,18 +257,6 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="feO-dx-22v" userLabel="Presence Indicator">
-                                                    <rect key="frame" x="79.5" y="6.5" width="12" height="12"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="12" id="9xt-Ie-Lqy"/>
-                                                        <constraint firstAttribute="height" constant="12" id="Mzc-St-VTp"/>
-                                                    </constraints>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                            <real key="value" value="0.0"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </imageView>
                                             </subviews>
                                         </stackView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5op-3b-306" userLabel="Invite to stream Button">
@@ -305,7 +306,6 @@
                                 <color key="backgroundColor" red="0.13333333333333333" green="0.12549019607843137" blue="0.14509803921568626" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <outlet property="inviteToStreamButton" destination="5op-3b-306" id="sqa-J0-wFZ"/>
-                                    <outlet property="presenceDot" destination="feO-dx-22v" id="JBO-2c-UuD"/>
                                     <outlet property="userImageView" destination="AIn-81-5oX" id="296-IZ-1qm"/>
                                     <outlet property="usernameLabel" destination="oqN-V0-Cpg" id="KyX-qH-IH8"/>
                                 </connections>
@@ -1866,18 +1866,6 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fcZ-XB-0Z9" userLabel="Presence Indicator">
-                                                    <rect key="frame" x="79.5" y="6.5" width="12" height="12"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="12" id="HNI-xm-wax"/>
-                                                        <constraint firstAttribute="width" constant="12" id="ZXh-W6-850"/>
-                                                    </constraints>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                            <real key="value" value="0.0"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </imageView>
                                             </subviews>
                                         </stackView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Vw-kW-c0a" userLabel="Star Button">
@@ -1914,7 +1902,6 @@
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="0.1333333333" green="0.12549019610000001" blue="0.1450980392" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
-                                    <outlet property="presenceDot" destination="fcZ-XB-0Z9" id="5yk-zb-JUN"/>
                                     <outlet property="starButton" destination="2Vw-kW-c0a" id="kkM-Si-xMu"/>
                                     <outlet property="starIcon" destination="yVp-ES-6zW" id="qhw-PZ-qmb"/>
                                     <outlet property="userImageView" destination="kLJ-pr-Bno" id="oMd-7S-bPB"/>
@@ -2217,7 +2204,7 @@
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SPb-GA-L82">
                                 <rect key="frame" x="0.0" y="182" width="375" height="436"/>
-                                <color key="backgroundColor" red="0.13333333333333333" green="0.12549019607843137" blue="0.14509803921568626" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.1333333333" green="0.12549019610000001" blue="0.1450980392" alpha="1" colorSpace="calibratedRGB"/>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
