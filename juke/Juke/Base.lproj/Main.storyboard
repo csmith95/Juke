@@ -936,7 +936,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="PDD-Pq-Ckc" userLabel="Cell text">
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="PDD-Pq-Ckc" userLabel="Cell text">f
                                                     <rect key="frame" x="23" y="15" width="279" height="30"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b7k-5r-dDM">
@@ -953,7 +953,7 @@
                                                         </label>
                                                     </subviews>
                                                 </stackView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TrB-0x-SQE">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TrB-0x-SQE">f
                                                     <rect key="frame" x="323" y="10" width="40" height="40"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="addToStreamButton"/>
                                                     <constraints>
@@ -1325,6 +1325,18 @@
                                                 <userDefinedRuntimeAttribute type="boolean" keyPath="horizontalMode" value="YES"/>
                                             </userDefinedRuntimeAttributes>
                                         </view>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="juke_icon" translatesAutoresizingMaskIntoConstraints="NO" id="5LD-1g-8r9" userLabel="Member Image View">
+                                            <rect key="frame" x="10" y="10" width="45" height="45"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="45" id="1dG-zG-pMD"/>
+                                                <constraint firstAttribute="width" constant="45" id="1wE-MV-vLa"/>
+                                            </constraints>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                    <real key="value" value="22.5"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </imageView>
                                         <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Nel-x0-Ab5">
                                             <rect key="frame" x="11" y="17" width="0.0" height="32.5"/>
                                             <subviews>
@@ -1345,18 +1357,21 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
+                                        <constraint firstItem="vQR-Zw-cwe" firstAttribute="leading" secondItem="5LD-1g-8r9" secondAttribute="trailing" constant="-55" id="3gZ-gd-0kX"/>
                                         <constraint firstItem="vQR-Zw-cwe" firstAttribute="top" secondItem="guB-Fj-CpO" secondAttribute="top" id="4W0-DZ-e9x"/>
                                         <constraint firstItem="Nel-x0-Ab5" firstAttribute="centerY" secondItem="guB-Fj-CpO" secondAttribute="centerY" id="DM6-wQ-rxZ"/>
                                         <constraint firstAttribute="bottom" secondItem="vQR-Zw-cwe" secondAttribute="bottom" id="FsL-ez-F8p"/>
+                                        <constraint firstItem="Nel-x0-Ab5" firstAttribute="leading" secondItem="5LD-1g-8r9" secondAttribute="trailing" constant="7" id="Hcp-gW-DLC"/>
                                         <constraint firstItem="3vp-Py-Aex" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Nel-x0-Ab5" secondAttribute="trailing" constant="5" id="Rqo-wb-RL3"/>
                                         <constraint firstAttribute="trailing" secondItem="vQR-Zw-cwe" secondAttribute="trailing" id="To0-Ou-Tbd"/>
                                         <constraint firstItem="vQR-Zw-cwe" firstAttribute="leading" secondItem="guB-Fj-CpO" secondAttribute="leading" id="gjS-hJ-wxO"/>
-                                        <constraint firstItem="Nel-x0-Ab5" firstAttribute="leading" secondItem="guB-Fj-CpO" secondAttribute="leading" constant="11" id="sHZ-Mi-LDW"/>
+                                        <constraint firstItem="5LD-1g-8r9" firstAttribute="centerY" secondItem="guB-Fj-CpO" secondAttribute="centerY" id="ybF-Gg-XuS"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="artist" destination="cIG-we-DoN" id="GdW-yF-QAg"/>
+                                    <outlet property="memberImgView" destination="5LD-1g-8r9" id="TYf-Mt-ZvK"/>
                                     <outlet property="songName" destination="66x-Jw-w2Y" id="JL1-C8-weW"/>
                                     <outlet property="upvoteButton" destination="3vp-Py-Aex" id="0bM-AW-a3X"/>
                                 </connections>

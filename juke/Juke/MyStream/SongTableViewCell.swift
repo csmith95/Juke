@@ -14,6 +14,9 @@ class SongTableViewCell: UITableViewCell {
     @IBOutlet var upvoteButton: UIButton!
     @IBOutlet var songName: UILabel!
     @IBOutlet var artist: UILabel!
+    @IBOutlet weak var memberImgView: UIImageView!
+    @IBOutlet weak var starImgView: UIImageView!
+    
     var song: Models.FirebaseSong!
     
     override func awakeFromNib() {
@@ -40,6 +43,16 @@ class SongTableViewCell: UITableViewCell {
             return userSpotifyID == user.spotifyID
         })
         upvoteButton.setTitle("\(song.upvoters.count)", for: .normal)
+        loadUserIcon(url: song.memberImageURL, imageView: memberImgView)
+        
+    }
+    
+    private func loadUserIcon(url: String?, imageView: UIImageView) {
+        imageView.isHidden = false
+        ImageCache.downloadUserImage(url: url, callback: { (image) in
+            imageView.isHidden = false
+            imageView.image = image
+        })
     }
 
 }
