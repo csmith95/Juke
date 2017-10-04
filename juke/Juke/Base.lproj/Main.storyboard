@@ -71,12 +71,12 @@
         <scene sceneID="zsD-Os-w13">
             <objects>
                 <tabBarController storyboardIdentifier="mainTabCtrl" title="MyStreamRoot" id="Wsq-F5-h4X" sceneMemberID="viewController">
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" id="xjB-LA-3Pt">
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" translucent="NO" id="xjB-LA-3Pt">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.13333333333333333" green="0.12549019607843137" blue="0.14509803921568626" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.088277284263959421" green="0.077688035937646449" blue="0.078947113770433466" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
                                 <color key="value" red="0.52430921792984009" green="0.4009014368057251" blue="0.80392372608184814" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -276,7 +276,7 @@
                                                 <constraint firstAttribute="width" constant="30" id="2Ep-kK-g3r"/>
                                                 <constraint firstAttribute="height" constant="40" id="4i9-oU-SYc"/>
                                             </constraints>
-                                            <state key="normal" image="Star"/>
+                                            <state key="normal" image="star"/>
                                             <connections>
                                                 <action selector="starButtonPressed:" destination="dK4-Ge-qtA" eventType="touchUpInside" id="70w-Lx-hNP"/>
                                             </connections>
@@ -1020,7 +1020,7 @@
                         <viewControllerLayoutGuide type="bottom" id="Rqd-Es-uvM"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="pwy-Wb-0Df">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Noc-Al-6a7" customClass="GradientView" customModule="Juke" customModuleProvider="target">
@@ -1509,17 +1509,24 @@
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="CPp-nq-kIe" userLabel="Star Image View">
+                                                    <rect key="frame" x="33" y="32.5" width="25" height="25"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="25" id="l2v-Fb-jyB"/>
+                                                        <constraint firstAttribute="width" constant="25" id="wgE-5n-Gcw"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="9Rf-Dn-oX3" firstAttribute="leading" secondItem="EGW-Eb-Taf" secondAttribute="trailing" constant="8" id="0oM-S4-bKw"/>
                                                 <constraint firstItem="Ccn-e6-7dl" firstAttribute="leading" secondItem="asU-QY-oeN" secondAttribute="leading" id="19C-zl-4qG"/>
-                                                <constraint firstItem="CPp-nq-kIe" firstAttribute="trailing" secondItem="EGW-Eb-Taf" secondAttribute="trailing" id="3T7-OV-2Gh"/>
+                                                <constraint firstItem="CPp-nq-kIe" firstAttribute="trailing" secondItem="EGW-Eb-Taf" secondAttribute="trailing" constant="6" id="3T7-OV-2Gh"/>
                                                 <constraint firstItem="EGW-Eb-Taf" firstAttribute="leading" secondItem="FOK-kx-WNe" secondAttribute="leadingMargin" constant="4" id="6jk-U9-fan"/>
                                                 <constraint firstItem="Ccn-e6-7dl" firstAttribute="top" secondItem="asU-QY-oeN" secondAttribute="bottom" constant="-2" id="Qiz-dg-lcA"/>
                                                 <constraint firstItem="Odm-y7-VTK" firstAttribute="centerY" secondItem="FOK-kx-WNe" secondAttribute="centerY" id="Tae-aR-8Qn"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="Odm-y7-VTK" secondAttribute="trailing" id="V7h-Dr-kPb"/>
                                                 <constraint firstItem="9Rf-Dn-oX3" firstAttribute="centerY" secondItem="FOK-kx-WNe" secondAttribute="centerY" id="pVo-z5-VOQ"/>
-                                                <constraint firstItem="CPp-nq-kIe" firstAttribute="bottom" secondItem="EGW-Eb-Taf" secondAttribute="bottom" id="yF5-aM-Dwx"/>
+                                                <constraint firstItem="CPp-nq-kIe" firstAttribute="bottom" secondItem="EGW-Eb-Taf" secondAttribute="bottom" constant="5" id="yF5-aM-Dwx"/>
                                                 <constraint firstItem="EGW-Eb-Taf" firstAttribute="centerY" secondItem="FOK-kx-WNe" secondAttribute="centerY" id="z1q-Oe-BAc"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -1566,7 +1573,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="aFy-QO-1jJ" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
-                    <tabBarItem key="tabBarItem" title="" image="music" id="vMP-0c-7Ux"/>
+                    <tabBarItem key="tabBarItem" title="Now Playing" image="music" id="vMP-0c-7Ux"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="M5b-gh-iM0">
                         <autoresizingMask key="autoresizingMask"/>
@@ -1866,7 +1873,7 @@
                                             </constraints>
                                             <state key="normal" image="empty star"/>
                                             <state key="disabled" image="ic_star_white"/>
-                                            <state key="selected" image="Star"/>
+                                            <state key="selected" image="star"/>
                                             <connections>
                                                 <action selector="starButtonPressed:" destination="dZo-Kb-5oG" eventType="touchUpInside" id="OH1-pO-SXs"/>
                                             </connections>
@@ -2129,7 +2136,7 @@
                         <viewControllerLayoutGuide type="bottom" id="OLq-iP-FW1"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="c1G-e7-XEn">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gso-gl-GQS" customClass="GradientView" customModule="Juke" customModuleProvider="target">
@@ -2223,7 +2230,6 @@
     </scenes>
     <resources>
         <image name="Add song button" width="19" height="19"/>
-        <image name="Star" width="27" height="28"/>
         <image name="addStar" width="30" height="18"/>
         <image name="checkmark" width="50" height="50"/>
         <image name="checkmark_white" width="14" height="13"/>
