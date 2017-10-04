@@ -29,6 +29,7 @@ class Models {
         var duration: Double
         var coverArtURL: String
         var memberImageURL: String?
+        var memberSpotifyID: String?
         var upvoters: [String: Bool] = [:]
         var image: MPMediaItemArtwork?
         
@@ -41,6 +42,9 @@ class Models {
                     ]
             if let memberImageURL = self.memberImageURL {
                 dict["memberImageURL"] = memberImageURL
+            }
+            if let memberSpotifyID = self.memberSpotifyID {
+                dict["memberSpotifyID"] = memberSpotifyID
             }
             return dict
         }
@@ -59,6 +63,7 @@ class Models {
             self.coverArtURL = coverArtURL
             self.duration = duration
             self.memberImageURL = dict["memberImageURL"] as? String
+            self.memberSpotifyID = dict["memberSpotifyID"] as? String
             self.key = key
             self.upvoters = dict["upvoters"] as? [String: Bool] ?? [:]
         }
@@ -81,6 +86,7 @@ class Models {
             self.songName = song.songName
             self.coverArtURL = song.coverArtURL
             self.memberImageURL = Current.user?.imageURL
+            self.memberSpotifyID = Current.user?.spotifyID
             self.upvoters = [:]
         }
     }

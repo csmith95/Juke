@@ -13,7 +13,6 @@ import PKHUD
 class StarredUserCell: UITableViewCell {
 
     @IBOutlet var inviteToStreamButton: UIButton!
-    @IBOutlet var presenceDot: UIImageView!
     @IBOutlet var usernameLabel: UILabel!
     @IBOutlet var userImageView: UIImageView!
     
@@ -45,16 +44,6 @@ class StarredUserCell: UITableViewCell {
         self.member = member
         self.usernameLabel.text = member.username
         loadUserIcon(url: member.imageURL)
-        
-        
-        presenceDot.isHidden = true
-
-//        if member.online {
-//            presenceDot.image = #imageLiteral(resourceName: "green dot")
-//            presenceDot.isHidden = false
-//        } else {
-//            presenceDot.isHidden = true
-//        }
         
     }
     

@@ -186,7 +186,7 @@
                                     </constraints>
                                 </stackView>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sy7-fp-TS3">
-                                    <rect key="frame" x="326" y="23" width="46" height="30"/>
+                                    <rect key="frame" x="326" y="11" width="46" height="30"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="46" id="NWv-AY-qDA"/>
                                         <constraint firstAttribute="height" constant="30" id="eBy-FZ-3Uf"/>
@@ -239,14 +239,9 @@
                                                 <constraint firstAttribute="width" constant="40" id="bnh-Pd-n4E"/>
                                                 <constraint firstAttribute="height" constant="40" id="c0U-TE-gFd"/>
                                             </constraints>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                    <real key="value" value="20"/>
-                                                </userDefinedRuntimeAttribute>
-                                            </userDefinedRuntimeAttributes>
                                         </imageView>
                                         <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="jE1-Dq-iml">
-                                            <rect key="frame" x="68" y="17" width="91.5" height="25"/>
+                                            <rect key="frame" x="68" y="17" width="74.5" height="25"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oqN-V0-Cpg" userLabel="User name">
                                                     <rect key="frame" x="0.0" y="0.0" width="74.5" height="25"/>
@@ -277,7 +272,7 @@
                                                 <constraint firstAttribute="width" constant="30" id="2Ep-kK-g3r"/>
                                                 <constraint firstAttribute="height" constant="40" id="4i9-oU-SYc"/>
                                             </constraints>
-                                            <state key="normal" image="star"/>
+                                            <state key="normal" image="Star"/>
                                             <connections>
                                                 <action selector="starButtonPressed:" destination="dK4-Ge-qtA" eventType="touchUpInside" id="70w-Lx-hNP"/>
                                             </connections>
@@ -936,7 +931,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="PDD-Pq-Ckc" userLabel="Cell text">f
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="PDD-Pq-Ckc" userLabel="Cell text">
                                                     <rect key="frame" x="23" y="15" width="279" height="30"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b7k-5r-dDM">
@@ -953,7 +948,7 @@
                                                         </label>
                                                     </subviews>
                                                 </stackView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TrB-0x-SQE">f
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TrB-0x-SQE">
                                                     <rect key="frame" x="323" y="10" width="40" height="40"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="addToStreamButton"/>
                                                     <constraints>
@@ -1325,11 +1320,11 @@
                                                 <userDefinedRuntimeAttribute type="boolean" keyPath="horizontalMode" value="YES"/>
                                             </userDefinedRuntimeAttributes>
                                         </view>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="juke_icon" translatesAutoresizingMaskIntoConstraints="NO" id="5LD-1g-8r9" userLabel="Member Image View">
-                                            <rect key="frame" x="10" y="10" width="45" height="45"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5LD-1g-8r9" userLabel="Member Image View">
+                                            <rect key="frame" x="8" y="12.5" width="40" height="40"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="45" id="1dG-zG-pMD"/>
-                                                <constraint firstAttribute="width" constant="45" id="1wE-MV-vLa"/>
+                                                <constraint firstAttribute="height" constant="40" id="1dG-zG-pMD"/>
+                                                <constraint firstAttribute="width" constant="40" id="1wE-MV-vLa"/>
                                             </constraints>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -1338,7 +1333,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </imageView>
                                         <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Nel-x0-Ab5">
-                                            <rect key="frame" x="11" y="17" width="0.0" height="32.5"/>
+                                            <rect key="frame" x="55" y="17" width="0.0" height="32.5"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song name" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="3" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="66x-Jw-w2Y">
                                                     <rect key="frame" x="0.0" y="0.0" width="0.0" height="18"/>
@@ -1354,17 +1349,26 @@
                                                 </label>
                                             </subviews>
                                         </stackView>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Star" translatesAutoresizingMaskIntoConstraints="NO" id="W2o-OM-3ts">
+                                            <rect key="frame" x="29" y="32.5" width="25" height="25"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="25" id="GDB-3P-L5A"/>
+                                                <constraint firstAttribute="height" constant="25" id="mfL-vc-1ct"/>
+                                            </constraints>
+                                        </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
-                                        <constraint firstItem="vQR-Zw-cwe" firstAttribute="leading" secondItem="5LD-1g-8r9" secondAttribute="trailing" constant="-55" id="3gZ-gd-0kX"/>
                                         <constraint firstItem="vQR-Zw-cwe" firstAttribute="top" secondItem="guB-Fj-CpO" secondAttribute="top" id="4W0-DZ-e9x"/>
                                         <constraint firstItem="Nel-x0-Ab5" firstAttribute="centerY" secondItem="guB-Fj-CpO" secondAttribute="centerY" id="DM6-wQ-rxZ"/>
                                         <constraint firstAttribute="bottom" secondItem="vQR-Zw-cwe" secondAttribute="bottom" id="FsL-ez-F8p"/>
                                         <constraint firstItem="Nel-x0-Ab5" firstAttribute="leading" secondItem="5LD-1g-8r9" secondAttribute="trailing" constant="7" id="Hcp-gW-DLC"/>
+                                        <constraint firstItem="W2o-OM-3ts" firstAttribute="bottom" secondItem="5LD-1g-8r9" secondAttribute="bottom" constant="5" id="OSl-20-j2i"/>
                                         <constraint firstItem="3vp-Py-Aex" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Nel-x0-Ab5" secondAttribute="trailing" constant="5" id="Rqo-wb-RL3"/>
                                         <constraint firstAttribute="trailing" secondItem="vQR-Zw-cwe" secondAttribute="trailing" id="To0-Ou-Tbd"/>
                                         <constraint firstItem="vQR-Zw-cwe" firstAttribute="leading" secondItem="guB-Fj-CpO" secondAttribute="leading" id="gjS-hJ-wxO"/>
+                                        <constraint firstItem="W2o-OM-3ts" firstAttribute="trailing" secondItem="5LD-1g-8r9" secondAttribute="trailing" constant="6" id="n21-FR-xvc"/>
+                                        <constraint firstItem="5LD-1g-8r9" firstAttribute="leading" secondItem="guB-Fj-CpO" secondAttribute="leading" constant="8" id="tHU-61-4D2"/>
                                         <constraint firstItem="5LD-1g-8r9" firstAttribute="centerY" secondItem="guB-Fj-CpO" secondAttribute="centerY" id="ybF-Gg-XuS"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -1374,6 +1378,7 @@
                                     <outlet property="memberImgView" destination="5LD-1g-8r9" id="TYf-Mt-ZvK"/>
                                     <outlet property="songName" destination="66x-Jw-w2Y" id="JL1-C8-weW"/>
                                     <outlet property="upvoteButton" destination="3vp-Py-Aex" id="0bM-AW-a3X"/>
+                                    <outlet property="userStarIcon" destination="W2o-OM-3ts" id="Bsl-uq-RUE"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -1399,7 +1404,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7dZ-hc-aso" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3048.8000000000002" y="696.7016491754124"/>
+            <point key="canvasLocation" x="3048.5" y="696.5"/>
         </scene>
         <!--Members Table View Controller-->
         <scene sceneID="eYF-6J-Lo8">
@@ -1470,14 +1475,9 @@
                                                         <constraint firstAttribute="width" constant="40" id="bfz-qf-UzY"/>
                                                         <constraint firstAttribute="height" constant="40" id="oca-Db-TXV"/>
                                                     </constraints>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                            <real key="value" value="20"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
                                                 </imageView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="9Rf-Dn-oX3">
-                                                    <rect key="frame" x="67" y="20" width="91.5" height="25"/>
+                                                    <rect key="frame" x="67" y="20" width="74.5" height="25"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="asU-QY-oeN" userLabel="User name">
                                                             <rect key="frame" x="0.0" y="0.0" width="74.5" height="25"/>
@@ -1488,18 +1488,6 @@
                                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Star" translatesAutoresizingMaskIntoConstraints="NO" id="T36-M1-qnc" userLabel="Presence Indicator">
-                                                            <rect key="frame" x="79.5" y="6.5" width="12" height="12"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="12" id="WVu-7g-oj1"/>
-                                                                <constraint firstAttribute="height" constant="12" id="wiu-sW-McN"/>
-                                                            </constraints>
-                                                            <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                                    <real key="value" value="0.0"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                            </userDefinedRuntimeAttributes>
-                                                        </imageView>
                                                     </subviews>
                                                 </stackView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Odm-y7-VTK" userLabel="Star Button">
@@ -1515,17 +1503,14 @@
                                                         <action selector="starButtonPressed:" destination="Wne-Ll-EU5" eventType="touchUpInside" id="6IF-fN-nSD"/>
                                                     </connections>
                                                 </button>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="CPp-nq-kIe" userLabel="Star Image View">
-                                                    <rect key="frame" x="32" y="24.5" width="27" height="28"/>
-                                                </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Host" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ccn-e6-7dl">
                                                     <rect key="frame" x="67" y="43" width="26.5" height="14.5"/>
                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="CPp-nq-kIe" userLabel="Star Image View">
-                                                    <rect key="frame" x="33" y="32.5" width="25" height="25"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Star" translatesAutoresizingMaskIntoConstraints="NO" id="CPp-nq-kIe" userLabel="Star Image View">
+                                                    <rect key="frame" x="40" y="32.5" width="25" height="25"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="25" id="l2v-Fb-jyB"/>
                                                         <constraint firstAttribute="width" constant="25" id="wgE-5n-Gcw"/>
@@ -1537,6 +1522,7 @@
                                                 <constraint firstItem="Ccn-e6-7dl" firstAttribute="leading" secondItem="asU-QY-oeN" secondAttribute="leading" id="19C-zl-4qG"/>
                                                 <constraint firstItem="CPp-nq-kIe" firstAttribute="trailing" secondItem="EGW-Eb-Taf" secondAttribute="trailing" constant="6" id="3T7-OV-2Gh"/>
                                                 <constraint firstItem="EGW-Eb-Taf" firstAttribute="leading" secondItem="FOK-kx-WNe" secondAttribute="leadingMargin" constant="4" id="6jk-U9-fan"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Ccn-e6-7dl" secondAttribute="trailing" constant="20" symbolic="YES" id="DQK-ZZ-BN8"/>
                                                 <constraint firstItem="Ccn-e6-7dl" firstAttribute="top" secondItem="asU-QY-oeN" secondAttribute="bottom" constant="-2" id="Qiz-dg-lcA"/>
                                                 <constraint firstItem="Odm-y7-VTK" firstAttribute="centerY" secondItem="FOK-kx-WNe" secondAttribute="centerY" id="Tae-aR-8Qn"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="Odm-y7-VTK" secondAttribute="trailing" id="V7h-Dr-kPb"/>
@@ -1548,7 +1534,6 @@
                                         <color key="backgroundColor" red="0.1333333333" green="0.12549019610000001" blue="0.1450980392" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <outlet property="hostLabel" destination="Ccn-e6-7dl" id="ozR-aX-ChX"/>
-                                            <outlet property="presenceDot" destination="T36-M1-qnc" id="kgg-ex-KyA"/>
                                             <outlet property="starButton" destination="Odm-y7-VTK" id="khR-FB-ekX"/>
                                             <outlet property="starIcon" destination="CPp-nq-kIe" id="NXz-M8-NWM"/>
                                             <outlet property="userImageView" destination="EGW-Eb-Taf" id="saX-lM-15K"/>
@@ -1583,7 +1568,7 @@
             </objects>
             <point key="canvasLocation" x="3830" y="697"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Now Playing-->
         <scene sceneID="OYg-Dy-j9s">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="aFy-QO-1jJ" sceneMemberID="viewController">
@@ -1813,6 +1798,7 @@
                                 <constraint firstAttribute="trailing" secondItem="VKZ-sk-3Sl" secondAttribute="trailing" constant="8" id="U2U-88-4pl"/>
                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="mGN-pT-V2N" secondAttribute="trailing" id="aw7-nP-IMA"/>
                                 <constraint firstAttribute="bottom" secondItem="SH7-7c-l0Q" secondAttribute="bottom" id="lK9-Dz-vhD"/>
+                                <constraint firstItem="VKZ-sk-3Sl" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="XSH-wR-Axe" secondAttribute="leading" constant="20" symbolic="YES" id="mbW-ae-6AY"/>
                                 <constraint firstItem="VKZ-sk-3Sl" firstAttribute="top" secondItem="XSH-wR-Axe" secondAttribute="top" constant="23" id="qmi-I0-yvM"/>
                                 <constraint firstItem="SH7-7c-l0Q" firstAttribute="leading" secondItem="XSH-wR-Axe" secondAttribute="leading" constant="5" id="sa3-rb-XPQ"/>
                                 <constraint firstItem="SH7-7c-l0Q" firstAttribute="top" secondItem="mGN-pT-V2N" secondAttribute="bottom" constant="-3" id="tPf-tp-3gV"/>
@@ -1848,14 +1834,9 @@
                                                 <constraint firstAttribute="height" constant="40" id="RAf-ZM-4vV"/>
                                                 <constraint firstAttribute="width" constant="40" id="g3K-9h-mt9"/>
                                             </constraints>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                    <real key="value" value="20"/>
-                                                </userDefinedRuntimeAttribute>
-                                            </userDefinedRuntimeAttributes>
                                         </imageView>
                                         <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="lN3-tO-xHM">
-                                            <rect key="frame" x="68" y="17" width="91.5" height="25"/>
+                                            <rect key="frame" x="68" y="17" width="74.5" height="25"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QsI-l1-wBr" userLabel="User name">
                                                     <rect key="frame" x="0.0" y="0.0" width="74.5" height="25"/>
@@ -1876,7 +1857,7 @@
                                             </constraints>
                                             <state key="normal" image="empty star"/>
                                             <state key="disabled" image="ic_star_white"/>
-                                            <state key="selected" image="star"/>
+                                            <state key="selected" image="Star"/>
                                             <connections>
                                                 <action selector="starButtonPressed:" destination="dZo-Kb-5oG" eventType="touchUpInside" id="OH1-pO-SXs"/>
                                             </connections>
@@ -2232,6 +2213,7 @@
     </scenes>
     <resources>
         <image name="Add song button" width="19" height="19"/>
+        <image name="Star" width="27" height="28"/>
         <image name="addStar" width="30" height="18"/>
         <image name="checkmark" width="50" height="50"/>
         <image name="checkmark_white" width="14" height="13"/>
@@ -2251,7 +2233,6 @@
         <image name="rightArrow" width="6" height="8"/>
         <image name="search" width="25" height="25"/>
         <image name="spotifyLoginButton" width="259" height="50"/>
-        <image name="star" width="27" height="28"/>
         <image name="toolbarMyLibrary" width="30" height="23"/>
         <image name="toolbarPeople" width="29" height="26"/>
         <image name="toolbarStreams" width="28" height="27"/>

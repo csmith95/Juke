@@ -11,6 +11,7 @@ import AlamofireImage
 
 class SongTableViewCell: UITableViewCell {
 
+    @IBOutlet var userStarIcon: UIImageView!
     @IBOutlet var upvoteButton: UIButton!
     @IBOutlet var songName: UILabel!
     @IBOutlet var artist: UILabel!
@@ -44,7 +45,7 @@ class SongTableViewCell: UITableViewCell {
         })
         upvoteButton.setTitle("\(song.upvoters.count)", for: .normal)
         loadUserIcon(url: song.memberImageURL, imageView: memberImgView)
-        
+        userStarIcon.isHidden = !Current.isStarred(spotifyID: song.memberSpotifyID)
     }
     
     private func loadUserIcon(url: String?, imageView: UIImageView) {

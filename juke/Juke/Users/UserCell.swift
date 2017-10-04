@@ -16,7 +16,6 @@ class UserCell: UITableViewCell {
     @IBOutlet var inviteToStreamButton: UIButton!
     @IBOutlet var userNameLabel: UILabel!
     @IBOutlet var userImageView: UIImageView!
-    @IBOutlet var presenceDot: UIImageView!
     @IBOutlet weak var starButton: UIButton!
     @IBOutlet var starIcon: UIImageView!
     @IBOutlet var hostLabel: UILabel!
@@ -75,15 +74,6 @@ class UserCell: UITableViewCell {
         self.member = member
         self.userNameLabel.text = member.username
         loadUserIcon(url: member.imageURL)
-        
-        presenceDot.isHidden = true
-//        if member.online {
-//            presenceDot.image = #imageLiteral(resourceName: "green dot")
-//            presenceDot.isHidden = false
-//        } else {
-//            presenceDot.isHidden = true
-//        }
-        
     }
     
     private func loadUserIcon(url: String?) {

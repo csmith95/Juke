@@ -85,7 +85,6 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePosition position: TimeInterval) {
         // signal MyStreamController so that it can update UISlider and update Firebase if host
-        print("got updated position \(position) for: ", audioStreaming.metadata.currentTrack?.uri)
         position_ms = position * 1000
         let data: [String:Any] = ["progress": position_ms]
         NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
@@ -93,8 +92,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     
     public func setPlayStatus(shouldPlay: Bool, topSong: Models.FirebaseSong?) {
         // in this public version, check that access token is valid. if not, refresh token
-        
-        guard let player = sharedInstance, let session = SessionManager.session, let token = SessionManager.accessToken else {
+        guard let _ = sharedInstance, let _ = SessionManager.session, let _ = SessionManager.accessToken else {
             SessionManager.refreshSession(completionHandler: { (_) in
                 self.authenticatePlayer()
             })

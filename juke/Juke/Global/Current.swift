@@ -65,4 +65,11 @@ class Current {
         })
     }
     
+    public static func isStarred(spotifyID: String?) -> Bool {
+        guard let spotifyID = spotifyID else { return false }
+        return starredUsers.contains(where: { (otherSpotifyID) -> Bool in
+            return spotifyID == otherSpotifyID
+        })
+    }
+    
 }
