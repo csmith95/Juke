@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StarredTableViewController: UITableViewController {
+class StarredTableViewController: UIViewController, UISearchBarDelegate {
 
     @IBOutlet var starredTableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
