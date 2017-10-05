@@ -28,15 +28,11 @@ class StarredStreamsDataSource: CustomDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        objc_sync_enter(self)
         let stream = filteredCollection[indexPath.row].stream!
-        FirebaseAPI.joinStreamPressed(stream: stream) { success in
-            if success {
-                NotificationCenter.default.post(name: Notification.Name("newStreamJoined"), object: nil)
-                HUD.flash(.success, delay: 1.0)
-            } else {
-                HUD.flash(.error, delay: 1.0)
-            }
-        }
+        let object = ["stream": stream]
+        NotificationCenter.default.post(name: Notification.Name("newStreamSelected"), object: object)
+        objc_sync_exit(self)
     }
     
     override func isEqual(current: CollectionItem, other: CollectionItem) -> Bool {

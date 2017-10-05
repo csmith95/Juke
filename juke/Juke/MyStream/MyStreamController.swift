@@ -21,6 +21,7 @@ class MyStreamController: UITableViewController {
     // firebase vars
     let songsDataSource = SongQueueDataSource()
     
+    @IBOutlet var pausedLabel: UILabel!
     @IBOutlet var addToSpotifyLibButton: UIButton!
     @IBOutlet var numContributorsButton: UIButton!
     @IBOutlet var streamNameLabel: UILabel!
@@ -157,6 +158,15 @@ class MyStreamController: UITableViewController {
             } else {
                 self.listenButton.isSelected = Current.listenSelected
             }
+            
+            if !Current.isHost() && !stream.isPlaying {
+                coverArtImage.alpha = 0.3
+                pausedLabel.isHidden = false
+            } else {
+                coverArtImage.alpha = 1.0
+                pausedLabel.isHidden = true
+            }
+            
             self.checkIfUserLibContainsCurrentSong(song: song)
             progressSlider.isHidden = false
             currTimeLabel.isHidden = false
@@ -317,6 +327,14 @@ class MyStreamController: UITableViewController {
             self.handleAutomaticProgressSlider()
             guard let stream = Current.stream else { return }
             self.listenButton.isSelected = stream.isPlaying
+            if !Current.isHost() && !stream.isPlaying {
+                coverArtImage.alpha = 0.3
+                pausedLabel.isHidden = false
+            } else {
+                coverArtImage.alpha = 1.0
+                pausedLabel.isHidden = true
+            }
+
         case .TopSongChanged:
             self.setUI()
         case .SetProgress:

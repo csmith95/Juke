@@ -63,9 +63,12 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
 
     func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
         print("**** Audio Player audio logged in")
+        objc_sync_enter(self)
         if let pending = pendingPlayOperation {
             self.tryPlaying(topSong: pending.song)
+            self.pendingPlayOperation = nil
         }
+        objc_sync_exit(self)
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceiveError error: Error!) {
@@ -104,29 +107,32 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     }
     
     public func setPlayStatus(shouldPlay: Bool, topSong: Models.FirebaseSong?) {
-        objc_sync_enter(pendingPlayOperation)
+        objc_sync_enter(self)
         
         // don't need token to stop playing
         if !shouldPlay || topSong == nil {
             pendingPlayOperation = nil
             self.stopPlaying()
-            objc_sync_exit(pendingPlayOperation)
+            objc_sync_exit(self)
             return
         }
         
         guard let song = topSong else { return }
         SessionManager.executeWithToken { (token) in
-            guard let token = token else { return }
+            guard let token = token else { objc_sync_exit(self.pendingPlayOperation); return }
+            print("Audio Player token: \(self.loggedInWithToken)")
+            print("Provided token: \(token)")
             guard let loggedInToken = self.loggedInWithToken, loggedInToken == token else {
                 self.pendingPlayOperation = PendingPlayOperation(song: song)
                 self.authenticatePlayer()
-                objc_sync_exit(self.pendingPlayOperation)
+                objc_sync_exit(self)
                 return
             }
             
             self.pendingPlayOperation = nil
             // tokens match -- go ahead and play song
             self.tryPlaying(topSong: song)
+            objc_sync_exit(self)
         }
     }
     
