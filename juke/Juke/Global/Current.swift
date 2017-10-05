@@ -41,6 +41,7 @@ class Current {
             NotificationCenter.default.post(name: Notification.Name("updateMyStreamView"), object: nil)
         }
     }
+    
     public static func isHost() -> Bool {
         guard let stream = Current.stream else { return false }
         guard let user = Current.user else { return false }

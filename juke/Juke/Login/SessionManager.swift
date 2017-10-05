@@ -11,6 +11,7 @@ import Alamofire
 
 final class SessionManager {
     
+    private static var refreshCallback: ((String?)->Void)?
     private static let userDefaults = UserDefaults.standard
     public static var session: SPTSession! {
         didSet {
@@ -20,9 +21,10 @@ final class SessionManager {
             self.userDefaults.synchronize()
         }
     }
-    public static var accessToken: String! {
+    
+    public static var accessToken: String? {
         get {
-            if session == nil { return nil }
+            if session == nil || !session.isValid() { return nil }
             return session.accessToken
         }
     }
@@ -45,12 +47,30 @@ final class SessionManager {
     
     public static func refreshSession(completionHandler: @escaping (Bool)->Void) {
         SPTAuth.defaultInstance().renewSession(self.session, callback: { (error, renewedSession) in
+            if let err = error { print("Error renewing session: \(err)"); return }
+            
             if let session = renewedSession {
                 self.session = session
                 completionHandler(true)
-                NotificationCenter.default.post(name: Notification.Name("reauthenticatePlayer"), object: nil)
+                return
             }
             completionHandler(false)
         })
+    }
+    
+    public static func executeWithToken(callback: @escaping (String?)->Void) {
+        objc_sync_enter(refreshCallback)
+        if session != nil && session.isValid() && accessToken != nil {
+            callback(accessToken)
+            objc_sync_exit(refreshCallback)
+        } else {
+            print("refreshing token...")
+            refreshCallback = callback
+            refreshSession() { success in
+                print("refreshed! success: ", success)
+                callback(self.accessToken)
+                objc_sync_exit(refreshCallback)
+            }
+        }
     }
 }

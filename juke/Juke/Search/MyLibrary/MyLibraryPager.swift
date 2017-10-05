@@ -59,9 +59,7 @@ class MyLibraryPager: ButtonBarPagerTabStripViewController {
     }
     
     func execSearchQuery() {
-        print("here")
         if let query = searchBar.text {
-            print("here2. notification name: ", notificationName)
             NotificationCenter.default.post(name: Notification.Name(notificationName), object: nil, userInfo: ["query" : query.lowercased()])
         }
     }

@@ -13,13 +13,13 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     
     static let shared = JamsPlayer()
     private let userDefaults = UserDefaults.standard
-    private let sharedInstance = SPTAudioStreamingController.sharedInstance()
+    private let player = SPTAudioStreamingController.sharedInstance()
     private let kClientID = "77d4489425fe464483f0934f99847c8b"
     private var old_position_ms: TimeInterval?
     public var position_ms: TimeInterval {
         
         didSet(newPosition) {
-            if old_position_ms == nil || abs(newPosition - old_position_ms!) >= 3000 {
+            if old_position_ms == nil || abs(newPosition - old_position_ms!) >= 4000 {
                 self.resync()
             }
             old_position_ms = newPosition
@@ -32,41 +32,53 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         }
     }
     
+    
+    private struct PendingPlayOperation {
+        var song: Models.FirebaseSong
+    }
+    private var loggedInWithToken: String?
+    private var pendingPlayOperation: PendingPlayOperation?
+    
     override private init() {
         self.position_ms = 0.0
         print("init jams player")
         super.init()
         do {
-            try sharedInstance?.start(withClientId: kClientID)
-            sharedInstance?.delegate = self
-            sharedInstance?.playbackDelegate = self
-            authenticatePlayer()
+            try player?.start(withClientId: kClientID)
+            player?.delegate = self
+            player?.playbackDelegate = self
             try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try? AVAudioSession.sharedInstance().setActive(true)
-            NotificationCenter.default.addObserver(self, selector: #selector(self.authenticatePlayer), name: Notification.Name("reauthenticatePlayer"), object: nil)
         } catch let err {
             print(err)
         }
     }
+    
+    public func login() {
+        // get/refresh token
+        SessionManager.executeWithToken(callback: { (token) in
+            self.authenticatePlayer()   // sign in
+        })
+    }
 
     func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
-        print("** JamsPlayer audio logged in")
-        NotificationCenter.default.post(name: Notification.Name("jamsPlayerReady"), object: nil)
+        print("**** Audio Player audio logged in")
+        if let pending = pendingPlayOperation {
+            self.tryPlaying(topSong: pending.song)
+        }
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceiveError error: Error!) {
         print(error)
     }
     
-    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceiveMessage message: String!) {
-        print("** JamsPlayer received message: ", message)
-    }
-    
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceive event: SpPlaybackEvent) {
+        if !Current.isHost() { return } // listen to owner's phone -- otherwise double skip sometimes happens
         if event == SPPlaybackNotifyTrackChanged {
             if audioStreaming.metadata == nil {
                 return
             }
+            
             // track changed -- tell StreamController to pop first song, play next song
             if let currentTrack = audioStreaming.metadata.currentTrack {
                 let duration_ms = currentTrack.duration * 1000
@@ -78,9 +90,10 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         }
     }
     
-    func authenticatePlayer() {
-        print("** JamsPlayer logging in with token: \(SessionManager.accessToken)")
-        self.sharedInstance?.login(withAccessToken: SessionManager.accessToken)
+    private func authenticatePlayer() {
+        print("*** Audio Player logging in with token: \(SessionManager.accessToken)")
+        self.loggedInWithToken = SessionManager.accessToken
+        player?.login(withAccessToken: SessionManager.accessToken)
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePosition position: TimeInterval) {
@@ -91,63 +104,77 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     }
     
     public func setPlayStatus(shouldPlay: Bool, topSong: Models.FirebaseSong?) {
-        // in this public version, check that access token is valid. if not, refresh token
-        guard let _ = sharedInstance, let _ = SessionManager.session, let _ = SessionManager.accessToken else {
-            SessionManager.refreshSession(completionHandler: { (_) in
-                self.authenticatePlayer()
-            })
-            return;
-        }
-        internalSetPlayStatus(shouldPlay: shouldPlay, topSong: topSong)
-    }
-    
-    private func internalSetPlayStatus(shouldPlay: Bool, topSong: Models.FirebaseSong?) {
-        guard let player = sharedInstance else { return }
-        guard let song = topSong else {                     // turn off if nil passed in for topSong
-            player.setIsPlaying(false, callback: { (err) in
-                if let err = err {
-                    print(err)
-                }
-            });
+        objc_sync_enter(pendingPlayOperation)
+        
+        // don't need token to stop playing
+        if !shouldPlay || topSong == nil {
+            pendingPlayOperation = nil
+            self.stopPlaying()
+            objc_sync_exit(pendingPlayOperation)
             return
         }
         
-        if shouldPlay {
-            // not sure if this is good style, but these 2 lines are the magic behind background streaming
-            let position = position_ms / 1000
-            let uri = "spotify:track:" + song.spotifyID
-            player.playSpotifyURI(uri, startingWith: 0, startingWithPosition: position, callback: { (error) in
-                if let error = error {
-                    print(error)
-                }
-            });
-        } else {
-            player.setIsPlaying(false, callback: { (err) in
-                if let err = err {
-                    print(err)
-                }
-            });
+        guard let song = topSong else { return }
+        SessionManager.executeWithToken { (token) in
+            guard let token = token else { return }
+            guard let loggedInToken = self.loggedInWithToken, loggedInToken == token else {
+                self.pendingPlayOperation = PendingPlayOperation(song: song)
+                self.authenticatePlayer()
+                objc_sync_exit(self.pendingPlayOperation)
+                return
+            }
+            
+            self.pendingPlayOperation = nil
+            // tokens match -- go ahead and play song
+            self.tryPlaying(topSong: song)
         }
+    }
+    
+    func stopPlaying() {
+        print("STOP")
+        player?.setIsPlaying(false, callback: { (err) in
+            if let _ = err {
+                print("error in stopPlaying")
+            }
+        });
+        return
+    }
+    
+    func tryPlaying(topSong: Models.FirebaseSong) {
+        print("GO")
+
+        // not sure if this is good style, but these 2 lines are the magic behind background streaming
+        let position = position_ms / 1000
+        let uri = "spotify:track:" + topSong.spotifyID
+        player?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: position, callback: { (error) in
+            if let _ = error {
+                print("error in tryPlaying")
+            }
+        });
     }
 
     
     public func resync() {
-        guard let stream = Current.stream else {
+        guard let stream = Current.stream, let song = stream.song else {
             // if no stream found, shut down music player
-            setPlayStatus(shouldPlay: false, topSong: nil)
+            stopPlaying()
             return
         }
         
         if !stream.isPlaying {
-            setPlayStatus(shouldPlay: false, topSong: stream.song)
+            stopPlaying()
             return
         }
         
         // below here we know stream is set to playing. play music if host or if member && listen button selected
         if Current.isHost() {
-            setPlayStatus(shouldPlay: true, topSong: stream.song)
+            setPlayStatus(shouldPlay: true, topSong: song)
         } else {
-            setPlayStatus(shouldPlay: Current.listenSelected, topSong: stream.song)
+            if Current.listenSelected {
+                setPlayStatus(shouldPlay: true, topSong: song)
+            } else {
+                setPlayStatus(shouldPlay: false, topSong: song)
+            }
         }
     }
 

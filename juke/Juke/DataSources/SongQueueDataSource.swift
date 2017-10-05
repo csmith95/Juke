@@ -39,6 +39,7 @@ class SongQueueDataSource: CustomDataSource {
         }
         if stream.streamID == observedStreamID { return } // don't set observer for same stream twice
         
+        objc_sync_enter(self)
         // remove old observer
         ref.child("/songs/\(observedStreamID)").removeAllObservers()
         observedStreamID = stream.streamID
@@ -58,7 +59,7 @@ class SongQueueDataSource: CustomDataSource {
         ref.child(path).observe(.childRemoved, with: { (snapshot) in
             super.updateCollection(type: .childRemoved, snapshot: snapshot)
         })
-        print("added observers: ", path)
+        objc_sync_exit(self)
     }
     
     override func isEqual(current: CollectionItem, other: CollectionItem) -> Bool {
@@ -81,12 +82,10 @@ class SongQueueDataSource: CustomDataSource {
     
     public func getNextSong() -> Models.FirebaseSong? {
         objc_sync_enter(self)
-        if let topSong = filteredCollection.first?.song {
-            objc_sync_exit(self)
-            return topSong
-        }
+        let topSong = filteredCollection.first?.song
+        filteredCollection.remove(at: 0)
         objc_sync_exit(self)
-        return nil
+        return topSong
     }
     
 }

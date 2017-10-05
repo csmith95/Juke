@@ -80,34 +80,36 @@ class MyPlaylistsTableViewController: UITableViewController, IndicatorInfoProvid
     private func fetchPlaylists() {
         if !allPlaylists.isEmpty { return } // alread fetched -- return
         
-        let headers = [
-            "Authorization": "Bearer " + SessionManager.accessToken
-        ]
-        let params: Parameters = ["limit": 50, "offset": 0]
-        Alamofire.request(Constants.kSpotifyMyPlaylistsURL, parameters: params, headers: headers).responseJSON { response in
-            do {
-                var serializedJSON = try JSONSerialization.jsonObject(with: response.data!, options: .mutableContainers) as! JSONStandard
-                if let items = serializedJSON["items"] as? [JSONStandard] {
-                    for item in items {
-                        do {
-                            let playlist: Models.SpotifyPlaylist = try unbox(dictionary: item)
-                            print(playlist.imageURL)
-                            self.allPlaylists.append(playlist)
-                        } catch {
-                            print("error unboxing spotify song: ", error)
+        SessionManager.executeWithToken { (token) in
+            guard let token = SessionManager.accessToken else { return }
+            let headers = [
+                "Authorization": "Bearer " + token
+            ]
+            let params: Parameters = ["limit": 50, "offset": 0]
+            Alamofire.request(Constants.kSpotifyMyPlaylistsURL, parameters: params, headers: headers).responseJSON { response in
+                do {
+                    var serializedJSON = try JSONSerialization.jsonObject(with: response.data!, options: .mutableContainers) as! JSONStandard
+                    if let items = serializedJSON["items"] as? [JSONStandard] {
+                        for item in items {
+                            do {
+                                let playlist: Models.SpotifyPlaylist = try unbox(dictionary: item)
+                                self.allPlaylists.append(playlist)
+                            } catch {
+                                print("error unboxing spotify song: ", error)
+                            }
                         }
+                        
+                        // to make UI more responsive, display first 50 immediately
+                        // then load the rest
+                        self.displayedPlaylists = self.allPlaylists
+                        DispatchQueue.main.async {
+                            self.threadSafeReloadView()
+                        }
+                        self.recursiveLoadPlaylists(urlString: serializedJSON["next"] as? String, headers: headers)
                     }
-                    
-                    // to make UI more responsive, display first 50 immediately
-                    // then load the rest
-                    self.displayedPlaylists = self.allPlaylists
-                    DispatchQueue.main.async {
-                        self.threadSafeReloadView()
-                    }
-                    self.recursiveLoadPlaylists(urlString: serializedJSON["next"] as? String, headers: headers)
+                } catch {
+                    print("error unboxing JSON")
                 }
-            } catch {
-                print("error unboxing JSON")
             }
         }
     }

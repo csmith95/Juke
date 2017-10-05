@@ -67,9 +67,15 @@ class FirebaseAPI {
     private static func addSongPlayStatusListener() {
         let path = "streams/\(Current.stream!.streamID)/isPlaying"
         ref.child(path).observe(.value, with:{ (snapshot) in
+            if Current.isHost() {
+                // this fixes this bug: play music. lock screen. when locked, pause stream.
+                // open app. without this line, the play/pause state doesn't get updated.
+                NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.PlayStatusChanged)
+                return
+            }
+            
             if snapshot.exists(), let isPlaying = snapshot.value as? Bool {
                 Current.stream!.isPlaying = isPlaying
-                jamsPlayer.resync()
                 self.listenForSongProgress()    // fetch updated status
                 NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.PlayStatusChanged)
                 NotificationCenter.default.post(name: Notification.Name("firebaseEventLockScreen"), object: FirebaseEvent.PlayStatusChanged)
@@ -161,6 +167,9 @@ class FirebaseAPI {
     public static func listenForSongProgress() {
         guard let stream = Current.stream else { return }
         self.ref.child("/songProgressTable/\(stream.streamID)").observeSingleEvent(of: .value, with: { (snapshot) in
+            if Current.isHost() { return }
+            
+            // note that setting jamsPlayer will trigger a resync if off by > 4 seconds
             if snapshot.exists(), let updatedProgress = snapshot.value as? Double {
                 jamsPlayer.position_ms = updatedProgress
             } else {
@@ -175,22 +184,22 @@ class FirebaseAPI {
     // deletes top song in current stream -- should only be called by host when spotify signals
     // that song ended or when host presses skip
     // then this method loads top song from list of queued songs, if any exists
-    public static func popTopSong(dataSource: SongQueueDataSource) {
+    public static func popTopSong(nextSong: Models.FirebaseSong?) {
+        
+        // ** note that only the host touches this method **
+        
         guard let stream = Current.stream else { return }
         // reset progress in any case
         self.ref.child("/songProgressTable/\(stream.streamID)").setValue(0.0)
-        jamsPlayer.position_ms = 0.0
         
-        guard let nextSong = dataSource.getNextSong() else {
+        if let next = nextSong {
+            self.ref.child("/streams/\(stream.streamID)/song").setValue(next.firebaseDict)
+            self.ref.child("/songs/\(stream.streamID)/\(next.key)").removeValue()
+        } else {
             // no songs queued
             self.ref.child("/streams/\(stream.streamID)/song").removeValue()
             ref.child("streams/\(stream.streamID)/isPlaying").setValue(false)
-            return
         }
-        
-        // set next song
-        self.ref.child("/streams/\(stream.streamID)/song").setValue(nextSong.firebaseDict)
-        self.ref.child("/songs/\(stream.streamID)/\(nextSong.key)").removeValue()
     }
     
     private static func addTopSongChangedListener() {
@@ -198,7 +207,12 @@ class FirebaseAPI {
         // listen for top song changes -- includes song skips and song finishes
         let path = "/streams/\(stream.streamID)/song"
         self.ref.child(path).observe(.value, with: { (snapshot) in
-            guard let _ = Current.stream else { return }
+            guard let stream = Current.stream else { return }
+            
+            if Current.isHost() && stream.song != nil {
+                return
+            }
+            
             Current.stream!.song = Models.FirebaseSong(snapshot: snapshot)
             self.jamsPlayer.position_ms = 0.0
             self.listenForSongProgress()
@@ -355,7 +369,6 @@ class FirebaseAPI {
     // smh since firebase removeAllObservers() doesn't do what you think it does, need
     // to iterate through list
     private static func removeAllObservers(callback: @escaping (() -> Void)) {
-        print("******** removed all observers ******")
         for path in self.observedPaths {
             self.ref.child(path).removeAllObservers()
         }

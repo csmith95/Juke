@@ -110,37 +110,40 @@ class MySongsTableViewController: UITableViewController, IndicatorInfoProvider {
     }
     
     func loadSavedTracks() {
-        self.allSongs.removeAll()
-        let url = "https://api.spotify.com/v1/me/tracks"
-        let headers = [
-            "Authorization": "Bearer " + SessionManager.accessToken
-        ]
-        let params: Parameters = ["limit": 50, "offset": 0]
-        Alamofire.request(url, parameters: params, headers: headers).responseJSON { response in
-            do {
-                var serializedJSON = try JSONSerialization.jsonObject(with: response.data!, options: .mutableContainers) as! JSONStandard
-                if let items = serializedJSON["items"] as? [JSONStandard] {
-                    for i in 0..<items.count {
-                        let item = items[i]["track"]
-                        let curr = item as! UnboxableDictionary
-                        do {
-                            let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
-                            self.allSongs.append(spotifySong)
-                        } catch {
-                            print("error unboxing spotify song: ", error)
+        SessionManager.executeWithToken { (token) in
+            guard let token = token else { return }
+            self.allSongs.removeAll()
+            let url = "https://api.spotify.com/v1/me/tracks"
+            let headers = [
+                "Authorization": "Bearer " + token
+            ]
+            let params: Parameters = ["limit": 50, "offset": 0]
+            Alamofire.request(url, parameters: params, headers: headers).responseJSON { response in
+                do {
+                    var serializedJSON = try JSONSerialization.jsonObject(with: response.data!, options: .mutableContainers) as! JSONStandard
+                    if let items = serializedJSON["items"] as? [JSONStandard] {
+                        for i in 0..<items.count {
+                            let item = items[i]["track"]
+                            let curr = item as! UnboxableDictionary
+                            do {
+                                let spotifySong: Models.SpotifySong = try unbox(dictionary: curr)
+                                self.allSongs.append(spotifySong)
+                            } catch {
+                                print("error unboxing spotify song: ", error)
+                            }
                         }
+                        
+                        // to make UI more responsive, display first 50 immediately
+                        // then load the rest
+                        self.displayedSongs = self.allSongs
+                        DispatchQueue.main.async {
+                            self.threadSafeReloadView()
+                        }
+                        self.recursiveLoadTracks(urlString: serializedJSON["next"] as? String, headers: headers)
                     }
-                    
-                    // to make UI more responsive, display first 50 immediately
-                    // then load the rest
-                    self.displayedSongs = self.allSongs
-                    DispatchQueue.main.async {
-                        self.threadSafeReloadView()
-                    }
-                    self.recursiveLoadTracks(urlString: serializedJSON["next"] as? String, headers: headers)
+                } catch {
+                    print("error unboxing JSON")
                 }
-            } catch {
-                print("error unboxing JSON")
             }
         }
     }

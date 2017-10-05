@@ -42,6 +42,7 @@ final class MyStreamRootViewController: UIViewController {
         // whenever top song changes or user stream changes, see if this tab should animate
         // to/from empty controller to/from my stream controller
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamRootViewController.updateChildViews), name: Notification.Name("updateMyStreamView"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamRootViewController.updateChildViews), name: Notification.Name("changedStreams"), object: nil)
         updateChildViews()
     }
     

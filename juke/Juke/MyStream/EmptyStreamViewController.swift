@@ -39,7 +39,7 @@ class EmptyStreamViewController: UIViewController {
             return
         }
         
-        // if user in a stream
+        // stream still exists
         endStreamButton.isHidden = false
         if Current.isHost() {
             endStreamButton.setTitle("End stream", for: .normal)

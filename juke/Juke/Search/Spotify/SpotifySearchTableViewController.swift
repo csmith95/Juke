@@ -56,28 +56,30 @@ class SpotifySearchTableViewController: UIViewController {
     }
     
     func searchSpotify(keywords: String) {
-        let params: Parameters = [
-            "query" : keywords + "*",
-            "type" : "track,artist",
-            "offset": "00",
-            "limit": "20",
-            "market": "US"
-        ]
         
-        print(params)
-        
-        let headers = [
-            "Authorization": "Bearer " + SessionManager.accessToken
-        ]
-        
-        Alamofire.request(Constants.kSpotifySearchURL, method: .get, parameters: params, headers: headers)
-            .validate().responseJSON { response in
-                switch response.result {
-                case .success:
-                    self.parseSearchData(JSONData: response.data!)
-                case .failure(let error):
-                    print("error searching spotify: ", error)
-                }
+        SessionManager.executeWithToken { (token) in
+            let params: Parameters = [
+                "query" : keywords + "*",
+                "type" : "track,artist",
+                "offset": "00",
+                "limit": "20",
+                "market": "US"
+            ]
+            
+            guard let token = SessionManager.accessToken else { return }
+            let headers = [
+                "Authorization": "Bearer " + token
+            ]
+            
+            Alamofire.request(Constants.kSpotifySearchURL, method: .get, parameters: params, headers: headers)
+                .validate().responseJSON { response in
+                    switch response.result {
+                    case .success:
+                        self.parseSearchData(JSONData: response.data!)
+                    case .failure(let error):
+                        print("error searching spotify: ", error)
+                    }
+            }
         }
     }
     

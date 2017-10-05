@@ -21,7 +21,6 @@ class LoginViewController: UIViewController {
     
     let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         lockScreenDelegate.setUpNowPlayingInfoCenter()
@@ -64,36 +63,39 @@ class LoginViewController: UIViewController {
     }
     
     func fetchSpotifyUser() {
-        let accessToken = SessionManager.accessToken!
-        let headers: HTTPHeaders = ["Authorization": "Bearer " + accessToken]
-        let url = Constants.kSpotifyBaseURL + Constants.kCurrentUserPath
-        print("fetching spotify user")
-        Alamofire.request(url, method: .get, parameters: nil, encoding: URLEncoding.default, headers: headers).validate().responseJSON {
-            response in
-            switch response.result {
-            case .success:
-                do {
-                    print("fetched spotify user")
-                    let dictionary = response.result.value as! UnboxableDictionary
-                    let spotifyUser: Models.SpotifyUser = try unbox(dictionary: dictionary)
-                    FirebaseAPI.loginUser(spotifyUser: spotifyUser) { success in
-                        print("logged in firebase user")
-                        if success {
-                            self.logUserToCrashlytics()
-                            DispatchQueue.main.async {
-                                self.performSegue(withIdentifier: "loginSegue", sender: nil)
+        JamsPlayer.shared.login()   // session has been set, so set up audio player
+        SessionManager.executeWithToken { (token) in
+            guard let token = token else { return }
+            let headers: HTTPHeaders = ["Authorization": "Bearer " + token]
+            let url = Constants.kSpotifyBaseURL + Constants.kCurrentUserPath
+            print("fetching spotify user")
+            Alamofire.request(url, method: .get, parameters: nil, encoding: URLEncoding.default, headers: headers).validate().responseJSON {
+                response in
+                switch response.result {
+                case .success:
+                    do {
+                        print("fetched spotify user")
+                        let dictionary = response.result.value as! UnboxableDictionary
+                        let spotifyUser: Models.SpotifyUser = try unbox(dictionary: dictionary)
+                        FirebaseAPI.loginUser(spotifyUser: spotifyUser) { success in
+                            print("logged in firebase user")
+                            if success {
+                                self.logUserToCrashlytics()
+                                DispatchQueue.main.async {
+                                    self.performSegue(withIdentifier: "loginSegue", sender: nil)
+                                }
+                            } else {
+                                print("error logging in firebase user -- that's life in the city")
                             }
-                        } else {
-                            print("error logging in firebase user -- that's life in the city")
                         }
+                    } catch {
+                        print("error unboxing spotify user: ", error)
                     }
-                } catch {
-                    print("error unboxing spotify user: ", error)
+                case .failure(let error):
+                    print(error)
                 }
-            case .failure(let error):
-                print(error)
             }
-        };
+        }
     }
 
     override func didReceiveMemoryWarning() {
