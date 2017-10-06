@@ -21,6 +21,7 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
     
     @IBOutlet var streamsTableView: UITableView!
     var starredStreamsDataSource = StarredStreamsDataSource()
+    var starredUsersDataSource = StarredUsersDataSource() // because we need to load starred users into Current.swift set in order to correctly filter in this table
     
     let presenter: Presentr = {
         let presenter = Presentr(presentationType: .alert)
@@ -33,6 +34,7 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        starredUsersDataSource.listen()
         streamsTableView.dataSource = starredStreamsDataSource
         streamsTableView.delegate = starredStreamsDataSource
 
@@ -48,11 +50,13 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         starredStreamsDataSource.listen()
+        StreamsDataSource().listen()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         starredStreamsDataSource.detach()
+        starredUsersDataSource.detach()
     }
     
     private func execSearchQuery(notification: Notification) {

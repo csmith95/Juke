@@ -13,7 +13,6 @@ import Firebase
 import Crashlytics
 
 class LoginViewController: UIViewController {
-    
 
     @IBOutlet weak var loginButton: UIButton!
     let spotifyLoginController: SpotifyLoginController = SpotifyLoginController()

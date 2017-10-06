@@ -381,10 +381,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hRE-uW-GhN" customClass="GradientView" customModule="Juke" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="160"/>
                                 <subviews>
                                     <searchBar contentMode="redraw" verticalCompressionResistancePriority="751" barStyle="black" searchBarStyle="minimal" text="" translatesAutoresizingMaskIntoConstraints="NO" id="0xC-Se-ZoZ">
-                                        <rect key="frame" x="5" y="94" width="365" height="56"/>
+                                        <rect key="frame" x="5" y="103" width="365" height="56"/>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         <connections>
@@ -392,7 +392,7 @@
                                         </connections>
                                     </searchBar>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dIt-WQ-aVS">
-                                        <rect key="frame" x="12" y="68" width="79.5" height="29"/>
+                                        <rect key="frame" x="12" y="80" width="79.5" height="29"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -400,12 +400,12 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="150" id="4JR-zc-CB2"/>
-                                    <constraint firstAttribute="bottom" secondItem="0xC-Se-ZoZ" secondAttribute="bottom" id="K9z-Xk-GLZ"/>
+                                    <constraint firstAttribute="height" constant="160" id="4JR-zc-CB2"/>
                                     <constraint firstItem="dIt-WQ-aVS" firstAttribute="leading" secondItem="hRE-uW-GhN" secondAttribute="leading" constant="12" id="YJu-VV-aHz"/>
                                     <constraint firstItem="0xC-Se-ZoZ" firstAttribute="leading" secondItem="hRE-uW-GhN" secondAttribute="leading" constant="5" id="eVs-4a-FbZ"/>
+                                    <constraint firstItem="dIt-WQ-aVS" firstAttribute="top" secondItem="hRE-uW-GhN" secondAttribute="top" constant="80" id="h8e-Lm-Ari"/>
                                     <constraint firstAttribute="trailing" secondItem="0xC-Se-ZoZ" secondAttribute="trailing" constant="5" id="ni8-ak-NgD"/>
-                                    <constraint firstItem="0xC-Se-ZoZ" firstAttribute="top" secondItem="dIt-WQ-aVS" secondAttribute="bottom" constant="-3" id="s7g-Ik-LRk"/>
+                                    <constraint firstItem="0xC-Se-ZoZ" firstAttribute="top" secondItem="hRE-uW-GhN" secondAttribute="top" constant="103" id="yrg-fg-hyS"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="startColor">
@@ -424,7 +424,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="CGT-vh-cjO">
-                                <rect key="frame" x="0.0" y="150" width="375" height="468"/>
+                                <rect key="frame" x="0.0" y="160" width="375" height="458"/>
                                 <color key="backgroundColor" red="0.13333333333333333" green="0.12549019607843137" blue="0.14509803921568626" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="SpotifySearchCell" rowHeight="60" id="rU3-UO-65s" customClass="SearchCell" customModule="Juke" customModuleProvider="target">
@@ -833,7 +833,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" placeholder="Filter" translatesAutoresizingMaskIntoConstraints="NO" id="Rcu-ex-LYP">
-                                        <rect key="frame" x="5" y="106" width="365" height="44"/>
+                                        <rect key="frame" x="5" y="103" width="365" height="56"/>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         <connections>
@@ -863,10 +863,9 @@
                                     <constraint firstItem="X5E-X4-qD4" firstAttribute="centerX" secondItem="Noc-Al-6a7" secondAttribute="centerX" id="GZ6-Mt-E2e"/>
                                     <constraint firstAttribute="trailing" secondItem="Rcu-ex-LYP" secondAttribute="trailing" constant="5" id="Gb5-vv-W9N"/>
                                     <constraint firstAttribute="trailing" secondItem="X5E-X4-qD4" secondAttribute="trailing" id="JkF-xF-6sY"/>
-                                    <constraint firstItem="Rcu-ex-LYP" firstAttribute="top" secondItem="Noc-Al-6a7" secondAttribute="top" constant="106" id="NGH-w4-DTr"/>
+                                    <constraint firstItem="Rcu-ex-LYP" firstAttribute="top" secondItem="Noc-Al-6a7" secondAttribute="top" constant="103" id="NGH-w4-DTr"/>
                                     <constraint firstAttribute="height" constant="182" id="Og1-1Q-zEI"/>
                                     <constraint firstItem="X5E-X4-qD4" firstAttribute="centerX" secondItem="Rcu-ex-LYP" secondAttribute="centerX" id="TUp-3y-lDa"/>
-                                    <constraint firstItem="X5E-X4-qD4" firstAttribute="top" secondItem="Rcu-ex-LYP" secondAttribute="bottom" constant="-5" id="YvK-O3-Qfp"/>
                                     <constraint firstItem="7G3-A8-WdZ" firstAttribute="top" secondItem="Noc-Al-6a7" secondAttribute="top" constant="80" id="e93-Zm-sSb"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
@@ -1739,7 +1738,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="60" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="8cc-Uh-GeH">
-                                <rect key="frame" x="0.0" y="150" width="375" height="468"/>
+                                <rect key="frame" x="0.0" y="160" width="375" height="458"/>
                                 <color key="backgroundColor" red="0.13333333333333333" green="0.12549019607843137" blue="0.14509803921568626" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="StarredUserCell" rowHeight="60" id="dK4-Ge-qtA" customClass="StarredUserCell" customModule="Juke" customModuleProvider="target">
@@ -1824,10 +1823,10 @@
                                 </prototypes>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Orf-SG-NOT" customClass="GradientView" customModule="Juke" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="160"/>
                                 <subviews>
                                     <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" text="" placeholder="Filter" translatesAutoresizingMaskIntoConstraints="NO" id="Erg-HO-Koo">
-                                        <rect key="frame" x="5" y="94" width="365" height="56"/>
+                                        <rect key="frame" x="5" y="103" width="365" height="56"/>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
@@ -1841,13 +1840,13 @@
                                         </connections>
                                     </searchBar>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Starred" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XgX-aC-GjG">
-                                        <rect key="frame" x="12" y="68" width="84" height="29"/>
+                                        <rect key="frame" x="12" y="80" width="84" height="29"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dnM-Pv-kya">
-                                        <rect key="frame" x="307" y="62" width="60" height="40"/>
+                                        <rect key="frame" x="307" y="74" width="60" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="08F-nm-bTJ"/>
                                             <constraint firstAttribute="height" constant="40" id="Bds-hM-pfL"/>
@@ -1863,11 +1862,11 @@
                                 <constraints>
                                     <constraint firstItem="XgX-aC-GjG" firstAttribute="leading" secondItem="Orf-SG-NOT" secondAttribute="leading" constant="12" id="93p-VX-9MB"/>
                                     <constraint firstItem="dnM-Pv-kya" firstAttribute="centerY" secondItem="XgX-aC-GjG" secondAttribute="centerY" id="CZ9-vt-wsV"/>
-                                    <constraint firstAttribute="height" constant="150" id="E3d-CE-QRr"/>
+                                    <constraint firstAttribute="height" constant="160" id="E3d-CE-QRr"/>
                                     <constraint firstAttribute="trailing" secondItem="dnM-Pv-kya" secondAttribute="trailing" constant="8" id="Rvf-vu-kS4"/>
                                     <constraint firstAttribute="trailing" secondItem="Erg-HO-Koo" secondAttribute="trailing" constant="5" id="SHM-kT-3x2"/>
-                                    <constraint firstAttribute="bottom" secondItem="Erg-HO-Koo" secondAttribute="bottom" id="SRY-bs-n7x"/>
-                                    <constraint firstItem="Erg-HO-Koo" firstAttribute="top" secondItem="XgX-aC-GjG" secondAttribute="bottom" constant="-3" id="Seh-CQ-O3C"/>
+                                    <constraint firstItem="Erg-HO-Koo" firstAttribute="top" secondItem="Orf-SG-NOT" secondAttribute="top" constant="103" id="avU-BP-gVw"/>
+                                    <constraint firstItem="XgX-aC-GjG" firstAttribute="top" secondItem="Orf-SG-NOT" secondAttribute="top" constant="80" id="f1m-wL-EyE"/>
                                     <constraint firstItem="Erg-HO-Koo" firstAttribute="leading" secondItem="Orf-SG-NOT" secondAttribute="leading" constant="5" id="xxn-nh-dHR"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
@@ -2148,7 +2147,7 @@
                                         <cells/>
                                     </collectionView>
                                     <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" translatesAutoresizingMaskIntoConstraints="NO" id="wXh-Dt-doQ">
-                                        <rect key="frame" x="5" y="106" width="365" height="44"/>
+                                        <rect key="frame" x="5" y="103" width="365" height="56"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <textInputTraits key="textInputTraits"/>
@@ -2159,8 +2158,7 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="wXh-Dt-doQ" firstAttribute="top" secondItem="gso-gl-GQS" secondAttribute="top" constant="106" id="4Oc-oN-4kv"/>
-                                    <constraint firstItem="ee8-OM-8Pu" firstAttribute="top" secondItem="wXh-Dt-doQ" secondAttribute="bottom" constant="-5" id="5e8-BM-bJD"/>
+                                    <constraint firstItem="wXh-Dt-doQ" firstAttribute="top" secondItem="gso-gl-GQS" secondAttribute="top" constant="103" id="4Oc-oN-4kv"/>
                                     <constraint firstItem="ee8-OM-8Pu" firstAttribute="leading" secondItem="gso-gl-GQS" secondAttribute="leading" id="A9z-Fe-EoR"/>
                                     <constraint firstAttribute="height" constant="182" id="Jtx-F0-cUY"/>
                                     <constraint firstItem="2Qr-gU-n0H" firstAttribute="top" secondItem="gso-gl-GQS" secondAttribute="top" constant="80" id="Mk7-wE-MRF"/>
