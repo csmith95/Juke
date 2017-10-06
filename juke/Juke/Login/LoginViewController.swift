@@ -13,7 +13,6 @@ import Firebase
 import Crashlytics
 
 class LoginViewController: UIViewController {
-    
 
     @IBOutlet weak var loginButton: UIButton!
     let spotifyLoginController: SpotifyLoginController = SpotifyLoginController()
@@ -63,7 +62,6 @@ class LoginViewController: UIViewController {
     }
     
     func fetchSpotifyUser() {
-        JamsPlayer.shared.login()   // session has been set, so set up audio player
         SessionManager.executeWithToken { (token) in
             guard let token = token else { return }
             let headers: HTTPHeaders = ["Authorization": "Bearer " + token]
@@ -81,6 +79,7 @@ class LoginViewController: UIViewController {
                             print("logged in firebase user")
                             if success {
                                 self.logUserToCrashlytics()
+                                JamsPlayer.shared.login()   // session has been set, so set up audio playe
                                 DispatchQueue.main.async {
                                     self.performSegue(withIdentifier: "loginSegue", sender: nil)
                                 }

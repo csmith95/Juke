@@ -14,19 +14,32 @@ import SCLAlertView
 import Firebase
 import FirebaseDatabaseUI
 import XLPagerTabStrip
+import Presentr
+import PKHUD
 
 class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, IndicatorInfoProvider {
     
     @IBOutlet var streamsTableView: UITableView!
     var starredStreamsDataSource = StarredStreamsDataSource()
+    var starredUsersDataSource = StarredUsersDataSource() // because we need to load starred users into Current.swift set in order to correctly filter in this table
+    
+    let presenter: Presentr = {
+        let presenter = Presentr(presentationType: .alert)
+        presenter.dismissAnimated = true
+        presenter.cornerRadius = 10
+        presenter.transitionType = TransitionType.coverVerticalFromTop
+        presenter.keyboardTranslationType = .moveUp
+        return presenter
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        starredUsersDataSource.listen()
         streamsTableView.dataSource = starredStreamsDataSource
         streamsTableView.delegate = starredStreamsDataSource
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStreams), name: Notification.Name("reloadStarredStreams"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.newStreamJoined), name: Notification.Name("newStreamJoined"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.newStreamSelected), name: Notification.Name("newStreamSelected"), object: nil)
         NotificationCenter.default.addObserver(forName: Notification.Name("starredStreamsSearchNotification"), object: nil, queue: nil, using: execSearchQuery)
     }
     
@@ -37,15 +50,13 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         starredStreamsDataSource.listen()
-//        // hack to reload
-//        if let source = tableView.dataSource as? CustomDataSource {
-//            source.searchBy(query: "")
-//        }
+        StreamsDataSource().listen()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         starredStreamsDataSource.detach()
+        starredUsersDataSource.detach()
     }
     
     private func execSearchQuery(notification: Notification) {
@@ -70,10 +81,48 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
         // Dispose of any resources that can be recreated.
     }
     
-    // triggered by CustomDataSource posting a notification. The view controller
-    // should take user to the new stream screen
-    func newStreamJoined() {
-        self.tabBarController?.selectedIndex = 2
+    // triggered by CustomDataSource posting a notification
+    func newStreamSelected(notification: NSNotification) {
+        if let object = notification.object as? [String: Any],
+            let stream = object["stream"] as? Models.FirebaseStream
+        {
+            if Current.isHost() {
+                showEndStreamModal(stream: stream)
+            } else {
+                joinStream(stream: stream)
+            }
+        }
+    }
+    
+    private func joinStream(stream: Models.FirebaseStream) {
+        FirebaseAPI.joinStreamPressed(stream: stream) { success in
+            if success {
+                HUD.flash(.success, delay: 1.0)
+                self.tabBarController?.selectedIndex = 2
+            } else {
+                HUD.flash(.error, delay: 1.0)
+            }
+        }
+    }
+    
+    private func showEndStreamModal(stream: Models.FirebaseStream) {
+        let title = "Sure you want to join?"
+        let body = "You are hosting a stream. The vibe will be lost forever if you do this!"
+        let controller = Presentr.alertViewController(title: title, body: body)
+        
+        let deleteAction = AlertAction(title: "Sure 🕶", style: .destructive) {
+            self.joinStream(stream: stream)
+        }
+        
+        let okAction = AlertAction(title: "NO, sorry 🙄", style: .cancel) {
+            print("Ok!")
+        }
+        
+        controller.addAction(deleteAction)
+        controller.addAction(okAction)
+        
+        presenter.presentationType = .alert
+        customPresentViewController(presenter, viewController: controller, animated: true, completion: nil)
     }
     
     deinit {

@@ -11,7 +11,6 @@ import Alamofire
 
 final class SessionManager {
     
-    private static var refreshCallback: ((String?)->Void)?
     private static let userDefaults = UserDefaults.standard
     public static var session: SPTSession! {
         didSet {
@@ -47,7 +46,7 @@ final class SessionManager {
     
     public static func refreshSession(completionHandler: @escaping (Bool)->Void) {
         SPTAuth.defaultInstance().renewSession(self.session, callback: { (error, renewedSession) in
-            if let err = error { print("Error renewing session: \(err)"); return }
+            if let err = error { print("Error renewing session: \(err)") }  // careful not to return here -- let execution continue so handler is called
             
             if let session = renewedSession {
                 self.session = session
@@ -59,17 +58,18 @@ final class SessionManager {
     }
     
     public static func executeWithToken(callback: @escaping (String?)->Void) {
-        objc_sync_enter(refreshCallback)
+        objc_sync_enter(self)
         if session != nil && session.isValid() && accessToken != nil {
+            // good to go
+            print("token is good: \(accessToken)")
             callback(accessToken)
-            objc_sync_exit(refreshCallback)
+            objc_sync_exit(self)
         } else {
-            print("refreshing token...")
-            refreshCallback = callback
+            print("token is bad. refreshing token...")
             refreshSession() { success in
                 print("refreshed! success: ", success)
                 callback(self.accessToken)
-                objc_sync_exit(refreshCallback)
+                objc_sync_exit(self)
             }
         }
     }
