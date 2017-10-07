@@ -79,7 +79,7 @@ class LoginViewController: UIViewController {
                             print("logged in firebase user")
                             if success {
                                 self.logUserToCrashlytics()
-                                JamsPlayer.shared.login()   // session has been set, so set up audio playe
+                                JamsPlayer.shared.login()   // session has been set, so set up audio player
                                 DispatchQueue.main.async {
                                     self.performSegue(withIdentifier: "loginSegue", sender: nil)
                                 }

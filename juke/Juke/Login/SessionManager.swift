@@ -45,29 +45,29 @@ final class SessionManager {
     }
     
     public static func refreshSession(completionHandler: @escaping (Bool)->Void) {
+        print("refreshing spotify access token...")
         SPTAuth.defaultInstance().renewSession(self.session, callback: { (error, renewedSession) in
-            if let err = error { print("Error renewing session: \(err)") }  // careful not to return here -- let execution continue so handler is called
-            
+            if let err = error { print("Error renewing session: \(err)"); completionHandler(false); return; }
             if let session = renewedSession {
                 self.session = session
+                print("refreshed succeeded!")
                 completionHandler(true)
-                return
+            } else {
+                print("refresh failed :(")
+                completionHandler(false)
             }
-            completionHandler(false)
         })
     }
     
     public static func executeWithToken(callback: @escaping (String?)->Void) {
         objc_sync_enter(self)
+        
         if session != nil && session.isValid() && accessToken != nil {
             // good to go
-            print("token is good: \(accessToken)")
             callback(accessToken)
             objc_sync_exit(self)
         } else {
-            print("token is bad. refreshing token...")
             refreshSession() { success in
-                print("refreshed! success: ", success)
                 callback(self.accessToken)
                 objc_sync_exit(self)
             }

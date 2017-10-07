@@ -32,6 +32,7 @@ class FirebaseAPI {
     
     // audio player
     private static let jamsPlayer = JamsPlayer.shared
+    public static var progressLocked = false
     
     // this method is called from Current.swift when stream is reassigned a new value
     public static func addListeners() {
@@ -67,19 +68,15 @@ class FirebaseAPI {
     private static func addSongPlayStatusListener() {
         let path = "streams/\(Current.stream!.streamID)/isPlaying"
         ref.child(path).observe(.value, with:{ (snapshot) in
-            if Current.isHost() {
-                // this fixes this bug: play music. lock screen. when locked, pause stream.
-                // open app. without this line, the play/pause state doesn't get updated.
-                NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.PlayStatusChanged)
-                return
-            }
             
             if snapshot.exists(), let isPlaying = snapshot.value as? Bool {
                 Current.stream!.isPlaying = isPlaying
                 self.listenForSongProgress()    // fetch updated status
-                NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.PlayStatusChanged)
-                NotificationCenter.default.post(name: Notification.Name("firebaseEventLockScreen"), object: FirebaseEvent.PlayStatusChanged)
+            } else {
+                Current.stream!.isPlaying = false
             }
+            NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.PlayStatusChanged)
+            NotificationCenter.default.post(name: Notification.Name("firebaseEventLockScreen"), object: FirebaseEvent.PlayStatusChanged)
         }) { err in print(err.localizedDescription)}
         observedPaths.append(path)
     }
@@ -167,7 +164,6 @@ class FirebaseAPI {
     public static func listenForSongProgress() {
         guard let stream = Current.stream else { return }
         self.ref.child("/songProgressTable/\(stream.streamID)").observeSingleEvent(of: .value, with: { (snapshot) in
-            if Current.isHost() { return }
             
             // note that setting jamsPlayer will trigger a resync if off by > 4 seconds
             if snapshot.exists(), let updatedProgress = snapshot.value as? Double {
@@ -190,6 +186,8 @@ class FirebaseAPI {
         
         guard let stream = Current.stream else { return }
         // reset progress in any case
+        objc_sync_enter(jamsPlayer)
+        defer { objc_sync_exit(jamsPlayer) }
         self.ref.child("/songProgressTable/\(stream.streamID)").setValue(0.0)
         
         if let next = nextSong {
@@ -198,7 +196,28 @@ class FirebaseAPI {
         } else {
             // no songs queued
             self.ref.child("/streams/\(stream.streamID)/song").removeValue()
-            ref.child("streams/\(stream.streamID)/isPlaying").setValue(false)
+            self.ref.child("streams/\(stream.streamID)/isPlaying").setValue(false)
+        }
+        setProgressLock()
+        jamsPlayer.position_ms = 0.0    // trigger a local resync
+        
+        // post event telling controllers to resync so it's very responsive for host
+        // others will get the update in topSongChangedListener
+        NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.TopSongChanged)
+        NotificationCenter.default.post(name: Notification.Name("firebaseEventLockScreen"), object: FirebaseEvent.TopSongChanged)
+    }
+    
+    // this fixes the issue where spotify playback updates come in late -- strategy is to not let
+    // host update progress
+    private static func setProgressLock() {
+        print("locked progress")
+        progressLocked = true
+        let when = DispatchTime.now() + 2 // unlock progress updates after 2 seconds to flush out lingering spotify progress updates from previous song
+        DispatchQueue.global().asyncAfter(deadline: when) {
+            print("unlocked progress")
+            objc_sync_enter(jamsPlayer)
+            progressLocked = false
+            objc_sync_exit(jamsPlayer)
         }
     }
     
@@ -209,10 +228,20 @@ class FirebaseAPI {
         self.ref.child(path).observe(.value, with: { (snapshot) in
             guard let stream = Current.stream else { return }
             
-            if Current.isHost() && stream.song != nil {
+            if Current.isHost() {
+                if stream.song == nil { // if queue was empty, need to fire events so that the MyStream view is loaded again instead of empty view
+                    Current.stream!.song = Models.FirebaseSong(snapshot: snapshot)
+                    self.jamsPlayer.position_ms = 0.0
+                    self.jamsPlayer.resync() // force resync because progress was already reset to 0.0 in popTopSong so the line above won't trigger a resync
+                    NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.TopSongChanged)
+                    NotificationCenter.default.post(name: Notification.Name("firebaseEventLockScreen"), object: FirebaseEvent.TopSongChanged)
+                }
                 return
             }
             
+            objc_sync_enter(jamsPlayer)
+            defer { objc_sync_exit(jamsPlayer) }
+            setProgressLock() // ignore delayed spotify progress updates for 3 seconds to flush them out
             Current.stream!.song = Models.FirebaseSong(snapshot: snapshot)
             self.jamsPlayer.position_ms = 0.0
             self.listenForSongProgress()
@@ -234,43 +263,9 @@ class FirebaseAPI {
         // STREAM object updates
         guard let stream = Current.stream else { return }
         if Current.isHost() {
-            // you are the host so update path: stream/host
-//            self.ref.child("/streams/\(stream.streamID)/host/\(user.spotifyID)/online").onDisconnectSetValue(false)
-            
-            // you are the host so pause stream playing
             self.ref.child("/streams/\(stream.streamID)/isPlaying").onDisconnectSetValue(false)
-        } else {
-            // you are not the host so update stream/members
-//            self.ref.child("/streams/\(stream.streamID)/members/\(user.spotifyID)/online").onDisconnectSetValue(false)
         }
     }
-
-    
-    public static func setOnlineTrue() {
-        return
-        // update main user object
-        guard let user = Current.user else { return }
-        self.ref.child("/users/\(user.spotifyID)/online").setValue(true)
-        Current.user!.online = true
-        
-        // add a presence listener when we do this because currently it's only added
-        // whenever user change streams (not really guaranteed)
-        self.ref.child("/users/\(user.spotifyID)/online").onDisconnectSetValue(false)
-
-        // STREAM object update
-        // before setting anything, make sure stream still exists in db
-        guard let stream = Current.stream else { return }
-        ref.child("/streams/\(stream.streamID)").observeSingleEvent(of: .value, with: { (snapshot) in
-            if snapshot.exists(), let _ = snapshot.value as? [String: Any?] {
-                if Current.isHost() {
-                    self.ref.child("/streams/\(stream.streamID)/host/\(user.spotifyID)/online").setValue(true)
-                } else {
-                    self.ref.child("/streams/\(stream.streamID)/members/\(user.spotifyID)/online").setValue(true)
-                }
-            }
-        })
-    }
-    
     
     private static func queueSongHelper(spotifySong: Models.SpotifySong) {
         guard let stream = Current.stream, let song = Models.FirebaseSong(song: spotifySong) else { return }
@@ -362,6 +357,9 @@ class FirebaseAPI {
     }
     
     public static func updateSongProgress(progress: Double) {
+        objc_sync_enter(jamsPlayer)
+        defer { objc_sync_exit(jamsPlayer) }
+        if progressLocked { return }  // see popTopSong for details about this
         guard let stream = Current.stream else { return }
         ref.child("/songProgressTable/\(stream.streamID)").setValue(progress)
     }
@@ -397,6 +395,10 @@ class FirebaseAPI {
         self.ref.child("/streams/\(streamID)").observeSingleEvent(of: .value, with:{ (snapshot) in
             if let stream = Models.FirebaseStream(snapshot: snapshot) {
                 callback(stream)
+                if Current.isHost() {
+                    // since host doesn't respond to top song changed firebase events
+                    NotificationCenter.default.post(name: Notification.Name("firebaseEventLockScreen"), object: FirebaseEvent.TopSongChanged)
+                }
             } else {
                 callback(nil)
             }

@@ -53,9 +53,12 @@ class LockScreenDelegate: NSObject {
         guard let event = notification.object as? FirebaseAPI.FirebaseEvent else { print("error"); return }
         switch event {
         case .PlayStatusChanged:
-            mpic.nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = stream.isPlaying
-            mpic.nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = jamsPlayer.position_ms/1000
+            var current = mpic.nowPlayingInfo
+            current![MPNowPlayingInfoPropertyPlaybackRate] = stream.isPlaying
+            current![MPNowPlayingInfoPropertyElapsedPlaybackTime] = jamsPlayer.position_ms/1000
+            mpic.nowPlayingInfo = current
         case .TopSongChanged:
+            print("top changed")
             var current = mpic.nowPlayingInfo
             current![MPMediaItemPropertyTitle] = song.songName
             current![MPMediaItemPropertyArtist] = song.artistName
@@ -71,11 +74,12 @@ class LockScreenDelegate: NSObject {
                 var current = self.mpic.nowPlayingInfo
                 current![MPMediaItemPropertyArtwork] = albumArt
                 self.mpic.nowPlayingInfo = current
+                print("set image")
             }
-        case .SetProgress:
-            var current = mpic.nowPlayingInfo
-            current![MPNowPlayingInfoPropertyElapsedPlaybackTime] = jamsPlayer.position_ms/1000
-            mpic.nowPlayingInfo = current
+//        case .SetProgress:
+//            var current = mpic.nowPlayingInfo
+//            current![MPNowPlayingInfoPropertyElapsedPlaybackTime] = jamsPlayer.position_ms/1000
+//            mpic.nowPlayingInfo = current
         default:
             return
         }

@@ -9,6 +9,11 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="AppleColorEmoji@2x.ttc">
+            <string>AppleColorEmoji</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Login View Controller-->
         <scene sceneID="viY-uY-OtI">
@@ -1455,11 +1460,8 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="confusedEmoji" translatesAutoresizingMaskIntoConstraints="NO" id="EfU-AW-sC9">
-                                <rect key="frame" x="137" y="233" width="101" height="112"/>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No songs queued" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C9e-ek-p4f">
-                                <rect key="frame" x="121.5" y="378" width="132" height="19.5"/>
+                                <rect key="frame" x="121.5" y="390" width="132" height="19.5"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -1498,7 +1500,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fpq-uQ-wK5">
-                                <rect key="frame" x="127.5" y="445" width="120" height="50"/>
+                                <rect key="frame" x="127.5" y="457" width="120" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="4ZN-cx-tLz"/>
                                     <constraint firstAttribute="width" constant="120" id="8zc-PL-XbB"/>
@@ -1510,23 +1512,33 @@
                                     <action selector="endStreamPressed:" destination="Uqg-8N-dQp" eventType="touchUpInside" id="3je-kD-z7f"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🤔" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yNM-3D-tlp">
+                                <rect key="frame" x="147" y="277" width="80" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="JM1-F7-Aff"/>
+                                    <constraint firstAttribute="height" constant="80" id="bXe-vr-749"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AppleColorEmoji" family="Apple Color Emoji" pointSize="80"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="DME-aq-I78" firstAttribute="top" secondItem="Eiu-Ej-4bR" secondAttribute="bottom" constant="56" id="021-U1-0pH"/>
                             <constraint firstItem="Kow-Rk-vmo" firstAttribute="top" secondItem="BPY-hg-VfQ" secondAttribute="bottom" constant="23" id="0au-FL-RC4"/>
-                            <constraint firstItem="C9e-ek-p4f" firstAttribute="top" secondItem="EfU-AW-sC9" secondAttribute="bottom" constant="33" id="4WW-9M-fYL"/>
+                            <constraint firstItem="C9e-ek-p4f" firstAttribute="top" secondItem="yNM-3D-tlp" secondAttribute="bottom" constant="33" id="5Xc-nq-swL"/>
                             <constraint firstItem="BJC-YC-E3U" firstAttribute="top" secondItem="DME-aq-I78" secondAttribute="bottom" constant="3" id="8SY-V9-sBh"/>
                             <constraint firstItem="Fpq-uQ-wK5" firstAttribute="top" secondItem="C9e-ek-p4f" secondAttribute="bottom" constant="47.5" id="CXT-K6-QfF"/>
                             <constraint firstItem="Fpq-uQ-wK5" firstAttribute="centerX" secondItem="OAF-0v-QFj" secondAttribute="centerX" id="FGW-La-3jh"/>
-                            <constraint firstItem="EfU-AW-sC9" firstAttribute="centerX" secondItem="OAF-0v-QFj" secondAttribute="centerX" id="GLN-T3-IzX"/>
                             <constraint firstItem="BPY-hg-VfQ" firstAttribute="trailing" secondItem="OAF-0v-QFj" secondAttribute="trailingMargin" constant="-15" id="Ix7-qG-S58"/>
                             <constraint firstItem="BPY-hg-VfQ" firstAttribute="top" secondItem="b6J-ji-QzM" secondAttribute="bottom" constant="8" id="QfY-7S-tDo"/>
+                            <constraint firstItem="yNM-3D-tlp" firstAttribute="centerX" secondItem="OAF-0v-QFj" secondAttribute="centerX" id="RFU-Ie-V47"/>
                             <constraint firstItem="BJC-YC-E3U" firstAttribute="top" secondItem="DME-aq-I78" secondAttribute="bottom" constant="3" id="VdM-Jg-GK8"/>
-                            <constraint firstItem="EfU-AW-sC9" firstAttribute="top" secondItem="BJC-YC-E3U" secondAttribute="bottom" constant="95" id="krh-Qq-JAb"/>
                             <constraint firstItem="BJC-YC-E3U" firstAttribute="centerX" secondItem="OAF-0v-QFj" secondAttribute="centerX" id="kte-ga-dwt"/>
                             <constraint firstItem="DME-aq-I78" firstAttribute="centerX" secondItem="OAF-0v-QFj" secondAttribute="centerX" id="qyp-GT-uwf"/>
                             <constraint firstItem="b6J-ji-QzM" firstAttribute="centerX" secondItem="BPY-hg-VfQ" secondAttribute="centerX" id="tt4-0d-Kt7"/>
+                            <constraint firstItem="yNM-3D-tlp" firstAttribute="top" secondItem="BJC-YC-E3U" secondAttribute="bottom" constant="139" id="u6P-sd-6Or"/>
                             <constraint firstItem="C9e-ek-p4f" firstAttribute="centerX" secondItem="OAF-0v-QFj" secondAttribute="centerX" id="uED-M0-waB"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
@@ -2218,7 +2230,6 @@
         <image name="addStar" width="30" height="18"/>
         <image name="checkmark" width="50" height="50"/>
         <image name="checkmark_white" width="14" height="13"/>
-        <image name="confusedEmoji" width="101" height="112"/>
         <image name="ellipsis" width="50" height="50"/>
         <image name="empty star" width="28" height="29"/>
         <image name="ic_pause_white_48pt" width="48" height="48"/>
@@ -2242,6 +2253,6 @@
         <image name="upvote-carat-white" width="11" height="7"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="dEN-pM-yCw"/>
+        <segue reference="JxZ-Hy-tRA"/>
     </inferredMetricsTieBreakers>
 </document>
