@@ -15,20 +15,17 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     private let userDefaults = UserDefaults.standard
     private let player = SPTAudioStreamingController.sharedInstance()
     private let kClientID = "77d4489425fe464483f0934f99847c8b"
-    private var old_position_ms: TimeInterval?
+    private var shouldResync = true
     public var position_ms: TimeInterval {
         
-        didSet(newPosition) {
-            if old_position_ms == nil || abs(newPosition - old_position_ms!) >= 4000 {
+        didSet(position) {
+            if shouldResync {
                 self.resync()
             }
-            old_position_ms = newPosition
         }
     
         willSet(newPosition) {
-            if newPosition == 0.0 {
-                 old_position_ms = nil
-            }
+            shouldResync = abs(newPosition - position_ms) >= 4000
         }
     }
     
@@ -49,9 +46,17 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
             player?.playbackDelegate = self
             try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try? AVAudioSession.sharedInstance().setActive(true)
+            NotificationCenter.default.addObserver(self,
+                                           selector: #selector(handleInterruption),
+                                           name: .AVAudioSessionInterruption,
+                                           object: nil)
         } catch let err {
             print(err)
         }
+    }
+    
+    func handleInterruption(notification: Notification) {
+        print("interrupted. ", notification.userInfo)
     }
     
     public func login() {
@@ -63,12 +68,12 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
 
     func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
         print("**** Audio Player audio logged in")
-        objc_sync_enter(self)
+        objc_sync_enter(self.pendingPlayOperation)
+        defer { objc_sync_exit(self.pendingPlayOperation) }
         if let pending = pendingPlayOperation {
             self.tryPlaying(topSong: pending.song)
             self.pendingPlayOperation = nil
         }
-        objc_sync_exit(self)
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceiveError error: Error!) {
@@ -94,7 +99,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     }
     
     private func authenticatePlayer() {
-        print("*** Audio Player logging in with token: \(SessionManager.accessToken)")
+        print("**** Audio Player logging in...")
         self.loggedInWithToken = SessionManager.accessToken
         player?.login(withAccessToken: SessionManager.accessToken)
     }
@@ -107,37 +112,35 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     }
     
     public func setPlayStatus(shouldPlay: Bool, topSong: Models.FirebaseSong?) {
-        objc_sync_enter(self)
+        objc_sync_enter(self.pendingPlayOperation)
         
         // don't need token to stop playing
         if !shouldPlay || topSong == nil {
             pendingPlayOperation = nil
             self.stopPlaying()
-            objc_sync_exit(self)
+            objc_sync_exit(self.pendingPlayOperation)
             return
         }
         
         guard let song = topSong else { return }
         SessionManager.executeWithToken { (token) in
-            guard let token = token else { objc_sync_exit(self.pendingPlayOperation); return }
-            print("Audio Player token: \(self.loggedInWithToken)")
-            print("Provided token: \(token)")
+            defer { objc_sync_exit(self.pendingPlayOperation) }
+            guard let token = token else { return }
             guard let loggedInToken = self.loggedInWithToken, loggedInToken == token else {
                 self.pendingPlayOperation = PendingPlayOperation(song: song)
                 self.authenticatePlayer()
-                objc_sync_exit(self)
                 return
             }
             
             self.pendingPlayOperation = nil
             // tokens match -- go ahead and play song
             self.tryPlaying(topSong: song)
-            objc_sync_exit(self)
         }
     }
     
     func stopPlaying() {
         print("STOP")
+//        try? AVAudioSession.sharedInstance().setActive(false)
         player?.setIsPlaying(false, callback: { (err) in
             if let _ = err {
                 print("error in stopPlaying")
@@ -148,8 +151,6 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     
     func tryPlaying(topSong: Models.FirebaseSong) {
         print("GO")
-
-        // not sure if this is good style, but these 2 lines are the magic behind background streaming
         let position = position_ms / 1000
         let uri = "spotify:track:" + topSong.spotifyID
         player?.playSpotifyURI(uri, startingWith: 0, startingWithPosition: position, callback: { (error) in
@@ -176,11 +177,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         if Current.isHost() {
             setPlayStatus(shouldPlay: true, topSong: song)
         } else {
-            if Current.listenSelected {
-                setPlayStatus(shouldPlay: true, topSong: song)
-            } else {
-                setPlayStatus(shouldPlay: false, topSong: song)
-            }
+            setPlayStatus(shouldPlay: Current.listenSelected, topSong: song)
         }
     }
 

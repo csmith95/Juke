@@ -133,7 +133,6 @@ class MyStreamController: UITableViewController {
         self.setUpControlButtons()
         FirebaseAPI.setfcmtoken()
         setUI()
-        FirebaseAPI.setOnlineTrue()
     }
     
     private func setUI() {
@@ -170,6 +169,7 @@ class MyStreamController: UITableViewController {
             self.checkIfUserLibContainsCurrentSong(song: song)
             progressSlider.isHidden = false
             currTimeLabel.isHidden = false
+            progressSliderValue = jamsPlayer.position_ms
         } else {
             self.setEmptyStreamUI()
         }
@@ -201,6 +201,7 @@ class MyStreamController: UITableViewController {
     }
     
     func songPositionChanged(notification: NSNotification) {
+        if FirebaseAPI.progressLocked { return }
         if let data = notification.object as? NSDictionary {
             let progress = data["progress"] as! Double
             self.progressSliderValue = progress
@@ -211,16 +212,11 @@ class MyStreamController: UITableViewController {
     }
     
     func songFinished() {
-        progressSliderValue = 0.0
-        jamsPlayer.position_ms = 0.0
-        let nextSong = songsDataSource.getNextSong()
-        Current.stream!.song = nextSong
         if (Current.isHost()) {
-            FirebaseAPI.popTopSong(nextSong: nextSong)
+            let nextSong = songsDataSource.getNextSong()
+            Current.stream!.song = nextSong
+            FirebaseAPI.popTopSong(nextSong: nextSong)  // UI refresh is triggered from here
         }
-        
-        setUI()
-        jamsPlayer.resync()
     }
     
     private func handleAutomaticProgressSlider() {
@@ -326,7 +322,6 @@ class MyStreamController: UITableViewController {
         case .PlayStatusChanged:
             self.handleAutomaticProgressSlider()
             guard let stream = Current.stream else { return }
-            self.listenButton.isSelected = stream.isPlaying
             if !Current.isHost() && !stream.isPlaying {
                 coverArtImage.alpha = 0.3
                 pausedLabel.isHidden = false
@@ -334,7 +329,6 @@ class MyStreamController: UITableViewController {
                 coverArtImage.alpha = 1.0
                 pausedLabel.isHidden = true
             }
-
         case .TopSongChanged:
             self.setUI()
         case .SetProgress:

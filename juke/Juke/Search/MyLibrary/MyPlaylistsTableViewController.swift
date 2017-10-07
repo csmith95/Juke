@@ -78,7 +78,7 @@ class MyPlaylistsTableViewController: UITableViewController, IndicatorInfoProvid
     }
 
     private func fetchPlaylists() {
-        if !allPlaylists.isEmpty { return } // alread fetched -- return
+        if !allPlaylists.isEmpty { return } // already fetched -- return
         
         SessionManager.executeWithToken { (token) in
             guard let token = SessionManager.accessToken else { return }

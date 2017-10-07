@@ -55,18 +55,6 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
         
         if path.isEmpty { return } // for the SongQueueDataSource
         self.path = path
-//        // add listeners to detect db changes
-//        ref.child(path).observe(.childChanged, with: { (snapshot) in
-//            self.updateCollection(type: .childChanged, snapshot: snapshot)
-//        })
-//
-//        ref.child(path).observe(.childAdded, with: { (snapshot) in
-//            self.updateCollection(type: .childAdded, snapshot: snapshot)
-//        })
-//
-//        ref.child(path).observe(.childRemoved, with: { (snapshot) in
-//            self.updateCollection(type: .childRemoved, snapshot: snapshot)
-//        })
     }
     
     public func listen() {
@@ -127,7 +115,7 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
         return filteredCollection.count
     }
     
-    private func triggerTableViewRefresh() {
+    func triggerTableViewRefresh() {
         filteredCollection = collection.filter({ (collectionItem) -> Bool in
             return self.shouldInclude(item: collectionItem)
         })

@@ -31,6 +31,8 @@ class SongQueueDataSource: CustomDataSource {
     // this should be called whenever user changes streams
     // or just whenever the MyStreamController view will appear
     public func setObservedStream() {
+        objc_sync_enter(self)
+        defer  { objc_sync_exit(self) }
         guard let stream = Current.stream else {
             ref.child("/songs/\(observedStreamID)").removeAllObservers()
             filteredCollection.removeAll()
@@ -39,7 +41,6 @@ class SongQueueDataSource: CustomDataSource {
         }
         if stream.streamID == observedStreamID { return } // don't set observer for same stream twice
         
-        objc_sync_enter(self)
         // remove old observer
         ref.child("/songs/\(observedStreamID)").removeAllObservers()
         observedStreamID = stream.streamID
@@ -59,7 +60,10 @@ class SongQueueDataSource: CustomDataSource {
         ref.child(path).observe(.childRemoved, with: { (snapshot) in
             super.updateCollection(type: .childRemoved, snapshot: snapshot)
         })
-        objc_sync_exit(self)
+        
+        // handles bug in build 5 bugs in which new qeueue is empty except for top song when
+        // new stream is joined
+        triggerTableViewRefresh()
     }
     
     override func isEqual(current: CollectionItem, other: CollectionItem) -> Bool {
@@ -81,9 +85,13 @@ class SongQueueDataSource: CustomDataSource {
     }
     
     public func getNextSong() -> Models.FirebaseSong? {
+        // note only host calls this method
         objc_sync_enter(self)
         let topSong = filteredCollection.first?.song
-        filteredCollection.remove(at: 0)
+        if topSong != nil {
+            filteredCollection.remove(at: 0)
+        }
+//        triggerTableViewRefresh()   // so it's very responsive for host
         objc_sync_exit(self)
         return topSong
     }

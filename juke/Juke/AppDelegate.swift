@@ -150,15 +150,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-         FirebaseAPI.setOnlineTrue()
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        SessionManager.refreshSession { _ in
-            // do nothing in this callback
-        }
-        FirebaseAPI.setOnlineTrue()
+        NotificationCenter.default.post(name: Notification.Name("updateMyStreamView"), object: nil)
+        NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseAPI.FirebaseEvent.TopSongChanged) // trigger UI refresh in MyStreamController
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
