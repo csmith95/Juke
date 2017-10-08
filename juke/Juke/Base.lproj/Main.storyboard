@@ -137,7 +137,7 @@
         <!--Streams-->
         <scene sceneID="qev-iE-LNt">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="aNa-bh-xnM" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="streamsPager" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="aNa-bh-xnM" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Streams" image="toolbarStreams" selectedImage="toolbarStreams" id="te7-SS-y4N"/>
                     <toolbarItems/>
                     <nil key="simulatedTopBarMetrics"/>

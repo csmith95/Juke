@@ -269,6 +269,12 @@ extension AppDelegate {
         // CASE: default
         default:
             print("called default")
+            let rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "mainTabCtrl") as! UITabBarController
+            rootVC.selectedIndex = 0
+            rootVC.view.frame = UIScreen.main.bounds
+            UIView.transition(with: self.window!, duration: 0.3, options: .layoutSubviews, animations: {
+                self.window!.rootViewController = rootVC
+            }, completion: nil)
         }
         
         completionHandler()
