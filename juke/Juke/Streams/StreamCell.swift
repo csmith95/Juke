@@ -65,12 +65,17 @@ class StreamCell: UITableViewCell {
     
     private func loadCellImages(stream: Models.FirebaseStream) {
         clearMemberIcons()  // start fresh
+        let starImg = #imageLiteral(resourceName: "Star")
+        let starImageView = UIImageView(image: starImg)
+        
         let numMemberIcons = stream.members.count
         if numMemberIcons > 0 {
             let numMemberIconsToDisplay = min(numMemberIcons, self.imageViewDict.count)
             for i in 0..<numMemberIconsToDisplay {
                 if Current.isStarred(user: stream.members[i]) {
                     loadUserIcon(url: stream.members[i].imageURL, imageView: self.imageViewDict[i]!)
+                    starImageView.frame = CGRect(x: 17, y: 17, width: 20, height: 20)
+                    self.imageViewDict[i]?.addSubview(starImageView)
                 }
             }
         } else {
