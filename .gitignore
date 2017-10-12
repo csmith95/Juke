@@ -49,3 +49,5 @@ DerivedData
 .idea/
 # Pods - for those of you who use CocoaPods
 Pods
+juke/Global/FirebaseConstants.swift
+juke/Static/GoogleService-Info.plist
