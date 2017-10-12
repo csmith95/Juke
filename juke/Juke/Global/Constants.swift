@@ -18,7 +18,6 @@ public class Constants {
     static let kAddSongByIDPath = "me/tracks?ids="
     static let kDeleteSongByIDPath = "me/tracks?ids="
     static let kContainsSongPath = "me/tracks/contains?ids="
-    static let kSendNotificationsURL = "https://us-central1-juke-9fbd6.cloudfunctions.net/sendNotification"
     static let kSpotifySessionKey = "SpotifySession"    // key session is stored as in user defaults
     static let kClientID = "77d4489425fe464483f0934f99847c8b"
     static let kCallbackURL = "juke1231://callback"

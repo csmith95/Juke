@@ -34,10 +34,11 @@
 		4B48FDE31F5DCF7900E87507 /* ActionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B48FDE21F5DCF7900E87507 /* ActionData.swift */; };
 		4B48FDE71F6108E700E87507 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B48FDE61F6108E700E87507 /* GradientView.swift */; };
 		4B4920C01F5722440089C61F /* SpotifyLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4920BF1F5722440089C61F /* SpotifyLoginController.swift */; };
+		4B5783AB1F900AC10072C204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B5783AA1F900AC10072C204 /* GoogleService-Info.plist */; };
+		4B5783AD1F900BE90072C204 /* FirebaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5783AC1F900BE90072C204 /* FirebaseConstants.swift */; };
 		4B62A2D81F69D05B00864EFF /* MyStreamRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B62A2D71F69D05B00864EFF /* MyStreamRootViewController.swift */; };
 		4B73AB7E1F69022B008DF5A2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B73AB7D1F69022B008DF5A2 /* Assets.xcassets */; };
 		4B7C1EA11F484DF00064F1C3 /* FirebaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */; };
-		4B852BAD1F67649B00B31AD5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B852BAC1F67649B00B31AD5 /* GoogleService-Info.plist */; };
 		4B8CD0F81F51FF47005C61D1 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8CD0F71F51FF47005C61D1 /* UserCell.swift */; };
 		4BA7CB701E8ED007003E3DC8 /* MyStreamController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */; };
 		4BA9B3F51E91B043003D352E /* Current.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA9B3F41E91B043003D352E /* Current.swift */; };
@@ -94,10 +95,11 @@
 		4B48FDE21F5DCF7900E87507 /* ActionData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionData.swift; sourceTree = "<group>"; };
 		4B48FDE61F6108E700E87507 /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		4B4920BF1F5722440089C61F /* SpotifyLoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyLoginController.swift; sourceTree = "<group>"; };
+		4B5783AA1F900AC10072C204 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
+		4B5783AC1F900BE90072C204 /* FirebaseConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseConstants.swift; sourceTree = "<group>"; };
 		4B62A2D71F69D05B00864EFF /* MyStreamRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyStreamRootViewController.swift; sourceTree = "<group>"; };
 		4B73AB7D1F69022B008DF5A2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseAPI.swift; sourceTree = "<group>"; };
-		4B852BAC1F67649B00B31AD5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4B8CD0F71F51FF47005C61D1 /* UserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		4BA7CB6F1E8ED007003E3DC8 /* MyStreamController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyStreamController.swift; sourceTree = "<group>"; };
 		4BA9B3F41E91B043003D352E /* Current.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Current.swift; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 				4BDCEC051E720D0B00D9D3EE /* Constants.swift */,
 				4BA9B3F41E91B043003D352E /* Current.swift */,
 				4B0DDE141F79C649009307D5 /* ImageCache.swift */,
+				4B5783AC1F900BE90072C204 /* FirebaseConstants.swift */,
 			);
 			path = Global;
 			sourceTree = "<group>";
@@ -244,7 +247,7 @@
 			isa = PBXGroup;
 			children = (
 				4B73AB7D1F69022B008DF5A2 /* Assets.xcassets */,
-				4B852BAC1F67649B00B31AD5 /* GoogleService-Info.plist */,
+				4B5783AA1F900AC10072C204 /* GoogleService-Info.plist */,
 				4B3A34DD1E58120F00C314A0 /* Info.plist */,
 				4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */,
 				F2A24EE71F57879400E0FE2F /* Juke.entitlements */,
@@ -365,7 +368,7 @@
 				TargetAttributes = {
 					4B3A34C81E58120F00C314A0 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 2746PGXGF5;
+						DevelopmentTeam = UL2WBS3TV4;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -399,11 +402,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4B852BAD1F67649B00B31AD5 /* GoogleService-Info.plist in Resources */,
 				4B48FDE11F5DCEC700E87507 /* MenuCell.xib in Resources */,
 				4B0DDE131F79BD7C009307D5 /* NameStreamViewController.xib in Resources */,
 				4B73AB7E1F69022B008DF5A2 /* Assets.xcassets in Resources */,
 				4B3A34D71E58120F00C314A0 /* Main.storyboard in Resources */,
+				4B5783AB1F900AC10072C204 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -531,6 +534,7 @@
 				4B13DE4E1E8AFB850060D29A /* StreamsTableViewController.swift in Sources */,
 				F25133C01F6E7C8F002745C7 /* StarredTableViewController.swift in Sources */,
 				4B0DDE231F7B18B5009307D5 /* PlaylistTableViewCell.swift in Sources */,
+				4B5783AD1F900BE90072C204 /* FirebaseConstants.swift in Sources */,
 				4BCFA0231F6DBAA600E49516 /* MembersTableViewController.swift in Sources */,
 				4BCFA0281F70515D00E49516 /* StreamsDataSource.swift in Sources */,
 				4BCFA0301F70532700E49516 /* StarredUserCell.swift in Sources */,
@@ -688,7 +692,7 @@
 				CODE_SIGN_ENTITLEMENTS = Juke/Static/Juke.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 2746PGXGF5;
+				DEVELOPMENT_TEAM = UL2WBS3TV4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -701,7 +705,7 @@
 					"-ObjC",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = jukedev;
+				PRODUCT_BUNDLE_IDENTIFIER = jukeproduction;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -720,7 +724,7 @@
 				CODE_SIGN_ENTITLEMENTS = Juke/Static/Juke.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 2746PGXGF5;
+				DEVELOPMENT_TEAM = UL2WBS3TV4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -733,7 +737,7 @@
 					"-ObjC",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = jukedev;
+				PRODUCT_BUNDLE_IDENTIFIER = jukeproduction;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";

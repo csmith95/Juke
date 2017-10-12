@@ -131,7 +131,6 @@ class MyStreamController: UITableViewController {
         FirebaseAPI.listenForSongProgress() // will update if progress difference > 4 seconds
         songsDataSource.setObservedStream()
         self.setUpControlButtons()
-        FirebaseAPI.setfcmtoken()
         setUI()
     }
     
