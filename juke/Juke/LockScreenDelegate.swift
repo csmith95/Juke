@@ -28,6 +28,7 @@ class LockScreenDelegate: NSObject {
             }
             Current.listenSelected = true
             self.jamsPlayer.setPlayStatus(shouldPlay: Current.stream!.isPlaying && Current.listenSelected, topSong: Current.stream?.song)
+            NotificationCenter.default.post(name: Notification.Name("firebaseEventLockScreen"), object: FirebaseAPI.FirebaseEvent.PlayStatusChanged)
             return .success
         }
         
@@ -39,6 +40,7 @@ class LockScreenDelegate: NSObject {
             }
             Current.listenSelected = false
             self.jamsPlayer.setPlayStatus(shouldPlay: Current.stream!.isPlaying && Current.listenSelected, topSong: Current.stream?.song)
+            NotificationCenter.default.post(name: Notification.Name("firebaseEventLockScreen"), object: FirebaseAPI.FirebaseEvent.PlayStatusChanged)
             return .success
         }
         
