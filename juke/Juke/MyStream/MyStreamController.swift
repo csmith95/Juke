@@ -87,14 +87,14 @@ class MyStreamController: UITableViewController {
         let status = !listenButton.isSelected
         listenButton.isSelected = status
         Current.listenSelected = status
-        handleAutomaticProgressSlider()
         if Current.isHost() {
             Current.stream?.isPlaying = status
             FirebaseAPI.setPlayStatus(status: status)   // update db
         } else {
-            FirebaseAPI.listenForSongProgress() // fetch real song progress to maintain sync
+            FirebaseAPI.listenForSongProgress(shouldUnlockProgress: false) // fetch real song progress to maintain sync
         }
-        jamsPlayer.resync()
+        jamsPlayer.resync() // trigger resync
+        handleAutomaticProgressSlider()
     }
     
     @IBAction func skipSong(_ sender: Any) {
@@ -128,7 +128,7 @@ class MyStreamController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        FirebaseAPI.listenForSongProgress() // will update if progress difference > 4 seconds
+        FirebaseAPI.listenForSongProgress(shouldUnlockProgress: false) // will update if progress difference > 4 seconds
         songsDataSource.setObservedStream()
         self.setUpControlButtons()
         FirebaseAPI.setfcmtoken()
@@ -201,7 +201,6 @@ class MyStreamController: UITableViewController {
     }
     
     func songPositionChanged(notification: NSNotification) {
-        if FirebaseAPI.progressLocked { return }
         if let data = notification.object as? NSDictionary {
             let progress = data["progress"] as! Double
             self.progressSliderValue = progress
@@ -329,6 +328,7 @@ class MyStreamController: UITableViewController {
                 coverArtImage.alpha = 1.0
                 pausedLabel.isHidden = true
             }
+            jamsPlayer.resync()
         case .TopSongChanged:
             self.setUI()
         case .SetProgress:

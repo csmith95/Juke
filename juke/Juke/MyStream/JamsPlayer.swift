@@ -25,7 +25,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         }
     
         willSet(newPosition) {
-            shouldResync = abs(newPosition - position_ms) >= 4000
+            shouldResync = ((newPosition == 0.0) || (abs(newPosition - position_ms) >= 4000))
         }
     }
     
@@ -106,6 +106,9 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePosition position: TimeInterval) {
         // signal MyStreamController so that it can update UISlider and update Firebase if host
+        objc_sync_enter(FirebaseAPI.progressLocked)
+        defer { objc_sync_exit(FirebaseAPI.progressLocked) }
+        if FirebaseAPI.progressLocked { return }
         position_ms = position * 1000
         let data: [String:Any] = ["progress": position_ms]
         NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
