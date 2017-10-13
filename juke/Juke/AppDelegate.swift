@@ -24,7 +24,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         // config firebase
-        FirebaseApp.configure()
+        var filePath: String!
+        #if DEVELOPMENT
+            filePath = Bundle.main.path(forResource: "Dev_GoogleService-Info.plist", ofType: "plist")
+        #else
+            filePath = Bundle.main.path(forResource: "Production_GoogleService-Info.plist", ofType: "plist")
+        #endif
+        guard let fileopts = FirebaseOptions.init(contentsOfFile: filePath!)
+            else { assert(false, "Couldn't load config file") }
+        FirebaseApp.configure(options: fileopts)
         
         // config Fabric/Crashlytics
         Fabric.with([Crashlytics.self])

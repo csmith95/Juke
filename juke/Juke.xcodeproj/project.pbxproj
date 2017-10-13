@@ -91,7 +91,6 @@
 		4B5783EB1F9035B80072C204 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B73AB7D1F69022B008DF5A2 /* Assets.xcassets */; };
 		4B5783EC1F9035B80072C204 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B3A34D51E58120F00C314A0 /* Main.storyboard */; };
 		4B5783F91F903D7B0072C204 /* Dev_GoogleService-Info copy.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B5783F81F903D7B0072C204 /* Dev_GoogleService-Info copy.plist */; };
-		4B5783FB1F903DF80072C204 /* Production_GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B5783FA1F903DF80072C204 /* Production_GoogleService-Info.plist */; };
 		4B62A2D81F69D05B00864EFF /* MyStreamRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B62A2D71F69D05B00864EFF /* MyStreamRootViewController.swift */; };
 		4B73AB7E1F69022B008DF5A2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B73AB7D1F69022B008DF5A2 /* Assets.xcassets */; };
 		4B7C1EA11F484DF00064F1C3 /* FirebaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */; };
@@ -109,6 +108,10 @@
 		4BCFA0331F71B71C00E49516 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCFA0321F71B71C00E49516 /* SessionManager.swift */; };
 		4BDCEBA81E709F7F00D9D3EE /* JamsPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */; };
 		4BDCEC061E720D0B00D9D3EE /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEC051E720D0B00D9D3EE /* Constants.swift */; };
+		4BE100501F9042E0001B81C6 /* Production_GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BE1004F1F9042E0001B81C6 /* Production_GoogleService-Info.plist */; };
+		4BE100511F9042E0001B81C6 /* Production_GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BE1004F1F9042E0001B81C6 /* Production_GoogleService-Info.plist */; };
+		4BE100541F904325001B81C6 /* Juke Dev Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BE100521F904325001B81C6 /* Juke Dev Info.plist */; };
+		4BE100571F90432B001B81C6 /* Juke Production Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BE100551F90432B001B81C6 /* Juke Production Info.plist */; };
 		92E279DB810F22F2C47E4E8E /* Pods_Juke_Production.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6EC70CD26CC692EDD2EB290 /* Pods_Juke_Production.framework */; };
 		F2242EB61F730416000BE18A /* StarredStreamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2242EB51F730416000BE18A /* StarredStreamsViewController.swift */; };
 		F25133C01F6E7C8F002745C7 /* StarredTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25133BF1F6E7C8F002745C7 /* StarredTableViewController.swift */; };
@@ -146,7 +149,6 @@
 		4B3A34CC1E58120F00C314A0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4B3A34CF1E58120F00C314A0 /* Juke.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Juke.xcdatamodel; sourceTree = "<group>"; };
 		4B3A34D61E58120F00C314A0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		4B3A34DD1E58120F00C314A0 /* Juke Production Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Juke Production Info.plist"; path = "Juke/Static/Juke Production Info.plist"; sourceTree = SOURCE_ROOT; };
 		4B3A34E41E581F1300C314A0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4B48FDDC1F5DCCE400E87507 /* MenuActionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuActionController.swift; sourceTree = "<group>"; };
@@ -155,9 +157,7 @@
 		4B48FDE61F6108E700E87507 /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		4B4920BF1F5722440089C61F /* SpotifyLoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyLoginController.swift; sourceTree = "<group>"; };
 		4B5783F41F9035B80072C204 /* Juke Production.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Juke Production.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4B5783F51F9035B80072C204 /* Juke Dev Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Juke Dev Info.plist"; path = "/Users/csmith/Desktop/Juke/juke/Juke/Static/Juke Dev Info.plist"; sourceTree = "<absolute>"; };
 		4B5783F81F903D7B0072C204 /* Dev_GoogleService-Info copy.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Dev_GoogleService-Info copy.plist"; sourceTree = "<group>"; };
-		4B5783FA1F903DF80072C204 /* Production_GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Production_GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4B62A2D71F69D05B00864EFF /* MyStreamRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyStreamRootViewController.swift; sourceTree = "<group>"; };
 		4B73AB7D1F69022B008DF5A2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseAPI.swift; sourceTree = "<group>"; };
@@ -176,6 +176,9 @@
 		4BCFA0321F71B71C00E49516 /* SessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 		4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JamsPlayer.swift; sourceTree = "<group>"; };
 		4BDCEC051E720D0B00D9D3EE /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		4BE1004F1F9042E0001B81C6 /* Production_GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Production_GoogleService-Info.plist"; path = "../../../../Juke Creds/Production_GoogleService-Info.plist"; sourceTree = "<group>"; };
+		4BE100521F904325001B81C6 /* Juke Dev Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Juke Dev Info.plist"; sourceTree = "<group>"; };
+		4BE100551F90432B001B81C6 /* Juke Production Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Juke Production Info.plist"; sourceTree = "<group>"; };
 		4CF5B62550425341DF3D4986 /* Pods-Juke Production.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke Production.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Juke Production/Pods-Juke Production.debug.xcconfig"; sourceTree = "<group>"; };
 		67767AD38D69F17FCA7EC584 /* Pods-Juke Dev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke Dev.release.xcconfig"; path = "Pods/Target Support Files/Pods-Juke Dev/Pods-Juke Dev.release.xcconfig"; sourceTree = "<group>"; };
 		72A8139088E7F63BECA297C9 /* Pods-Juke.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke.release.xcconfig"; path = "Pods/Target Support Files/Pods-Juke/Pods-Juke.release.xcconfig"; sourceTree = "<group>"; };
@@ -328,10 +331,10 @@
 			isa = PBXGroup;
 			children = (
 				4B73AB7D1F69022B008DF5A2 /* Assets.xcassets */,
-				4B5783FA1F903DF80072C204 /* Production_GoogleService-Info.plist */,
+				4BE1004F1F9042E0001B81C6 /* Production_GoogleService-Info.plist */,
+				4BE100521F904325001B81C6 /* Juke Dev Info.plist */,
+				4BE100551F90432B001B81C6 /* Juke Production Info.plist */,
 				4B5783F81F903D7B0072C204 /* Dev_GoogleService-Info copy.plist */,
-				4B3A34DD1E58120F00C314A0 /* Juke Production Info.plist */,
-				4B5783F51F9035B80072C204 /* Juke Dev Info.plist */,
 				4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */,
 				F2A24EE71F57879400E0FE2F /* Juke.entitlements */,
 				4B3A34CE1E58120F00C314A0 /* Juke.xcdatamodeld */,
@@ -518,6 +521,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B5783F91F903D7B0072C204 /* Dev_GoogleService-Info copy.plist in Resources */,
+				4BE100501F9042E0001B81C6 /* Production_GoogleService-Info.plist in Resources */,
 				4B48FDE11F5DCEC700E87507 /* MenuCell.xib in Resources */,
 				4B0DDE131F79BD7C009307D5 /* NameStreamViewController.xib in Resources */,
 				4B73AB7E1F69022B008DF5A2 /* Assets.xcassets in Resources */,
@@ -530,8 +534,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B5783E91F9035B80072C204 /* MenuCell.xib in Resources */,
-				4B5783FB1F903DF80072C204 /* Production_GoogleService-Info.plist in Resources */,
+				4BE100511F9042E0001B81C6 /* Production_GoogleService-Info.plist in Resources */,
 				4B5783EA1F9035B80072C204 /* NameStreamViewController.xib in Resources */,
+				4BE100571F90432B001B81C6 /* Juke Production Info.plist in Resources */,
+				4BE100541F904325001B81C6 /* Juke Dev Info.plist in Resources */,
 				4B5783EB1F9035B80072C204 /* Assets.xcassets in Resources */,
 				4B5783EC1F9035B80072C204 /* Main.storyboard in Resources */,
 			);
