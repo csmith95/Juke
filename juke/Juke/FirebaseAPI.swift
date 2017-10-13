@@ -490,7 +490,6 @@ class FirebaseAPI {
         self.ref.child("/starredTable/\(currUser.spotifyID)").child(user.spotifyID).removeValue()
     }
     
-    // Function URL: varies between dev and prod branches. See FirebaseConstants (untracked on git)
     public static func sendNotification(receiver: Models.FirebaseUser) {
         guard let user = Current.user else { return }
         let params: Parameters = [
@@ -499,7 +498,7 @@ class FirebaseAPI {
         ]
         
         print("called sendNotification")
-        Alamofire.request(FirebaseConstants.kSendNotificationsURL, method: .post, parameters: params, encoding: JSONEncoding.default).responseJSON { response in
+        Alamofire.request(Constants.kSendNotificationsURL, method: .post, parameters: params, encoding: JSONEncoding.default).responseJSON { response in
             
             print("response came back", response)
         }

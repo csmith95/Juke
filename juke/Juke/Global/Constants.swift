@@ -25,4 +25,10 @@ public class Constants {
     static let kTokenRefreshURL = "https://juketokenrefresh.herokuapp.com/refresh"
     static let kSpotifyTokenRefreshIntervalSeconds: TimeInterval = 40 * 60 // every 40 minutes
     
+    #if DEVELOPMENT
+    static let kSendNotificationsURL = "https://us-central1-juke-9fbd6.cloudfunctions.net/sendNotification"
+    #else
+    static let kSendNotificationsURL = "https://us-central1-juke-production-72b80.cloudfunctions.net/sendNotification"
+    #endif
+    
 }

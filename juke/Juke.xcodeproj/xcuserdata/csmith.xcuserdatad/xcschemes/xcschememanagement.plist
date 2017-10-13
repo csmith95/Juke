@@ -4,6 +4,16 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Juke Production.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>21</integer>
+		</dict>
+		<key>Juke copy.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>19</integer>
+		</dict>
 		<key>Juke.xcscheme</key>
 		<dict>
 			<key>orderHint</key>

@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4B3A34C81E58120F00C314A0"
-               BuildableName = "Juke.app"
-               BlueprintName = "Juke"
+               BuildableName = "Juke Dev.app"
+               BlueprintName = "Juke Dev"
                ReferencedContainer = "container:Juke.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -34,8 +34,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4B3A34C81E58120F00C314A0"
-            BuildableName = "Juke.app"
-            BlueprintName = "Juke"
+            BuildableName = "Juke Dev.app"
+            BlueprintName = "Juke Dev"
             ReferencedContainer = "container:Juke.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -58,8 +58,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4B3A34C81E58120F00C314A0"
-            BuildableName = "Juke.app"
-            BlueprintName = "Juke"
+            BuildableName = "Juke Dev.app"
+            BlueprintName = "Juke Dev"
             ReferencedContainer = "container:Juke.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -88,8 +88,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4B3A34C81E58120F00C314A0"
-            BuildableName = "Juke.app"
-            BlueprintName = "Juke"
+            BuildableName = "Juke Dev.app"
+            BlueprintName = "Juke Dev"
             ReferencedContainer = "container:Juke.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
