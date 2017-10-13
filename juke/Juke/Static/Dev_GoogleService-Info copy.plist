@@ -7,34 +7,34 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>597329598193-u520q9ft3jp4rvrgcq0i8brmks6u38k7.apps.googleusercontent.com</string>
+	<string>632180830466-0a1e57es5v8fru5he00aqa8flots0q4j.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.597329598193-u520q9ft3jp4rvrgcq0i8brmks6u38k7</string>
+	<string>com.googleusercontent.apps.632180830466-0a1e57es5v8fru5he00aqa8flots0q4j</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBEdwbI2-iPaje_qCf3kA5wyAafYjv10ZY</string>
+	<string>AIzaSyDCCcZuLYPqpx5vy1_Tj22jWA7t2nINu5s</string>
 	<key>GCM_SENDER_ID</key>
-	<string>597329598193</string>
+	<string>632180830466</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>jukeproduction</string>
+	<string>jukedev</string>
 	<key>PROJECT_ID</key>
-	<string>juke-production-72b80</string>
+	<string>juke-9fbd6</string>
 	<key>STORAGE_BUCKET</key>
-	<string>juke-production-72b80.appspot.com</string>
+	<string>juke-9fbd6.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_APPINVITE_ENABLED</key>
-	<false></false>
+	<true/>
 	<key>IS_GCM_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:597329598193:ios:f8fd5dd3bd16da60</string>
+	<string>1:632180830466:ios:bea95c655fb31c5e</string>
 	<key>DATABASE_URL</key>
-	<string>https://juke-production-72b80.firebaseio.com</string>
+	<string>https://juke-9fbd6.firebaseio.com</string>
 </dict>
 </plist>

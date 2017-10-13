@@ -90,7 +90,8 @@
 		4B5783EA1F9035B80072C204 /* NameStreamViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B0DDE121F79BD7C009307D5 /* NameStreamViewController.xib */; };
 		4B5783EB1F9035B80072C204 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B73AB7D1F69022B008DF5A2 /* Assets.xcassets */; };
 		4B5783EC1F9035B80072C204 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B3A34D51E58120F00C314A0 /* Main.storyboard */; };
-		4B5783F71F903CF20072C204 /* Production-GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B5783F61F903CF20072C204 /* Production-GoogleService-Info.plist */; };
+		4B5783F91F903D7B0072C204 /* Dev_GoogleService-Info copy.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B5783F81F903D7B0072C204 /* Dev_GoogleService-Info copy.plist */; };
+		4B5783FB1F903DF80072C204 /* Production_GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B5783FA1F903DF80072C204 /* Production_GoogleService-Info.plist */; };
 		4B62A2D81F69D05B00864EFF /* MyStreamRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B62A2D71F69D05B00864EFF /* MyStreamRootViewController.swift */; };
 		4B73AB7E1F69022B008DF5A2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B73AB7D1F69022B008DF5A2 /* Assets.xcassets */; };
 		4B7C1EA11F484DF00064F1C3 /* FirebaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */; };
@@ -155,7 +156,8 @@
 		4B4920BF1F5722440089C61F /* SpotifyLoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyLoginController.swift; sourceTree = "<group>"; };
 		4B5783F41F9035B80072C204 /* Juke Production.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Juke Production.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B5783F51F9035B80072C204 /* Juke Dev Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Juke Dev Info.plist"; path = "/Users/csmith/Desktop/Juke/juke/Juke/Static/Juke Dev Info.plist"; sourceTree = "<absolute>"; };
-		4B5783F61F903CF20072C204 /* Production-GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Production-GoogleService-Info.plist"; sourceTree = "<group>"; };
+		4B5783F81F903D7B0072C204 /* Dev_GoogleService-Info copy.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Dev_GoogleService-Info copy.plist"; sourceTree = "<group>"; };
+		4B5783FA1F903DF80072C204 /* Production_GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Production_GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4B62A2D71F69D05B00864EFF /* MyStreamRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyStreamRootViewController.swift; sourceTree = "<group>"; };
 		4B73AB7D1F69022B008DF5A2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4B7C1EA01F484DF00064F1C3 /* FirebaseAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseAPI.swift; sourceTree = "<group>"; };
@@ -326,7 +328,8 @@
 			isa = PBXGroup;
 			children = (
 				4B73AB7D1F69022B008DF5A2 /* Assets.xcassets */,
-				4B5783F61F903CF20072C204 /* Production-GoogleService-Info.plist */,
+				4B5783FA1F903DF80072C204 /* Production_GoogleService-Info.plist */,
+				4B5783F81F903D7B0072C204 /* Dev_GoogleService-Info copy.plist */,
 				4B3A34DD1E58120F00C314A0 /* Juke Production Info.plist */,
 				4B5783F51F9035B80072C204 /* Juke Dev Info.plist */,
 				4BC778531E5821C2009DD520 /* Juke-Bridging-Header.h */,
@@ -514,6 +517,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B5783F91F903D7B0072C204 /* Dev_GoogleService-Info copy.plist in Resources */,
 				4B48FDE11F5DCEC700E87507 /* MenuCell.xib in Resources */,
 				4B0DDE131F79BD7C009307D5 /* NameStreamViewController.xib in Resources */,
 				4B73AB7E1F69022B008DF5A2 /* Assets.xcassets in Resources */,
@@ -526,8 +530,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B5783E91F9035B80072C204 /* MenuCell.xib in Resources */,
+				4B5783FB1F903DF80072C204 /* Production_GoogleService-Info.plist in Resources */,
 				4B5783EA1F9035B80072C204 /* NameStreamViewController.xib in Resources */,
-				4B5783F71F903CF20072C204 /* Production-GoogleService-Info.plist in Resources */,
 				4B5783EB1F9035B80072C204 /* Assets.xcassets in Resources */,
 				4B5783EC1F9035B80072C204 /* Main.storyboard in Resources */,
 			);
