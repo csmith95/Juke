@@ -106,16 +106,16 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
         let body = "You are hosting a stream. The vibe will be lost forever if you do this!"
         let controller = Presentr.alertViewController(title: title, body: body)
         
-        let deleteAction = AlertAction(title: "Sure 🕶", style: .destructive) {
-            self.joinStream(stream: stream)
-        }
-        
-        let okAction = AlertAction(title: "NO, sorry 🙄", style: .cancel) {
-            print("Ok!")
-        }
-        
-        controller.addAction(deleteAction)
-        controller.addAction(okAction)
+//        let deleteAction = AlertAction(title: "Sure 🕶", style: .destructive) {
+//            self.joinStream(stream: stream)
+//        }
+//
+//        let okAction = AlertAction(title: "NO, sorry 🙄", style: .cancel) {
+//            print("Ok!")
+//        }
+//
+//        controller.addAction(deleteAction)
+//        controller.addAction(okAction)
         
         presenter.presentationType = .alert
         customPresentViewController(presenter, viewController: controller, animated: true, completion: nil)

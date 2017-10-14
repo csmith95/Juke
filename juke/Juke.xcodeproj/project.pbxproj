@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		3F8A2B41FFAC0E1FB970EE54 /* Pods_Juke_Dev.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08BEAF84424C40B20B502CAC /* Pods_Juke_Dev.framework */; };
-		4A4F167F5B62F339520F3BEB /* Pods_Juke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9D54D33C710A946C6515520 /* Pods_Juke.framework */; };
 		4B0490E91E734614003F49DF /* SongTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0490E81E734614003F49DF /* SongTableViewCell.swift */; };
 		4B04E4591F55682C001605E2 /* CustomDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B04E4581F55682C001605E2 /* CustomDataSource.swift */; };
 		4B0532391F684FD600ADA988 /* SpotifySearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0532381F684FD600ADA988 /* SpotifySearchTableViewController.swift */; };
@@ -84,7 +83,6 @@
 		4B5783E31F9035B80072C204 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */; };
 		4B5783E41F9035B80072C204 /* SpotifyMetadata.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26A652F1EB194F100ADB14E /* SpotifyMetadata.framework */; };
 		4B5783E51F9035B80072C204 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3A34E41E581F1300C314A0 /* AVFoundation.framework */; };
-		4B5783E61F9035B80072C204 /* Pods_Juke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9D54D33C710A946C6515520 /* Pods_Juke.framework */; };
 		4B5783E71F9035B80072C204 /* SpotifyAudioPlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F26A652D1EB194F100ADB14E /* SpotifyAudioPlayback.framework */; };
 		4B5783E91F9035B80072C204 /* MenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B48FDE01F5DCEC700E87507 /* MenuCell.xib */; };
 		4B5783EA1F9035B80072C204 /* NameStreamViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B0DDE121F79BD7C009307D5 /* NameStreamViewController.xib */; };
@@ -181,11 +179,8 @@
 		4BE100551F90432B001B81C6 /* Juke Production Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Juke Production Info.plist"; sourceTree = "<group>"; };
 		4CF5B62550425341DF3D4986 /* Pods-Juke Production.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke Production.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Juke Production/Pods-Juke Production.debug.xcconfig"; sourceTree = "<group>"; };
 		67767AD38D69F17FCA7EC584 /* Pods-Juke Dev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke Dev.release.xcconfig"; path = "Pods/Target Support Files/Pods-Juke Dev/Pods-Juke Dev.release.xcconfig"; sourceTree = "<group>"; };
-		72A8139088E7F63BECA297C9 /* Pods-Juke.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke.release.xcconfig"; path = "Pods/Target Support Files/Pods-Juke/Pods-Juke.release.xcconfig"; sourceTree = "<group>"; };
 		A53E89CB8DC74D8E8C77768C /* Pods-Juke Production.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke Production.release.xcconfig"; path = "Pods/Target Support Files/Pods-Juke Production/Pods-Juke Production.release.xcconfig"; sourceTree = "<group>"; };
-		D9D54D33C710A946C6515520 /* Pods_Juke.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Juke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6EC70CD26CC692EDD2EB290 /* Pods_Juke_Production.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Juke_Production.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		ECDA8CAF8FCA9C3B7EFCAFF4 /* Pods-Juke.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Juke/Pods-Juke.debug.xcconfig"; sourceTree = "<group>"; };
 		F2242EB51F730416000BE18A /* StarredStreamsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarredStreamsViewController.swift; sourceTree = "<group>"; };
 		F25133BF1F6E7C8F002745C7 /* StarredTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarredTableViewController.swift; sourceTree = "<group>"; };
 		F26A652D1EB194F100ADB14E /* SpotifyAudioPlayback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAudioPlayback.framework; sourceTree = "<group>"; };
@@ -211,7 +206,6 @@
 				4B3A34E71E581F8F00C314A0 /* SystemConfiguration.framework in Frameworks */,
 				F26A65321EB194F100ADB14E /* SpotifyMetadata.framework in Frameworks */,
 				4B3A34E51E581F1300C314A0 /* AVFoundation.framework in Frameworks */,
-				4A4F167F5B62F339520F3BEB /* Pods_Juke.framework in Frameworks */,
 				F26A65301EB194F100ADB14E /* SpotifyAudioPlayback.framework in Frameworks */,
 				3F8A2B41FFAC0E1FB970EE54 /* Pods_Juke_Dev.framework in Frameworks */,
 			);
@@ -227,7 +221,6 @@
 				4B5783E31F9035B80072C204 /* SystemConfiguration.framework in Frameworks */,
 				4B5783E41F9035B80072C204 /* SpotifyMetadata.framework in Frameworks */,
 				4B5783E51F9035B80072C204 /* AVFoundation.framework in Frameworks */,
-				4B5783E61F9035B80072C204 /* Pods_Juke.framework in Frameworks */,
 				4B5783E71F9035B80072C204 /* SpotifyAudioPlayback.framework in Frameworks */,
 				92E279DB810F22F2C47E4E8E /* Pods_Juke_Production.framework in Frameworks */,
 			);
@@ -392,7 +385,6 @@
 				4B0FB57F1E59A12C008D34FD /* CoreLocation.framework */,
 				4B3A34E61E581F8F00C314A0 /* SystemConfiguration.framework */,
 				4B3A34E41E581F1300C314A0 /* AVFoundation.framework */,
-				D9D54D33C710A946C6515520 /* Pods_Juke.framework */,
 				08BEAF84424C40B20B502CAC /* Pods_Juke_Dev.framework */,
 				E6EC70CD26CC692EDD2EB290 /* Pods_Juke_Production.framework */,
 			);
@@ -415,8 +407,6 @@
 		5180FECD659CC87351E2CFDD /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				ECDA8CAF8FCA9C3B7EFCAFF4 /* Pods-Juke.debug.xcconfig */,
-				72A8139088E7F63BECA297C9 /* Pods-Juke.release.xcconfig */,
 				2361772256898FAEC68881A3 /* Pods-Juke Dev.debug.xcconfig */,
 				67767AD38D69F17FCA7EC584 /* Pods-Juke Dev.release.xcconfig */,
 				4CF5B62550425341DF3D4986 /* Pods-Juke Production.debug.xcconfig */,

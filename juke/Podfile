@@ -1,10 +1,11 @@
 # Uncomment the next line to define a global platform for your project
 platform :ios, '9.0'
 
+workspace 'Juke'
 use_frameworks!
 
 def all_pods
-    pod 'Alamofire', '~> 4.4'
+    pod 'Alamofire', '~> 4.5'
     pod 'AlamofireImage', '~> 3.1'
     pod 'Unbox'
     pod 'PKHUD', :git => 'https://github.com/pkluz/PKHUD.git', :branch => 'release/swift4'

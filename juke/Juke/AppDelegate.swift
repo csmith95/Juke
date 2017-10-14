@@ -26,10 +26,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // config firebase
         var filePath: String!
         #if DEVELOPMENT
-            filePath = Bundle.main.path(forResource: "Dev_GoogleService-Info.plist", ofType: "plist")
+            filePath = Bundle.main.path(forResource: "Dev_GoogleService-Info", ofType: "plist")
         #else
-            filePath = Bundle.main.path(forResource: "Production_GoogleService-Info.plist", ofType: "plist")
+            filePath = Bundle.main.path(forResource: "Production_GoogleService-Info", ofType: "plist")
         #endif
+        print(filePath)
         guard let fileopts = FirebaseOptions.init(contentsOfFile: filePath!)
             else { assert(false, "Couldn't load config file") }
         FirebaseApp.configure(options: fileopts)
