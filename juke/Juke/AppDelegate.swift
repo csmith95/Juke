@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             filePath = Bundle.main.path(forResource: "Production_GoogleService-Info", ofType: "plist")
         #endif
         guard let fileopts = FirebaseOptions.init(contentsOfFile: filePath!)
-            else { assert(false, "Couldn't load config file") }
+            else { print("**** Couldn't load config file"); return false }
         FirebaseApp.configure(options: fileopts)
         
         // config Fabric/Crashlytics

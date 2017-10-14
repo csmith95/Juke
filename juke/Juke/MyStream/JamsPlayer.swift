@@ -56,7 +56,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     }
     
     func handleInterruption(notification: Notification) {
-        print("interrupted. ", notification.userInfo)
+        print("interrupted.")
     }
     
     public func login() {

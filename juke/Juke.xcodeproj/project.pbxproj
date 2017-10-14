@@ -174,7 +174,7 @@
 		4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JamsPlayer.swift; sourceTree = "<group>"; };
 		4BDCEC051E720D0B00D9D3EE /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		4BDFF1CF1F92AD1100A68D9A /* Dev_GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Dev_GoogleService-Info.plist"; sourceTree = "<group>"; };
-		4BE1004F1F9042E0001B81C6 /* Production_GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Production_GoogleService-Info.plist"; path = "../../../../Juke Creds/Production_GoogleService-Info.plist"; sourceTree = "<group>"; };
+		4BE1004F1F9042E0001B81C6 /* Production_GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Production_GoogleService-Info.plist"; path = "Juke/Static/Production_GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		4BE100521F904325001B81C6 /* Juke Dev Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Juke Dev Info.plist"; sourceTree = "<group>"; };
 		4BE100551F90432B001B81C6 /* Juke Production Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Juke Production Info.plist"; sourceTree = "<group>"; };
 		4CF5B62550425341DF3D4986 /* Pods-Juke Production.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Juke Production.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Juke Production/Pods-Juke Production.debug.xcconfig"; sourceTree = "<group>"; };
@@ -483,6 +483,7 @@
 					};
 					4B5783B01F9035B80072C204 = {
 						DevelopmentTeam = UL2WBS3TV4;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -994,6 +995,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "Juke/Static/Juke-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1037,6 +1039,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Juke/Static/Juke-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -1049,6 +1052,7 @@
 				CODE_SIGN_ENTITLEMENTS = Juke/Static/Juke.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UL2WBS3TV4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1081,6 +1085,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "Juke/Static/Juke-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1093,6 +1098,7 @@
 				CODE_SIGN_ENTITLEMENTS = Juke/Static/Juke.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UL2WBS3TV4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1124,6 +1130,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Juke/Static/Juke-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

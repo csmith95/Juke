@@ -345,7 +345,7 @@ class FirebaseAPI {
     }
     
     // creates and joins empty stream with user as host. leaves current stream if any
-    public static func createNewStream(title: String, callback: @escaping ((Void) -> Void)) {
+    public static func createNewStream(title: String, callback: @escaping (() -> Void)) {
         let newStream = Models.FirebaseStream()
         
         // create stream in firebase
