@@ -35,7 +35,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         print("***** filePath: ", filePath)
         guard let fileopts = FirebaseOptions.init(contentsOfFile: filePath!)
             else { assert(false, "Couldn't load config file") }
-        print("***** fileOpts: ", filePath)
         FirebaseApp.configure(options: fileopts)
         
         // config Fabric/Crashlytics

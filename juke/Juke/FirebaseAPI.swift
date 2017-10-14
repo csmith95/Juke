@@ -68,13 +68,14 @@ class FirebaseAPI {
     private static func addSongPlayStatusListener() {
         let path = "streams/\(Current.stream!.streamID)/isPlaying"
         ref.child(path).observe(.value, with:{ (snapshot) in
-            
+            if Current.isHost() { return }
             if snapshot.exists(), let isPlaying = snapshot.value as? Bool {
                 Current.stream!.isPlaying = isPlaying
                 self.listenForSongProgress()    // fetch updated status
             } else {
                 Current.stream!.isPlaying = false
             }
+            jamsPlayer.resync()
             NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.PlayStatusChanged)
             NotificationCenter.default.post(name: Notification.Name("firebaseEventLockScreen"), object: FirebaseEvent.PlayStatusChanged)
         }) { err in print(err.localizedDescription)}
