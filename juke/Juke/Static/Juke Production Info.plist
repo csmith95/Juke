@@ -24,10 +24,20 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>edu.stanford.csmith95</string>
+			<string>Dev callback</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>juke1231</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>Production callback</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>jukeproduction</string>
 			</array>
 		</dict>
 	</array>

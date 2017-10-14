@@ -26,13 +26,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // config firebase
         var filePath: String!
         #if DEVELOPMENT
+            print("**** DEV ENABLED")
             filePath = Bundle.main.path(forResource: "Dev_GoogleService-Info", ofType: "plist")
         #else
+            print("**** PRODUCTION ENABLED")
             filePath = Bundle.main.path(forResource: "Production_GoogleService-Info", ofType: "plist")
         #endif
-        print(filePath)
+        print("***** filePath: ", filePath)
         guard let fileopts = FirebaseOptions.init(contentsOfFile: filePath!)
             else { assert(false, "Couldn't load config file") }
+        print("***** fileOpts: ", filePath)
         FirebaseApp.configure(options: fileopts)
         
         // config Fabric/Crashlytics
