@@ -106,7 +106,6 @@
 		4BDCEBA81E709F7F00D9D3EE /* JamsPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEBA71E709F7F00D9D3EE /* JamsPlayer.swift */; };
 		4BDCEC061E720D0B00D9D3EE /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDCEC051E720D0B00D9D3EE /* Constants.swift */; };
 		4BDFF1D01F92AD1100A68D9A /* Dev_GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BDFF1CF1F92AD1100A68D9A /* Dev_GoogleService-Info.plist */; };
-		4BDFF1D11F92AD1100A68D9A /* Dev_GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BDFF1CF1F92AD1100A68D9A /* Dev_GoogleService-Info.plist */; };
 		4BE100511F9042E0001B81C6 /* Production_GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BE1004F1F9042E0001B81C6 /* Production_GoogleService-Info.plist */; };
 		92E279DB810F22F2C47E4E8E /* Pods_Juke_Production.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6EC70CD26CC692EDD2EB290 /* Pods_Juke_Production.framework */; };
 		F2242EB61F730416000BE18A /* StarredStreamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2242EB51F730416000BE18A /* StarredStreamsViewController.swift */; };
@@ -533,7 +532,6 @@
 				4B5783EA1F9035B80072C204 /* NameStreamViewController.xib in Resources */,
 				4B5783EB1F9035B80072C204 /* Assets.xcassets in Resources */,
 				4B5783EC1F9035B80072C204 /* Main.storyboard in Resources */,
-				4BDFF1D11F92AD1100A68D9A /* Dev_GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
