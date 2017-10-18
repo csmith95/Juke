@@ -26,6 +26,10 @@ class LockScreenDelegate: NSObject {
             if Current.isHost() {
                 Current.stream?.isPlaying = true
                 FirebaseAPI.setPlayStatus(status: true)   // update db
+                var current = self.mpic.nowPlayingInfo
+                current![MPNowPlayingInfoPropertyPlaybackRate] = Current.stream?.isPlaying
+                current![MPNowPlayingInfoPropertyElapsedPlaybackTime] = self.jamsPlayer.position_ms/1000
+                self.mpic.nowPlayingInfo = current
             }
             Current.listenSelected = true
             self.jamsPlayer.setPlayStatus(shouldPlay: Current.stream!.isPlaying && Current.listenSelected, topSong: Current.stream?.song)
@@ -37,6 +41,10 @@ class LockScreenDelegate: NSObject {
             if Current.isHost() {
                 Current.stream?.isPlaying = false
                 FirebaseAPI.setPlayStatus(status: false)   // update db
+                var current = self.mpic.nowPlayingInfo
+                current![MPNowPlayingInfoPropertyPlaybackRate] = Current.stream?.isPlaying
+                current![MPNowPlayingInfoPropertyElapsedPlaybackTime] = self.jamsPlayer.position_ms/1000
+                self.mpic.nowPlayingInfo = current
             }
             Current.listenSelected = false
             self.jamsPlayer.setPlayStatus(shouldPlay: Current.stream!.isPlaying && Current.listenSelected, topSong: Current.stream?.song)
