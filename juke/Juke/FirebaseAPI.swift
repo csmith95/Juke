@@ -69,6 +69,7 @@ class FirebaseAPI {
         let path = "streams/\(Current.stream!.streamID)/isPlaying"
         ref.child(path).observe(.value, with:{ (snapshot) in
             if Current.isHost() { return }
+            
             if snapshot.exists(), let isPlaying = snapshot.value as? Bool {
                 Current.stream!.isPlaying = isPlaying
                 self.listenForSongProgress()    // fetch updated status
@@ -391,20 +392,6 @@ class FirebaseAPI {
             self.ref.child("streams/\(stream.streamID)/members/\(user.spotifyID)/fcmToken").setValue(fcmToken)
         }
     }
-
-    public static func fetchStream(streamID: String, callback: @escaping ((_: Models.FirebaseStream?) -> Void)) {
-        self.ref.child("/streams/\(streamID)").observeSingleEvent(of: .value, with:{ (snapshot) in
-            if let stream = Models.FirebaseStream(snapshot: snapshot) {
-                callback(stream)
-                if Current.isHost() {
-                    // since host doesn't respond to top song changed firebase events
-                    NotificationCenter.default.post(name: Notification.Name("firebaseEventLockScreen"), object: FirebaseEvent.TopSongChanged)
-                }
-            } else {
-                callback(nil)
-            }
-        })
-    }
     
     public static func loginUser(spotifyUser: Models.SpotifyUser, callback: @escaping ((_: Bool) -> Void)) {
         ref.child("users/\(spotifyUser.spotifyID)").observeSingleEvent(of: .value, with: { (snapshot) in
@@ -438,6 +425,11 @@ class FirebaseAPI {
                 self.ref.child("streams/\(tunedInto)").observeSingleEvent(of: .value, with : { (snapshot) in
                     if let stream = Models.FirebaseStream(snapshot: snapshot) {
                         Current.stream = stream
+                        if Current.isHost() {
+                            // since host doesn't subscribe to all top song changed events, otherwise first song isn't loaded on lock screen
+                            // host only listens if queue is empty when song is queued
+                            NotificationCenter.default.post(name: Notification.Name("firebaseEventLockScreen"), object: FirebaseEvent.TopSongChanged)
+                        }
                     }
                     callback(true)
                 }) {error in

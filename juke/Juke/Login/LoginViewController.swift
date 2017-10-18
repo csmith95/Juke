@@ -24,7 +24,6 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         lockScreenDelegate.setUpNowPlayingInfoCenter()
         spotifyLoginController.setSpotifyAppCredentials()  // set credentials before trying to fetch session
-        printCreds()
         if let session = SessionManager.fetchSession() {
             if session.isValid() {
                 self.fetchSpotifyUser()
@@ -40,13 +39,6 @@ class LoginViewController: UIViewController {
         } else {
             self.loginButton.isHidden = false
         }
-    }
-    
-    func printCreds() {
-        print(Constants.kCallbackURL)
-        print(Constants.kSendNotificationsURL)
-        print(Constants.kTokenSwapURL)
-        print(Constants.kTokenRefreshURL)
     }
 
     @IBAction func loginWithSpotify(_ sender: Any) {
