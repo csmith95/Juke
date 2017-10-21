@@ -62,13 +62,11 @@ class LockScreenDelegate: NSObject {
         guard let event = notification.object as? FirebaseAPI.FirebaseEvent else { print("error"); return }
         switch event {
         case .PlayStatusChanged:
-            print("**** status")
             var current = mpic.nowPlayingInfo
             current![MPNowPlayingInfoPropertyPlaybackRate] = stream.isPlaying
             current![MPNowPlayingInfoPropertyElapsedPlaybackTime] = jamsPlayer.position_ms/1000
             mpic.nowPlayingInfo = current
         case .TopSongChanged:
-            print("**** top")
             var current = mpic.nowPlayingInfo
             current![MPMediaItemPropertyTitle] = song.songName
             current![MPMediaItemPropertyArtist] = song.artistName
