@@ -110,11 +110,11 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
         let body = "You are hosting a stream. The vibe will be lost forever if you do this!"
         let controller = Presentr.alertViewController(title: title, body: body)
         
-        let deleteAction = AlertAction(title: "Sure 🕶", style: .destructive) {
+        let deleteAction = AlertAction(title: "Sure 🕶", style: .destructive) { _ in
             self.joinStream(stream: stream)
         }
-        
-        let okAction = AlertAction(title: "NO, sorry 🙄", style: .cancel) {
+
+        let okAction = AlertAction(title: "NO, sorry 🙄", style: .cancel) { _ in
             print("Ok!")
         }
         

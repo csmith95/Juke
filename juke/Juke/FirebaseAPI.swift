@@ -69,12 +69,14 @@ class FirebaseAPI {
         let path = "streams/\(Current.stream!.streamID)/isPlaying"
         ref.child(path).observe(.value, with:{ (snapshot) in
             if Current.isHost() { return }
+
             if snapshot.exists(), let isPlaying = snapshot.value as? Bool {
                 Current.stream!.isPlaying = isPlaying
                 self.listenForSongProgress(shouldUnlockProgress: false)    // fetch updated status
             } else {
                 Current.stream!.isPlaying = false
             }
+            jamsPlayer.resync()
             NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseEvent.PlayStatusChanged)
             NotificationCenter.default.post(name: Notification.Name("firebaseEventLockScreen"), object: FirebaseEvent.PlayStatusChanged)
         }) { err in print(err.localizedDescription)}
@@ -349,7 +351,7 @@ class FirebaseAPI {
     }
     
     // creates and joins empty stream with user as host. leaves current stream if any
-    public static func createNewStream(title: String, callback: @escaping ((Void) -> Void)) {
+    public static func createNewStream(title: String, callback: @escaping (() -> Void)) {
         let newStream = Models.FirebaseStream()
         
         // create stream in firebase
@@ -426,7 +428,8 @@ class FirebaseAPI {
                     if let stream = Models.FirebaseStream(snapshot: snapshot) {
                         Current.stream = stream
                         if Current.isHost() {
-                            // since host doesn't respond to top song changed firebase events, set lock screen UI info here
+                            // since host doesn't subscribe to all top song changed events, otherwise first song isn't loaded on lock screen
+                            // host only listens if queue is empty when song is queued
                             NotificationCenter.default.post(name: Notification.Name("firebaseEventLockScreen"), object: FirebaseEvent.TopSongChanged)
                         }
                     }

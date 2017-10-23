@@ -24,7 +24,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         // config firebase
-        FirebaseApp.configure()
+        var filePath: String!
+        #if DEVELOPMENT
+            filePath = Bundle.main.path(forResource: "Dev_GoogleService-Info", ofType: "plist")
+        #else
+            filePath = Bundle.main.path(forResource: "Production_GoogleService-Info", ofType: "plist")
+        #endif
+        guard let fileopts = FirebaseOptions.init(contentsOfFile: filePath!)
+            else { print("**** Couldn't load config file"); return false }
+        FirebaseApp.configure(options: fileopts)
         
         // config Fabric/Crashlytics
         Fabric.with([Crashlytics.self])
@@ -36,7 +44,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         // Auth firebase user
         Auth.auth().signInAnonymously(completion: { (user, error) in
-            print("user auth completed", user!.uid)
+            if let err = error {
+                print("error signing in anonymously: ", err)
+                return
+            }
+            guard let user = user else { print("error signing in anonymously"); return }
+            print("anonymous auth completed. uid: ", user.uid)
         })
         
         // set up FCM
@@ -248,11 +261,6 @@ extension AppDelegate {
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
         
-        // Print message ID.
-        //        if let messageID = userInfo[gcmMessageIDKey] {
-        //            print("Message ID: \(messageID)")
-        //        }
-        
         // Print full message.
         print("response", response)
         print(userInfo)
@@ -286,8 +294,8 @@ extension AppDelegate : MessagingDelegate {
     // [START refresh_token]
     func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
         print("Firebase registration token: \(fcmToken)")
-        //FirebaseAPI.setfcmtoken()
     }
+    
     // [END refresh_token]
     // [START ios_10_data_message]
     // Receive data messages on iOS 10+ directly from FCM (bypassing APNs) when the app is in the foreground.

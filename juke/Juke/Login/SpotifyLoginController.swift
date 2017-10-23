@@ -11,7 +11,7 @@ import UIKit
 class SpotifyLoginController: UIViewController, UIWebViewDelegate {
     
     let webView: UIWebView = UIWebView(frame: CGRect.zero)
-    let kClientID = "77d4489425fe464483f0934f99847c8b"
+    let kClientID = Constants.kClientID
     let kCallbackURL = URL(string: Constants.kCallbackURL)!
     let kTokenSwapURL = URL(string: Constants.kTokenSwapURL)!
     let kTokenRefreshURL = URL(string: Constants.kTokenRefreshURL)

@@ -131,7 +131,6 @@ class MyStreamController: UITableViewController {
         FirebaseAPI.listenForSongProgress(shouldUnlockProgress: false) // will update if progress difference > 4 seconds
         songsDataSource.setObservedStream()
         self.setUpControlButtons()
-        FirebaseAPI.setfcmtoken()
         setUI()
     }
     
@@ -355,11 +354,11 @@ class MyStreamController: UITableViewController {
         let body = "The vibe will be lost forever if you do this!"
         let controller = Presentr.alertViewController(title: title, body: body)
         
-        let deleteAction = AlertAction(title: "Sure 🕶", style: .destructive) {
+        let deleteAction = AlertAction(title: "Sure 🕶", style: .destructive) { _ in
             Current.stream = nil
         }
-        
-        let okAction = AlertAction(title: "NO, sorry 🙄", style: .cancel) {
+
+        let okAction = AlertAction(title: "NO, sorry 🙄", style: .cancel) { _ in
             print("Ok!")
         }
         
