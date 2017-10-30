@@ -5,11 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-<<<<<<< HEAD:juke/Juke/Static/Info.plist
-	<string>Juke</string>
-=======
 	<string>Juke Beta</string>
->>>>>>> ae26a38aa8f1091c6f04f8f83907a255e1059169:juke/Juke/Static/Juke Dev Info.plist
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>

@@ -34,7 +34,6 @@
 		4B48FDE31F5DCF7900E87507 /* ActionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B48FDE21F5DCF7900E87507 /* ActionData.swift */; };
 		4B48FDE71F6108E700E87507 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B48FDE61F6108E700E87507 /* GradientView.swift */; };
 		4B4920C01F5722440089C61F /* SpotifyLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4920BF1F5722440089C61F /* SpotifyLoginController.swift */; };
-		4B5783AF1F9033BE0072C204 /* FirebaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5783AE1F9033BE0072C204 /* FirebaseConstants.swift */; };
 		4B5783B31F9035B80072C204 /* SpotifySearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0532381F684FD600ADA988 /* SpotifySearchTableViewController.swift */; };
 		4B5783B41F9035B80072C204 /* StreamCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B13DE4B1E8AFA970060D29A /* StreamCell.swift */; };
 		4B5783B51F9035B80072C204 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8CD0F71F51FF47005C61D1 /* UserCell.swift */; };
@@ -154,7 +153,6 @@
 		4B48FDE21F5DCF7900E87507 /* ActionData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionData.swift; sourceTree = "<group>"; };
 		4B48FDE61F6108E700E87507 /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		4B4920BF1F5722440089C61F /* SpotifyLoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyLoginController.swift; sourceTree = "<group>"; };
-		4B5783AE1F9033BE0072C204 /* FirebaseConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseConstants.swift; sourceTree = "<group>"; };
 		4B5783F41F9035B80072C204 /* Juke Production.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Juke Production.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B62A2D71F69D05B00864EFF /* MyStreamRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyStreamRootViewController.swift; sourceTree = "<group>"; };
 		4B73AB7D1F69022B008DF5A2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -316,7 +314,6 @@
 				4BDCEC051E720D0B00D9D3EE /* Constants.swift */,
 				4BA9B3F41E91B043003D352E /* Current.swift */,
 				4B0DDE141F79C649009307D5 /* ImageCache.swift */,
-				4B5783AE1F9033BE0072C204 /* FirebaseConstants.swift */,
 			);
 			path = Global;
 			sourceTree = "<group>";
@@ -556,7 +553,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		34A7314F190E8126F182500E /* [CP] Copy Pods Resources */ = {
@@ -589,7 +586,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		4B5783EE1F9035B80072C204 /* [CP] Embed Pods Frameworks */ = {
@@ -760,7 +757,6 @@
 				4B13DE4E1E8AFB850060D29A /* StreamsTableViewController.swift in Sources */,
 				F25133C01F6E7C8F002745C7 /* StarredTableViewController.swift in Sources */,
 				4B0DDE231F7B18B5009307D5 /* PlaylistTableViewCell.swift in Sources */,
-				4B5783AF1F9033BE0072C204 /* FirebaseConstants.swift in Sources */,
 				4BCFA0231F6DBAA600E49516 /* MembersTableViewController.swift in Sources */,
 				4BCFA0281F70515D00E49516 /* StreamsDataSource.swift in Sources */,
 				4BCFA0301F70532700E49516 /* StarredUserCell.swift in Sources */,
