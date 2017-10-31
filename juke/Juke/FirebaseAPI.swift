@@ -270,12 +270,12 @@ class FirebaseAPI {
         guard let stream = Current.stream else { return }
         if Current.isHost() {
             self.ref.child("/streams/\(stream.streamID)/isPlaying").onDisconnectSetValue(false)
+            print("added listener for stream: ", stream.streamID)
         }
     }
     
     private static func queueSongHelper(spotifySong: Models.SpotifySong) {
         guard let stream = Current.stream, let song = Models.FirebaseSong(song: spotifySong) else { return }
-
         self.ref.child("/streams/\(stream.streamID)/song").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
                 // if there is already a top song right now (queue not empty), write it to the song queue
@@ -495,5 +495,10 @@ class FirebaseAPI {
         Alamofire.request(Constants.kSendNotificationsURL, method: .post, parameters: params, encoding: JSONEncoding.default).responseJSON { response in
             print("response came back", response)
         }
+    }
+    
+    public static func updateTimestamp(stream: Models.FirebaseStream) {
+        print("**** updating timestamp")
+        self.ref.child("/streams/\(stream.streamID)/timestamp").setValue(NSDate().timeIntervalSince1970)
     }
 }

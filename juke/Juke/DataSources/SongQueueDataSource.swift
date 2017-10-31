@@ -72,6 +72,16 @@ class SongQueueDataSource: CustomDataSource {
     
     // comparator function used for sorting in super class
     override func comparator(first: CollectionItem, second: CollectionItem) -> Bool {
+        if first.song.upvoters.count != second.song.upvoters.count {
+            return first.song.upvoters.count > second.song.upvoters.count
+        }
+        // same # of votes. use timestamp to sort
+        if let time1 = first.song.timestamp, let time2 = second.song.timestamp {
+            return time1 < time2
+        }
+        
+        // user is running a version that doesn't have timestamps -- just resort to the
+        // vote count (this will be super weird for people running different versions...)
         return first.song.upvoters.count > second.song.upvoters.count
     }
     

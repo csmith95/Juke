@@ -26,6 +26,7 @@ class MySongsTableViewController: UITableViewController, IndicatorInfoProvider {
         super.viewDidLoad()
         loadSavedTracks()
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapRecognizer.cancelsTouchesInView = false
         self.tableView.addGestureRecognizer(tapRecognizer)
         NotificationCenter.default.addObserver(self, selector: #selector(self.libraryChanged), name: Notification.Name("libraryChanged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.execSearch), name: Notification.Name("MySongsSearchNotification"), object: nil)
@@ -85,7 +86,6 @@ class MySongsTableViewController: UITableViewController, IndicatorInfoProvider {
         }
         threadSafeReloadView()
     }
-    
     
     func libraryChanged(notification: Notification) {
         guard let dict = notification.object as? [String: Any?] else { return }

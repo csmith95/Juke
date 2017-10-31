@@ -15,12 +15,15 @@ import Firebase
 import FirebaseDatabaseUI
 import XLActionController
 import Presentr
+import NVActivityIndicatorView
 
 class MyStreamController: UITableViewController {
     
     // firebase vars
     let songsDataSource = SongQueueDataSource()
     
+    @IBOutlet var connectingActivityIndicator: NVActivityIndicatorView!
+    @IBOutlet var connectingStackView: UIStackView!
     @IBOutlet var pausedLabel: UILabel!
     @IBOutlet var addToSpotifyLibButton: UIButton!
     @IBOutlet var numContributorsButton: UIButton!
@@ -89,10 +92,22 @@ class MyStreamController: UITableViewController {
         Current.listenSelected = status
         if Current.isHost() {
             Current.stream?.isPlaying = status
-            FirebaseAPI.setPlayStatus(status: status)   // update db
         } else {
             FirebaseAPI.listenForSongProgress(shouldUnlockProgress: false) // fetch real song progress to maintain sync
         }
+        
+        if !connectingStackView.isHidden && !status {
+            coverArtImage.alpha = 1.0
+            connectingStackView.isHidden = true
+            connectingActivityIndicator.stopAnimating()
+        }
+        
+        if Current.stream?.isPlaying ?? false && status {
+            coverArtImage.alpha = 0.3
+            connectingStackView.isHidden = false
+            connectingActivityIndicator.startAnimating()
+        }
+        
         jamsPlayer.resync() // trigger resync
         handleAutomaticProgressSlider()
     }
@@ -115,7 +130,25 @@ class MyStreamController: UITableViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.reloadSongs), name: Notification.Name("reloadSongs"), object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.dismissConnectingView), name: Notification.Name("songStartedPlaying"), object: nil)
+        
         progressSlider.setThumbImage(UIImage(named: "slider_thumb.png"), for: .normal)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(MyStreamController.titleTapped))
+        streamNameLabel.addGestureRecognizer(tap)
+    }
+    
+    func dismissConnectingView() {
+        connectingStackView.isHidden = true
+        connectingActivityIndicator.stopAnimating()
+        if pausedLabel.isHidden {
+            coverArtImage.alpha = 1.0
+        }
+    }
+    
+    func titleTapped() {
+        if Current.isHost() {
+            showNameStreamModal()
+        }
     }
     
     func reloadSongs() {
