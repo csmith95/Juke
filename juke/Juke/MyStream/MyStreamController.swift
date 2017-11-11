@@ -118,6 +118,13 @@ class MyStreamController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // solve clipping issue
+        self.edgesForExtendedLayout = []
+        //self.edgesForExtendedLayout = UIRectEdgeNone
+        self.extendedLayoutIncludesOpaqueBars = false
+        self.automaticallyAdjustsScrollViewInsets = false
+        
         tableView.delegate = songsDataSource
         tableView.dataSource = songsDataSource
         // first 2 respond to spotify events
