@@ -27,7 +27,7 @@ class MembersTableViewController: UIViewController {
     
     override func viewDidLoad() {
         // track views of this page
-        Answers.logContentView(withName: "Stream Members Page", contentType: "Stream Members List", contentId: "\(String(describing: Current.user?.spotifyID))memberspage")
+        Answers.logContentView(withName: "Stream Members Page", contentType: "Stream Members List", contentId: "\(Current.user?.spotifyID ?? "noname"))|memberspage")
     }
     
     // set status bar text to white

@@ -33,7 +33,7 @@ class MySongsTableViewController: UITableViewController, IndicatorInfoProvider {
         NotificationCenter.default.addObserver(self, selector: #selector(self.execSearch), name: Notification.Name("MySongsSearchNotification"), object: nil)
         
         // track views of this page
-        Answers.logContentView(withName: "Saved Songs Page", contentType: "Saved Songs List", contentId: "\(String(describing: Current.user?.spotifyID))|savedSongs")
+        Answers.logContentView(withName: "Saved Songs Page", contentType: "Saved Songs List", contentId: "\(Current.user?.spotifyID ?? "noname"))|savedSongs")
     }
     
     override func viewDidDisappear(_ animated: Bool) {

@@ -44,7 +44,7 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
         NotificationCenter.default.addObserver(forName: Notification.Name("allStreamsSearchNotification"), object: nil, queue: nil, using: execSearchQuery)
         checkNoStreams()
         // Track views of this page
-        Answers.logContentView(withName: "All Streams Page", contentType: "All Streams List", contentId: "\(String(describing: Current.user?.spotifyID))AllStreams")
+        Answers.logContentView(withName: "All Streams Page", contentType: "All Streams List", contentId: "\(Current.user?.spotifyID ?? "noname"))|AllStreams")
 
     }
     

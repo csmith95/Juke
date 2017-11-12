@@ -144,7 +144,7 @@ class MyStreamController: UITableViewController {
         streamNameLabel.addGestureRecognizer(tap)
         
         // Track views of this page
-        Answers.logContentView(withName: "My Stream Page", contentType: "myStream", contentId: "\(String(describing: Current.user?.spotifyID))streaming")
+        Answers.logContentView(withName: "My Stream Page", contentType: "myStream", contentId: "\(Current.user?.spotifyID ?? "noname"))|streaming")
     }
     
     func dismissConnectingView() {

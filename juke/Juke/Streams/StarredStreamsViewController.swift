@@ -42,7 +42,7 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
         NotificationCenter.default.addObserver(self, selector: #selector(self.newStreamSelected), name: Notification.Name("newStreamSelected"), object: nil)
         NotificationCenter.default.addObserver(forName: Notification.Name("starredStreamsSearchNotification"), object: nil, queue: nil, using: execSearchQuery)
         // Track views of this page
-        Answers.logContentView(withName: "Starred Streams Page", contentType: "Starred Streams List", contentId: "\(String(describing: Current.user?.spotifyID))StarredStreams")
+        Answers.logContentView(withName: "Starred Streams Page", contentType: "Starred Streams List", contentId: "\(Current.user?.spotifyID ?? "noname"))|StarredStreams")
     }
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {

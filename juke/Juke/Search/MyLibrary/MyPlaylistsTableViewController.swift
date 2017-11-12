@@ -28,7 +28,7 @@ class MyPlaylistsTableViewController: UITableViewController, IndicatorInfoProvid
 //        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
 //        self.tableView.addGestureRecognizer(tapRecognizer)
         // track views of this page
-        Answers.logContentView(withName: "Saved Playlists Page", contentType: "Saved Playlists", contentId: "\(String(describing: Current.user?.spotifyID))|savedPlaylists")
+        Answers.logContentView(withName: "Saved Playlists Page", contentType: "Saved Playlists", contentId: "\(Current.user?.spotifyID ?? "noname"))|savedPlaylists")
         
     }
     

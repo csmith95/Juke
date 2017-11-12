@@ -27,7 +27,7 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
         
         // track views of this page
-        Answers.logContentView(withName: "All Users Page", contentType: "All Users list", contentId: "\(String(describing: Current.user?.spotifyID))|allUserViews")
+        Answers.logContentView(withName: "All Users Page", contentType: "All Users list", contentId: "\(Current.user?.spotifyID ?? "noname"))|allUserViews")
     }
     
     override func viewWillAppear(_ animated: Bool) {

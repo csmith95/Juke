@@ -29,7 +29,7 @@ class SpotifySearchTableViewController: UIViewController {
         checkEmptyState()
         
         // track views of this page
-        Answers.logContentView(withName: "Search Page", contentType: "Search Page", contentId: "\(String(describing: Current.user?.spotifyID))|searchpageview")
+        Answers.logContentView(withName: "Search Page", contentType: "Search Page", contentId: "\(Current.user?.spotifyID ?? "noname"))|searchpageview")
     }
     
     override func viewWillDisappear(_ animated: Bool) {

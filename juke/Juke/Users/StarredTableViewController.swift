@@ -27,7 +27,7 @@ class StarredTableViewController: UIViewController, UISearchBarDelegate {
         checkEmptyState()
         
         // track views of this page
-        Answers.logContentView(withName: "Starred Users Page", contentType: "Starred Users list", contentId: "\(String(describing: Current.user?.spotifyID))|starredUserViews")
+        Answers.logContentView(withName: "Starred Users Page", contentType: "Starred Users list", contentId: "\(Current.user?.spotifyID ?? "noname"))|starredUserViews")
         
     }
     
