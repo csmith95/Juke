@@ -37,9 +37,12 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
         streamsTableView.dataSource = streamsDataSource
         streamsTableView.delegate = streamsDataSource
         
+        print("Filtered collection count", streamsDataSource.filteredCollection.count)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStreams), name: Notification.Name("reloadStreams"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.newStreamSelected), name: Notification.Name("newStreamSelected"), object: nil)
         NotificationCenter.default.addObserver(forName: Notification.Name("allStreamsSearchNotification"), object: nil, queue: nil, using: execSearchQuery)
+        checkNoStreams()
     }
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
@@ -69,6 +72,7 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
         DispatchQueue.main.async {
             objc_sync_enter(self.streamsTableView.dataSource)
             self.streamsTableView.reloadData()
+            self.checkNoStreams()
             objc_sync_exit(self.streamsTableView.dataSource)
         }
     }
@@ -124,8 +128,8 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
     
     func checkNoStreams() {
         
-        let count = self.streamsTableView.numberOfRows(inSection: 0)
-        if (count == 0) {
+        //let count = self.streamsTableView.numberOfRows(inSection: 0)
+        if streamsTableView.visibleCells.isEmpty {
             let emptyStateLabel = UILabel(frame: self.streamsTableView.frame)
             emptyStateLabel.text = "The whole world has gone quiet... \n \n Start adding some songs to your own stream!"
             emptyStateLabel.textColor = UIColor.white
@@ -135,7 +139,7 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
         } else {
             self.streamsTableView.backgroundView = nil
         }
-        print("count in checkno is", count)
+        //print("tableView visible cells count", tableView.visibleCells.count)
     }
     
     
