@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Crashlytics
 
 class StarredTableViewController: UIViewController, UISearchBarDelegate {
 
@@ -24,6 +25,9 @@ class StarredTableViewController: UIViewController, UISearchBarDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStarredUsers), name: Notification.Name("reloadStarredUsers"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
         checkEmptyState()
+        
+        // track views of this page
+        Answers.logContentView(withName: "Starred Users Page", contentType: "Starred Users list", contentId: "\(Current.user?.spotifyID ?? "noname"))|starredUserViews")
         
     }
     
