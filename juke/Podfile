@@ -5,6 +5,7 @@ workspace 'Juke'
 use_frameworks!
 
 def all_pods
+    pod 'NVActivityIndicatorView'
     pod 'Alamofire', '~> 4.5'
     pod 'AlamofireImage', '~> 3.1'
     pod 'Unbox'

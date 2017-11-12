@@ -35,7 +35,20 @@ class SearchCell: UITableViewCell {
         }
     }
     
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: false)
+        if selected {
+            handlePressed()
+        }
+        super.setSelected(false, animated: false)
+    }
+    
     @IBAction func addButtonPressed(_ sender: Any) {
+        handlePressed()
+    }
+    
+    private func handlePressed() {
+        if SongKeeper.addedSongs.contains(self.song.spotifyID) { return }
         FirebaseAPI.queueSong(spotifySong: self.song)
         HUD.flash(.labeledSuccess(title: nil, subtitle: "Added \(self.song.songName) to your stream"), delay: 1.0)
         SongKeeper.addedSongs.insert(self.song.spotifyID)

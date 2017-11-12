@@ -15,12 +15,15 @@ import Firebase
 import FirebaseDatabaseUI
 import XLActionController
 import Presentr
+import NVActivityIndicatorView
 
 class MyStreamController: UITableViewController {
     
     // firebase vars
     let songsDataSource = SongQueueDataSource()
     
+    @IBOutlet var connectingActivityIndicator: NVActivityIndicatorView!
+    @IBOutlet var connectingStackView: UIStackView!
     @IBOutlet var pausedLabel: UILabel!
     @IBOutlet var addToSpotifyLibButton: UIButton!
     @IBOutlet var numContributorsButton: UIButton!
@@ -87,14 +90,26 @@ class MyStreamController: UITableViewController {
         let status = !listenButton.isSelected
         listenButton.isSelected = status
         Current.listenSelected = status
-        handleAutomaticProgressSlider()
         if Current.isHost() {
             Current.stream?.isPlaying = status
-            FirebaseAPI.setPlayStatus(status: status)   // update db
         } else {
-            FirebaseAPI.listenForSongProgress() // fetch real song progress to maintain sync
+            FirebaseAPI.listenForSongProgress(shouldUnlockProgress: false) // fetch real song progress to maintain sync
         }
-        jamsPlayer.resync()
+        
+        if !connectingStackView.isHidden && !status {
+            coverArtImage.alpha = 1.0
+            connectingStackView.isHidden = true
+            connectingActivityIndicator.stopAnimating()
+        }
+        
+        if Current.stream?.isPlaying ?? false && status {
+            coverArtImage.alpha = 0.3
+            connectingStackView.isHidden = false
+            connectingActivityIndicator.startAnimating()
+        }
+        
+        jamsPlayer.resync() // trigger resync
+        handleAutomaticProgressSlider()
     }
     
     @IBAction func skipSong(_ sender: Any) {
@@ -103,6 +118,13 @@ class MyStreamController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // solve clipping issue
+        self.edgesForExtendedLayout = []
+        //self.edgesForExtendedLayout = UIRectEdgeNone
+        self.extendedLayoutIncludesOpaqueBars = false
+        self.automaticallyAdjustsScrollViewInsets = false
+        
         tableView.delegate = songsDataSource
         tableView.dataSource = songsDataSource
         // first 2 respond to spotify events
@@ -115,7 +137,25 @@ class MyStreamController: UITableViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.reloadSongs), name: Notification.Name("reloadSongs"), object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.dismissConnectingView), name: Notification.Name("songStartedPlaying"), object: nil)
+        
         progressSlider.setThumbImage(UIImage(named: "slider_thumb.png"), for: .normal)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(MyStreamController.titleTapped))
+        streamNameLabel.addGestureRecognizer(tap)
+    }
+    
+    func dismissConnectingView() {
+        connectingStackView.isHidden = true
+        connectingActivityIndicator.stopAnimating()
+        if pausedLabel.isHidden {
+            coverArtImage.alpha = 1.0
+        }
+    }
+    
+    func titleTapped() {
+        if Current.isHost() {
+            showNameStreamModal()
+        }
     }
     
     func reloadSongs() {
@@ -128,7 +168,7 @@ class MyStreamController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        FirebaseAPI.listenForSongProgress() // will update if progress difference > 4 seconds
+        FirebaseAPI.listenForSongProgress(shouldUnlockProgress: false) // will update if progress difference > 4 seconds
         songsDataSource.setObservedStream()
         self.setUpControlButtons()
         setUI()
@@ -200,7 +240,6 @@ class MyStreamController: UITableViewController {
     }
     
     func songPositionChanged(notification: NSNotification) {
-        if FirebaseAPI.progressLocked { return }
         if let data = notification.object as? NSDictionary {
             let progress = data["progress"] as! Double
             self.progressSliderValue = progress
@@ -328,6 +367,7 @@ class MyStreamController: UITableViewController {
                 coverArtImage.alpha = 1.0
                 pausedLabel.isHidden = true
             }
+            jamsPlayer.resync()
         case .TopSongChanged:
             self.setUI()
         case .SetProgress:

@@ -21,6 +21,7 @@ class PlaylistTableViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapRecognizer.cancelsTouchesInView = false
         self.tableView.addGestureRecognizer(tapRecognizer)
     }
     
@@ -34,10 +35,12 @@ class PlaylistTableViewController: UIViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        // reset
+        super.viewDidDisappear(animated)
+        objc_sync_enter(self.allSongs)
+        defer { objc_sync_exit(self.allSongs) }
         allSongs.removeAll()
         displayedSongs.removeAll()
-        super.viewDidDisappear(animated)
+        SongKeeper.addedSongs.removeAll()
     }
 
     override func didReceiveMemoryWarning() {

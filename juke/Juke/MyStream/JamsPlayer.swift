@@ -25,7 +25,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         }
     
         willSet(newPosition) {
-            shouldResync = abs(newPosition - position_ms) >= 4000
+            shouldResync = ((newPosition == 0.0) || (abs(newPosition - position_ms) >= 4000))
         }
     }
     
@@ -55,12 +55,36 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         }
     }
     
-    func handleInterruption(notification: Notification) {
-        print("interrupted.")
+    func handleInterruption(_ notification: Notification) {
+        print("** received audio interruption")
+        guard let info = notification.userInfo,
+            let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
+            let type = AVAudioSessionInterruptionType(rawValue: typeValue) else {
+                return
+        }
+        
+        if type == .began {
+            // Interruption began, take appropriate actions (save state, update user interface)
+            if Current.isHost() {
+                print("pausing stream from handle interruption. check to see if SPT pause event also fires")
+                Current.stream?.isPlaying = false
+                FirebaseAPI.setPlayStatus(status: false)
+            }
+        } else if type == .ended {
+            guard let optionsValue =
+                info[AVAudioSessionInterruptionOptionKey] as? UInt else {
+                    return
+            }
+            let options = AVAudioSessionInterruptionOptions(rawValue: optionsValue)
+            if options.contains(.shouldResume) {
+                // Interruption Ended - playback should resume
+                print("resuming playback")
+                setPlayStatus(shouldPlay: true, topSong: Current.stream?.song)
+            }
+        }
     }
     
     public func login() {
-        // get/refresh token
         SessionManager.executeWithToken(callback: { (token) in
             self.authenticatePlayer()   // sign in
         })
@@ -81,8 +105,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceive event: SpPlaybackEvent) {
-        if !Current.isHost() { return } // listen to owner's phone -- otherwise double skip sometimes happens
-        if event == SPPlaybackNotifyTrackChanged {
+        if event == SPPlaybackNotifyTrackChanged && Current.isHost() {
             if audioStreaming.metadata == nil {
                 return
             }
@@ -96,6 +119,23 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
                 }
             }
         }
+        
+        if event == SPPlaybackNotifyPlay {
+            print("got play event")
+            if Current.isHost() {
+                Current.stream?.isPlaying = true
+                FirebaseAPI.setPlayStatus(status: true)
+            }
+            NotificationCenter.default.post(name: Notification.Name("songStartedPlaying"), object: nil)
+        }
+        
+        if event == SPPlaybackNotifyPause || event == SPPlaybackNotifyLostPermission {
+            print("got pause event")
+            if Current.isHost() {
+                Current.stream?.isPlaying = false
+                FirebaseAPI.setPlayStatus(status: false)
+            }
+        }
     }
     
     private func authenticatePlayer() {
@@ -106,6 +146,9 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePosition position: TimeInterval) {
         // signal MyStreamController so that it can update UISlider and update Firebase if host
+        objc_sync_enter(FirebaseAPI.progressLocked)
+        defer { objc_sync_exit(FirebaseAPI.progressLocked) }
+        if FirebaseAPI.progressLocked { return }
         position_ms = position * 1000
         let data: [String:Any] = ["progress": position_ms]
         NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
@@ -140,7 +183,6 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     
     func stopPlaying() {
         print("STOP")
-//        try? AVAudioSession.sharedInstance().setActive(false)
         player?.setIsPlaying(false, callback: { (err) in
             if let _ = err {
                 print("error in stopPlaying")

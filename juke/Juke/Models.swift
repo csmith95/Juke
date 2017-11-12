@@ -32,19 +32,23 @@ class Models {
         var memberSpotifyID: String?
         var upvoters: [String: Bool] = [:]
         var image: MPMediaItemArtwork?
+        var timestamp: Double?
         
         // formatted to be written directly to /streams/{streamID}/song/ or /songs/{streamID}/{key}/
         var firebaseDict: [String: Any] {
             var dict: [String: Any] = ["spotifyID": self.spotifyID, "songName":self.songName,
                     "artistName": self.artistName, "coverArtURL": self.coverArtURL,
                     "duration": self.duration,
-                    "upvoters": upvoters
+                    "upvoters": upvoters,
                     ]
             if let memberImageURL = self.memberImageURL {
                 dict["memberImageURL"] = memberImageURL
             }
             if let memberSpotifyID = self.memberSpotifyID {
                 dict["memberSpotifyID"] = memberSpotifyID
+            }
+            if let timestamp = self.timestamp {
+                dict["timestamp"] = timestamp
             }
             return dict
         }
@@ -66,6 +70,9 @@ class Models {
             self.memberSpotifyID = dict["memberSpotifyID"] as? String
             self.key = key
             self.upvoters = dict["upvoters"] as? [String: Bool] ?? [:]
+            if let timestamp = dict["timestamp"] as? Double {
+                self.timestamp = timestamp
+            }
         }
         
         init?(snapshot: DataSnapshot) {
@@ -88,6 +95,7 @@ class Models {
             self.memberImageURL = Current.user?.imageURL
             self.memberSpotifyID = Current.user?.spotifyID
             self.upvoters = [:]
+            self.timestamp = NSDate().timeIntervalSince1970
         }
     }
     
@@ -98,12 +106,14 @@ class Models {
         var host: FirebaseUser! = Current.user
         var members: [FirebaseUser] = []
         var title = ""
+        var timestamp: Double?
         
         // formatted to be written directly to the /streams/{streamID}/ path
         var firebaseDict: [String: Any] {
             var dict: [String: Any] = ["isPlaying": self.isPlaying,
                                        "song": NSNull(),
-                                       "title": self.title]
+                                       "title": self.title,
+                                       ]
             dict["host"] = [host.spotifyID: host.firebaseDict]
             var result: [String: Any] = [:]
             for member in members {
@@ -113,17 +123,20 @@ class Models {
             if let song = self.song {
                 dict["song"] = song.firebaseDict
             }
+            if let timestamp = self.timestamp {
+                dict["timestamp"] = timestamp
+            }
             return dict
         }
         
         init?(dict: [String: Any?]) {
             guard let streamID = dict["streamID"] as? String else { return nil }
             guard let isPlaying = dict["isPlaying"] as? Bool else { return nil }
-            let title = dict["title"] as? String ?? "Placeholder Title"
+            self.timestamp = dict["timestamp"] as? Double
+            self.title = dict["title"] as? String ?? "Stream Title"
 
             self.streamID = streamID
             self.isPlaying = isPlaying
-            self.title = title
             // jesus this is tedious
             guard let otherDict = dict["host"] as? [String: Any?] else { return nil }
             guard let spotifyID = otherDict.first?.key else { return nil }
@@ -159,8 +172,8 @@ class Models {
         init() {
             let streamID = ref.childByAutoId().key
             self.streamID = streamID
-            guard let user = Current.user else { return }
-            self.title = "\(user.username)'s Stream"
+            self.title = "\(Current.user!.username)'s Stream"
+            self.timestamp = NSDate().timeIntervalSince1970
         }
     }
     

@@ -37,9 +37,12 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
         streamsTableView.dataSource = streamsDataSource
         streamsTableView.delegate = streamsDataSource
         
+        print("Filtered collection count", streamsDataSource.filteredCollection.count)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStreams), name: Notification.Name("reloadStreams"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.newStreamSelected), name: Notification.Name("newStreamSelected"), object: nil)
         NotificationCenter.default.addObserver(forName: Notification.Name("allStreamsSearchNotification"), object: nil, queue: nil, using: execSearchQuery)
+        checkNoStreams()
     }
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
@@ -56,6 +59,7 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         streamsDataSource.listen()
+        checkNoStreams()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -68,6 +72,7 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
         DispatchQueue.main.async {
             objc_sync_enter(self.streamsTableView.dataSource)
             self.streamsTableView.reloadData()
+            self.checkNoStreams()
             objc_sync_exit(self.streamsTableView.dataSource)
         }
     }
@@ -120,6 +125,23 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
         presenter.presentationType = .alert
         customPresentViewController(presenter, viewController: controller, animated: true, completion: nil)
     }
+    
+    func checkNoStreams() {
+        
+        //let count = self.streamsTableView.numberOfRows(inSection: 0)
+        if streamsTableView.visibleCells.isEmpty {
+            let emptyStateLabel = UILabel(frame: self.streamsTableView.frame)
+            emptyStateLabel.text = "The whole world has gone quiet... \n \n Start adding some songs to your own stream!"
+            emptyStateLabel.textColor = UIColor.white
+            emptyStateLabel.textAlignment = .center
+            emptyStateLabel.numberOfLines = 0
+            self.streamsTableView.backgroundView = emptyStateLabel
+        } else {
+            self.streamsTableView.backgroundView = nil
+        }
+        //print("tableView visible cells count", tableView.visibleCells.count)
+    }
+    
     
     deinit {
         NotificationCenter.default.removeObserver(self)
