@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import Unbox
+import Crashlytics
 
 class SpotifySearchTableViewController: UIViewController {
     
@@ -26,6 +27,9 @@ class SpotifySearchTableViewController: UIViewController {
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         self.tableView.addGestureRecognizer(tapRecognizer)
         checkEmptyState()
+        
+        // track views of this page
+        Answers.logContentView(withName: "Search Page", contentType: "Search Page", contentId: "\(String(describing: Current.user?.spotifyID))|searchpageview")
     }
     
     override func viewWillDisappear(_ animated: Bool) {

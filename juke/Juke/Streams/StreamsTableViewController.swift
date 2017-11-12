@@ -43,6 +43,9 @@ class StreamsTableViewController: UITableViewController, UISearchBarDelegate, In
         NotificationCenter.default.addObserver(self, selector: #selector(self.newStreamSelected), name: Notification.Name("newStreamSelected"), object: nil)
         NotificationCenter.default.addObserver(forName: Notification.Name("allStreamsSearchNotification"), object: nil, queue: nil, using: execSearchQuery)
         checkNoStreams()
+        // Track views of this page
+        Answers.logContentView(withName: "All Streams Page", contentType: "All Streams List", contentId: "\(String(describing: Current.user?.spotifyID))AllStreams")
+
     }
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {

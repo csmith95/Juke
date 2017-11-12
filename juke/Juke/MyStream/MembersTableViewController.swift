@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Crashlytics
 
 class MembersTableViewController: UIViewController {
     
@@ -22,6 +23,11 @@ class MembersTableViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         unwindButton.setTitle(stream.title, for: .normal)
+    }
+    
+    override func viewDidLoad() {
+        // track views of this page
+        Answers.logContentView(withName: "Stream Members Page", contentType: "Stream Members List", contentId: "\(String(describing: Current.user?.spotifyID))memberspage")
     }
     
     // set status bar text to white

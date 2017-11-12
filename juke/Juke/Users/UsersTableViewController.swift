@@ -25,6 +25,9 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
         // setup notifications received from usersDataSource
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadAllUsers), name: Notification.Name("reloadAllUsers"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
+        
+        // track views of this page
+        Answers.logContentView(withName: "All Users Page", contentType: "All Users list", contentId: "\(String(describing: Current.user?.spotifyID))|allUserViews")
     }
     
     override func viewWillAppear(_ animated: Bool) {
