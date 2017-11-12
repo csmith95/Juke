@@ -25,6 +25,7 @@ class SpotifySearchTableViewController: UIViewController {
         super.viewDidLoad()
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         self.tableView.addGestureRecognizer(tapRecognizer)
+        checkEmptyState()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -38,6 +39,7 @@ class SpotifySearchTableViewController: UIViewController {
     func threadSafeReloadView() {
         objc_sync_enter(tableView)
         tableView.reloadData()
+        checkEmptyState()
         objc_sync_exit(tableView)
     }
     
@@ -161,5 +163,18 @@ extension SpotifySearchTableViewController: UITableViewDataSource, UITableViewDe
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let cell = cell as! SearchCell
         cell.populateCell(song: self.displayedResults[indexPath.row])
+    }
+    
+    func checkEmptyState() {
+        if tableView.visibleCells.isEmpty {
+            let emptyStateLabel = UILabel(frame: self.tableView.frame)
+            emptyStateLabel.text = "Search for songs on Spotify 😀"
+            emptyStateLabel.textColor = UIColor.white
+            emptyStateLabel.textAlignment = .center
+            emptyStateLabel.numberOfLines = 0
+            self.tableView.backgroundView = emptyStateLabel
+        } else {
+            self.tableView.backgroundView = nil
+        }
     }
 }
