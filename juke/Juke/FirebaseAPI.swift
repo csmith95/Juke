@@ -395,6 +395,11 @@ class FirebaseAPI {
         }
     }
     
+    public static func setOnboardTrue() {
+        guard let user = Current.user else { return }
+        self.ref.child("users/\(user.spotifyID)/onboard").setValue(true)
+    }
+    
     public static func loginUser(spotifyUser: Models.SpotifyUser, callback: @escaping ((_: Bool) -> Void)) {
         ref.child("users/\(spotifyUser.spotifyID)").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists() {
@@ -407,7 +412,7 @@ class FirebaseAPI {
                 // add user if user does not exist
                 var newUserDict: [String: Any?] = ["imageURL": spotifyUser.imageURL,
                                                    "tunedInto": nil,
-                                                   "online": true]
+                                                   "online": true, "onboard": false]
                 if let username = spotifyUser.username {
                     newUserDict["username"] = username
                 } else {
@@ -423,6 +428,7 @@ class FirebaseAPI {
             }
             
             // now that current user is set, try to fetch stream
+            print("CURR USER", Current.user)
             if let tunedInto = Current.user!.tunedInto {
                 self.ref.child("streams/\(tunedInto)").observeSingleEvent(of: .value, with : { (snapshot) in
                     if let stream = Models.FirebaseStream(snapshot: snapshot) {
