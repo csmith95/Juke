@@ -111,6 +111,10 @@ class MyStreamController: UITableViewController {
         jamsPlayer.resync() // trigger resync
         handleAutomaticProgressSlider()
     }
+
+    
+    
+    
     
     @IBAction func skipSong(_ sender: Any) {
         songFinished()

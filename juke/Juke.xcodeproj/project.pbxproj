@@ -116,6 +116,7 @@
 		F2B98C051F71B6A400BDECEC /* StarredStreamsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B98C041F71B6A400BDECEC /* StarredStreamsDataSource.swift */; };
 		F2B98C121F724C1700BDECEC /* StreamsPager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B98C111F724C1700BDECEC /* StreamsPager.swift */; };
 		F2BFC44D1FD0CD6400F531C0 /* OnboardingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BFC44C1FD0CD6400F531C0 /* OnboardingController.swift */; };
+		F2BFC4501FD12A6E00F531C0 /* OnboardingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BFC44C1FD0CD6400F531C0 /* OnboardingController.swift */; };
 		F2DB0B371EA14BA200A13E30 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DB0B361EA14BA200A13E30 /* SearchCell.swift */; };
 		F2E10C131F64EFE900E6723F /* UsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E10C121F64EFE900E6723F /* UsersTableViewController.swift */; };
 		F2E815581E90BBBC00404DDF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E815571E90BBBC00404DDF /* LoginViewController.swift */; };
@@ -819,6 +820,7 @@
 				4B5783C91F9035B80072C204 /* StreamsDataSource.swift in Sources */,
 				4B5783CA1F9035B80072C204 /* StarredUserCell.swift in Sources */,
 				4B5783CB1F9035B80072C204 /* LockScreenDelegate.swift in Sources */,
+				F2BFC4501FD12A6E00F531C0 /* OnboardingController.swift in Sources */,
 				4B5783CC1F9035B80072C204 /* MyStreamController.swift in Sources */,
 				4B5783CD1F9035B80072C204 /* MenuActionController.swift in Sources */,
 				4B5783CE1F9035B80072C204 /* FirebaseAPI.swift in Sources */,

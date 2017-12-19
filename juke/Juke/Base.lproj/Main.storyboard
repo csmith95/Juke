@@ -379,12 +379,14 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Onboarding 1" translatesAutoresizingMaskIntoConstraints="NO" id="i4R-eV-UFs">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sh9-JT-sgw">
-                                <rect key="frame" x="348" y="20" width="46" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sh9-JT-sgw">
+                                <rect key="frame" x="360" y="28" width="46" height="30"/>
                                 <state key="normal" title="Skip">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <segue destination="Wsq-F5-h4X" kind="show" id="Ho5-7b-FAd"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -393,6 +395,8 @@
                             <constraint firstItem="TMC-0w-KKZ" firstAttribute="top" secondItem="i4R-eV-UFs" secondAttribute="bottom" id="IiO-fJ-I7C"/>
                             <constraint firstItem="i4R-eV-UFs" firstAttribute="leading" secondItem="050-X8-fou" secondAttribute="leading" id="Irm-Ha-daZ"/>
                             <constraint firstAttribute="trailing" secondItem="i4R-eV-UFs" secondAttribute="trailing" id="Vu5-o4-Zvg"/>
+                            <constraint firstItem="i4R-eV-UFs" firstAttribute="top" secondItem="Sh9-JT-sgw" secondAttribute="bottom" constant="-58" id="bPs-rb-FLd"/>
+                            <constraint firstItem="Sh9-JT-sgw" firstAttribute="leading" secondItem="i4R-eV-UFs" secondAttribute="trailing" constant="-54" id="jUP-NU-ojN"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -415,12 +419,23 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Onboarding 2" translatesAutoresizingMaskIntoConstraints="NO" id="BcI-mM-Nya">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uuI-1W-T8h">
+                                <rect key="frame" x="360" y="28" width="46" height="30"/>
+                                <state key="normal" title="Skip">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="Wsq-F5-h4X" kind="show" id="1DQ-SR-Xvx"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="WKu-Ky-aYG" firstAttribute="top" secondItem="BcI-mM-Nya" secondAttribute="bottom" id="BEH-8X-7yC"/>
                             <constraint firstItem="BcI-mM-Nya" firstAttribute="top" secondItem="rNh-Zi-BEe" secondAttribute="top" id="bFM-BH-E6X"/>
                             <constraint firstAttribute="trailing" secondItem="BcI-mM-Nya" secondAttribute="trailing" id="e6q-QJ-are"/>
+                            <constraint firstItem="BcI-mM-Nya" firstAttribute="top" secondItem="uuI-1W-T8h" secondAttribute="bottom" constant="-58" id="epg-gt-EIe"/>
+                            <constraint firstItem="uuI-1W-T8h" firstAttribute="leading" secondItem="BcI-mM-Nya" secondAttribute="trailing" constant="-54" id="qbo-UP-goR"/>
                             <constraint firstItem="BcI-mM-Nya" firstAttribute="leading" secondItem="rNh-Zi-BEe" secondAttribute="leading" id="voh-Ig-kl4"/>
                         </constraints>
                     </view>
@@ -444,11 +459,22 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Onboarding 3" translatesAutoresizingMaskIntoConstraints="NO" id="a07-og-pU1">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gXc-ra-vaO">
+                                <rect key="frame" x="360" y="28" width="30" height="30"/>
+                                <state key="normal" title="Skip">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="Wsq-F5-h4X" kind="show" id="HzC-0n-8kH"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="a07-og-pU1" firstAttribute="top" secondItem="gXc-ra-vaO" secondAttribute="bottom" constant="-58" id="3ME-Kq-5cQ"/>
                             <constraint firstItem="a07-og-pU1" firstAttribute="leading" secondItem="4jr-4I-vyw" secondAttribute="leading" id="Pew-A5-385"/>
                             <constraint firstItem="L2j-gz-tiU" firstAttribute="top" secondItem="a07-og-pU1" secondAttribute="bottom" id="Qme-PO-Yyk"/>
+                            <constraint firstItem="gXc-ra-vaO" firstAttribute="leading" secondItem="a07-og-pU1" secondAttribute="trailing" constant="-54" id="gsp-yp-UX9"/>
                             <constraint firstItem="a07-og-pU1" firstAttribute="top" secondItem="4jr-4I-vyw" secondAttribute="top" id="jYS-wh-hD8"/>
                             <constraint firstAttribute="trailing" secondItem="a07-og-pU1" secondAttribute="trailing" id="tZG-j7-tJ9"/>
                         </constraints>
@@ -473,17 +499,30 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Onboarding 4" translatesAutoresizingMaskIntoConstraints="NO" id="JQG-X8-dDj">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3OW-ca-Lcp">
+                                <rect key="frame" x="360" y="28" width="30" height="30"/>
+                                <state key="normal" title="Skip">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="skipTutorial:" destination="j7o-CO-624" eventType="touchUpInside" id="Ex6-qd-2zd"/>
+                                    <segue destination="Wsq-F5-h4X" kind="show" id="Mxp-Bc-Lfk"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="3OW-ca-Lcp" firstAttribute="leading" secondItem="JQG-X8-dDj" secondAttribute="trailing" constant="-54" id="36I-pY-Xpn"/>
                             <constraint firstAttribute="trailing" secondItem="JQG-X8-dDj" secondAttribute="trailing" id="MTd-b2-GGT"/>
                             <constraint firstItem="JQG-X8-dDj" firstAttribute="top" secondItem="LQs-Re-s9M" secondAttribute="top" id="UaU-vc-ngb"/>
                             <constraint firstItem="JQG-X8-dDj" firstAttribute="leading" secondItem="LQs-Re-s9M" secondAttribute="leading" id="bjP-4s-mjg"/>
                             <constraint firstItem="H3C-Fm-WKl" firstAttribute="top" secondItem="JQG-X8-dDj" secondAttribute="bottom" id="lgD-9v-AEb"/>
+                            <constraint firstItem="JQG-X8-dDj" firstAttribute="top" secondItem="3OW-ca-Lcp" secondAttribute="bottom" constant="-58" id="rh0-PZ-Oli"/>
                         </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="257-Dm-dWT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="j7o-CO-624" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="902.89855072463774" y="3842.934782608696"/>
         </scene>
@@ -502,11 +541,23 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Onboarding 5" translatesAutoresizingMaskIntoConstraints="NO" id="Z7R-hN-1rh">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IAh-vn-jig">
+                                <rect key="frame" x="360" y="28" width="30" height="30"/>
+                                <state key="normal" title="Skip">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="skipTutorial:" destination="vWV-T9-Jkr" eventType="touchUpInside" id="Bce-J6-MOj"/>
+                                    <segue destination="Wsq-F5-h4X" kind="show" id="RHj-Xi-jqH"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="UUE-QR-yXo" firstAttribute="top" secondItem="Z7R-hN-1rh" secondAttribute="bottom" id="3h8-QP-atB"/>
                             <constraint firstItem="Z7R-hN-1rh" firstAttribute="leading" secondItem="h8N-zT-pu7" secondAttribute="leading" id="6oE-66-tem"/>
+                            <constraint firstItem="IAh-vn-jig" firstAttribute="leading" secondItem="Z7R-hN-1rh" secondAttribute="trailing" constant="-54" id="FYt-OW-o4V"/>
+                            <constraint firstItem="Z7R-hN-1rh" firstAttribute="top" secondItem="IAh-vn-jig" secondAttribute="bottom" constant="-58" id="XUL-iN-S9Y"/>
                             <constraint firstItem="Z7R-hN-1rh" firstAttribute="top" secondItem="h8N-zT-pu7" secondAttribute="top" id="edi-IL-w46"/>
                             <constraint firstAttribute="trailing" secondItem="Z7R-hN-1rh" secondAttribute="trailing" id="s3j-le-mQb"/>
                         </constraints>
@@ -531,12 +582,23 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Onboarding 6" translatesAutoresizingMaskIntoConstraints="NO" id="pu5-uZ-dq0">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wbn-0H-iSX">
+                                <rect key="frame" x="360" y="28" width="37" height="30"/>
+                                <state key="normal" title="Done">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="Wsq-F5-h4X" kind="show" id="F1S-UF-eyu"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="GtM-J1-ZFZ" firstAttribute="top" secondItem="pu5-uZ-dq0" secondAttribute="bottom" id="Fw9-Dc-ldR"/>
+                            <constraint firstItem="Wbn-0H-iSX" firstAttribute="leading" secondItem="pu5-uZ-dq0" secondAttribute="trailing" constant="-54" id="PP3-YN-pTB"/>
                             <constraint firstItem="pu5-uZ-dq0" firstAttribute="top" secondItem="kbx-jZ-O9a" secondAttribute="top" id="Pee-qd-Gbi"/>
                             <constraint firstAttribute="trailing" secondItem="pu5-uZ-dq0" secondAttribute="trailing" id="ZRe-i7-8Tg"/>
+                            <constraint firstItem="pu5-uZ-dq0" firstAttribute="top" secondItem="Wbn-0H-iSX" secondAttribute="bottom" constant="-58" id="dB6-Hu-zJO"/>
                             <constraint firstItem="pu5-uZ-dq0" firstAttribute="leading" secondItem="kbx-jZ-O9a" secondAttribute="leading" id="glW-Ob-p8h"/>
                         </constraints>
                     </view>
@@ -2482,6 +2544,7 @@
         <image name="upvote-carat-white" width="11" height="7"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="dEN-pM-yCw"/>
+        <segue reference="JxZ-Hy-tRA"/>
+        <segue reference="F1S-UF-eyu"/>
     </inferredMetricsTieBreakers>
 </document>

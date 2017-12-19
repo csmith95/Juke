@@ -39,6 +39,7 @@ class OnboardingController: UIPageViewController {
         }
         
         configurePageControl()
+        FirebaseAPI.setOnboardTrue()
     }
     
     func configurePageControl() {
@@ -85,19 +86,6 @@ extension OnboardingController: UIPageViewControllerDataSource
         let pageContentViewController = pageViewController.viewControllers![0]
         self.pageControl.currentPage = pages.index(of: pageContentViewController)!
     }
-    
-//    func presentationCountForPageViewController(pageViewController: UIPageViewController) -> Int {
-//        return pages.count
-//    }
-//
-//    func presentationIndexForPageViewController(pageViewController: UIPageViewController) -> Int {
-//        guard let firstViewController = viewControllers?.first,
-//            let firstViewControllerIndex = pages.index(of: firstViewController) else {
-//                return 0
-//        }
-//
-//        return firstViewControllerIndex
-//    }
 }
 
 extension OnboardingController: UIPageViewControllerDelegate { }
