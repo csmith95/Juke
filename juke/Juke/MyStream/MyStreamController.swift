@@ -111,6 +111,10 @@ class MyStreamController: UITableViewController {
         jamsPlayer.resync() // trigger resync
         handleAutomaticProgressSlider()
     }
+
+    
+    
+    
     
     @IBAction func skipSong(_ sender: Any) {
         songFinished()
@@ -142,6 +146,9 @@ class MyStreamController: UITableViewController {
         progressSlider.setThumbImage(UIImage(named: "slider_thumb.png"), for: .normal)
         let tap = UITapGestureRecognizer(target: self, action: #selector(MyStreamController.titleTapped))
         streamNameLabel.addGestureRecognizer(tap)
+        
+        // Track views of this page
+        Answers.logContentView(withName: "My Stream Page", contentType: "myStream", contentId: "\(Current.user?.spotifyID ?? "noname"))|streaming")
     }
     
     func dismissConnectingView() {

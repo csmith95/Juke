@@ -10,6 +10,7 @@ import UIKit
 import XLPagerTabStrip
 import Alamofire
 import Unbox
+import Crashlytics
 
 class MySongsTableViewController: UITableViewController, IndicatorInfoProvider {
 
@@ -30,6 +31,9 @@ class MySongsTableViewController: UITableViewController, IndicatorInfoProvider {
         self.tableView.addGestureRecognizer(tapRecognizer)
         NotificationCenter.default.addObserver(self, selector: #selector(self.libraryChanged), name: Notification.Name("libraryChanged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.execSearch), name: Notification.Name("MySongsSearchNotification"), object: nil)
+        
+        // track views of this page
+        Answers.logContentView(withName: "Saved Songs Page", contentType: "Saved Songs List", contentId: "\(Current.user?.spotifyID ?? "noname"))|savedSongs")
     }
     
     override func viewDidDisappear(_ animated: Bool) {

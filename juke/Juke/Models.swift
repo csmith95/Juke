@@ -184,6 +184,7 @@ class Models {
         var imageURL: String?
         var online: Bool
         var fcmToken: String?
+        var onboard: Bool?
         var hashValue: Int {
             return self.spotifyID.hashValue
         }
@@ -196,6 +197,7 @@ class Models {
             if let tunedInto = tunedInto { dict["tunedInto"] = tunedInto }
             if let imageURL = imageURL { dict["imageURL"] = imageURL }
             if let fcmToken = fcmToken {dict["fcmToken"] = fcmToken }
+            if let onboard = onboard {dict["onboard"] = onboard }
             return dict
         }
         
@@ -207,6 +209,7 @@ class Models {
             guard let spotifyID = dict["spotifyID"] as? String else { return nil }
             guard let username = dict["username"] as? String else { return nil }
             guard let online = dict["online"] as? Bool else { return nil }
+            //guard let onboard = dict["onboard"] as? Bool else { return nil }
             
             self.spotifyID = spotifyID
             self.tunedInto = dict["tunedInto"] as? String
@@ -214,6 +217,7 @@ class Models {
             self.imageURL = dict["imageURL"] as? String
             self.online = online
             self.fcmToken = dict["fcmToken"] as? String
+            self.onboard = dict["onboard"] as? Bool
         }
         
         init?(snapshot: DataSnapshot) {

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Crashlytics
 
 class EmptyStreamViewController: UIViewController {
 
@@ -18,6 +19,7 @@ class EmptyStreamViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(self.streamDeleted), name: Notification.Name("streamDeleted"), object: nil)
+        Answers.logContentView(withName: "Empty Stream Page", contentType: "Empty Stream", contentId: "\(Current.user?.spotifyID ?? "noname"))|emptyStream")
     }
     
     override func viewWillAppear(_ animated: Bool) {

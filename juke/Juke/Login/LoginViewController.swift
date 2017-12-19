@@ -14,6 +14,8 @@ import Crashlytics
 
 class LoginViewController: UIViewController {
 
+    @IBOutlet weak var skipTutorialButton: UIButton!
+    
     @IBOutlet weak var loginButton: UIButton!
     let spotifyLoginController: SpotifyLoginController = SpotifyLoginController()
     let lockScreenDelegate = LockScreenDelegate()
@@ -80,8 +82,15 @@ class LoginViewController: UIViewController {
                             if success {
                                 self.logUserToCrashlytics()
                                 JamsPlayer.shared.login()   // session has been set, so set up audio player
+                                
+                                // dispatch onboarding seque
                                 DispatchQueue.main.async {
-                                    self.performSegue(withIdentifier: "loginSegue", sender: nil)
+                                    print("CURRUSER", Current.user)
+                                    if Current.user?.onboard == true {
+                                        self.performSegue(withIdentifier: "loginSegue", sender: nil)
+                                    } else {
+                                        self.performSegue(withIdentifier: "onBoardSegue", sender: nil)
+                                    }
                                 }
                             } else {
                                 print("error logging in firebase user -- that's life in the city")
@@ -96,7 +105,9 @@ class LoginViewController: UIViewController {
             }
         }
     }
+    
 
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
