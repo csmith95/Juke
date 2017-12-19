@@ -22,6 +22,10 @@ class MyStreamController: UITableViewController {
     // firebase vars
     let songsDataSource = SongQueueDataSource()
     
+    
+    @IBOutlet weak var streamNameEditBtn: UIButton!
+    
+    
     @IBOutlet var connectingActivityIndicator: NVActivityIndicatorView!
     @IBOutlet var connectingStackView: UIStackView!
     @IBOutlet var pausedLabel: UILabel!
@@ -145,7 +149,9 @@ class MyStreamController: UITableViewController {
         
         progressSlider.setThumbImage(UIImage(named: "slider_thumb.png"), for: .normal)
         let tap = UITapGestureRecognizer(target: self, action: #selector(MyStreamController.titleTapped))
-        streamNameLabel.addGestureRecognizer(tap)
+        //streamNameLabel.addGestureRecognizer(tap)
+        streamNameEditBtn.addGestureRecognizer(tap)
+        
         
         // Track views of this page
         Answers.logContentView(withName: "My Stream Page", contentType: "myStream", contentId: "\(Current.user?.spotifyID ?? "noname"))|streaming")
@@ -164,6 +170,8 @@ class MyStreamController: UITableViewController {
             showNameStreamModal()
         }
     }
+    
+    
     
     func reloadSongs() {
         DispatchQueue.main.async {

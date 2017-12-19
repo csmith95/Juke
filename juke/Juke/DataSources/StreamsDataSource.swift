@@ -56,9 +56,9 @@ class StreamsDataSource: CustomDataSource {
     override func shouldInclude(item: CollectionItem) -> Bool {
         // add if you are starred by the current user
         if item.stream.song == nil { return false }
-        if let currentStream = Current.stream {
-            if (item.stream.streamID == currentStream.streamID) { return false }
-        }
+//        if let currentStream = Current.stream {
+//            if (item.stream.streamID == currentStream.streamID) { return false }
+//        }
         
         if let timestamp = item.stream.timestamp {
             let hoursElapsed = (NSDate().timeIntervalSince1970 - timestamp) / kSecondsPerHour

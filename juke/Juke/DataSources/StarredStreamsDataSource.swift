@@ -11,6 +11,8 @@ import PKHUD
 
 class StarredStreamsDataSource: CustomDataSource {
     
+    private let kSecondsPerHour: Double = 3600
+    
     override var reloadEventName: String {
         get {
             return "reloadStarredStreams"
@@ -60,8 +62,13 @@ class StarredStreamsDataSource: CustomDataSource {
         
         
         // check if this is not the same as the stream you are currently in
-        if let currentStream = Current.stream {
-            if (item.stream.streamID == currentStream.streamID) { return false }
+//        if let currentStream = Current.stream {
+//            if (item.stream.streamID == currentStream.streamID) { return false }
+//        }
+        
+        if let timestamp = item.stream.timestamp {
+            let hoursElapsed = (NSDate().timeIntervalSince1970 - timestamp) / kSecondsPerHour
+            if hoursElapsed > 24 { return false }
         }
         
         if (query.isEmpty) {
