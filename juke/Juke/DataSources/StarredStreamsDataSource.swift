@@ -62,9 +62,9 @@ class StarredStreamsDataSource: CustomDataSource {
         
         
         // check if this is not the same as the stream you are currently in
-//        if let currentStream = Current.stream {
-//            if (item.stream.streamID == currentStream.streamID) { return false }
-//        }
+        if let currentStream = Current.stream {
+            if (item.stream.streamID == currentStream.streamID) { return true }
+        }
         
         if let timestamp = item.stream.timestamp {
             let hoursElapsed = (NSDate().timeIntervalSince1970 - timestamp) / kSecondsPerHour
