@@ -2541,12 +2541,12 @@
     </scenes>
     <resources>
         <image name="Add song button" width="19" height="19"/>
-        <image name="Onboarding 1" width="375" height="667"/>
-        <image name="Onboarding 2" width="375" height="667"/>
-        <image name="Onboarding 3" width="375" height="667"/>
-        <image name="Onboarding 4" width="375" height="667"/>
-        <image name="Onboarding 5" width="375" height="667"/>
-        <image name="Onboarding 6" width="375" height="667"/>
+        <image name="Onboarding 1" width="1125" height="2001"/>
+        <image name="Onboarding 2" width="1125" height="2001"/>
+        <image name="Onboarding 3" width="1125" height="2001"/>
+        <image name="Onboarding 4" width="1125" height="2001"/>
+        <image name="Onboarding 5" width="1125" height="2001"/>
+        <image name="Onboarding 6" width="1125" height="2001"/>
         <image name="Star" width="27" height="28"/>
         <image name="addStar" width="30" height="18"/>
         <image name="checkmark" width="166" height="166"/>
