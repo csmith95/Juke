@@ -154,7 +154,7 @@ class MyStreamController: UITableViewController {
         
         
         // Track views of this page
-        Answers.logContentView(withName: "My Stream Page", contentType: "myStream", contentId: "\(Current.user?.spotifyID ?? "noname"))|streaming")
+        Answers.logContentView(withName: "My Stream Page", contentType: "myStream", contentId: "\(Current.user?.spotifyID ?? "noname")|streaming")
     }
     
     func dismissConnectingView() {

@@ -91,7 +91,7 @@ DEPENDENCIES:
   - Alamofire (~> 4.5)
   - AlamofireImage (~> 3.1)
   - ChameleonFramework/Swift (from `https://github.com/ViccAlexander/Chameleon.git`)
-  - Crashlytics
+  - Crashlytics (~> 3.9)
   - ESTMusicIndicator
   - Fabric
   - Firebase/Auth
@@ -156,6 +156,6 @@ SPEC CHECKSUMS:
   XLActionController: 7e88fece1799e61357cb00b1cc67104d66ec4d2c
   XLPagerTabStrip: d1ab378af0923320ec0b5eab11d7b2f803d31261
 
-PODFILE CHECKSUM: 5db54091db9cf9c9e9703a0e0e1c449928bbcf42
+PODFILE CHECKSUM: 2d37a8da08b444efe081e7161d9762d22d29ca40
 
 COCOAPODS: 1.2.0
