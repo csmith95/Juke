@@ -287,6 +287,23 @@ class FirebaseAPI {
         }) {error in print(error.localizedDescription)}
     }
     
+    private static func queuePlaylistHelper(songs: [Models.SpotifySong]) {
+        guard let stream = Current.stream else { return }
+        for song in songs {
+            guard let song = Models.FirebaseSong(song: song) else { return }
+            self.ref.child("/streams/\(stream.streamID)/song").observeSingleEvent(of: .value, with: { (snapshot) in
+                if snapshot.exists() {
+                    // if there is already a top song right now (queue not empty), write it to the song queue
+                    self.ref.child("/songs/\(stream.streamID)/\(song.key)").setValue(song.firebaseDict)
+                } else {
+                    // no current song - set current song
+                    self.ref.child("/streams/\(stream.streamID)/song").setValue(song.firebaseDict)
+                }
+            }) {error in print(error.localizedDescription)}
+        }
+        
+    }
+    
     public static func queueSong(spotifySong: Models.SpotifySong) {
         if Current.stream == nil {
             FirebaseAPI.createNewStream(title: "\(Current.user!.username)'s Stream") {
@@ -295,6 +312,17 @@ class FirebaseAPI {
         } else {
             queueSongHelper(spotifySong: spotifySong)
         }
+    }
+    
+    public static func queuePlaylist(songs: [Models.SpotifySong]) {
+        if Current.stream == nil {
+            FirebaseAPI.createNewStream(title: "\(Current.user!.username)'s Stream") {
+                self.queuePlaylistHelper(songs: songs)
+            }
+        } else {
+            self.queuePlaylistHelper(songs: songs)
+        }
+        
     }
     
     // called from StreamsTableViewController when user selects a new stream to join
@@ -428,7 +456,6 @@ class FirebaseAPI {
             }
             
             // now that current user is set, try to fetch stream
-            print("CURR USER", Current.user)
             if let tunedInto = Current.user!.tunedInto {
                 self.ref.child("streams/\(tunedInto)").observeSingleEvent(of: .value, with : { (snapshot) in
                     if let stream = Models.FirebaseStream(snapshot: snapshot) {
