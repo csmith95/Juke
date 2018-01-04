@@ -414,6 +414,7 @@ class FirebaseAPI {
         guard let user = Current.user else { return }
         let fcmToken = Messaging.messaging().fcmToken
         Current.user!.fcmToken = fcmToken
+        print("called set token", fcmToken as Any)
         self.ref.child("users/\(user.spotifyID)/fcmToken").setValue(fcmToken)
         guard let stream = Current.stream else { return }
         if Current.isHost() {
@@ -421,6 +422,7 @@ class FirebaseAPI {
         } else {
             self.ref.child("streams/\(stream.streamID)/members/\(user.spotifyID)/fcmToken").setValue(fcmToken)
         }
+        
     }
     
     public static func setOnboardTrue() {
@@ -435,6 +437,7 @@ class FirebaseAPI {
                     userDict["spotifyID"] = spotifyUser.spotifyID
                     Current.user = Models.FirebaseUser(dict: userDict)
                     self.ref.child("users/\(spotifyUser.spotifyID)/online").setValue(true)
+                    setfcmtoken()
                 }
             } else {
                 // add user if user does not exist
@@ -448,6 +451,7 @@ class FirebaseAPI {
                 }
                 // set firebase messaging token
                 let token = Messaging.messaging().fcmToken
+                print("set fcmToken \(String(describing: token))")
                 newUserDict["fcmToken"] = token
                 // write to firebase DB
                 self.ref.child("users/\(spotifyUser.spotifyID)").setValue(newUserDict)
@@ -522,9 +526,10 @@ class FirebaseAPI {
         guard let user = Current.user else { return }
         let params: Parameters = [
             "sender": user.firebaseDict,
-            "receiver": receiver.firebaseDict
+            "receiver": receiver.spotifyID
         ]
         
+        print("called sendnotification with", receiver.fcmToken as Any)
         Alamofire.request(Constants.kSendNotificationsURL, method: .post, parameters: params, encoding: JSONEncoding.default).responseJSON { response in
             print("response came back", response)
         }
