@@ -21,11 +21,11 @@ class MyStreamController: UITableViewController {
     
     // firebase vars
     let songsDataSource = SongQueueDataSource()
-    
-    
+
+    @IBOutlet var emptyQueueLabel1: UILabel!
+    @IBOutlet var emptyQueueLabel2: UILabel!
+    @IBOutlet var emptyQueueLabel3: UILabel!
     @IBOutlet weak var streamNameEditBtn: UIButton!
-    
-    
     @IBOutlet var connectingActivityIndicator: NVActivityIndicatorView!
     @IBOutlet var connectingStackView: UIStackView!
     @IBOutlet var pausedLabel: UILabel!
@@ -116,10 +116,6 @@ class MyStreamController: UITableViewController {
         handleAutomaticProgressSlider()
     }
 
-    
-    
-    
-    
     @IBAction func skipSong(_ sender: Any) {
         songFinished()
     }
@@ -138,7 +134,6 @@ class MyStreamController: UITableViewController {
         // first 2 respond to spotify events
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songPositionChanged), name: Notification.Name("songPositionChanged"), object: nil)
-
         
         // resyncing
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.firebaseEventHandler), name: Notification.Name("firebaseEvent"), object: nil)
@@ -152,9 +147,15 @@ class MyStreamController: UITableViewController {
         //streamNameLabel.addGestureRecognizer(tap)
         streamNameEditBtn.addGestureRecognizer(tap)
         
-        
         // Track views of this page
         Answers.logContentView(withName: "My Stream Page", contentType: "myStream", contentId: "\(Current.user?.spotifyID ?? "noname")|streaming")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if Current.stream?.song == nil {
+            setEmptyStreamUI()
+        }
     }
     
     func dismissConnectingView() {
@@ -170,8 +171,6 @@ class MyStreamController: UITableViewController {
             showNameStreamModal()
         }
     }
-    
-    
     
     func reloadSongs() {
         DispatchQueue.main.async {
@@ -200,30 +199,39 @@ class MyStreamController: UITableViewController {
         numContributorsButton.setTitle(numMembersString, for: .normal)   // +1 for host
         streamNameLabel.text = stream.title
         if let song = stream.song {
+            self.emptyQueueLabel1.isHidden = true
+            self.emptyQueueLabel2.isHidden = true
+            self.emptyQueueLabel3.isHidden = true
+            
             self.coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil)
             self.coverArtImage.isHidden = false
             self.bgblurimg.af_setImage(withURL: URL(string:song.coverArtURL)!, placeholderImage: nil)
             self.currentSongLabel.text = song.songName
+            self.currentSongLabel.isHidden = false
             self.currentArtistLabel.text = song.artistName
+            self.currentArtistLabel.isHidden = false
             self.listenButton.isHidden = false
             if Current.isHost() {
                 self.listenButton.isSelected = stream.isPlaying
+                self.streamNameEditBtn.isHidden = false
             } else {
                 self.listenButton.isSelected = Current.listenSelected
+                self.streamNameEditBtn.isHidden = true
             }
             
             if !Current.isHost() && !stream.isPlaying {
-                coverArtImage.alpha = 0.3
-                pausedLabel.isHidden = false
+                self.coverArtImage.alpha = 0.3
+                self.pausedLabel.isHidden = false
             } else {
-                coverArtImage.alpha = 1.0
-                pausedLabel.isHidden = true
+                self.coverArtImage.alpha = 1.0
+                self.pausedLabel.isHidden = true
             }
             
             self.checkIfUserLibContainsCurrentSong(song: song)
-            progressSlider.isHidden = false
-            currTimeLabel.isHidden = false
-            progressSliderValue = jamsPlayer.position_ms
+            self.addToSpotifyLibButton.isHidden = false
+            self.progressSlider.isHidden = false
+            self.currTimeLabel.isHidden = false
+            self.progressSliderValue = jamsPlayer.position_ms
         } else {
             self.setEmptyStreamUI()
         }
@@ -303,8 +311,19 @@ class MyStreamController: UITableViewController {
     }
     
     private func setEmptyStreamUI() {
-        // notification handled in MyStreamRootViewController
-        NotificationCenter.default.post(name: Notification.Name("updateMyStreamView"), object: nil)
+        connectingActivityIndicator.isHidden = true
+        pausedLabel.isHidden = true
+        addToSpotifyLibButton.isHidden = true
+        currentArtistLabel.isHidden = true
+        currentSongLabel.isHidden = true
+        bgblurimg.image = UIImage(named: "juke_icon")
+        coverArtImage.isHidden = true
+        progressSlider.isHidden = true
+        currTimeLabel.isHidden = true
+        listenButton.isHidden = true
+        emptyQueueLabel1.isHidden = false
+        emptyQueueLabel2.isHidden = false
+        emptyQueueLabel3.isHidden = false
     }
     
     @IBAction func addToSpotifyLibButtonPressed(_ sender: Any) {
