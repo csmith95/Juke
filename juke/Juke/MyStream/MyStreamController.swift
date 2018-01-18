@@ -266,9 +266,6 @@ class MyStreamController: UITableViewController {
         if let data = notification.object as? NSDictionary {
             let progress = data["progress"] as! Double
             self.progressSliderValue = progress
-            if Current.isHost() {
-                FirebaseAPI.updateSongProgress(progress: progress)
-            }
         }
     }
     
@@ -311,7 +308,7 @@ class MyStreamController: UITableViewController {
     }
     
     private func setEmptyStreamUI() {
-        connectingActivityIndicator.isHidden = true
+        connectingStackView.isHidden = true
         pausedLabel.isHidden = true
         addToSpotifyLibButton.isHidden = true
         currentArtistLabel.isHidden = true

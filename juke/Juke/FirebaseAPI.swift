@@ -196,6 +196,7 @@ class FirebaseAPI {
         guard let stream = Current.stream else { return }
         // reset progress in any case
         objc_sync_enter(progressLocked) // unlocked in setProgressLock()
+        print("setting progress to 0.0")
         self.ref.child("/songProgressTable/\(stream.streamID)").setValue(0.0)
         
         if let next = nextSong {
@@ -219,8 +220,10 @@ class FirebaseAPI {
     // host update progress
     private static func setProgressLock() {
         progressLocked = true
+        print("progress locked")
         let when = DispatchTime.now() + 2 // unlock progress updates after 2 seconds to flush out lingering spotify progress updates from previous song
         DispatchQueue.global().asyncAfter(deadline: when) {
+            print("progress unlocked")
             progressLocked = false
             objc_sync_exit(progressLocked)
         }
