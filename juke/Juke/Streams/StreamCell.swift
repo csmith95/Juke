@@ -27,6 +27,8 @@ class StreamCell: UITableViewCell {
     private var indicator:ESTMusicIndicatorView!
     private var coverArtFilter: ImageFilter!
     private var defaultCoverArtImage: UIImage!
+    @IBOutlet weak var featuredHost: UIImageView!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -41,10 +43,18 @@ class StreamCell: UITableViewCell {
     }
     
     public func populateCell(stream: Models.FirebaseStream) {
-        loadCellImages(stream: stream)
-        self.streamName.text = stream.title
+        
+        let isftrd = stream.isFeatured ?? false
+        if (isftrd) {
+            loadFtrdCellImages(stream: stream)
+            self.streamName.text = "JukeLIVE: \(stream.title)"
+        } else {
+            loadCellImages(stream: stream)
+            self.streamName.text = stream.title
+            self.hostStarIcon.isHidden = !Current.isStarred(user: stream.host)
+        }
         self.hostLabel.text = "Hosted by \(stream.host.username)"
-        self.hostStarIcon.isHidden = !Current.isStarred(user: stream.host)
+        
         if let song = stream.song {
             self.blurredBgImage.af_setImage(withURL: URL(string: song.coverArtURL)!)
         } else {
@@ -89,6 +99,13 @@ class StreamCell: UITableViewCell {
         } else {
             self.clearMemberIcons()
         }
+    }
+    
+    private func loadFtrdCellImages(stream: Models.FirebaseStream) {
+        // load featured artist image
+        loadUserIcon(url: stream.host.imageURL, imageView: self.featuredHost)
+        self.featuredHost.isHidden = false
+        self.hostStarIcon.image = #imageLiteral(resourceName: "checkmark_white")
     }
     
     public func clearMemberIcons() {
