@@ -114,6 +114,7 @@ class Models {
             var dict: [String: Any] = ["isPlaying": self.isPlaying,
                                        "song": NSNull(),
                                        "title": self.title,
+                                       "isFeatured": false
                                        ]
             dict["host"] = [host.spotifyID: host.firebaseDict]
             var result: [String: Any] = [:]
@@ -137,6 +138,7 @@ class Models {
             guard let streamID = dict["streamID"] as? String else { return nil }
             guard let isPlaying = dict["isPlaying"] as? Bool else { return nil }
             self.timestamp = dict["timestamp"] as? Double
+            self.isFeatured = dict["isFeatured"] as? Bool
             self.title = dict["title"] as? String ?? "Stream Title"
             self.isFeatured = dict["isFeatured"] as? Bool ?? false
 
@@ -179,6 +181,7 @@ class Models {
             self.streamID = streamID
             self.title = "\(Current.user!.username)'s Stream"
             self.timestamp = NSDate().timeIntervalSince1970
+            self.isFeatured = false
         }
     }
     
