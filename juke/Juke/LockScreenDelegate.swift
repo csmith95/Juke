@@ -14,6 +14,7 @@ class LockScreenDelegate: NSObject {
     // object for interacting with Apple API
     private let mpic = MPNowPlayingInfoCenter.default()
     
+    
     // audio player
     private let jamsPlayer = JamsPlayer.shared
 
@@ -21,6 +22,17 @@ class LockScreenDelegate: NSObject {
         print("init")
         mpic.nowPlayingInfo = [String: AnyObject]()
         UIApplication.shared.beginReceivingRemoteControlEvents()
+        MPRemoteCommandCenter.shared().previousTrackCommand.isEnabled = false
+        
+//        if Current.isHost() {
+//            MPRemoteCommandCenter.shared().playCommand.isEnabled = true
+//            MPRemoteCommandCenter.shared().nextTrackCommand.isEnabled = true
+//        } else {
+//            MPRemoteCommandCenter.shared().playCommand.isEnabled = false
+//            MPRemoteCommandCenter.shared().nextTrackCommand.isEnabled = false
+//        }
+        
+        
         MPRemoteCommandCenter.shared().playCommand.addTarget {event in
             guard let _ = Current.stream else { return .commandFailed }
             if Current.isHost() {
@@ -33,9 +45,11 @@ class LockScreenDelegate: NSObject {
             }
             Current.listenSelected = true
             self.jamsPlayer.setPlayStatus(shouldPlay: Current.stream!.isPlaying && Current.listenSelected, topSong: Current.stream?.song)
+            NotificationCenter.default.post(name: Notification.Name("firebaseEventLockScreen"), object: FirebaseAPI.FirebaseEvent.PlayStatusChanged)
             return .success
         }
         
+        MPRemoteCommandCenter.shared().pauseCommand.isEnabled = true
         MPRemoteCommandCenter.shared().pauseCommand.addTarget {event in
             guard let _ = Current.stream else { return .commandFailed }
             if Current.isHost() {
@@ -48,8 +62,16 @@ class LockScreenDelegate: NSObject {
             }
             Current.listenSelected = false
             self.jamsPlayer.setPlayStatus(shouldPlay: Current.stream!.isPlaying && Current.listenSelected, topSong: Current.stream?.song)
+            NotificationCenter.default.post(name: Notification.Name("firebaseEventLockScreen"), object: FirebaseAPI.FirebaseEvent.TopSongChanged)
             return .success
         }
+        
+        MPRemoteCommandCenter.shared().nextTrackCommand.addTarget {event in
+            
+            NotificationCenter.default.post(name: Notification.Name("songFinished"), object: nil)
+            return .success
+        }
+    
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.firebaseEventHandler), name: Notification.Name("firebaseEventLockScreen"), object: nil)
     }

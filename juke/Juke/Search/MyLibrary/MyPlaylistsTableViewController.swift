@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import Unbox
 import XLPagerTabStrip
+import Crashlytics
 
 class MyPlaylistsTableViewController: UITableViewController, IndicatorInfoProvider {
 
@@ -26,6 +27,9 @@ class MyPlaylistsTableViewController: UITableViewController, IndicatorInfoProvid
         // note: this fucks up detecting cell selection
 //        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
 //        self.tableView.addGestureRecognizer(tapRecognizer)
+        // track views of this page
+        Answers.logContentView(withName: "Saved Playlists Page", contentType: "Saved Playlists", contentId: "\(Current.user?.spotifyID ?? "noname"))|savedPlaylists")
+        
     }
     
     func hideKeyboard() {

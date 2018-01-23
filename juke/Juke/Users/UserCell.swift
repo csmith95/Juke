@@ -43,9 +43,7 @@ class UserCell: UITableViewCell {
         HUD.flash(.labeledSuccess(title: nil, subtitle: message), delay: 1.0)
     }
     
-    
     public func populateCell(member: Models.FirebaseUser) {
-        
         if hostLabel != nil {
             if Current.stream!.host.spotifyID == member.spotifyID {
                 hostLabel.isHidden = false

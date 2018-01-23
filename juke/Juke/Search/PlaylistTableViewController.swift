@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import Unbox
+import PKHUD
 
 class PlaylistTableViewController: UIViewController {
     
@@ -17,10 +18,15 @@ class PlaylistTableViewController: UIViewController {
     public var allSongs: [Models.SpotifySong] = []
     public var displayedSongs: [Models.SpotifySong] = []
     typealias JSONStandard = [String: Any]
+    @IBOutlet weak var addPlaylistButton: UIButton!
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapRecognizer.cancelsTouchesInView = false
         self.tableView.addGestureRecognizer(tapRecognizer)
     }
     
@@ -34,10 +40,12 @@ class PlaylistTableViewController: UIViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        // reset
+        super.viewDidDisappear(animated)
+        objc_sync_enter(self.allSongs)
+        defer { objc_sync_exit(self.allSongs) }
         allSongs.removeAll()
         displayedSongs.removeAll()
-        super.viewDidDisappear(animated)
+        SongKeeper.addedSongs.removeAll()
     }
 
     override func didReceiveMemoryWarning() {
@@ -120,6 +128,16 @@ class PlaylistTableViewController: UIViewController {
             }
         }
     }
+    
+    
+    @IBAction func addAllPlaylist(_ sender: Any) {
+        //print(allSongs)
+        HUD.flash(.labeledSuccess(title: nil, subtitle: "Added all songs in \(self.playlist.name) to your stream"), delay: 1.0)
+        FirebaseAPI.queuePlaylist(songs: allSongs)
+        addPlaylistButton.isSelected = true
+    }
+    
+    
     
     // set status bar content to white text
     override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }

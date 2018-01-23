@@ -15,12 +15,24 @@ import Firebase
 import FirebaseDatabaseUI
 import XLActionController
 import Presentr
+import NVActivityIndicatorView
 
 class MyStreamController: UITableViewController {
     
     // firebase vars
     let songsDataSource = SongQueueDataSource()
-    
+
+    @IBOutlet var currentlyPlayingUpvote: UIButton!
+    @IBOutlet var featuredArtistVerifiedImage: UIImageView!
+    @IBOutlet var featuredArtistImageHeight: NSLayoutConstraint!
+    @IBOutlet var streamNameStackView: UIStackView!
+    @IBOutlet var featuredArtistImage: UIImageView!
+    @IBOutlet var emptyQueueLabel1: UILabel!
+    @IBOutlet var emptyQueueLabel2: UILabel!
+    @IBOutlet var emptyQueueLabel3: UILabel!
+    @IBOutlet weak var streamNameEditBtn: UIButton!
+    @IBOutlet var connectingActivityIndicator: NVActivityIndicatorView!
+    @IBOutlet var connectingStackView: UIStackView!
     @IBOutlet var pausedLabel: UILabel!
     @IBOutlet var addToSpotifyLibButton: UIButton!
     @IBOutlet var numContributorsButton: UIButton!
@@ -87,35 +99,86 @@ class MyStreamController: UITableViewController {
         let status = !listenButton.isSelected
         listenButton.isSelected = status
         Current.listenSelected = status
-        handleAutomaticProgressSlider()
         if Current.isHost() {
             Current.stream?.isPlaying = status
-            FirebaseAPI.setPlayStatus(status: status)   // update db
         } else {
-            FirebaseAPI.listenForSongProgress() // fetch real song progress to maintain sync
+            FirebaseAPI.listenForSongProgress(shouldUnlockProgress: false) // fetch real song progress to maintain sync
         }
-        jamsPlayer.resync()
+        
+        if !connectingStackView.isHidden && !status {
+            coverArtImage.alpha = 1.0
+            connectingStackView.isHidden = true
+            connectingActivityIndicator.stopAnimating()
+        }
+        
+        if Current.stream?.isPlaying ?? false && status {
+            coverArtImage.alpha = 0.3
+            connectingStackView.isHidden = false
+            connectingActivityIndicator.startAnimating()
+        }
+        
+        jamsPlayer.resync() // trigger resync
+        handleAutomaticProgressSlider()
     }
-    
+
     @IBAction func skipSong(_ sender: Any) {
         songFinished()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // solve clipping issue
+        self.edgesForExtendedLayout = []
+        //self.edgesForExtendedLayout = UIRectEdgeNone
+        self.extendedLayoutIncludesOpaqueBars = false
+        self.automaticallyAdjustsScrollViewInsets = false
+        
         tableView.delegate = songsDataSource
         tableView.dataSource = songsDataSource
         // first 2 respond to spotify events
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songFinished), name: Notification.Name("songFinished"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.songPositionChanged), name: Notification.Name("songPositionChanged"), object: nil)
-
         
         // resyncing
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.firebaseEventHandler), name: Notification.Name("firebaseEvent"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.reloadSongs), name: Notification.Name("reloadSongs"), object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(MyStreamController.dismissConnectingView), name: Notification.Name("songStartedPlaying"), object: nil)
+        
         progressSlider.setThumbImage(UIImage(named: "slider_thumb.png"), for: .normal)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(MyStreamController.titleTapped))
+        //streamNameLabel.addGestureRecognizer(tap)
+        streamNameEditBtn.addGestureRecognizer(tap)
+        
+        // Track views of this page
+        Answers.logContentView(withName: "My Stream Page", contentType: "myStream", contentId: "\(Current.user?.spotifyID ?? "noname")|streaming")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if Current.stream?.song == nil {
+            setEmptyStreamUI()
+        }
+    }
+    
+    func dismissConnectingView() {
+        connectingStackView.isHidden = true
+        connectingActivityIndicator.stopAnimating()
+        if pausedLabel.isHidden {
+            coverArtImage.alpha = 1.0
+        }
+    }
+    
+    func titleTapped() {
+        if Current.isHost() {
+            showNameStreamModal()
+        }
+    }
+    
+    @IBAction func currentlyPlayingUpvotePressed(_ sender: Any) {
+        currentlyPlayingUpvote.isSelected = !currentlyPlayingUpvote.isSelected
     }
     
     func reloadSongs() {
@@ -128,7 +191,7 @@ class MyStreamController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        FirebaseAPI.listenForSongProgress() // will update if progress difference > 4 seconds
+        FirebaseAPI.listenForSongProgress(shouldUnlockProgress: false) // will update if progress difference > 4 seconds
         songsDataSource.setObservedStream()
         self.setUpControlButtons()
         setUI()
@@ -141,34 +204,67 @@ class MyStreamController: UITableViewController {
         }
         
         let numMembers = stream.members.count + 1 // +1 for host
-        let numMembersString = "\(numMembers) member" + (numMembers > 1 ? "s" : "")
-        numContributorsButton.setTitle(numMembersString, for: .normal)   // +1 for host
+        var numMembersString = "\(numMembers) member" + (numMembers > 1 ? "s" : "")
+        if stream.isFeatured ?? false {
+            numMembersString = "\(numMembers) " + (numMembers > 1 ? "people" : "person") + " listening now"
+        }
+        numContributorsButton.setTitle(numMembersString, for: .normal)
         streamNameLabel.text = stream.title
         if let song = stream.song {
+            let frame = self.tableView.tableHeaderView!.frame
+
+            if stream.isFeatured ?? false {
+                self.currentlyPlayingUpvote.isHidden = false
+                self.featuredArtistImageHeight.constant = 80
+                self.featuredArtistImage.layoutIfNeeded()
+                self.tableView.tableHeaderView!.frame.size = CGSize(width: frame.width, height: 470)
+                self.tableView.layoutIfNeeded()
+                ImageCache.downloadUserImage(url: stream.host.imageURL, callback: { (image) in
+                    self.featuredArtistImage.image = image
+                    self.featuredArtistVerifiedImage.isHidden = false
+                })
+            } else {
+                self.currentlyPlayingUpvote.isHidden = true
+                self.featuredArtistImageHeight.constant = 0
+                self.featuredArtistImage.layoutIfNeeded()
+                self.tableView.tableHeaderView!.frame.size = CGSize(width: frame.width, height: 400)
+                self.tableView.layoutIfNeeded()
+                self.featuredArtistVerifiedImage.isHidden = true
+            }
+            
+            self.emptyQueueLabel1.isHidden = true
+            self.emptyQueueLabel2.isHidden = true
+            self.emptyQueueLabel3.isHidden = true
+            
             self.coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil)
             self.coverArtImage.isHidden = false
             self.bgblurimg.af_setImage(withURL: URL(string:song.coverArtURL)!, placeholderImage: nil)
             self.currentSongLabel.text = song.songName
+            self.currentSongLabel.isHidden = false
             self.currentArtistLabel.text = song.artistName
+            self.currentArtistLabel.isHidden = false
             self.listenButton.isHidden = false
             if Current.isHost() {
                 self.listenButton.isSelected = stream.isPlaying
+                self.streamNameEditBtn.isHidden = false
             } else {
                 self.listenButton.isSelected = Current.listenSelected
+                self.streamNameEditBtn.isHidden = true
             }
             
             if !Current.isHost() && !stream.isPlaying {
-                coverArtImage.alpha = 0.3
-                pausedLabel.isHidden = false
+                self.coverArtImage.alpha = 0.3
+                self.pausedLabel.isHidden = false
             } else {
-                coverArtImage.alpha = 1.0
-                pausedLabel.isHidden = true
+                self.coverArtImage.alpha = 1.0
+                self.pausedLabel.isHidden = true
             }
             
             self.checkIfUserLibContainsCurrentSong(song: song)
-            progressSlider.isHidden = false
-            currTimeLabel.isHidden = false
-            progressSliderValue = jamsPlayer.position_ms
+            self.addToSpotifyLibButton.isHidden = false
+            self.progressSlider.isHidden = false
+            self.currTimeLabel.isHidden = false
+            self.progressSliderValue = jamsPlayer.position_ms
         } else {
             self.setEmptyStreamUI()
         }
@@ -200,13 +296,9 @@ class MyStreamController: UITableViewController {
     }
     
     func songPositionChanged(notification: NSNotification) {
-        if FirebaseAPI.progressLocked { return }
         if let data = notification.object as? NSDictionary {
             let progress = data["progress"] as! Double
             self.progressSliderValue = progress
-            if Current.isHost() {
-                FirebaseAPI.updateSongProgress(progress: progress)
-            }
         }
     }
     
@@ -249,8 +341,19 @@ class MyStreamController: UITableViewController {
     }
     
     private func setEmptyStreamUI() {
-        // notification handled in MyStreamRootViewController
-        NotificationCenter.default.post(name: Notification.Name("updateMyStreamView"), object: nil)
+        connectingStackView.isHidden = true
+        pausedLabel.isHidden = true
+        addToSpotifyLibButton.isHidden = true
+        currentArtistLabel.isHidden = true
+        currentSongLabel.isHidden = true
+        bgblurimg.image = UIImage(named: "juke_icon")
+        coverArtImage.isHidden = true
+        progressSlider.isHidden = true
+        currTimeLabel.isHidden = true
+        listenButton.isHidden = true
+        emptyQueueLabel1.isHidden = false
+        emptyQueueLabel2.isHidden = false
+        emptyQueueLabel3.isHidden = false
     }
     
     @IBAction func addToSpotifyLibButtonPressed(_ sender: Any) {
@@ -328,6 +431,7 @@ class MyStreamController: UITableViewController {
                 coverArtImage.alpha = 1.0
                 pausedLabel.isHidden = true
             }
+            jamsPlayer.resync()
         case .TopSongChanged:
             self.setUI()
         case .SetProgress:

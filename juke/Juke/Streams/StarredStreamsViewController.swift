@@ -41,6 +41,8 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStreams), name: Notification.Name("reloadStarredStreams"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.newStreamSelected), name: Notification.Name("newStreamSelected"), object: nil)
         NotificationCenter.default.addObserver(forName: Notification.Name("starredStreamsSearchNotification"), object: nil, queue: nil, using: execSearchQuery)
+        // Track views of this page
+        Answers.logContentView(withName: "Starred Streams Page", contentType: "Starred Streams List", contentId: "\(Current.user?.spotifyID ?? "noname"))|StarredStreams")
     }
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
@@ -72,6 +74,7 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
         DispatchQueue.main.async {
             objc_sync_enter(self.streamsTableView.dataSource)
             self.streamsTableView.reloadData()
+            self.checkEmptyState()
             objc_sync_exit(self.streamsTableView.dataSource)
         }
     }
@@ -127,6 +130,19 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    func checkEmptyState() {
+        if streamsTableView.visibleCells.isEmpty {
+            let emptyStateLabel = UILabel(frame: self.streamsTableView.frame)
+            emptyStateLabel.text = "None of your starred friends have an active stream now ☹️ \n \n Start adding some songs to your own stream or explore the ALL streams tab!"
+            emptyStateLabel.textColor = UIColor.white
+            emptyStateLabel.textAlignment = .center
+            emptyStateLabel.numberOfLines = 0
+            self.streamsTableView.backgroundView = emptyStateLabel
+        } else {
+            self.streamsTableView.backgroundView = nil
+        }
     }
     
 }

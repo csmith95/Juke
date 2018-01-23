@@ -7,17 +7,18 @@
 //
 
 import UIKit
+import Crashlytics
 
 class EmptyStreamViewController: UIViewController {
 
     @IBOutlet weak var streamTitleLabel: UILabel!
     @IBOutlet weak var numMembersButton: UIButton!
     @IBOutlet weak var twoDownArrows: UIImageView!
-    @IBOutlet var endStreamButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(self.streamDeleted), name: Notification.Name("streamDeleted"), object: nil)
+        Answers.logContentView(withName: "Empty Stream Page", contentType: "Empty Stream", contentId: "\(Current.user?.spotifyID ?? "noname"))|emptyStream")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -34,17 +35,9 @@ class EmptyStreamViewController: UIViewController {
             //  if user not in stream
             streamTitleLabel.isHidden = true
             numMembersButton.isHidden = true
-            endStreamButton.isHidden = true
             return
         }
         
-        // stream still exists
-        endStreamButton.isHidden = false
-        if Current.isHost() {
-            endStreamButton.setTitle("End stream", for: .normal)
-        } else {
-            endStreamButton.setTitle("Leave stream", for: .normal)
-        }
         streamTitleLabel.isHidden = false
         streamTitleLabel.text = stream.title
         numMembersButton.isHidden = false
@@ -60,11 +53,6 @@ class EmptyStreamViewController: UIViewController {
             dest.stream = stream
         }
     }
-
-    @IBAction func endStreamPressed(_ sender: Any) {
-        Current.stream = nil
-        setUI()
-    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -75,7 +63,6 @@ class EmptyStreamViewController: UIViewController {
         //nothing goes here
     }
     
-
     // set status bar text to white
     override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
     

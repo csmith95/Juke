@@ -5,6 +5,7 @@ workspace 'Juke'
 use_frameworks!
 
 def all_pods
+    pod 'NVActivityIndicatorView'
     pod 'Alamofire', '~> 4.5'
     pod 'AlamofireImage', '~> 3.1'
     pod 'Unbox'
@@ -20,8 +21,8 @@ def all_pods
     pod 'Whisper'
     pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
     pod 'XLActionController'
-    pod 'Fabric'
-    pod 'Crashlytics'
+    pod 'Fabric', '~> 1.7.2'
+    pod 'Crashlytics', '~>  3.9.3'
     pod 'XLPagerTabStrip'
     pod 'Presentr'
     pod 'SkyFloatingLabelTextField', '~> 3.0'

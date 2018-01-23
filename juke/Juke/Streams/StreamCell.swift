@@ -12,6 +12,7 @@ import AlamofireImage
 
 class StreamCell: UITableViewCell {
 
+    @IBOutlet weak var currentlyLstnTag: UILabel!
     @IBOutlet var hostStarIcon: UIImageView!
     @IBOutlet var blurredBgImage: UIImageView!
     @IBOutlet var musicIndicatorView: UIView!
@@ -52,6 +53,13 @@ class StreamCell: UITableViewCell {
         indicator.state = (stream.isPlaying) ? .playing : .stopped
         let count = stream.members.count+1  // +1 for host
         numMembers.text = "\(count) member" + ((count > 1) ? "s" : "")
+        if let currentStream = Current.stream {
+            if (stream.streamID == currentStream.streamID) {
+                currentlyLstnTag.isHidden = false
+                self.isUserInteractionEnabled = false
+                self.alpha = 0.5
+            }
+        }
     }
     
     // set user icons
@@ -65,12 +73,17 @@ class StreamCell: UITableViewCell {
     
     private func loadCellImages(stream: Models.FirebaseStream) {
         clearMemberIcons()  // start fresh
+        let starImg = #imageLiteral(resourceName: "Star")
+        let starImageView = UIImageView(image: starImg)
+        
         let numMemberIcons = stream.members.count
         if numMemberIcons > 0 {
             let numMemberIconsToDisplay = min(numMemberIcons, self.imageViewDict.count)
             for i in 0..<numMemberIconsToDisplay {
                 if Current.isStarred(user: stream.members[i]) {
                     loadUserIcon(url: stream.members[i].imageURL, imageView: self.imageViewDict[i]!)
+                    starImageView.frame = CGRect(x: 17, y: 17, width: 20, height: 20)
+                    self.imageViewDict[i]?.addSubview(starImageView)
                 }
             }
         } else {
@@ -82,6 +95,9 @@ class StreamCell: UITableViewCell {
         for (_, imageView) in imageViewDict {
             imageView.image = nil
             imageView.isHidden = true
+            currentlyLstnTag.isHidden = true
+            self.isUserInteractionEnabled = true
+            
         }
     }
 

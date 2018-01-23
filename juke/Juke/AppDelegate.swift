@@ -14,7 +14,7 @@ import Firebase
 import PKHUD
 import Fabric
 import Crashlytics
-
+import AVFoundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -81,12 +81,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return true
     }
     
+    
+    
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        print("** did register: ", deviceToken)
+        print("** did register for remote notifications: ", deviceToken)
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        print("** failed to register: ", error)
+        print("** failed to register for remote notifications: ", error)
     }
     
     
@@ -169,6 +171,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         NotificationCenter.default.post(name: Notification.Name("updateMyStreamView"), object: nil)
         NotificationCenter.default.post(name: Notification.Name("firebaseEvent"), object: FirebaseAPI.FirebaseEvent.TopSongChanged) // trigger UI refresh in MyStreamController
+        if Current.isHost() {
+            FirebaseAPI.updateTimestamp(stream: Current.stream!)
+        }
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
@@ -277,6 +282,12 @@ extension AppDelegate {
         // CASE: default
         default:
             print("called default")
+            let rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "mainTabCtrl") as! UITabBarController
+            rootVC.selectedIndex = 0
+            rootVC.view.frame = UIScreen.main.bounds
+            UIView.transition(with: self.window!, duration: 0.3, options: .layoutSubviews, animations: {
+                self.window!.rootViewController = rootVC
+            }, completion: nil)
         }
         
         completionHandler()

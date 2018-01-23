@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13526" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NameStreamViewController" customModule="Juke" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NameStreamViewController" customModule="Juke_Dev" customModuleProvider="target">
             <connections>
                 <outlet property="textField" destination="CEx-Cg-U2k" id="8dr-HZ-IrF"/>
                 <outlet property="view" destination="iN0-l3-epB" id="KVv-wd-ZlR"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="GradientView" customModule="Juke" customModuleProvider="target">
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="GradientView" customModule="Juke_Dev" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -73,12 +73,20 @@
                         </button>
                     </subviews>
                 </stackView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Give your stream a name!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="spE-ZO-r4O">
+                    <rect key="frame" x="61" y="25" width="199" height="20.5"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstItem="spE-ZO-r4O" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="JLC-0F-ODH"/>
                 <constraint firstAttribute="bottom" secondItem="cHf-wW-OpV" secondAttribute="bottom" id="Jwn-hy-OJp"/>
                 <constraint firstItem="cHf-wW-OpV" firstAttribute="top" secondItem="CEx-Cg-U2k" secondAttribute="bottom" constant="38" id="Ous-WX-P56"/>
                 <constraint firstItem="cHf-wW-OpV" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Pvw-s8-gep"/>
+                <constraint firstItem="spE-ZO-r4O" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="25" id="Qq8-1q-I2d"/>
                 <constraint firstAttribute="trailing" secondItem="CEx-Cg-U2k" secondAttribute="trailing" constant="8" id="Rab-xo-CyS"/>
                 <constraint firstAttribute="trailing" secondItem="cHf-wW-OpV" secondAttribute="trailing" id="Rwj-Wb-iFC"/>
                 <constraint firstItem="CEx-Cg-U2k" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="b18-V0-f0u"/>

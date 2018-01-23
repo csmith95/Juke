@@ -49,7 +49,7 @@ final class MyStreamRootViewController: UIViewController {
     func updateChildViews() {
         var toRemove: UIViewController!
         var toAdd: UIViewController!
-        if Current.stream == nil || Current.stream!.song == nil {
+        if Current.stream == nil {
             toRemove = myStreamController
             toAdd = emptyStreamViewController
         } else {

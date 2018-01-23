@@ -10,6 +10,8 @@ import Foundation
 
 class StreamsDataSource: CustomDataSource {
     
+    private let kSecondsPerHour: Double = 3600
+    
     override var reloadEventName: String {
         get {
             return "reloadStreams"
@@ -53,16 +55,17 @@ class StreamsDataSource: CustomDataSource {
     
     override func shouldInclude(item: CollectionItem) -> Bool {
         // add if you are starred by the current user
-        var included = (item.stream.song != nil)
-        if let currentStream = Current.stream {
-            included = (included && item.stream.streamID != currentStream.streamID)
+        if item.stream.song == nil { return false }
+//        if let currentStream = Current.stream {
+//            if (item.stream.streamID == currentStream.streamID) { return false }
+//        }
+        
+        if let timestamp = item.stream.timestamp {
+            let hoursElapsed = (NSDate().timeIntervalSince1970 - timestamp) / kSecondsPerHour
+            if hoursElapsed > 24 { return false }
         }
         
-        if !included || query.isEmpty {
-            return included
-        }
-        
-        return item.stream.host.username.lowercased().contains(query.lowercased())
+        return query.isEmpty || item.stream.host.username.lowercased().contains(query.lowercased())
     }
     
     override func populateCell(cell: UITableViewCell, item: CollectionItem) {

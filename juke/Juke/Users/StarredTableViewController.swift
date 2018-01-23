@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Crashlytics
 
 class StarredTableViewController: UIViewController, UISearchBarDelegate {
 
@@ -23,11 +24,17 @@ class StarredTableViewController: UIViewController, UISearchBarDelegate {
         // setup notifications received from usersDataSource
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStarredUsers), name: Notification.Name("reloadStarredUsers"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideKeyboard), name: Notification.Name("hideKeyboard"), object: nil)
+        checkEmptyState()
+        
+        // track views of this page
+        Answers.logContentView(withName: "Starred Users Page", contentType: "Starred Users list", contentId: "\(Current.user?.spotifyID ?? "noname"))|starredUserViews")
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         starredDataSource.listen()
+        checkEmptyState()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -65,6 +72,7 @@ class StarredTableViewController: UIViewController, UISearchBarDelegate {
         DispatchQueue.main.async {
             objc_sync_enter(self.starredTableView.dataSource)
             self.starredTableView.reloadData()
+            self.checkEmptyState()
             objc_sync_exit(self.starredTableView.dataSource)
         }
     }
@@ -75,6 +83,22 @@ class StarredTableViewController: UIViewController, UISearchBarDelegate {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
+    
+    func checkEmptyState() {
+        //print("cells in section count: ", starredTableView.numberOfRows(inSection: 0))
+        if starredTableView.visibleCells.isEmpty {
+            let emptyStateLabel = UILabel(frame: self.starredTableView.frame)
+            emptyStateLabel.text = "You have not starred any friends... \n \n Click the star button in top right to find people!"
+            emptyStateLabel.textColor = UIColor.white
+            emptyStateLabel.textAlignment = .center
+            emptyStateLabel.numberOfLines = 0
+            self.starredTableView.backgroundView = emptyStateLabel
+        } else {
+            self.starredTableView.backgroundView = nil
+        }
+    }
+    
+    
 
 
 }
