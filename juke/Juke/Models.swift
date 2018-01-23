@@ -22,7 +22,7 @@ class Models {
     struct FirebaseSong {
         var key: String       // key in db -- helpful for access if queued (/streams/{streamID}/{key} list)
                                 // but not needed for top song (/streams/{streamID}/song object) -- just set to "song"
-        
+    
         var spotifyID: String   // careful not to use this as key in DB
         var songName: String
         var artistName: String
@@ -107,6 +107,7 @@ class Models {
         var members: [FirebaseUser] = []
         var title = ""
         var timestamp: Double?
+        var isFeatured: Bool?
         
         // formatted to be written directly to the /streams/{streamID}/ path
         var firebaseDict: [String: Any] {
@@ -126,6 +127,9 @@ class Models {
             if let timestamp = self.timestamp {
                 dict["timestamp"] = timestamp
             }
+            if let isFeatured = self.isFeatured {
+                dict["isFeatured"] = isFeatured
+            }
             return dict
         }
         
@@ -134,6 +138,7 @@ class Models {
             guard let isPlaying = dict["isPlaying"] as? Bool else { return nil }
             self.timestamp = dict["timestamp"] as? Double
             self.title = dict["title"] as? String ?? "Stream Title"
+            self.isFeatured = dict["isFeatured"] as? Bool ?? false
 
             self.streamID = streamID
             self.isPlaying = isPlaying

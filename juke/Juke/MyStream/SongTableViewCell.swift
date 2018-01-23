@@ -18,6 +18,11 @@ class SongTableViewCell: UITableViewCell {
     @IBOutlet weak var memberImgView: UIImageView!
     @IBOutlet weak var starImgView: UIImageView!
     
+    let normalUpvote = UIImage(named: "upvote-carat-white")
+    let selectedUpvote = UIImage(named: "upvote-carat-green")
+    let featuredNormalUpvote = UIImage(named: "empty_heart")
+    let featuredSelectedUpvote = UIImage(named: "filled_heart")
+    
     var song: Models.FirebaseSong!
     
     override func awakeFromNib() {
@@ -45,7 +50,25 @@ class SongTableViewCell: UITableViewCell {
         })
         upvoteButton.setTitle("\(song.upvoters.count)", for: .normal)
         loadUserIcon(url: song.memberImageURL, imageView: memberImgView)
-        userStarIcon.isHidden = !Current.isStarred(spotifyID: song.memberSpotifyID)
+        
+        FirebaseAPI.checkVerified(spotifyID: song.memberSpotifyID, callback: { (result) in
+            if result {
+                self.userStarIcon.image = UIImage(named: "verified")
+                self.userStarIcon.isHidden = false
+            } else {
+                self.userStarIcon.image = UIImage(named: "star")
+                self.userStarIcon.isHidden = !Current.isStarred(spotifyID: song.memberSpotifyID)
+            }
+        })
+        
+        upvoteButton.setImage(normalUpvote, for: .normal)
+        upvoteButton.setImage(selectedUpvote, for: .selected)
+        if let stream = Current.stream {
+            if stream.isFeatured ?? false {
+                upvoteButton.setImage(featuredNormalUpvote, for: .normal)
+                upvoteButton.setImage(featuredSelectedUpvote, for: .selected)
+            }
+        }
     }
     
     private func loadUserIcon(url: String?, imageView: UIImageView) {

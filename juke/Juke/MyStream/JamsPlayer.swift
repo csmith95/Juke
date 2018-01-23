@@ -19,21 +19,16 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     public var position_ms: TimeInterval {
         
         willSet(newPosition) {
-            print("new position is: ", newPosition)
             shouldResync = ((newPosition == 0.0) || (abs(newPosition - position_ms) >= 4000))
-            print("shouldResync: ", shouldResync)
         }
         
         didSet {
-            print("didSet")
             if shouldResync {
                 self.resync()
-                print("resynced with pos: ", position_ms)
             }
         }
 
     }
-    
     
     private struct PendingPlayOperation {
         var song: Models.FirebaseSong

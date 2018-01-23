@@ -35,7 +35,6 @@ class Current {
         }
         
         didSet(newValue) {
-            print(didChangeStreams)
             if didChangeStreams {
                 FirebaseAPI.addListeners()
             }

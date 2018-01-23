@@ -539,7 +539,15 @@ class FirebaseAPI {
     }
     
     public static func updateTimestamp(stream: Models.FirebaseStream) {
-        print("**** updating timestamp")
         self.ref.child("/streams/\(stream.streamID)/timestamp").setValue(NSDate().timeIntervalSince1970)
     }
+    
+    public static func checkVerified(spotifyID: String?, callback: @escaping (Bool) -> Void) {
+        guard let id = spotifyID else { callback(false); return }
+        ref.child("/featuredArtists/"+id).observe(.value, with: { (snapshot) in
+            if !snapshot.exists() { callback(false); return }
+            callback(true)
+        })
+    }
+    
 }

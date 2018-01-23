@@ -22,6 +22,11 @@ class MyStreamController: UITableViewController {
     // firebase vars
     let songsDataSource = SongQueueDataSource()
 
+    @IBOutlet var currentlyPlayingUpvote: UIButton!
+    @IBOutlet var featuredArtistVerifiedImage: UIImageView!
+    @IBOutlet var featuredArtistImageHeight: NSLayoutConstraint!
+    @IBOutlet var streamNameStackView: UIStackView!
+    @IBOutlet var featuredArtistImage: UIImageView!
     @IBOutlet var emptyQueueLabel1: UILabel!
     @IBOutlet var emptyQueueLabel2: UILabel!
     @IBOutlet var emptyQueueLabel3: UILabel!
@@ -172,6 +177,10 @@ class MyStreamController: UITableViewController {
         }
     }
     
+    @IBAction func currentlyPlayingUpvotePressed(_ sender: Any) {
+        currentlyPlayingUpvote.isSelected = !currentlyPlayingUpvote.isSelected
+    }
+    
     func reloadSongs() {
         DispatchQueue.main.async {
             objc_sync_enter(self.tableView.dataSource)
@@ -195,10 +204,34 @@ class MyStreamController: UITableViewController {
         }
         
         let numMembers = stream.members.count + 1 // +1 for host
-        let numMembersString = "\(numMembers) member" + (numMembers > 1 ? "s" : "")
-        numContributorsButton.setTitle(numMembersString, for: .normal)   // +1 for host
+        var numMembersString = "\(numMembers) member" + (numMembers > 1 ? "s" : "")
+        if stream.isFeatured ?? false {
+            numMembersString = "\(numMembers) " + (numMembers > 1 ? "people" : "person") + " listening now"
+        }
+        numContributorsButton.setTitle(numMembersString, for: .normal)
         streamNameLabel.text = stream.title
         if let song = stream.song {
+            let frame = self.tableView.tableHeaderView!.frame
+
+            if stream.isFeatured ?? false {
+                self.currentlyPlayingUpvote.isHidden = false
+                self.featuredArtistImageHeight.constant = 80
+                self.featuredArtistImage.layoutIfNeeded()
+                self.tableView.tableHeaderView!.frame.size = CGSize(width: frame.width, height: 470)
+                self.tableView.layoutIfNeeded()
+                ImageCache.downloadUserImage(url: stream.host.imageURL, callback: { (image) in
+                    self.featuredArtistImage.image = image
+                    self.featuredArtistVerifiedImage.isHidden = false
+                })
+            } else {
+                self.currentlyPlayingUpvote.isHidden = true
+                self.featuredArtistImageHeight.constant = 0
+                self.featuredArtistImage.layoutIfNeeded()
+                self.tableView.tableHeaderView!.frame.size = CGSize(width: frame.width, height: 400)
+                self.tableView.layoutIfNeeded()
+                self.featuredArtistVerifiedImage.isHidden = true
+            }
+            
             self.emptyQueueLabel1.isHidden = true
             self.emptyQueueLabel2.isHidden = true
             self.emptyQueueLabel3.isHidden = true
