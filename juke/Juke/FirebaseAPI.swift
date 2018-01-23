@@ -196,6 +196,7 @@ class FirebaseAPI {
         guard let stream = Current.stream else { return }
         // reset progress in any case
         objc_sync_enter(progressLocked) // unlocked in setProgressLock()
+        print("setting progress to 0.0")
         self.ref.child("/songProgressTable/\(stream.streamID)").setValue(0.0)
         
         if let next = nextSong {
@@ -219,8 +220,10 @@ class FirebaseAPI {
     // host update progress
     private static func setProgressLock() {
         progressLocked = true
+        print("progress locked")
         let when = DispatchTime.now() + 2 // unlock progress updates after 2 seconds to flush out lingering spotify progress updates from previous song
         DispatchQueue.global().asyncAfter(deadline: when) {
+            print("progress unlocked")
             progressLocked = false
             objc_sync_exit(progressLocked)
         }
@@ -287,6 +290,23 @@ class FirebaseAPI {
         }) {error in print(error.localizedDescription)}
     }
     
+    private static func queuePlaylistHelper(songs: [Models.SpotifySong]) {
+        guard let stream = Current.stream else { return }
+        for song in songs {
+            guard let song = Models.FirebaseSong(song: song) else { return }
+            self.ref.child("/streams/\(stream.streamID)/song").observeSingleEvent(of: .value, with: { (snapshot) in
+                if snapshot.exists() {
+                    // if there is already a top song right now (queue not empty), write it to the song queue
+                    self.ref.child("/songs/\(stream.streamID)/\(song.key)").setValue(song.firebaseDict)
+                } else {
+                    // no current song - set current song
+                    self.ref.child("/streams/\(stream.streamID)/song").setValue(song.firebaseDict)
+                }
+            }) {error in print(error.localizedDescription)}
+        }
+        
+    }
+    
     public static func queueSong(spotifySong: Models.SpotifySong) {
         if Current.stream == nil {
             FirebaseAPI.createNewStream(title: "\(Current.user!.username)'s Stream") {
@@ -295,6 +315,17 @@ class FirebaseAPI {
         } else {
             queueSongHelper(spotifySong: spotifySong)
         }
+    }
+    
+    public static func queuePlaylist(songs: [Models.SpotifySong]) {
+        if Current.stream == nil {
+            FirebaseAPI.createNewStream(title: "\(Current.user!.username)'s Stream") {
+                self.queuePlaylistHelper(songs: songs)
+            }
+        } else {
+            self.queuePlaylistHelper(songs: songs)
+        }
+        
     }
     
     // called from StreamsTableViewController when user selects a new stream to join
@@ -386,6 +417,7 @@ class FirebaseAPI {
         guard let user = Current.user else { return }
         let fcmToken = Messaging.messaging().fcmToken
         Current.user!.fcmToken = fcmToken
+        print("called set token", fcmToken as Any)
         self.ref.child("users/\(user.spotifyID)/fcmToken").setValue(fcmToken)
         guard let stream = Current.stream else { return }
         if Current.isHost() {
@@ -393,6 +425,7 @@ class FirebaseAPI {
         } else {
             self.ref.child("streams/\(stream.streamID)/members/\(user.spotifyID)/fcmToken").setValue(fcmToken)
         }
+        
     }
     
     public static func setOnboardTrue() {
@@ -407,6 +440,7 @@ class FirebaseAPI {
                     userDict["spotifyID"] = spotifyUser.spotifyID
                     Current.user = Models.FirebaseUser(dict: userDict)
                     self.ref.child("users/\(spotifyUser.spotifyID)/online").setValue(true)
+                    setfcmtoken()
                 }
             } else {
                 // add user if user does not exist
@@ -420,6 +454,7 @@ class FirebaseAPI {
                 }
                 // set firebase messaging token
                 let token = Messaging.messaging().fcmToken
+                print("set fcmToken \(String(describing: token))")
                 newUserDict["fcmToken"] = token
                 // write to firebase DB
                 self.ref.child("users/\(spotifyUser.spotifyID)").setValue(newUserDict)
@@ -428,7 +463,6 @@ class FirebaseAPI {
             }
             
             // now that current user is set, try to fetch stream
-            print("CURR USER", Current.user)
             if let tunedInto = Current.user!.tunedInto {
                 self.ref.child("streams/\(tunedInto)").observeSingleEvent(of: .value, with : { (snapshot) in
                     if let stream = Models.FirebaseStream(snapshot: snapshot) {
@@ -495,16 +529,26 @@ class FirebaseAPI {
         guard let user = Current.user else { return }
         let params: Parameters = [
             "sender": user.firebaseDict,
-            "receiver": receiver.firebaseDict
+            "receiver": receiver.spotifyID
         ]
         
+        print("called sendnotification with", receiver.fcmToken as Any)
         Alamofire.request(Constants.kSendNotificationsURL, method: .post, parameters: params, encoding: JSONEncoding.default).responseJSON { response in
             print("response came back", response)
         }
     }
     
     public static func updateTimestamp(stream: Models.FirebaseStream) {
-        print("**** updating timestamp")
         self.ref.child("/streams/\(stream.streamID)/timestamp").setValue(NSDate().timeIntervalSince1970)
     }
+    
+    // note: currently not using this at all
+    public static func checkVerified(spotifyID: String?, callback: @escaping (Bool) -> Void) {
+        guard let id = spotifyID else { callback(false); return }
+        ref.child("/featuredArtists/"+id).observe(.value, with: { (snapshot) in
+            if !snapshot.exists() { callback(false); return }
+            callback(true)
+        })
+    }
+    
 }

@@ -70,8 +70,18 @@ class SongQueueDataSource: CustomDataSource {
         return other.song.key == current.song.key
     }
     
+    override func sort() {
+        if let stream = Current.stream {
+            if stream.isFeatured ?? false {
+                return // don't sort if featured stream
+            }
+        }
+        super.sort()
+    }
+    
     // comparator function used for sorting in super class
     override func comparator(first: CollectionItem, second: CollectionItem) -> Bool {
+        
         if first.song.upvoters.count != second.song.upvoters.count {
             return first.song.upvoters.count > second.song.upvoters.count
         }

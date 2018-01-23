@@ -12,6 +12,7 @@ import AlamofireImage
 
 class StreamCell: UITableViewCell {
 
+    @IBOutlet weak var currentlyLstnTag: UILabel!
     @IBOutlet var hostStarIcon: UIImageView!
     @IBOutlet var blurredBgImage: UIImageView!
     @IBOutlet var musicIndicatorView: UIView!
@@ -52,6 +53,13 @@ class StreamCell: UITableViewCell {
         indicator.state = (stream.isPlaying) ? .playing : .stopped
         let count = stream.members.count+1  // +1 for host
         numMembers.text = "\(count) member" + ((count > 1) ? "s" : "")
+        if let currentStream = Current.stream {
+            if (stream.streamID == currentStream.streamID) {
+                currentlyLstnTag.isHidden = false
+                self.isUserInteractionEnabled = false
+                self.alpha = 0.5
+            }
+        }
     }
     
     // set user icons
@@ -87,6 +95,9 @@ class StreamCell: UITableViewCell {
         for (_, imageView) in imageViewDict {
             imageView.image = nil
             imageView.isHidden = true
+            currentlyLstnTag.isHidden = true
+            self.isUserInteractionEnabled = true
+            
         }
     }
 

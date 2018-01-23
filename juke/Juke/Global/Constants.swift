@@ -20,6 +20,7 @@ public class Constants {
     static let kContainsSongPath = "me/tracks/contains?ids="
     static let kSpotifySessionKey = "SpotifySession"    // key session is stored as in user defaults
     static let kSpotifyTokenRefreshIntervalSeconds: TimeInterval = 40 * 60 // every 40 minutes
+    static let kRecentlyPlayedURL = Constants.kSpotifyBaseURL + "me/player/recently-played"
     
     #if DEVELOPMENT
         static let kSendNotificationsURL = "https://us-central1-juke-9fbd6.cloudfunctions.net/sendNotification"

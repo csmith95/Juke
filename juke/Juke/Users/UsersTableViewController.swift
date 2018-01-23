@@ -10,9 +10,9 @@ import UIKit
 import Firebase
 import FirebaseDatabaseUI
 
-class UsersTableViewController: UITableViewController, UISearchBarDelegate {
+class UsersTableViewController: UIViewController, UISearchBarDelegate {
 
-    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet var searchBar: UISearchBar!
     @IBOutlet var usersTableView: UITableView!
     let usersDataSource = UsersDataSource()
     
@@ -42,6 +42,7 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
     
     @IBAction func doneButtonPressed(_ sender: Any) {
         navigationController?.popViewController(animated: true)
+        dismiss(animated: true, completion: nil)
     }
     
     func hideKeyboard() {
@@ -60,7 +61,7 @@ class UsersTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     private func execSearchQuery() {
-        if let source = tableView.dataSource as? CustomDataSource, let query = searchBar.text {
+        if let source = usersTableView.dataSource as? CustomDataSource, let query = searchBar.text {
             source.searchBy(query: query)
         }
     }

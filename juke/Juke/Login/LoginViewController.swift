@@ -85,7 +85,6 @@ class LoginViewController: UIViewController {
                                 
                                 // dispatch onboarding seque
                                 DispatchQueue.main.async {
-                                    print("CURRUSER", Current.user)
                                     if Current.user?.onboard == true {
                                         self.performSegue(withIdentifier: "loginSegue", sender: nil)
                                     } else {

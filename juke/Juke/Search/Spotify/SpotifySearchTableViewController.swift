@@ -27,6 +27,7 @@ class SpotifySearchTableViewController: UIViewController {
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         self.tableView.addGestureRecognizer(tapRecognizer)
         checkEmptyState()
+        self.fetchRecentlyPlayed()
         
         // track views of this page
         Answers.logContentView(withName: "Search Page", contentType: "Search Page", contentId: "\(Current.user?.spotifyID ?? "noname"))|searchpageview")
@@ -62,7 +63,6 @@ class SpotifySearchTableViewController: UIViewController {
     }
     
     func searchSpotify(keywords: String) {
-        
         SessionManager.executeWithToken { (token) in
             let params: Parameters = [
                 "query" : keywords + "*",
@@ -115,6 +115,30 @@ class SpotifySearchTableViewController: UIViewController {
         }
         catch {
             print("error", error)
+        }
+    }
+    
+    func fetchRecentlyPlayed() {
+        SessionManager.executeWithToken { (token) in
+
+            guard let token = SessionManager.accessToken else { return }
+            let headers = [
+                "Authorization": "Bearer " + token
+            ]
+            
+            Alamofire.request(Constants.kRecentlyPlayedURL, method: .get, headers: headers)
+                .responseJSON { response in
+                    switch response.result {
+                    case .success:
+                        //self.parseSearchData(JSONData: response.data!)
+                        print("success in fetch recently played")
+                        if let json = response.result.value {
+                            print("JSON: \(json)") // serialized json response
+                        }
+                    case .failure(let error):
+                        print("error searching spotify: ", error)
+                    }
+            }
         }
     }
     

@@ -23,7 +23,7 @@ class SpotifyLoginController: UIViewController, UIWebViewDelegate {
         auth.redirectURL = kCallbackURL
         auth.tokenSwapURL = kTokenSwapURL
         auth.tokenRefreshURL = kTokenRefreshURL
-        auth.requestedScopes = [SPTAuthStreamingScope, SPTAuthUserLibraryReadScope, SPTAuthUserLibraryModifyScope, SPTAuthPlaylistReadPrivateScope]
+        auth.requestedScopes = [SPTAuthStreamingScope, SPTAuthUserLibraryReadScope, SPTAuthUserLibraryModifyScope, SPTAuthPlaylistReadPrivateScope, SPTAuthUserReadTopScope, SPTAuthPlaylistReadPrivateScope]
     }
     
     override func loadView() {

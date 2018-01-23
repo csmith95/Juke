@@ -18,17 +18,17 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     private var shouldResync = true
     public var position_ms: TimeInterval {
         
-        didSet(position) {
+        willSet(newPosition) {
+            shouldResync = ((newPosition == 0.0) || (abs(newPosition - position_ms) >= 4000))
+        }
+        
+        didSet {
             if shouldResync {
                 self.resync()
             }
         }
-    
-        willSet(newPosition) {
-            shouldResync = ((newPosition == 0.0) || (abs(newPosition - position_ms) >= 4000))
-        }
+
     }
-    
     
     private struct PendingPlayOperation {
         var song: Models.FirebaseSong
@@ -130,7 +130,6 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         }
         
         if event == SPPlaybackNotifyPause || event == SPPlaybackNotifyLostPermission {
-            print("got pause event")
             if Current.isHost() {
                 Current.stream?.isPlaying = false
                 FirebaseAPI.setPlayStatus(status: false)
@@ -150,6 +149,9 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         defer { objc_sync_exit(FirebaseAPI.progressLocked) }
         if FirebaseAPI.progressLocked { return }
         position_ms = position * 1000
+        if Current.isHost() {
+            FirebaseAPI.updateSongProgress(progress: position_ms)
+        }
         let data: [String:Any] = ["progress": position_ms]
         NotificationCenter.default.post(name: Notification.Name("songPositionChanged"), object: data)
     }
@@ -188,7 +190,6 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
                 print("error in stopPlaying")
             }
         });
-        return
     }
     
     func tryPlaying(topSong: Models.FirebaseSong) {
