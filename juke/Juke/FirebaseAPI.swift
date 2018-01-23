@@ -542,6 +542,7 @@ class FirebaseAPI {
         self.ref.child("/streams/\(stream.streamID)/timestamp").setValue(NSDate().timeIntervalSince1970)
     }
     
+    // note: currently not using this at all
     public static func checkVerified(spotifyID: String?, callback: @escaping (Bool) -> Void) {
         guard let id = spotifyID else { callback(false); return }
         ref.child("/featuredArtists/"+id).observe(.value, with: { (snapshot) in

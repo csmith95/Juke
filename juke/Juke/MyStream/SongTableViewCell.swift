@@ -50,16 +50,8 @@ class SongTableViewCell: UITableViewCell {
         })
         upvoteButton.setTitle("\(song.upvoters.count)", for: .normal)
         loadUserIcon(url: song.memberImageURL, imageView: memberImgView)
-        
-        FirebaseAPI.checkVerified(spotifyID: song.memberSpotifyID, callback: { (result) in
-            if result {
-                self.userStarIcon.image = UIImage(named: "verified")
-                self.userStarIcon.isHidden = false
-            } else {
-                self.userStarIcon.image = UIImage(named: "star")
-                self.userStarIcon.isHidden = !Current.isStarred(spotifyID: song.memberSpotifyID)
-            }
-        })
+        self.userStarIcon.image = UIImage(named: "star")
+        self.userStarIcon.isHidden = !Current.isStarred(spotifyID: song.memberSpotifyID)
         
         upvoteButton.setImage(normalUpvote, for: .normal)
         upvoteButton.setImage(selectedUpvote, for: .selected)
