@@ -27,19 +27,29 @@ class UserCell: UITableViewCell {
     
     @IBAction func starButtonPressed(_ sender: Any) {
         var message = ""
-        if self.starIcon.isHidden {
-            FirebaseAPI.addToStarredTable(user: self.member)
-            self.starIcon.isHidden = false
-            self.starButton.isSelected = true
-            message = "Starred \(self.member.username)"
-            Current.addStarredUser(user: self.member)
-        } else {
+        var shouldHideStar = false
+        if Current.isStarred(spotifyID: member.spotifyID) {
             FirebaseAPI.removeFromStarredTable(user: self.member)
             self.starIcon.isHidden = true
             self.starButton.isSelected = false
             message = "Removed \(self.member.username)"
             Current.removeStarredUser(user: self.member)
+            shouldHideStar = true
+        } else {
+            FirebaseAPI.addToStarredTable(user: self.member)
+            self.starIcon.isHidden = false
+            self.starButton.isSelected = true
+            message = "Starred \(self.member.username)"
+            Current.addStarredUser(user: self.member)
         }
+        
+        FirebaseAPI.checkVerified(spotifyID: member.spotifyID) { (isVerified) in
+            if isVerified {
+                shouldHideStar = false
+            }
+            self.starIcon.isHidden = shouldHideStar
+        }
+
         HUD.flash(.labeledSuccess(title: nil, subtitle: message), delay: 1.0)
     }
     
@@ -61,11 +71,19 @@ class UserCell: UITableViewCell {
         }
         
         if Current.isStarred(user: member) {
+            starIcon.image = #imageLiteral(resourceName: "Star")
             starButton.isSelected = true
             starIcon.isHidden = false
         } else {
             starButton.isSelected = false
             starIcon.isHidden = true
+        }
+        
+        FirebaseAPI.checkVerified(spotifyID: member.spotifyID) { (isVerified) in
+            if isVerified {
+                self.starIcon.image = #imageLiteral(resourceName: "verified")
+                self.starIcon.isHidden = false
+            }
         }
         
         // set elements

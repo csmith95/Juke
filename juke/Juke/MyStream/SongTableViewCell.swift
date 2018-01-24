@@ -32,7 +32,7 @@ class SongTableViewCell: UITableViewCell {
 
     @IBAction func upvotePressed(_ sender: Any) {
         upvoteButton.isSelected = !upvoteButton.isSelected
-        FirebaseAPI.updateVotes(song: self.song, upvoted: upvoteButton.isSelected)
+        FirebaseAPI.updateVotes(song: self.song, upvoted: upvoteButton.isSelected, topSong: false)
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -50,8 +50,15 @@ class SongTableViewCell: UITableViewCell {
         })
         upvoteButton.setTitle("\(song.upvoters.count)", for: .normal)
         loadUserIcon(url: song.memberImageURL, imageView: memberImgView)
-        self.userStarIcon.image = UIImage(named: "star")
+        self.userStarIcon.image = #imageLiteral(resourceName: "Star")
         self.userStarIcon.isHidden = !Current.isStarred(spotifyID: song.memberSpotifyID)
+        
+        FirebaseAPI.checkVerified(spotifyID: song.memberSpotifyID) { (isVerified) in
+            if isVerified {
+                self.userStarIcon.isHidden = false
+                self.userStarIcon.image = #imageLiteral(resourceName: "verified")
+            }
+        }
         
         upvoteButton.setImage(normalUpvote, for: .normal)
         upvoteButton.setImage(selectedUpvote, for: .selected)

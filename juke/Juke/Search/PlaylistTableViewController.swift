@@ -131,7 +131,12 @@ class PlaylistTableViewController: UIViewController {
     
     
     @IBAction func addAllPlaylist(_ sender: Any) {
-        //print(allSongs)
+        
+        if (Current.stream?.isFeatured ?? false) && !Current.isHost() {
+            HUD.flash(.labeledError(title: nil, subtitle: "Adding songs is disabled for JukeLIVE sessions"), delay: 2.0)
+            return
+        }
+        
         HUD.flash(.labeledSuccess(title: nil, subtitle: "Added all songs in \(self.playlist.name) to your stream"), delay: 1.0)
         FirebaseAPI.queuePlaylist(songs: allSongs)
         addPlaylistButton.isSelected = true

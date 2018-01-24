@@ -287,24 +287,21 @@ class FirebaseAPI {
                 // no current song - set current song
                 self.ref.child("/streams/\(stream.streamID)/song").setValue(song.firebaseDict)
             }
-        }) {error in print(error.localizedDescription)}
+        }) { error in print(error.localizedDescription) }
     }
     
     private static func queuePlaylistHelper(songs: [Models.SpotifySong]) {
         guard let stream = Current.stream else { return }
-        for song in songs {
-            guard let song = Models.FirebaseSong(song: song) else { return }
-            self.ref.child("/streams/\(stream.streamID)/song").observeSingleEvent(of: .value, with: { (snapshot) in
-                if snapshot.exists() {
-                    // if there is already a top song right now (queue not empty), write it to the song queue
-                    self.ref.child("/songs/\(stream.streamID)/\(song.key)").setValue(song.firebaseDict)
-                } else {
-                    // no current song - set current song
-                    self.ref.child("/streams/\(stream.streamID)/song").setValue(song.firebaseDict)
-                }
-            }) {error in print(error.localizedDescription)}
+        for index in 0..<songs.count {
+            guard let song = Models.FirebaseSong(song: songs[index]) else { continue }
+            print("adding song: " + song.songName)
+            if index == 0 && stream.song == nil {
+                self.ref.child("/streams/\(stream.streamID)/song").setValue(song.firebaseDict)
+                continue
+            }
+            
+            self.ref.child("/songs/\(stream.streamID)/\(song.key)").setValue(song.firebaseDict)
         }
-        
     }
     
     public static func queueSong(spotifySong: Models.SpotifySong) {
@@ -318,6 +315,7 @@ class FirebaseAPI {
     }
     
     public static func queuePlaylist(songs: [Models.SpotifySong]) {
+        if songs.count == 0 { return }
         if Current.stream == nil {
             FirebaseAPI.createNewStream(title: "\(Current.user!.username)'s Stream") {
                 self.queuePlaylistHelper(songs: songs)
@@ -383,7 +381,13 @@ class FirebaseAPI {
     
     // creates and joins empty stream with user as host. leaves current stream if any
     public static func createNewStream(title: String, callback: @escaping (() -> Void)) {
-        let newStream = Models.FirebaseStream()
+        var newStream = Models.FirebaseStream()
+        
+        // terrible style but this is the most reliable way for now (surpass network calls) to encode
+        // featured streams. just change spotify ID to DAP's or Matoma's
+        if Current.user?.spotifyID ?? "" == "22xpbylgoadqnzdz64o6xppua" {
+            newStream.isFeatured = true
+        }
         
         // create stream in firebase
         ref.child("streams/\(newStream.streamID)").setValue(newStream.firebaseDict)
@@ -488,14 +492,20 @@ class FirebaseAPI {
         }
     }
     
-    public static func updateVotes(song: Models.FirebaseSong, upvoted: Bool) {
+    public static func updateVotes(song: Models.FirebaseSong, upvoted: Bool, topSong: Bool) {
         guard let stream = Current.stream else { return }
         guard let user = Current.user else { return }
+        if stream.isFeatured ?? false {
+            self.ref.child("/featuredAnalytics/\(stream.host.username)/\(song.spotifyID)/upvoters/\(user.spotifyID)").setValue(upvoted ? true : false)
+            if topSong { return }
+        }
+        
         if upvoted {
             self.ref.child("/songs/\(stream.streamID)/\(song.key)/upvoters/\(user.spotifyID)").setValue(true)
         } else {
             self.ref.child("/songs/\(stream.streamID)/\(song.key)/upvoters/\(user.spotifyID)").removeValue()
         }
+        
     }
     
     public static func addStreamTitleChangedListener() {

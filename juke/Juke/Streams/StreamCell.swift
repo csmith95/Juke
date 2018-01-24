@@ -48,9 +48,11 @@ class StreamCell: UITableViewCell {
         if (isftrd) {
             loadFtrdCellImages(stream: stream)
             self.streamName.text = "JukeLIVE: \(stream.title)"
+            self.hostStarIcon.image = #imageLiteral(resourceName: "verified")
         } else {
             loadCellImages(stream: stream)
             self.streamName.text = stream.title
+            self.hostStarIcon.image = #imageLiteral(resourceName: "Star")
             self.hostStarIcon.isHidden = !Current.isStarred(user: stream.host)
         }
         self.hostLabel.text = "Hosted by \(stream.host.username)"

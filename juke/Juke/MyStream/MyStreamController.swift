@@ -22,7 +22,7 @@ class MyStreamController: UITableViewController {
     // firebase vars
     let songsDataSource = SongQueueDataSource()
 
-    @IBOutlet var currentlyPlayingUpvote: UIButton!
+    @IBOutlet var jukeLiveButton: UIButton!
     @IBOutlet var featuredArtistVerifiedImage: UIImageView!
     @IBOutlet var featuredArtistImageHeight: NSLayoutConstraint!
     @IBOutlet var streamNameStackView: UIStackView!
@@ -177,10 +177,6 @@ class MyStreamController: UITableViewController {
         }
     }
     
-    @IBAction func currentlyPlayingUpvotePressed(_ sender: Any) {
-        currentlyPlayingUpvote.isSelected = !currentlyPlayingUpvote.isSelected
-    }
-    
     func reloadSongs() {
         DispatchQueue.main.async {
             objc_sync_enter(self.tableView.dataSource)
@@ -210,27 +206,28 @@ class MyStreamController: UITableViewController {
         }
         numContributorsButton.setTitle(numMembersString, for: .normal)
         streamNameLabel.text = stream.title
+        
+        let frame = self.tableView.tableHeaderView!.frame
+        if stream.isFeatured ?? false {
+            self.featuredArtistImageHeight.constant = 80
+            self.featuredArtistImage.layoutIfNeeded()
+            self.tableView.tableHeaderView!.frame.size = CGSize(width: frame.width, height: 475)
+            self.tableView.layoutIfNeeded()
+            ImageCache.downloadUserImage(url: stream.host.imageURL, callback: { (image) in
+                self.featuredArtistImage.image = image
+                self.featuredArtistVerifiedImage.isHidden = false
+            })
+            self.jukeLiveButton.isHidden = false
+        } else {
+            self.featuredArtistImageHeight.constant = 0
+            self.featuredArtistImage.layoutIfNeeded()
+            self.tableView.tableHeaderView!.frame.size = CGSize(width: frame.width, height: 400)
+            self.tableView.layoutIfNeeded()
+            self.featuredArtistVerifiedImage.isHidden = true
+            self.jukeLiveButton.isHidden = true
+        }
+        
         if let song = stream.song {
-            let frame = self.tableView.tableHeaderView!.frame
-
-            if stream.isFeatured ?? false {
-                self.currentlyPlayingUpvote.isHidden = false
-                self.featuredArtistImageHeight.constant = 80
-                self.featuredArtistImage.layoutIfNeeded()
-                self.tableView.tableHeaderView!.frame.size = CGSize(width: frame.width, height: 470)
-                self.tableView.layoutIfNeeded()
-                ImageCache.downloadUserImage(url: stream.host.imageURL, callback: { (image) in
-                    self.featuredArtistImage.image = image
-                    self.featuredArtistVerifiedImage.isHidden = false
-                })
-            } else {
-                self.currentlyPlayingUpvote.isHidden = true
-                self.featuredArtistImageHeight.constant = 0
-                self.featuredArtistImage.layoutIfNeeded()
-                self.tableView.tableHeaderView!.frame.size = CGSize(width: frame.width, height: 400)
-                self.tableView.layoutIfNeeded()
-                self.featuredArtistVerifiedImage.isHidden = true
-            }
             
             self.emptyQueueLabel1.isHidden = true
             self.emptyQueueLabel2.isHidden = true
@@ -238,7 +235,11 @@ class MyStreamController: UITableViewController {
             
             self.coverArtImage.af_setImage(withURL: URL(string: song.coverArtURL)!, placeholderImage: nil)
             self.coverArtImage.isHidden = false
-            self.bgblurimg.af_setImage(withURL: URL(string:song.coverArtURL)!, placeholderImage: nil)
+            if stream.isFeatured ?? false {
+                self.bgblurimg.image = UIImage(named: "black")
+            } else {
+                self.bgblurimg.af_setImage(withURL: URL(string:song.coverArtURL)!, placeholderImage: nil)
+            }
             self.currentSongLabel.text = song.songName
             self.currentSongLabel.isHidden = false
             self.currentArtistLabel.text = song.artistName
@@ -516,5 +517,6 @@ class MyStreamController: UITableViewController {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
+
 }
 

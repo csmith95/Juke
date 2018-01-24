@@ -38,7 +38,6 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
     
     override private init() {
         self.position_ms = 0.0
-        print("init jams player")
         super.init()
         do {
             try player?.start(withClientId: kClientID)
@@ -66,20 +65,7 @@ class JamsPlayer: NSObject, SPTAudioStreamingDelegate, SPTAudioStreamingPlayback
         if type == .began {
             // Interruption began, take appropriate actions (save state, update user interface)
             if Current.isHost() {
-                print("pausing stream from handle interruption. check to see if SPT pause event also fires")
-                Current.stream?.isPlaying = false
                 FirebaseAPI.setPlayStatus(status: false)
-            }
-        } else if type == .ended {
-            guard let optionsValue =
-                info[AVAudioSessionInterruptionOptionKey] as? UInt else {
-                    return
-            }
-            let options = AVAudioSessionInterruptionOptions(rawValue: optionsValue)
-            if options.contains(.shouldResume) {
-                // Interruption Ended - playback should resume
-                print("resuming playback")
-                setPlayStatus(shouldPlay: true, topSong: Current.stream?.song)
             }
         }
     }

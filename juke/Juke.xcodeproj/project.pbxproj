@@ -11,6 +11,8 @@
 		4B0490E91E734614003F49DF /* SongTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0490E81E734614003F49DF /* SongTableViewCell.swift */; };
 		4B04E4591F55682C001605E2 /* CustomDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B04E4581F55682C001605E2 /* CustomDataSource.swift */; };
 		4B0532391F684FD600ADA988 /* SpotifySearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0532381F684FD600ADA988 /* SpotifySearchTableViewController.swift */; };
+		4B0D219F2017E8E200CB0402 /* LivePromoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0D219E2017E8E200CB0402 /* LivePromoViewController.swift */; };
+		4B0D21A02017E8E200CB0402 /* LivePromoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0D219E2017E8E200CB0402 /* LivePromoViewController.swift */; };
 		4B0DDE111F7971DD009307D5 /* NameStreamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0DDE101F7971DD009307D5 /* NameStreamViewController.swift */; };
 		4B0DDE131F79BD7C009307D5 /* NameStreamViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B0DDE121F79BD7C009307D5 /* NameStreamViewController.xib */; };
 		4B0DDE151F79C649009307D5 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0DDE141F79C649009307D5 /* ImageCache.swift */; };
@@ -131,6 +133,7 @@
 		4B0532381F684FD600ADA988 /* SpotifySearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifySearchTableViewController.swift; sourceTree = "<group>"; };
 		4B054AF51F94110900116B21 /* Juke Production.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Juke Production.entitlements"; sourceTree = "<group>"; };
 		4B054AF61F9411C800116B21 /* Juke Dev.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Juke Dev.entitlements"; sourceTree = "<group>"; };
+		4B0D219E2017E8E200CB0402 /* LivePromoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LivePromoViewController.swift; sourceTree = "<group>"; };
 		4B0DDE101F7971DD009307D5 /* NameStreamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameStreamViewController.swift; sourceTree = "<group>"; };
 		4B0DDE121F79BD7C009307D5 /* NameStreamViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NameStreamViewController.xib; sourceTree = "<group>"; };
 		4B0DDE141F79C649009307D5 /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
@@ -335,6 +338,14 @@
 			path = Static;
 			sourceTree = "<group>";
 		};
+		4B0D21992017E85000CB0402 /* Live */ = {
+			isa = PBXGroup;
+			children = (
+				4B0D219E2017E8E200CB0402 /* LivePromoViewController.swift */,
+			);
+			path = Live;
+			sourceTree = "<group>";
+		};
 		4B3A34C01E58120E00C314A0 = {
 			isa = PBXGroup;
 			children = (
@@ -360,6 +371,7 @@
 		4B3A34CB1E58120F00C314A0 /* Juke */ = {
 			isa = PBXGroup;
 			children = (
+				4B0D21992017E85000CB0402 /* Live */,
 				4BCFA0261F70511E00E49516 /* DataSources */,
 				4B0532451F687DB200ADA988 /* Global */,
 				4B05323F1F687C7D00ADA988 /* Login */,
@@ -748,6 +760,7 @@
 				4B0532391F684FD600ADA988 /* SpotifySearchTableViewController.swift in Sources */,
 				4B13DE4C1E8AFA970060D29A /* StreamCell.swift in Sources */,
 				4B8CD0F81F51FF47005C61D1 /* UserCell.swift in Sources */,
+				4B0D219F2017E8E200CB0402 /* LivePromoViewController.swift in Sources */,
 				4B0DDE1F1F7B1844009307D5 /* MyPlaylistsTableViewController.swift in Sources */,
 				4BCFA02A1F70516E00E49516 /* StarredUsersDataSource.swift in Sources */,
 				4B336A671E8B54A0003CEDBB /* Models.swift in Sources */,
@@ -799,6 +812,7 @@
 				4B5783B31F9035B80072C204 /* SpotifySearchTableViewController.swift in Sources */,
 				4B5783B41F9035B80072C204 /* StreamCell.swift in Sources */,
 				4B5783B51F9035B80072C204 /* UserCell.swift in Sources */,
+				4B0D21A02017E8E200CB0402 /* LivePromoViewController.swift in Sources */,
 				4B5783B61F9035B80072C204 /* MyPlaylistsTableViewController.swift in Sources */,
 				4B5783B71F9035B80072C204 /* StarredUsersDataSource.swift in Sources */,
 				4B5783B81F9035B80072C204 /* Models.swift in Sources */,

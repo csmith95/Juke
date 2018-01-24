@@ -12,6 +12,7 @@ import PKHUD
 
 class StarredUserCell: UITableViewCell {
 
+    @IBOutlet var starIcon: UIImageView!
     @IBOutlet var inviteToStreamButton: UIButton!
     @IBOutlet var usernameLabel: UILabel!
     @IBOutlet var userImageView: UIImageView!
@@ -38,6 +39,13 @@ class StarredUserCell: UITableViewCell {
             self.inviteToStreamButton.isSelected = false
             self.inviteToStreamButton.isHidden = false
             self.inviteToStreamButton.isUserInteractionEnabled = true
+        }
+        self.starIcon.image = #imageLiteral(resourceName: "Star")
+        
+        FirebaseAPI.checkVerified(spotifyID: member.spotifyID) { (isVerified) in
+            if isVerified {
+                self.starIcon.image = #imageLiteral(resourceName: "verified")
+            }
         }
         
         // set elements
