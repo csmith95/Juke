@@ -478,7 +478,7 @@ class FirebaseAPI {
                         }
                     }
                     callback(true)
-                }) {error in
+                }) { error in
                     print(error.localizedDescription)
                     callback(false)
                 }
