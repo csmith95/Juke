@@ -45,7 +45,7 @@ class StreamCell: UITableViewCell {
     public func populateCell(stream: Models.FirebaseStream) {
         
         let isftrd = stream.isFeatured ?? false
-        self.featuredhost.isHidden = true
+        self.featuredHost.isHidden = true
         if (isftrd) {
             loadFtrdCellImages(stream: stream)
             self.streamName.text = "JukeLIVE: \(stream.title)"

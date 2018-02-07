@@ -113,11 +113,11 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
         let body = "You are hosting a stream. The vibe will be lost forever if you do this!"
         let controller = Presentr.alertViewController(title: title, body: body)
         
-        let deleteAction = AlertAction(title: "Sure 🕶", style: .destructive) { _ in
+        let deleteAction = AlertAction(title: "Sure", style: .destructive) { _ in
             self.joinStream(stream: stream)
         }
 
-        let okAction = AlertAction(title: "NO, sorry 🙄", style: .cancel) { _ in
+        let okAction = AlertAction(title: "NO, sorry", style: .cancel) { _ in
             print("Ok!")
         }
         
@@ -135,7 +135,7 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
     func checkEmptyState() {
         if streamsTableView.visibleCells.isEmpty {
             let emptyStateLabel = UILabel(frame: self.streamsTableView.frame)
-            emptyStateLabel.text = "None of your starred friends have an active stream now ☹️ \n \n Start adding some songs to your own stream or explore the ALL streams tab!"
+            emptyStateLabel.text = "None of your starred friends have an active stream now \n \n Start adding some songs to your own stream or explore the ALL streams tab!"
             emptyStateLabel.textColor = UIColor.white
             emptyStateLabel.textAlignment = .center
             emptyStateLabel.numberOfLines = 0

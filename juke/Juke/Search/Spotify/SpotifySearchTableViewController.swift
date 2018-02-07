@@ -196,7 +196,7 @@ extension SpotifySearchTableViewController: UITableViewDataSource, UITableViewDe
     func checkEmptyState() {
         if tableView.visibleCells.isEmpty {
             let emptyStateLabel = UILabel(frame: self.tableView.frame)
-            emptyStateLabel.text = "Search for songs on Spotify 😀"
+            emptyStateLabel.text = "Search for songs on Spotify"
             emptyStateLabel.textColor = UIColor.white
             emptyStateLabel.textAlignment = .center
             emptyStateLabel.numberOfLines = 0

@@ -18,7 +18,7 @@ def all_pods
     pod 'Firebase/Storage'
     pod 'Firebase/Messaging'
     pod 'FirebaseUI/Database', '~> 4.0'
-    pod 'Whisper'
+    pod 'Whisper', '5.1.0'
     pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
     pod 'XLActionController'
     pod 'Fabric', '~> 1.7.2'
