@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="rXL-Ez-cdK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="rXL-Ez-cdK">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
         <array key="AppleColorEmoji@2x.ttc">
             <string>AppleColorEmoji</string>
+        </array>
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+            <string>HelveticaNeue-Bold</string>
         </array>
     </customFonts>
     <scenes>
@@ -119,6 +123,103 @@
             </objects>
             <point key="canvasLocation" x="-388" y="653"/>
         </scene>
+        <!--Streams View Controller-->
+        <scene sceneID="be8-lL-N03">
+            <objects>
+                <viewController id="bwb-kF-6hF" userLabel="Streams View Controller" customClass="StreamsViewController" customModule="Juke_Dev" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="JrG-TH-cDV"/>
+                        <viewControllerLayoutGuide type="bottom" id="8HD-gV-jAC"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="aPg-6s-61s">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="100" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="cSc-n2-dq6" userLabel="Streams Table View">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
+                                <color key="backgroundColor" red="0.090476475656032562" green="0.078388981521129608" blue="0.078268878161907196" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="StreamCell" rowHeight="100" id="NJT-PM-BSA" customClass="StreamCell" customModule="Juke_Dev" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="100"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" clipsSubviews="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="NJT-PM-BSA" id="Sc1-KM-qxO">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="99.666666666666671"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DAP" translatesAutoresizingMaskIntoConstraints="NO" id="ugB-ZX-XeA">
+                                                    <rect key="frame" x="21" y="16" width="68" height="68"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="68" id="EDK-US-nzB"/>
+                                                        <constraint firstAttribute="height" constant="68" id="fGX-vJ-nKC"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="lWc-kf-Asr">
+                                                    <rect key="frame" x="104.99999999999999" y="32" width="142.66666666666663" height="37"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stream Name" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2el-lI-tXf">
+                                                            <rect key="frame" x="0.0" y="0.0" width="97.666666666666671" height="18"/>
+                                                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="15"/>
+                                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yMd-ns-DA4">
+                                                            <rect key="frame" x="0.0" y="23" width="142.66666666666666" height="14"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Host Name" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VrP-1N-TGY">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="60.666666666666664" height="14"/>
+                                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
+                                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Num streaming" textAlignment="justified" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N2x-rM-QPs">
+                                                                    <rect key="frame" x="60.666666666666657" y="0.0" width="82" height="14"/>
+                                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
+                                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                        </stackView>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstItem="ugB-ZX-XeA" firstAttribute="leading" secondItem="Sc1-KM-qxO" secondAttribute="leading" constant="21" id="4nV-jU-cMR"/>
+                                                <constraint firstItem="lWc-kf-Asr" firstAttribute="leading" secondItem="ugB-ZX-XeA" secondAttribute="trailing" constant="16" id="9BF-L6-e1z"/>
+                                                <constraint firstItem="ugB-ZX-XeA" firstAttribute="centerY" secondItem="Sc1-KM-qxO" secondAttribute="centerY" id="yf1-YM-Hfb"/>
+                                                <constraint firstItem="lWc-kf-Asr" firstAttribute="centerY" secondItem="ugB-ZX-XeA" secondAttribute="centerY" id="zH1-vs-Mbj"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="StreamCell"/>
+                                        <connections>
+                                            <outlet property="albumArt" destination="ugB-ZX-XeA" id="lr9-e3-HuR"/>
+                                            <outlet property="hostLabel" destination="VrP-1N-TGY" id="H2N-Bc-Oz9"/>
+                                            <outlet property="numMembers" destination="N2x-rM-QPs" id="iwu-sV-wNG"/>
+                                            <outlet property="streamName" destination="2el-lI-tXf" id="dkC-0k-VuR"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="cSc-n2-dq6" firstAttribute="bottom" secondItem="8HD-gV-jAC" secondAttribute="top" id="66X-hg-niq"/>
+                            <constraint firstItem="cSc-n2-dq6" firstAttribute="top" secondItem="aPg-6s-61s" secondAttribute="top" id="LPm-Nh-Pna"/>
+                            <constraint firstAttribute="trailing" secondItem="cSc-n2-dq6" secondAttribute="trailing" id="pZc-ka-c4P"/>
+                            <constraint firstItem="cSc-n2-dq6" firstAttribute="leading" secondItem="aPg-6s-61s" secondAttribute="leading" id="sef-re-L34"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="RRw-2f-JF4"/>
+                    <connections>
+                        <outlet property="streamsTableView" destination="cSc-n2-dq6" id="HeS-uv-nmu"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zHZ-5J-ImK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="679.71014492753625" y="-1488.5869565217392"/>
+        </scene>
         <!--Users-->
         <scene sceneID="4GY-9q-zGx">
             <objects>
@@ -154,7 +255,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BZy-C8-JzH" kind="relationship" relationship="rootViewController" id="qRV-c8-cfb"/>
+                        <segue destination="bwb-kF-6hF" kind="relationship" relationship="rootViewController" id="E7z-Or-4Eg"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wkY-6g-z1U" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2666,7 +2767,7 @@
                         <viewControllerLayoutGuide type="bottom" id="OLq-iP-FW1"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="c1G-e7-XEn">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gso-gl-GQS" customClass="GradientView" customModule="Juke_Dev" customModuleProvider="target">
@@ -2731,7 +2832,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SPb-GA-L82">
-                                <rect key="frame" x="0.0" y="182" width="414" height="505"/>
+                                <rect key="frame" x="0.0" y="182" width="414" height="554"/>
                                 <color key="backgroundColor" red="0.1333333333" green="0.12549019610000001" blue="0.1450980392" alpha="1" colorSpace="calibratedRGB"/>
                             </scrollView>
                         </subviews>
@@ -2799,6 +2900,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="dEN-pM-yCw"/>
-        <segue reference="Ho5-7b-FAd"/>
+        <segue reference="W62-tH-21x"/>
     </inferredMetricsTieBreakers>
 </document>

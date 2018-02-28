@@ -44,7 +44,6 @@ class LoginViewController: UIViewController {
     }
 
     @IBAction func loginWithSpotify(_ sender: Any) {
-        print("in login with spotify")
         self.present(spotifyLoginController, animated: true) {
             print("in login controller")
             self.activityIndicator.center = self.view.center
