@@ -113,8 +113,6 @@
 		F2242EB61F730416000BE18A /* StarredStreamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2242EB51F730416000BE18A /* StarredStreamsViewController.swift */; };
 		F238B150204639C700929D31 /* StreamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F238B14F204639C700929D31 /* StreamsViewController.swift */; };
 		F238B151204639C700929D31 /* StreamsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F238B14F204639C700929D31 /* StreamsViewController.swift */; };
-		F238B1532048B67800929D31 /* FeaturedStreamDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F238B1522048B67800929D31 /* FeaturedStreamDataSource.swift */; };
-		F238B1542048B67800929D31 /* FeaturedStreamDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F238B1522048B67800929D31 /* FeaturedStreamDataSource.swift */; };
 		F238B156204E6AF200929D31 /* StreamsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F238B155204E6AF200929D31 /* StreamsViewModel.swift */; };
 		F238B157204E6AF200929D31 /* StreamsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F238B155204E6AF200929D31 /* StreamsViewModel.swift */; };
 		F25133C01F6E7C8F002745C7 /* StarredTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25133BF1F6E7C8F002745C7 /* StarredTableViewController.swift */; };
@@ -193,7 +191,6 @@
 		E6EC70CD26CC692EDD2EB290 /* Pods_Juke_Production.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Juke_Production.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2242EB51F730416000BE18A /* StarredStreamsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarredStreamsViewController.swift; sourceTree = "<group>"; };
 		F238B14F204639C700929D31 /* StreamsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamsViewController.swift; sourceTree = "<group>"; };
-		F238B1522048B67800929D31 /* FeaturedStreamDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedStreamDataSource.swift; sourceTree = "<group>"; };
 		F238B155204E6AF200929D31 /* StreamsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamsViewModel.swift; sourceTree = "<group>"; };
 		F25133BF1F6E7C8F002745C7 /* StarredTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarredTableViewController.swift; sourceTree = "<group>"; };
 		F26A652D1EB194F100ADB14E /* SpotifyAudioPlayback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAudioPlayback.framework; sourceTree = "<group>"; };
@@ -426,7 +423,6 @@
 				4BCFA0271F70515D00E49516 /* StreamsDataSource.swift */,
 				4BCFA02B1F70517900E49516 /* UsersDataSource.swift */,
 				F2B98C041F71B6A400BDECEC /* StarredStreamsDataSource.swift */,
-				F238B1522048B67800929D31 /* FeaturedStreamDataSource.swift */,
 			);
 			path = DataSources;
 			sourceTree = "<group>";
@@ -795,7 +791,6 @@
 				4BCFA0281F70515D00E49516 /* StreamsDataSource.swift in Sources */,
 				4BCFA0301F70532700E49516 /* StarredUserCell.swift in Sources */,
 				4BB2B37A1F7F1DE400DDB6F5 /* LockScreenDelegate.swift in Sources */,
-				F238B1532048B67800929D31 /* FeaturedStreamDataSource.swift in Sources */,
 				F2BFC44D1FD0CD6400F531C0 /* OnboardingController.swift in Sources */,
 				F238B156204E6AF200929D31 /* StreamsViewModel.swift in Sources */,
 				4BA7CB701E8ED007003E3DC8 /* MyStreamController.swift in Sources */,
@@ -850,7 +845,6 @@
 				4B5783C91F9035B80072C204 /* StreamsDataSource.swift in Sources */,
 				4B5783CA1F9035B80072C204 /* StarredUserCell.swift in Sources */,
 				4B5783CB1F9035B80072C204 /* LockScreenDelegate.swift in Sources */,
-				F238B1542048B67800929D31 /* FeaturedStreamDataSource.swift in Sources */,
 				F2BFC4501FD12A6E00F531C0 /* OnboardingController.swift in Sources */,
 				F238B157204E6AF200929D31 /* StreamsViewModel.swift in Sources */,
 				4B5783CC1F9035B80072C204 /* MyStreamController.swift in Sources */,

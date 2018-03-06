@@ -561,4 +561,9 @@ class FirebaseAPI {
         })
     }
     
+    // Stream loading apis
+//    public func listenForFollowingStreams() {
+//
+//    }
+    
 }

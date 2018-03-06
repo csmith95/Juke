@@ -9,6 +9,7 @@
 import Foundation
 
 class StarredUsersDataSource: CustomDataSource {
+
     
     override var reloadEventName: String {
         get {

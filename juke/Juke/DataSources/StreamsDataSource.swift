@@ -10,6 +10,8 @@ import Foundation
 
 class StreamsDataSource: CustomDataSource {
     
+    var featuredStreams: [Models.FirebaseStream] = []
+    
     private let kSecondsPerHour: Double = 3600
     override var reloadEventName: String {
         get {
@@ -59,6 +61,11 @@ class StreamsDataSource: CustomDataSource {
         if let timestamp = item.stream.timestamp {
             let hoursElapsed = (NSDate().timeIntervalSince1970 - timestamp) / kSecondsPerHour
             if hoursElapsed > 336 { return false }  // filter after 2 weeks
+        }
+        
+        // create featured streams array
+        if item.stream.isFeatured == true {
+            featuredStreams.append(item.stream)
         }
         
         return query.isEmpty || item.stream.host.username.lowercased().contains(query.lowercased())
