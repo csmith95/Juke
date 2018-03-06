@@ -11,7 +11,6 @@ import Foundation
 class StreamsDataSource: CustomDataSource {
     
     private let kSecondsPerHour: Double = 3600
-    
     override var reloadEventName: String {
         get {
             return "reloadStreams"

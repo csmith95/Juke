@@ -23,6 +23,12 @@ class StarredStreamsViewController: UITableViewController, UISearchBarDelegate, 
     var starredStreamsDataSource = StarredStreamsDataSource()
     var starredUsersDataSource = StarredUsersDataSource() // because we need to load starred users into Current.swift set in order to correctly filter in this table
     
+    enum streamType {
+        case currentStream
+        case followingStream
+        case featuredStream
+    }
+    
     let presenter: Presentr = {
         let presenter = Presentr(presentationType: .alert)
         presenter.dismissAnimated = true

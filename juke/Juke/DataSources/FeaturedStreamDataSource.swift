@@ -1,29 +1,25 @@
 //
-//  StarredStreamsDataSource.swift
+//  FeaturedStreamDataSource.swift
 //  Juke
 //
-//  Created by Kojo Worai Osei on 9/19/17.
-//  Copyright © 2017 csmith. All rights reserved.
+//  Created by Kojo Worai Osei on 3/1/18.
+//  Copyright © 2018 csmith. All rights reserved.
 //
 
 import Foundation
 import PKHUD
 
-class StarredStreamsDataSource: CustomDataSource {
-    
-    private let kSecondsPerHour: Double = 3600
-    
-    var sections = ["Current", "Following", "Featured"]
+class FeaturedStreamsDataSource: CustomDataSource {
     
     override var reloadEventName: String {
         get {
-            return "reloadStarredStreams"
+            return "reloadFeaturedStreams"
         }
     }
     
     override var cellName: String {
         get {
-            return "StreamCell"
+            return "FeaturedStreamCell"
         }
     }
     
@@ -37,14 +33,6 @@ class StarredStreamsDataSource: CustomDataSource {
         let object = ["stream": stream]
         NotificationCenter.default.post(name: Notification.Name("newStreamSelected"), object: object)
         objc_sync_exit(self)
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return sections.count
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sections[section]
     }
     
     override func isEqual(current: CollectionItem, other: CollectionItem) -> Bool {
@@ -68,17 +56,12 @@ class StarredStreamsDataSource: CustomDataSource {
         
         // check if there is a song
         //var included = (item.stream.song != nil)
-        if (item.stream.song == nil) { return false }
-        
+//        if (item.stream.song == nil) { return false }
+//        
         
         // check if this is not the same as the stream you are currently in
         if let currentStream = Current.stream {
             if (item.stream.streamID == currentStream.streamID) { return true }
-        }
-        
-        if let timestamp = item.stream.timestamp {
-            let hoursElapsed = (NSDate().timeIntervalSince1970 - timestamp) / kSecondsPerHour
-            if hoursElapsed > 24 { return false }
         }
         
         if (query.isEmpty) {
