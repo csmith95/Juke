@@ -562,8 +562,16 @@ class FirebaseAPI {
     }
     
     // Stream loading apis
-//    public func listenForFollowingStreams() {
-//
-//    }
+    public static func streamsListener(callback: @escaping (DataSnapshot) -> Void) {
+        ref.child("streams").observe(.value, with: { (snapshot) in
+            callback(snapshot)
+        })
+    }
+    
+    public static func isFollowing(user: Models.FirebaseUser, callback: @escaping (Bool) -> Bool) -> Void {
+        ref.child("starredTable/\(String(describing: Current.user?.spotifyID))/").observeSingleEvent(of: .value, with: { (snapshot) in
+            return snapshot.hasChild("\(user.spotifyID)")
+            })
+    }
     
 }

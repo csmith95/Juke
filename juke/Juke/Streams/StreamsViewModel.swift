@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Firebase
 
 enum StreamsViewModelType {
     case currentStream
@@ -28,22 +29,50 @@ protocol StreamsViewModelDelegate: class {
 class StreamsViewModel: NSObject {
     var items = [StreamsViewModelItem]()
     weak var delegate: StreamsViewModelDelegate?
+    var featuredStreams = [Models.FirebaseStream]()
+    var followingStreams = [Models.FirebaseStream]()
     
-    private func getData() {
+    func parseData() {
         // refresh items
         items.removeAll()
+        
         // create streamviewmodeltypes
-        let followingStreamsItem = FollowingStreamsItem(fStreams: StarredStreamsDataSource().filteredCollection)
-        let featuredStreamsItem = FeaturedStreamsItem(ftrdStreams: StreamsDataSource().featuredStreams)
+        let followingStreamsItem = FollowingStreamsItem(fStreams: self.followingStreams)
+        let featuredStreamsItem = FeaturedStreamsItem(ftrdStreams: self.featuredStreams)
         let currStreamItem = CurrentStreamItem(currentStream: Current.stream!)
         
+        items.append(currStreamItem)
         items.append(followingStreamsItem)
         items.append(featuredStreamsItem)
-        items.append(currStreamItem)
         
+        print("FOLLOWING STREAMS ITEMS", followingStreamsItem.followingStreams)
+        print("featuredstreamsitem", featuredStreamsItem.featuredStreams)
+        print("currstreamsitem", currStreamItem.currStream)
         delegate?.didFinishUpdates()
         
     }
+    
+    func loadData() {
+        FirebaseAPI.streamsListener { (streams) in
+            let enumerator = streams.children
+            while let stream = enumerator.nextObject() as? DataSnapshot {
+                let FIRStream = Models.FirebaseStream(snapshot: stream)
+                if (FIRStream?.isFeatured)! { self.featuredStreams.append(FIRStream!) }
+                if self.streamHasStarredUser(stream: FIRStream!) { self.followingStreams.append(FIRStream!) }
+            }
+            self.parseData()
+        }
+    }
+    
+    func streamHasStarredUser(stream: Models.FirebaseStream) -> Bool {
+        if (Current.isStarred(user: stream.host)) { return true }
+        
+        for user in stream.members {
+            if (Current.isStarred(user: user)) { return true }
+        }
+        return false
+    }
+    
 }
 
 class CurrentStreamItem: StreamsViewModelItem {
@@ -79,15 +108,15 @@ class FollowingStreamsItem: StreamsViewModelItem {
         return followingStreams.count
     }
     
-    var followingStreams: [CollectionItem]
-    init(fStreams: [CollectionItem]) {
+    var followingStreams: [Models.FirebaseStream]
+    init(fStreams: [Models.FirebaseStream]) {
         self.followingStreams = fStreams
     }
 }
 
 class FeaturedStreamsItem: StreamsViewModelItem {
     var type: StreamsViewModelType {
-        return .followingStream
+        return .featuredStream
     }
     
     var sectionTitle: String {
@@ -95,11 +124,70 @@ class FeaturedStreamsItem: StreamsViewModelItem {
     }
     
     var rowCount: Int {
-        return 1
+        return featuredStreams.count
     }
     
     var featuredStreams: [Models.FirebaseStream]
     init(ftrdStreams: [Models.FirebaseStream]) {
         self.featuredStreams = ftrdStreams
     }
+}
+
+extension StreamsViewModel: UITableViewDataSource, UITableViewDelegate {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        print(items)
+        return items.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return items[section].rowCount
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let item = items[indexPath.section]
+        switch item.type {
+        case .currentStream:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell") as? StreamCell {
+                //let cell = cell as! StreamCell
+                let item = item as? CurrentStreamItem
+                print("item in currStream case", item as Any)
+                cell.populateCell(stream: (item?.currStream)!)
+                return cell
+            }
+        case .followingStream:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell") as? StreamCell {
+                //let cell = cell as! StreamCell
+                let item = item as? FollowingStreamsItem
+                print("item in followingStream case", item as Any)
+                if let fwStream = item?.followingStreams[indexPath.row] {
+                    
+                    cell.populateCell(stream: fwStream)
+                    return cell
+                }
+            }
+        case .featuredStream:
+            print("in featuredStreams case")
+            if let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell") as? StreamCell {
+                let item = item as? FeaturedStreamsItem
+                print("item in featuredStream case", item?.featuredStreams as Any)
+                if !((item?.featuredStreams.isEmpty)!), let featuredStream = item?.featuredStreams[indexPath.row] {
+                    cell.populateCell(stream: featuredStream)
+                    return cell
+                }
+                
+            }
+        }
+        return UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return items[section].sectionTitle
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView()
+        view.backgroundColor = UIColor.red
+        return view
+    }
+    
 }

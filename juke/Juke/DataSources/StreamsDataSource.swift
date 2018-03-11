@@ -4,13 +4,14 @@
 //
 //  Created by Conner Smith on 9/18/17.
 //  Copyright © 2017 csmith. All rights reserved.
-//
+//  This file is deprecated
+//  Retiring this api in next iteration
 
 import Foundation
 
 class StreamsDataSource: CustomDataSource {
     
-    var featuredStreams: [Models.FirebaseStream] = []
+    var featuredStreams = [Models.FirebaseStream]()
     
     private let kSecondsPerHour: Double = 3600
     override var reloadEventName: String {
@@ -53,18 +54,20 @@ class StreamsDataSource: CustomDataSource {
         // then by member count
         return first.members.count > second.members.count
     }
+
     
     override func shouldInclude(item: CollectionItem) -> Bool {
         // add if you are starred by the current user
         if item.stream.song == nil { return false }
         
-        if let timestamp = item.stream.timestamp {
-            let hoursElapsed = (NSDate().timeIntervalSince1970 - timestamp) / kSecondsPerHour
-            if hoursElapsed > 336 { return false }  // filter after 2 weeks
-        }
-        
+//        if let timestamp = item.stream.timestamp {
+//            let hoursElapsed = (NSDate().timeIntervalSince1970 - timestamp) / kSecondsPerHour
+//            if hoursElapsed > 336 { return false }  // filter after 2 weeks
+//        }
+        print("item in streams data source shouldInclude", item)
         // create featured streams array
         if item.stream.isFeatured == true {
+            print("found a featured stream and adding")
             featuredStreams.append(item.stream)
         }
         

@@ -68,7 +68,7 @@ class StarredStreamsDataSource: CustomDataSource {
         
         // check if there is a song
         //var included = (item.stream.song != nil)
-        if (item.stream.song == nil) { return false }
+        //if (item.stream.song == nil) { return false }
         
         
         // check if this is not the same as the stream you are currently in
@@ -76,17 +76,17 @@ class StarredStreamsDataSource: CustomDataSource {
             if (item.stream.streamID == currentStream.streamID) { return true }
         }
         
-        if let timestamp = item.stream.timestamp {
-            let hoursElapsed = (NSDate().timeIntervalSince1970 - timestamp) / kSecondsPerHour
-            if hoursElapsed > 24 { return false }
-        }
+//        if let timestamp = item.stream.timestamp {
+//            let hoursElapsed = (NSDate().timeIntervalSince1970 - timestamp) / kSecondsPerHour
+//            if hoursElapsed > 24 { return false }
+//        }
         
         if (query.isEmpty) {
             return streamHasStarredUser(item: item)
             //print("query is empty")
             //return true
         } else {
-            return item.stream.host.username.lowercased().contains(query.lowercased())
+            return true //item.stream.host.username.lowercased().contains(query.lowercased())
         }
     }
     

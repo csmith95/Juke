@@ -1591,7 +1591,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="65"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3vp-Py-Aex">
-                                                    <rect key="frame" x="356" y="12.666666666666664" width="50" height="40"/>
+                                                    <rect key="frame" x="0.0" y="12.666666666666664" width="0.0" height="40"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="VWt-W2-Fig"/>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="aY7-9f-ABz"/>

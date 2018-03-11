@@ -36,6 +36,7 @@ class CustomDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     let ref = Database.database().reference()
     
     // set in subclass because different events should trigger different tables to reload
+    // we need to not assume that I am using this for a table... just give me an array and let me do what I want with it
     var reloadEventName: String {
         get {
             fatalError("Subclass should override this property")
