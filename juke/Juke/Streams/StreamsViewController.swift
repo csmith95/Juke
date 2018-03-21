@@ -24,51 +24,21 @@ class StreamsViewController: UIViewController {
         super.viewDidLoad()
         
         streamsTableView.dataSource = viewModel
+        streamsTableView.delegate = viewModel
+        //streamsTableView.sectionFooterHeight = 1
         viewModel.delegate = self
         let followingUsers = StarredUsersDataSource()
         followingUsers.listen()
-        //starredUsersDataSource.listen()
         // Track views of this page
         Answers.logContentView(withName: "Starred Streams Page", contentType: "Starred Streams List", contentId: "\(Current.user?.spotifyID ?? "noname"))|StarredStreams")
         
         viewModel.loadData()
-        // Set up notifications
-        //NotificationCenter.default.addObserver(self, selector: #selector(self.reloadStreams), name: Notification.Name("reloadStarredStreams"), object: nil)
-        
-        // Set delegate and dataSource
-//        streamsTableView.dataSource = streamsDataSource
-//        streamsTableView.delegate = streamsDataSource
-
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        streamsDataSource.listen()
-//        StreamsDataSource().listen()
-//    }
-//
-//    override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        streamsDataSource.detach()
-//        starredUsersDataSource.detach()
-//    }
-//
-//    func reloadStreams() {
-//        DispatchQueue.main.async {
-//            objc_sync_enter(self.streamsTableView.dataSource)
-//            self.streamsTableView.reloadData()
-//            //self.checkEmptyState()
-//            objc_sync_exit(self.streamsTableView.dataSource)
-//        }
-//    }
-    
-
     /*
     // MARK: - Navigation
 

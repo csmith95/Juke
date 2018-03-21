@@ -39,20 +39,25 @@ class StreamsViewModel: NSObject {
         // create streamviewmodeltypes
         let followingStreamsItem = FollowingStreamsItem(fStreams: self.followingStreams)
         let featuredStreamsItem = FeaturedStreamsItem(ftrdStreams: self.featuredStreams)
-        let currStreamItem = CurrentStreamItem(currentStream: Current.stream!)
+        //let currStreamItem = CurrentStreamItem(currentStream: Current.stream)
         
-        items.append(currStreamItem)
+        if let currListening = Current.stream {
+            let currStreamItem = CurrentStreamItem(currentStream: currListening)
+            items.append(currStreamItem)
+        }
+        
+        // append model types to items list
+        
         items.append(followingStreamsItem)
         items.append(featuredStreamsItem)
         
-        print("FOLLOWING STREAMS ITEMS", followingStreamsItem.followingStreams)
-        print("featuredstreamsitem", featuredStreamsItem.featuredStreams)
-        print("currstreamsitem", currStreamItem.currStream)
+        // notify view controller that you have finished updating items list
         delegate?.didFinishUpdates()
         
     }
     
     func loadData() {
+        // this will fire whenever there is a change and then update the items list appropriately by calling parseData
         FirebaseAPI.streamsListener { (streams) in
             let enumerator = streams.children
             while let stream = enumerator.nextObject() as? DataSnapshot {
@@ -60,13 +65,14 @@ class StreamsViewModel: NSObject {
                 if (FIRStream?.isFeatured)! { self.featuredStreams.append(FIRStream!) }
                 if self.streamHasStarredUser(stream: FIRStream!) { self.followingStreams.append(FIRStream!) }
             }
+            
+            // update items list
             self.parseData()
         }
     }
     
     func streamHasStarredUser(stream: Models.FirebaseStream) -> Bool {
         if (Current.isStarred(user: stream.host)) { return true }
-        
         for user in stream.members {
             if (Current.isStarred(user: user)) { return true }
         }
@@ -81,14 +87,14 @@ class CurrentStreamItem: StreamsViewModelItem {
     }
     
     var sectionTitle: String {
-        return "Current Stream"
+        return "Current"
     }
     
     var rowCount: Int {
         return 1
     }
     
-    var currStream: Models.FirebaseStream
+    var currStream: Models.FirebaseStream?
     
     init(currentStream: Models.FirebaseStream) {
         self.currStream = currentStream
@@ -120,7 +126,7 @@ class FeaturedStreamsItem: StreamsViewModelItem {
     }
     
     var sectionTitle: String {
-        return "Featured Streams"
+        return "Featured"
     }
     
     var rowCount: Int {
@@ -135,7 +141,6 @@ class FeaturedStreamsItem: StreamsViewModelItem {
 
 extension StreamsViewModel: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
-        print(items)
         return items.count
     }
     
@@ -150,7 +155,6 @@ extension StreamsViewModel: UITableViewDataSource, UITableViewDelegate {
             if let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell") as? StreamCell {
                 //let cell = cell as! StreamCell
                 let item = item as? CurrentStreamItem
-                print("item in currStream case", item as Any)
                 cell.populateCell(stream: (item?.currStream)!)
                 return cell
             }
@@ -158,7 +162,6 @@ extension StreamsViewModel: UITableViewDataSource, UITableViewDelegate {
             if let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell") as? StreamCell {
                 //let cell = cell as! StreamCell
                 let item = item as? FollowingStreamsItem
-                print("item in followingStream case", item as Any)
                 if let fwStream = item?.followingStreams[indexPath.row] {
                     
                     cell.populateCell(stream: fwStream)
@@ -166,10 +169,8 @@ extension StreamsViewModel: UITableViewDataSource, UITableViewDelegate {
                 }
             }
         case .featuredStream:
-            print("in featuredStreams case")
             if let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell") as? StreamCell {
                 let item = item as? FeaturedStreamsItem
-                print("item in featuredStream case", item?.featuredStreams as Any)
                 if !((item?.featuredStreams.isEmpty)!), let featuredStream = item?.featuredStreams[indexPath.row] {
                     cell.populateCell(stream: featuredStream)
                     return cell
@@ -186,8 +187,34 @@ extension StreamsViewModel: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
-        view.backgroundColor = UIColor.red
+        view.backgroundColor = UIColor.clear
+        let label = UILabel()
+        let text = (items[section].sectionTitle).uppercased()
+        label.attributedText = NSAttributedString(string: text, attributes: [NSKernAttributeName: 3.5])
+        label.textColor = UIColor.white
+        label.textAlignment = .center
+        label.font = UIFont(name: "Helvetica", size: 15)
+        label.frame = CGRect(x: 0, y:0, width: tableView.frame.size.width, height: 30)
+        view.addSubview(label)
+        view.layer.borderWidth = 1
         return view
+    }
+
+//    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+//        let footerGradientView = GradientView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 0.2))
+//        footerGradientView.backgroundColor = UIColor.white
+//        return footerGradientView
+//    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let headerTitle = view as? UITableViewHeaderFooterView {
+            headerTitle.textLabel?.textColor = UIColor.white
+    
+        }
     }
     
 }
