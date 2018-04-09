@@ -28,7 +28,7 @@ class FirebaseAPI {
     private static var observedPaths: [String] = []
     
     // firebase ref
-    private static let ref = Database.database().reference()
+    public static let ref = Database.database().reference()
     
     // audio player
     private static let jamsPlayer = JamsPlayer.shared
@@ -385,6 +385,7 @@ class FirebaseAPI {
         
         // terrible style but this is the most reliable way for now (surpass network calls) to encode
         // featured streams. just change spotify ID to DAP's or Matoma's
+        // lmao lmao, love this - Kojo
         if Current.user?.spotifyID ?? "" == "22xpbylgoadqnzdz64o6xppua" {
             newStream.isFeatured = true
         }
@@ -523,6 +524,7 @@ class FirebaseAPI {
     public static func setStreamName(name: String) {
         guard let stream = Current.stream else { return }
         self.ref.child("/streams/\(stream.streamID)/title").setValue(name)
+        self.ref.child("/streamsHistory/\(stream.streamID)/title").setValue(name)
     }
     
     public static func addToStarredTable(user: Models.FirebaseUser) {
@@ -561,17 +563,10 @@ class FirebaseAPI {
         })
     }
     
-    // Stream loading apis
+    // MARK: Stream loading apis:: THIS IS A BAD IDEA - but okay
     public static func streamsListener(callback: @escaping (DataSnapshot) -> Void) {
         ref.child("streams").observe(.value, with: { (snapshot) in
             callback(snapshot)
         })
     }
-    
-    public static func isFollowing(user: Models.FirebaseUser, callback: @escaping (Bool) -> Bool) -> Void {
-        ref.child("starredTable/\(String(describing: Current.user?.spotifyID))/").observeSingleEvent(of: .value, with: { (snapshot) in
-            return snapshot.hasChild("\(user.spotifyID)")
-            })
-    }
-    
 }

@@ -29,18 +29,20 @@ protocol StreamsViewModelDelegate: class {
 class StreamsViewModel: NSObject {
     var items = [StreamsViewModelItem]()
     weak var delegate: StreamsViewModelDelegate?
+    weak var streamsVC: UIViewController? = nil
     var featuredStreams = [Models.FirebaseStream]()
     var followingStreams = [Models.FirebaseStream]()
     
     func parseData() {
         // refresh items
         items.removeAll()
+        print("called parseData, removed all items")
         
         // create streamviewmodeltypes
         let followingStreamsItem = FollowingStreamsItem(fStreams: self.followingStreams)
         let featuredStreamsItem = FeaturedStreamsItem(ftrdStreams: self.featuredStreams)
-        //let currStreamItem = CurrentStreamItem(currentStream: Current.stream)
         
+        // Because a user may or may not be in a stream
         if let currListening = Current.stream {
             let currStreamItem = CurrentStreamItem(currentStream: currListening)
             items.append(currStreamItem)
@@ -48,17 +50,25 @@ class StreamsViewModel: NSObject {
         
         // append model types to items list
         
+        
         items.append(followingStreamsItem)
         items.append(featuredStreamsItem)
         
+        print("Following length", followingStreamsItem.followingStreams.count)
+        print("items length", items.count)
         // notify view controller that you have finished updating items list
         delegate?.didFinishUpdates()
         
     }
     
     func loadData() {
-        // this will fire whenever there is a change and then update the items list appropriately by calling parseData
+        // update when there is a change in streams
         FirebaseAPI.streamsListener { (streams) in
+            // clear before adding new streams
+            self.followingStreams.removeAll()
+            self.featuredStreams.removeAll()
+            
+            // go through snapshot and assign streams to their appropriate type
             let enumerator = streams.children
             while let stream = enumerator.nextObject() as? DataSnapshot {
                 let FIRStream = Models.FirebaseStream(snapshot: stream)
@@ -70,6 +80,7 @@ class StreamsViewModel: NSObject {
             self.parseData()
         }
     }
+
     
     func streamHasStarredUser(stream: Models.FirebaseStream) -> Bool {
         if (Current.isStarred(user: stream.host)) { return true }
@@ -111,6 +122,10 @@ class FollowingStreamsItem: StreamsViewModelItem {
     }
     
     var rowCount: Int {
+        // if there are no following streams then dequeue no followers cell
+        if followingStreams.count == 0 {
+            return 1
+        }
         return followingStreams.count
     }
     
@@ -130,7 +145,7 @@ class FeaturedStreamsItem: StreamsViewModelItem {
     }
     
     var rowCount: Int {
-        return featuredStreams.count
+        return 1
     }
     
     var featuredStreams: [Models.FirebaseStream]
@@ -159,23 +174,31 @@ extension StreamsViewModel: UITableViewDataSource, UITableViewDelegate {
                 return cell
             }
         case .followingStream:
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell") as? StreamCell {
-                //let cell = cell as! StreamCell
-                let item = item as? FollowingStreamsItem
-                if let fwStream = item?.followingStreams[indexPath.row] {
-                    
-                    cell.populateCell(stream: fwStream)
-                    return cell
+            
+            // dequeue a no followers cell if no following stream
+            let item = item as? FollowingStreamsItem
+            
+            if item?.followingStreams.count == 0 {
+                let cell = Bundle.main.loadNibNamed("NoFollowersCell", owner: self, options: nil)?.first as! NoFollowersCell
+                cell.parentVC = self.streamsVC
+                return cell
+            } else {
+                if let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell") as? StreamCell {
+                    if let fwStream = item?.followingStreams[indexPath.row] {
+                        
+                        cell.populateCell(stream: fwStream)
+                        return cell
+                    }
                 }
             }
+            
+            
+            
         case .featuredStream:
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "StreamCell") as? StreamCell {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: "featuredRow") as? FeaturedRow {
                 let item = item as? FeaturedStreamsItem
-                if !((item?.featuredStreams.isEmpty)!), let featuredStream = item?.featuredStreams[indexPath.row] {
-                    cell.populateCell(stream: featuredStream)
-                    return cell
-                }
-                
+                cell.featuredStreams = item?.featuredStreams
+                return cell
             }
         }
         return UITableViewCell()
@@ -185,36 +208,32 @@ extension StreamsViewModel: UITableViewDataSource, UITableViewDelegate {
         return items[section].sectionTitle
     }
     
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView()
-        view.backgroundColor = UIColor.clear
-        let label = UILabel()
+        let headerView = Bundle.main.loadNibNamed("StreamSectionHeader", owner: self, options: nil)?.first as! StreamSectionHeader!
+        
         let text = (items[section].sectionTitle).uppercased()
-        label.attributedText = NSAttributedString(string: text, attributes: [NSKernAttributeName: 3.5])
-        label.textColor = UIColor.white
-        label.textAlignment = .center
-        label.font = UIFont(name: "Helvetica", size: 15)
-        label.frame = CGRect(x: 0, y:0, width: tableView.frame.size.width, height: 30)
-        view.addSubview(label)
-        view.layer.borderWidth = 1
-        return view
+       
+        
+        headerView?.sectionTitle.attributedText = NSAttributedString(string: text, attributes: [NSKernAttributeName: 3.5])
+        
+        return headerView
     }
 
-//    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-//        let footerGradientView = GradientView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 0.2))
-//        footerGradientView.backgroundColor = UIColor.white
-//        return footerGradientView
-//    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 1
-    }
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let headerTitle = view as? UITableViewHeaderFooterView {
             headerTitle.textLabel?.textColor = UIColor.white
-    
+            headerTitle.layer.borderWidth = 1
+            headerTitle.layer.borderColor = UIColor.white.cgColor
         }
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        // set custom height for featured streams row
+        if indexPath.section == 2 {
+            return 190
+        }
+        return 100
+    }
 }

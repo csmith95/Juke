@@ -7,28 +7,14 @@
 //
 
 import UIKit
-import ESTMusicIndicator
 import AlamofireImage
 
 class StreamCell: UITableViewCell {
 
     @IBOutlet weak var albumArt: UIImageView!
-    //@IBOutlet weak var currentlyLstnTag: UILabel!
-    //@IBOutlet var hostStarIcon: UIImageView!
-    //@IBOutlet var blurredBgImage: UIImageView!
-   // @IBOutlet var musicIndicatorView: UIView!
     @IBOutlet weak var streamName: UILabel!
     @IBOutlet weak var hostLabel: UILabel!
     @IBOutlet weak var numMembers: UILabel!
-//    @IBOutlet weak var member1ImageView: UIImageView!
-//    @IBOutlet weak var member2ImageView: UIImageView!
-//    @IBOutlet weak var member3ImageView: UIImageView!
-//    @IBOutlet weak var member4ImageView: UIImageView!
-//    private var imageViewDict:[Int:UIImageView] = [:]
-//    private var indicator:ESTMusicIndicatorView!
-//    private var coverArtFilter: ImageFilter!
-//    private var defaultCoverArtImage: UIImage!
-//    @IBOutlet weak var featuredHost: UIImageView!
     
     
     override func awakeFromNib() {
@@ -38,16 +24,10 @@ class StreamCell: UITableViewCell {
     public func populateCell(stream: Models.FirebaseStream) {
         
         let isftrd = stream.isFeatured ?? false
-       // self.featuredHost.isHidden = true
         if (isftrd) {
-            //loadFtrdCellImages(stream: stream)
             self.streamName.text = "JukeLIVE: \(stream.title)"
-            //self.hostStarIcon.image = #imageLiteral(resourceName: "verified")
         } else {
-            //loadCellImages(stream: stream)
             self.streamName.text = stream.title
-            //self.hostStarIcon.image = #imageLiteral(resourceName: "Star")
-            //self.hostStarIcon.isHidden = !Current.isStarred(user: stream.host)
         }
         if (stream.host == Current.user) {
             self.hostLabel.text = "Hosted by you\u{25CF}"
@@ -61,6 +41,18 @@ class StreamCell: UITableViewCell {
         } else {
             self.albumArt.image = #imageLiteral(resourceName: "jukedef")
         }
+        
+        if stream.isPlaying {
+            self.albumArt.layer.borderWidth = 6
+            self.albumArt.layer.masksToBounds = true
+            self.albumArt.layer.cornerRadius = 4
+            self.albumArt.layer.borderColor = UIColor(red: 108.0/255.0, green: 74.0/255.0, blue: 188.0/255.0, alpha: 1.0).cgColor
+            
+        } else {
+            self.albumArt.layer.borderWidth = 0
+            self.albumArt.layer.cornerRadius = 0
+        }
+        
         let count = stream.members.count+1  // +1 for host
         numMembers.text = "\(count) other" + ((count > 1) ? "s" : "") + " streaming"
         if let currentStream = Current.stream {
@@ -71,51 +63,4 @@ class StreamCell: UITableViewCell {
             }
         }
     }
-    
-    // set user icons
-    private func loadUserIcon(url: String?, imageView: UIImageView) {
-        imageView.isHidden = false
-        ImageCache.downloadUserImage(url: url, callback: { (image) in
-            imageView.isHidden = false
-            imageView.image = image
-        })
-    }
-    
-//    private func loadCellImages(stream: Models.FirebaseStream) {
-//        clearMemberIcons()  // start fresh
-//        let starImg = #imageLiteral(resourceName: "Star")
-//        let starImageView = UIImageView(image: starImg)
-//
-//        let numMemberIcons = stream.members.count
-//        if numMemberIcons > 0 {
-//            let numMemberIconsToDisplay = min(numMemberIcons, self.imageViewDict.count)
-//            for i in 0..<numMemberIconsToDisplay {
-//                if Current.isStarred(user: stream.members[i]) {
-//                    loadUserIcon(url: stream.members[i].imageURL, imageView: self.imageViewDict[i]!)
-//                    starImageView.frame = CGRect(x: 17, y: 17, width: 20, height: 20)
-//                    self.imageViewDict[i]?.addSubview(starImageView)
-//                }
-//            }
-//        } else {
-//            self.clearMemberIcons()
-//        }
-//    }
-//
-//    private func loadFtrdCellImages(stream: Models.FirebaseStream) {
-//        // load featured artist image
-//        loadUserIcon(url: stream.host.imageURL, imageView: self.featuredHost)
-//        self.featuredHost.isHidden = false
-//        self.hostStarIcon.image = #imageLiteral(resourceName: "checkmark_white")
-//    }
-//
-//    public func clearMemberIcons() {
-//        for (_, imageView) in imageViewDict {
-//            imageView.image = nil
-//            imageView.isHidden = true
-//            currentlyLstnTag.isHidden = true
-//            self.isUserInteractionEnabled = true
-//
-//        }
-//    }
-
 }
